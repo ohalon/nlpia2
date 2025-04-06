@@ -1,0 +1,1620 @@
+# Quotes for use in NLPiA 2nd Ed
+# Hardlinked to canonical version: ~/code/tangibleai/nlpia2/src/nlpia2/data/quotes.yml
+# meld ~/code/tangibleai/nlpia2/src/nlpia2/data/quotes.yml ~/code/tangibleai/nlpia2/.nlpia2-data/quotes.yml ~/.nlpia2-data/quotes.yml
+#
+# Uses:
+# - Clues within the book to help readers with chatbot treasure/knowledge hunt on qary.ai etc
+# - Concept graph or mind map dataset example
+# - Authorship attribution testset?
+# - Text tagging multi-class example?
+# - Augment with Goodreads api scraping?
+# - Chapter 6: fuzzy tags, tag clustering, tag autocomplete/normalization, tag search
+# 
+# TODO:
+# - Edelman:
+#    _Neural Darwinism_: (ch1 and philosophy, wisdom, prosocial)
+-
+  text: "I said then, and I say now, that while there is a lower class, I am in it, and while there is a criminal element, I am of it, and while there is a soul in prison, I am not free."
+  author: Eugene V. Debs
+  tags: [workers, DSA, class, captialism, socialism, poverty]
+-
+  text: "The meaning of a word lies in its use."
+  author: Ludwig Wittgenstein
+  description: In his later days' _Philosophical Investigations_ Wittgenstein criticized his earlier writing about _ideal language_. He grew to appreciate that context determines what a word means and there is no "ideal language."
+  tags: ch6, nlpia, words, language, linguistics
+-
+  text: "The universe is a dark forest. Every civilization is an armed hunter stalking through the trees like a ghost, gently pushing aside branches that block the path and trying to tread without sound. Even breathing is done with care. The hunter has to be careful, because everywhere in the forest are stealthy hunters like him. If he finds other life--another hunter, an angel or a demon, a delicate infant or a tottering old man, a fairy or a demigod--there's only one thing he can do: open fire and eliminate them. In this forest, hell is other people. An eternal threat that any life that exposes its own existence will be swiftly wiped out. This is the picture of cosmic civilization. It's the explanation for the Fermi Paradox."
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Dark Forest
+-
+  text: "No, emptiness is not nothingness. Emptiness is a type of existence. You must use this existential emptiness to fill yourself."
+  likes: 200
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "Weakness and ignorance are not barriers to survival, but arrogance is."
+  likes: 169
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  Death's End
+-
+  text: "If I destroy you, what business is it of yours?"
+  likes: 167
+  author: Cixin Liu
+  source: Good Reads
+  book:  The Dark Forest
+-
+  text: "It was impossible to expect a moral awakening from humankind itself, just like it was impossible to expect humans to lift off the earth by pulling up on their own hair. To achieve moral awakening required a force outside the human race."
+  likes: 113
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "To effectively contain a civilization's development and disarm it across such a long span of time, there is only one way: kill its science."
+  likes: 106
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "Is it possible that the relationship between humanity and evil is similar to the relationship between the ocean and an iceberg floating on its surface? Both the ocean and the iceberg are made of the same material. That the iceberg seems separate is only because it is in a different form. In reality, it is but a part of the vast ocean.…"
+  likes: 103
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "In the shooter hypothesis, a good marksman shoots at a target, creating a hole every ten centimeters. Now suppose the surface of the target is inhabited by intelligent, two-dimensional creatures. Their scientists, after observing the universe, discover a great law: "There exists a hole in the universe every ten centimeters." They have mistaken the result of the marksman's momentary whim for an unalterable law of the universe. The farmer hypothesis, on the other hand, has the flavor of a horror story: Every morning on a turkey farm, the farmer comes to feed the turkeys. A scientist turkey, having observed this pattern to hold without change for almost a year, makes the following discovery: "Every morning at eleven, food arrives." On the morning of Thanksgiving, the scientist announces this law to the other turkeys. But that morning at eleven, food doesn't arrive; instead, the farmer comes and kills the entire flock."
+  likes: 93
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "Your lack of fear is based on your ignorance."
+  likes: 84
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  The Three-Body Problem
+  tags: [fear, ignorance]
+-
+  text: "For the majority of people, what they love exists only in the imagination. The object of their love is not the man or woman of reality, but what he or she is like in their imagination. The person in reality is just a template used for the creation of this dream lover. Eventually, they find out the differences between their dream lover and the template. If they can get used to those differences, then they can be together. If not, they split up. It's as simple as that. You differ from the majority in one respect: You didn't need a template."
+  likes: 84
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  The Dark Forest
+-
+  text: "Every era puts invisible shackles on those who have lived through it, and I can only dance in my chains."
+  likes: 69
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "I'm a simple man without a lot of complicated twists and turns. Look down my throat and you can see out my ass."
+  likes: 67
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  The Three-Body Problem
+  tags: [simple, simple-life, simple-man, simple-minds]
+-
+  text: "And now we know that this is the journey that must be made by every civilization: awakening inside a cramped cradle, toddling out of it, taking flight, flying faster and farther, and, finally, merging with the fate of the universe as one. The ultimate fate of all intelligent beings has always been to become as grand as their thoughts."
+  likes: 63
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  Death's End
+-
+  text: "If we lose our human nature, we lose much, but if we lose our bestial nature, we lose everything."
+  likes: 61
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  Death's End
+-
+  text: "In the face of madness, rationality was powerless."
+  likes: 53
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "Time is the cruelest force of all."
+  likes: 53
+  author: Cixin Liu  
+  source: Good Reads
+  book:  Death's End
+  tags: [cruel, eternity, force, time]
+-
+  text: "It's a wonder to be alive. If you don't understand that, how can you search for anything deeper?"
+  likes: 48
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  The Dark Forest
+-
+  text: "In China, any idea that dared to take flight would only crash back to the ground. The gravity of reality is too strong."
+  likes: 48
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "Make time for civilization, for civilization won't make time."
+  likes: 46
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  The Dark Forest
+-
+  text: "By the time you're my age, you'll realize that everything you once thought mattered so much turns out to mean very little."
+  likes: 45
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "Sometimes I thought life was precious, and everything was so important; but other times I thought humans were insignificant, and nothing was worthwhile. Anyway, my life passed day after day accompanied by this strange feeling, and before I knew it, I was old.…"
+  likes: 44
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "Even if God were here, it wouldn't do any good. The entire human race has reached the point where no one is listening to their prayers."
+  likes: 34
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "Mere existence is already the result of incredible luck. Such was the case on Earth in the past, and such has always been the case in this cruel universe. But at some point, humanity began to develop the illusion that they're entitled to life, that life can be taken for granted."
+  likes: 33
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  Death's End
+  tags: [don-t-panic]
+-
+  text: "Staying alive is not enough to guarantee survival. Development is the best way to ensure survival."
+  likes: 32
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  The Dark Forest
+-
+  text: "Take those frauds who practice pseudoscience - do you know who they're most afraid of?"
+  likes: 31
+
+"Scientists, of course."
+
+"No. Many of the best scientists can be fooled by pseudoscience and sometimes devote their lives to it. But pseudoscience is afraid of one particular type of people who are very hard to fool: stage magicians. In fact, many pseudoscience hoaxes were exposed by stage magicians."
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  The Three-Body Problem
+  tags: [magicians, pseudoscience, stage-magic, street-magic]
+-
+  text: "A woman should be like water, able to flow over and around anything."
+  likes: 31
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  The Three-Body Problem
+  tags: [gender-roles, impossible-expectations, impossible-standards, life, standards, stereotypes, woman, women]
+-
+  text: "Time is the one thing that can't be stopped. Like a sharp blade, it silently cuts through hard and soft, constantly advancing. Nothing is capable of jolting it even the slightest bit, but it changes everything."
+  likes: 30
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  The Dark Forest
+-
+  text: "I need a dual-vector foil for cleansing."
+  likes: 30
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  Death's End
+-
+  text: "You must know that a person's ability to discern the truth is directly proportional to his knowledge."
+  likes: 29
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "Ten thousand times the web could be destroyed, and ten thousand times the spider would rebuild it. There was neither annoyance nor despair, nor any delight, just as it had been for a billion years."
+  likes: 28
+  author: Cixin Liu
+  
+  source: Good Reads
+  book:  The Dark Forest 
+-
+  text: "No, emptiness is not nothingness. Emptiness is a type of existence. You must use this existential emptiness to fill yourself."
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "It was impossible to expect a moral awakening from humankind itself, just like it was impossible to expect humans to lift off the earth by pulling up on their own hair. To achieve moral awakening required a force outside the human race."
+  likes: 169
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "To effectively contain a civilization's development and disarm it across such a long span of time, there is only one way: kill its science."
+  likes: 106
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "Is it possible that the relationship between humanity and evil is similar to the relationship between the ocean and an iceberg floating on its surface? Both the ocean and the iceberg are made of the same material. That the iceberg seems separate is only because it is in a different form. In reality, it is but a part of the vast ocean.…"
+  likes: 103
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: |+
+    In the shooter hypothesis, a good marksman shoots at a target, creating a hole every ten centimeters. Now suppose the surface of the target is inhabited by intelligent, two-dimensional creatures. Their scientists, after observing the universe, discover a great law: "There exists a hole in the universe every ten centimeters." They have mistaken the result of the marksman's momentary whim for an unalterable law of the universe. The farmer hypothesis, on the other hand, has the flavor of a horror story: Every morning on a turkey farm, the farmer comes to feed the turkeys. A scientist turkey, having observed this pattern to hold without change for almost a year, makes the following discovery: "Every morning at eleven, food arrives." On the morning of Thanksgiving, the scientist announces this law to the other turkeys. But that morning at eleven, food doesn't arrive; instead, the farmer comes and kills the entire flock.
+  likes: 93
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "Your lack of fear is based on your ignorance."
+  likes: 84
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+  tags: [fear, ignorance]
+-
+  text: "Every era puts invisible shackles on those who have lived through it, and I can only dance in my chains."
+  likes: 84
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "I'm a simple man without a lot of complicated twists and turns. Look down my throat and you can see out my ass."
+  likes: 67
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+  tags: [simple, simple-life, simple-man, simple-minds]
+-
+  text: "In the face of madness, rationality was powerless."
+  likes: 63
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "In China, any idea that dared to take flight would only crash back to the ground. The gravity of reality is too strong."
+  likes: 53
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "By the time you're my age, you'll realize that everything you once thought mattered so much turns out to mean very little."
+  likes: 46
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "Sometimes I thought life was precious, and everything was so important; but other times I thought humans were insignificant, and nothing was worthwhile. Anyway, my life passed day after day accompanied by this strange feeling, and before I knew it, I was old.…"
+  likes: 44
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "Even if God were here, it wouldn't do any good. The entire human race has reached the point where no one is listening to their prayers."
+  likes: 34
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: |+
+    "Take those frauds who practice pseudoscience - do you know who they're most afraid of?"
+    "Scientists, of course."
+    "No. Many of the best scientists can be fooled by pseudoscience and sometimes devote their lives to it. But pseudoscience is afraid of one particular type of people who are very hard to fool: stage magicians. In fact, many pseudoscience hoaxes were exposed by stage magicians."
+  likes: 33
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+  tags: [magicians, pseudoscience, stage-magic, street-magic]
+-
+  text: "A woman should be like water, able to flow over and around anything."
+  likes: 31
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+  tags: [gender-roles, impossible-expectations, impossible-standards, life, standards, stereotypes, woman, women]
+-
+  text: "You must know that a person's ability to discern the truth is directly proportional to his knowledge."
+  likes: 30
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "Should philosophy guide experiments, or should experiments guide philosophy?"
+  likes: 28
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+  tags: [philosophy, scientific-experiments, scientific-method]
+-
+  text: "Overly literal translations, far from being faithful, actually distort meaning by obscuring sense."
+  likes: 23
+  author: Ken Liu (Cixin Liu's translator) 
+  source: Good Reads
+  book:  The Three-Body Problem
+  tags: [bilingualism, language-barrier, translated, translating, translation, translations, translator]
+-
+  text: "From time to time, I would gaze up at the stars after a night shift and think that they looked like a glowing desert, and I myself was a poor child abandoned in the desert... I thought that life was truly an accident among accidents in the universe. The universe was an empty palace, and humankind the only ant in the entire palace. This kind of thinking infused the second half of my life with a conflicted mentality: Sometimes I thought life was precious, and everything was so important; but other times I thought humans were insignificant, and nothing was worthwhile. Anyway, my life passed day after day accompanied by this strange feeling, and before I knew it, I was old..."
+  likes: 22
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+  tags: [meaning, nihilism, time]
+-
+  text: "The creation myths of the various peoples and religions of the world pale when compared to the glory of the big bang."
+  likes: 19
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: |+
+    "Why are you all like this?" Evans suddenly became furious. "Why does one have to save people to be considered a hero? Why is saving other species considered insignificant? Who gave humans such high honors? No, humans do not need saving. They're already living much better than they deserve."
+  likes: 19
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+  text: "She was like a star, always so distant. Even the light she shone on me was always cold."
+  likes: 18
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "My father then said, 'Mike, I've told you how dinosaurs went extinct. An asteroid crashed into the Earth. The world first became a sea of fire, and then sank into a prolonged period of darkness and coldness.… One night, you woke from a nightmare, saying that you had dreamt that you were back in that terrifying age. Let me tell you now what I wanted to tell you that night: If you really lived during the Cretaceous Period, you'd be fortunate. The period we live in now is far more frightening. Right now, species on Earth are going extinct far faster than during the late Cretaceous. Now is truly the age of mass extinctions! So, my child, what you're seeing is nothing. This is only an insignificant episode in a much vaster process. We can have no sea birds, but we can't be without oil. Can you imagine life without oil? Your last birthday, I gave you that lovely Ferrari and promised you that you could drive it after you turned fifteen. But without oil, it would be a pile of junk metal and you'd never drive it. Right now, if you want to visit your grandfather, you can get there on my personal jet and cross the ocean in a dozen hours or so. But without oil, you'd have to tumble in a sailboat for more than a month.… These are the rules of the game of civilization: The first priority is to guarantee the existence of the human race and their comfortable life. Everything else is secondary."
+  likes: 17
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "Is it possible that the relationship between humanity and evil is similar to the relationship between the ocean and an iceberg floating on its surface? Both the ocean and the iceberg are made of the same material. That the iceberg seems separate is only because it is in a different form. In reality, it is but a part of the vast ocean.… It was impossible to expect a moral awakening from humankind itself, just like it was impossible to expect humans to lift off the earth by pulling up on their own hair. To achieve moral awakening required a force outside the human race."
+  likes: 16
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "At the end, an adult and a child stand in front of the grave of a Red Guard who had died during the faction civil wars. The child asks the adult, 'Are they heroes?' The adult says no. The child asks, 'Are they enemies?' The adult again says no. The child asks, 'Then who are they?' The adult says, 'History."
+  likes: 15
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "On Earth, humankind can step onto another continent, and without a thought, destroy the kindred civilizations found there through warfare and disease. But when they gaze up at the stars, they turn sentimental and believe that if extraterrestrial intelligences exist, they must be civilizations bound by universal, noble, moral constraints, as if cherishing and loving different forms of life are parts of a self-evident universal code of conduct. I think it should be precisely the opposite: Let's turn the kindness we show toward the stars to members of the human race on Earth"
+  likes: 12
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "Evans: We don't know what extraterrestrial civilization is like, but we know humanity."
+  likes: 12
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "The creation myths of the various peoples and religions of the world pale when compared to the glory of the big bang. The three-billion-year history of life's evolution from self-reproducing molecules to civilization contains twists and romances that cannot be matched by any myth or epic. There is also the poetic vision of space and time in relativity, the weird subatomic world of quantum mechanics … these wondrous stories of science all possess an irresistible attraction. Through the medium of science fiction, I seek only to create my own worlds using the power of imagination, and to make known the poetry of Nature in those worlds, to tell the romantic legends that have unfolded between Man and Universe."
+  likes: 11
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "Can the fundamental nature of matter really be lawlessness? Can the stability and order of the world be but a temporary dynamic equilibrium achieved in a corner of the universe, a short-lived eddy in a chaotic current?"
+  likes: 11
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem
+-
+  text: "Anything sufficiently weird must be fishy."
+  likes: 11
+  author: Cixin Liu  
+  source: Good Reads
+  book:  The Three-Body Problem 
+-
+    text: |+
+      So from that spring whence comfort seemed to come
+      Discomfort swells.
+    author: Shakespeare
+    play: Macbeth
+-
+    text: "Ahh, it's just a cold dark night on the side of Everest"
+    author: Brett Logan
+    context: IT person in psyche department at Yale sneaked into the room where Alia Crum a 3rd year phd grad student was stressed to come up with something for her advisor the next friday morning.
+    interpretation: Climbing everest is not a walk in the park, it's difficult. Getting a Ph.D. is hard work and stressful. The stress is not your fault, not a flaw. It's not that you are unworthy of the challenge. The times when you did well, usually it was associated of stress. Adversity in one's goal-related efforts cause us stress. So you can have a new mindset about the stress and recognize it as a normal part of pursuing a difficult goal.
+    source: Alia Crum
+-
+    author: Bertrand Russell
+    text: The good life is one inspired by love and guided by knowledge.
+    tags: ["meaning of life", "life", "inspiration", "learning", "education"]
+-
+    author: Eleanor Roosevelt
+    tags: [intelligence, greatness, ideas, gossip]
+    text: Great minds discuss ideas. Average minds discuss events. Small minds talk about people.
+-
+    tags: [post-truth, marketing, advertisement, politics, power, control, 1984, misinformation, disinformation, honesty, truth, democracy]
+    author: Joseph Rain
+    text: All control, in essence, is about who controls the truth.
+-
+  text: "Notes on paper, or on a computer screen [...] do not make contemporary physics or other kinds of intellectual endeavor easier, they make it possible ... no matter how internal processes are implemented [...you..] need to understand the extent to which the mind is reliant upon external scaffolding."
+  author: Levy
+  date: 2011
+  source:
+      title: "_How to Take Smart Notes: One Simple Technique to Boost Writing, Learning and Thinking -- for Students, Academics and Nonfiction Book Writers"
+      author: Sönke Ahrens
+      date: 2017
+-
+  text: "One cannot think without writing."
+  date: 1992
+  author: Luhmann
+-
+  text: "It's no use, Mr. James--it's turtles all the way down."
+  author: J. R. Ross
+  source: _Constraints on Variables in Syntax_, 1967
+  tags: [recursion, rnn, philosophy, debate, logic, argument, ch8]
+-
+  text: "If everything must have a cause, then God must have a cause. If there can be anything without a cause, it may just as well be the world as God, so that there cannot be any validity in that argument."
+  author: Bertrand Russell
+  source: "'Why I Am Not a Christian' a lecture in 1927" 
+  url: https://en.wikipedia.org/wiki/Turtles_all_the_way_down
+  tags: [religion, god, recursion, rnn, philosophy, debate, logic, argument, ch8]
+-
+  author: Eleanor Roosevelt
+  tags: [great minds, ideas, gossip, politics]
+  text: Great minds discuss ideas. Average minds discuss events. Small minds talk about people.
+- 
+  author: Joseph Rain
+  text: All control, in essence, is about who controls the truth.
+  tags: [post-truth era, truth, misinformation, social media, miasma, information bubble, confirmation bias] 
+-
+  text: "If you disagree with somebody, you want to be able to state their case better than they can. And at that point you've earned the right to disagree with them. Otherwise you should keep quiet."
+  author: Charlie Munger, Warren Buffett's business partner (see this article)
+  tags: [debate, Rapoport, Rapoport's Rules, Impossible Conversations, communication, influence, persuasion, arguing, disagreement, criticism]
+  source: https://www.rightattitudes.com/2017/06/16/rapoport-rules-criticism
+-
+  text: "The man who can hold forth on every matter under debate in two contradictory ways of pleading, or can argue for and against every proposition that can be laid down--such a man is the true, the complete, and the only orator."
+  author: Roman Orator Cicero (see this article)
+  tags: [debate, Rapoport, Rapoport's Rules, Impossible Conversations, communication, influence, persuasion, arguing, disagreement, criticism]
+  source: https://www.rightattitudes.com/2017/06/16/rapoport-rules-criticism
+-
+  text: "I have yet to find a more efficient and reliable way to probe the depths of a person's knowledge and seriousness about an issue than asking them to explain the other side's perspective."
+  author: Entrepreneur Ben Casnocha (see this article)
+  tags: [debate, Rapoport, Rapoport's Rules, Impossible Conversations, communication, influence, persuasion, arguing, disagreement, criticism]
+  source: https://www.rightattitudes.com/2017/06/16/rapoport-rules-criticism
+-
+  text: "If you can't imagine how anyone could hold the view you are attacking, you just don't understand it yet."
+  author: Philosopher Anthony Weston in Rulebook for Arguments (see this article)
+  tags: [debate, Rapoport, Rapoport's Rules, Impossible Conversations, communication, influence, persuasion, arguing, disagreement, criticism]
+  source: https://www.rightattitudes.com/2017/06/16/rapoport-rules-criticism
+-
+  text: "When you think you can nail someone with your argument, take a breath & see if you can phrase it as a face-saving question."
+  author: Career Coach Marty Nemko
+  tags: [debate, Rapoport, Rapoport's Rules, Impossible Conversations, communication, influence, persuasion, arguing, disagreement, criticism]
+  source: https://www.rightattitudes.com/2017/06/16/rapoport-rules-criticism
+-
+  text: "Daddy is a doctor."
+  page: 68
+  author: Daniel C. Dennett
+  title: "Intuition Pumps and Other Tools for Thinking"
+-
+  text: "Teaching is the highest form of understanding."
+  author: Aristotle
+  tags: [teaching, learning, intelligence, thinking, understanding]
+-
+  text:  "When one teaches, two learn."
+  author: Robert Heinlein
+  tags: [teaching, learning]
+-
+  text: "Those who know, do. Those that understand, teach."
+  author: Aristotle
+  tags: [teaching, learning, intelligence, thinking, understanding, doers, engineers, knowledge, names, memory]
+-
+  text: "I cannot be a teacher without exposing who I am."
+  author: Paulo Freire
+  tags: [teaching, self-awareness, mindfulness, vulnerability, intelligence, thinking, understanding]
+-
+  text:  "A teacher affects eternity: he can never tell where his influence stops."
+  author: Henry Adams
+  tags: [teaching, karma, legacy, ripple effect, meaning of life]  
+-
+  text:  "I cannot teach anybody anything, I can only make them think."
+  author: Socrates
+  tags: [teaching, learning, intelligence, thinking, understanding]
+-
+  text: "We are all one. And if we don't know it, we will find out the hard way."
+  author: Bayard Rustin
+  date: 2007
+  manuscript: ch6
+  source: 
+    - "_We Are One: The Story of Bayard Rustin_, 2007, p.46_ by Larry Dane Brimner"
+    - "_The New Human Rights Movement: Reinventing the Economy to Prevent Oppression_ by Peter Joseph (Zeitgeist movement), Introduction, p. xvii"
+  tags: [ch6, cooperation, competition, supercooperator, out-compete, game theory, winning, win-win, universal consciousness, collective consciousness, collective, society, community, zeitgeist movement]
+-
+  text: "The single biggest problem in communication is the illusion that it has taken place."
+  author: George Bernard Shaw
+  date: 2017
+  source: "_The New Human Rights Movement: Reinventing the Economy to Prevent Oppression_ by Peter Joseph (Zeitgeist movement), Preface, p. xiii"
+  tags: [communication, delusion, thought, listening, nlp, nlu, nlg, feedback, introspection, self-awareness, zeitgeist movement]
+-
+  text: "You use a glass mirror to see your face; you use works of art to see your soul."
+  author: George Bernard Shaw
+  tags: [art, understanding, intelligence, introspection, self-awareness, reflection, inner dialog]
+-
+  text: "The unconscious self is the real genius. Your breathing goes wrong the moment your conscious self meddles with it."
+  author: George Bernard Shaw
+  tags: [unconscious, subconsious, collective subsoncious, collective consciousness, emotion, intelligence, AGI, AI, Jung]
+  date: ~1915
+-
+  text: "These 'primordial images' or 'archetypes,'' as I have called them, belong to the basic stock of the unconscious psyche and cannot be explained as personal acquisitions."
+  tags: [culture, collective unconscious, myth, archetypes, psychology, Jung]
+  author: Carl Jung
+  title: "'The Structure of the Unconscious'"
+  date: 1916
+
+
+-
+  text: True intelligence is self-awareness -- including a sense of just how wrong you likely are most of the time as a result of your biases.
+  author: George Bernard Shaw
+  source: "_The New Human Rights Movement: Reinventing the Economy to Prevent Oppression_ by Peter Joseph (Zeitgeist movement), Preface, p. xiii"
+  tags: [intelligence, humility, beneficial ai, human compatible ai, IQ, AI, agi, biases, ethical ai, delusion, self-delusion, inner dialog, communication, NLU, NLG, feedback, introspection, self-awareness, zeitgeist movement]
+-
+  text: "Whatever affects one directly affects all indirectly. For some strange reason, I can never be what I ought to be until you are what you ought to be. You can never be what you ought to be until I am what I ought to be. This is the interrelated structure of reality."
+  author: "Dr. Martin Luther Link Jr."
+  source: "_The New Human Rights Movement: Reinventing the Economy to Prevent Oppression_ by Peter Joseph (Zeitgeist movement), Chapter One, p. 1"
+  tags: [cooperation, partnership, reciprocity, symbiosis, friendship, activism, competition, supercooperator, out-compete, game theory, winning, win-win, universal consciousness, collective consciousness, collective, society, community, zeitgeist movement, civil rights, human rights]
+-
+  text: "Babbage, who once declared he would gladly give up the rest of his life if he could come back in five hundred years and have a three-day guided scientific tour of the new age, would probably have been thrilled speechless a mere century after his death -- both by the new machines and by the unexpected limiatations."
+  book: "_Goedel Escher Bach: An Eternal Golden Braid_ p. 26"
+  author: Douglas R. Hofstadter
+  tags: [technology, AI, AGI, progress, science, time travel]
+-
+  text: |+
+    No one knows where the borderline between non-intelligent behavior and intelligent behavior lies; in fact, to suggest that a sharp borderline exists is probably silly. But essential elements for intelligence are certainly:
+
+    to respond to situations very flexibly;
+    to take advantage of fortuitous circumstances;
+    to make sense out of ambiguous or contradictory messages;
+    to recognize the relative importance of different elements of a situation;
+    to find find similarities between situations despite differences which may separate them;
+    to draw distinctions between situations despite similarities which may link them;
+    to synthesize new concepts by taking old concepts and putting them together in new ways;
+    to come up with ideas which are novel.
+  book: "_Goedel Escher Bach: An Eternal Golden Braid_ p. 26"
+  author: Douglas R. Hofstadter
+  tags: [intelligence, IQ, AGI, general intelligence, AI, creativity, patterns, pattern recognition, beneficial AI, entropy, complexity, analogy, vector oriented reasoning, reason, rationality, discriminating, human compatible AI, IQ, ethical AI]
+- 
+  text: |+
+    Every one of us is trying to find our true home. 
+    Some of us are still searching. 
+    Our true home is inside, but it's also in our loved ones around us.
+    When you're in a loving relationship, you and the other person can be a true home for each other.
+  author: Thich Nhat Hanhn
+  book: _How to Love_
+  tags: [budhism, philosophy, love, home, purpose, meaning of life]
+-
+  text: "Understanding someone's suffering is the best gift you can give another person."
+  author: Thich Nhat Hanhn
+  book: _How to Love_
+  tags: [love, budhism, philosophy, partnership, marriage, purpose, meaning of life]
+-
+  text: "Understanding is love's other name."
+  author: Thich Nhat Hanhn
+  book: _How to Love_
+  tags: [love, understanding, communication, intelligence, listening, budhism, partnership, marriage, purpose, meaning of life]
+
+-
+  text: "Virtual assistants and search engines shape our minds. We have to build prosocial virtual assistants that support our prosocial values before we lose our humanity to Big Tech."
+  author: Hobson Lane
+  source: NLPiA2e
+  tags: [search, information, information bubble, internet bubble, social media, virtual assistants, prosocial, society, culture, mind control, propaganda, advertisement, Big Tech, post-truth era, journalism, news]
+-
+  text: "Virtual assistants like Siri and Google Search don't actually assist us, they manipulate us into spending our attention and money to support some Billionaire's business model."
+  author: Hobson Lane
+  source: NLPiA2e
+  tags: [search, influence, sales, manipulation, exploitation, information, information bubble, internet bubble, social media, virtual assistants, prosocial, society, culture, mind control, propaganda, advertisement, Big Tech, post-truth era, journalism, news]
+-
+  text: "From a very early age [in the US] we learn to manipulate those around us. Our parents and bosses praise us and reward us raises when we shove a Big Gulp across the counter to an unwitting customer. We stop treating customers as human beings. We become drug dealers selling to users."
+  author: Hobson Lane
+  source: NLPiA2e
+  tags: [capitalism, greed, incentives, influence, competition, cooperation, sales, manipulation, exploitation, assistance, information, social media, virtual assistants, prosocial, society, culture, parenting, incentives]
+-
+  text: "We are on a mission to help the social sector organizations scale their impact, increase their outreach and improve their operations using artificial intelligence (AI)."
+  author: Maria Dyshel
+  tags: [social impact, nonprofit, social sector, outreach, impact, AI, AI for good, DS for good]
+-
+  text: "I was flabbergasted. I thought that when we went someplace they'd said, 'Well congratulations, you Americans finally did it.' And instead of that, unanimously, the reaction was, 'We did it. We humans finally left this planet. We did it.'"
+  author: Michael Collins
+  source: Jeffrey Kluger, CBS interview of Michael Collins
+  tags: [space exploration, moon landing, space race, capitalism, patriotism, Americans, American exceptionalism, USA, humanity, citizen of the world, competition, cooperation, space travel, unifying mission, unifying vision, UN, united nations]
+-
+  text: "The Earth must become as it appears: blue and white, not capitalist or communist; blue and white, not rich or poor; blue and white, not envious or envied."
+  author: Michael Collins
+  source: Twitter
+  date: May 19, 2019
+  tags: [astronaught, moon landing, apollo, climate change, politics, blue marble, conflict, war, capitalism, communism, space race, space exploration]
+-
+  text: "I really believe that if the political leaders of the world could see their planet from a distance of, let's say 100,000 miles, their outlook would be fundamentally changed. The all-important border would be invisible, that noisy argument suddenly silenced."
+  author: Michael Collins
+  source: Twitter
+  date: May 19, 2019
+  tags: [astronaught, apollo, climate change, politics, blue marble, conflict, war]
+-
+  text: "Let me say, as I sit here before you today having walked on the Moon, that I am myself still awed by that miracle. That awe, in me and in each of us... must be the engine of future achievement, not a slow dimming light from a time once bright."
+  author: Buzz Aldrin
+  source: Daily News
+  date: May 1997
+  tags: [awe, inspiration, apollo, humanity, progress, space travel, space exploration, moon landing, humans, cooperation]
+-
+  text: "See, the world is full of things more powerful than us. But if you know how to catch a ride, you can go places,"
+  author: Neil Stephenson
+  tags: [humility, oportunism, power, success, achievment, alien technology, aliens, alien civilization]
+-
+  text: Get up quickly--just switch on the white light of the will.
+  author: Susan Sontag
+  source: Every Day a Word Surprises Me & Other Quotes by Writers
+  tags: [life, agency, work ethic, will power, free will]
+-
+  text: Explore unfamiliar sections--on foot if wet, on bicycle if dry.
+  author: Henry Miller
+  source: Every Day a Word Surprises Me & Other Quotes by Writers
+  tags: [stoicism, exploration, life, commute, conservation, electric vehicles, cycling]
+-
+  text: The blizzard doesn't last forever; it just seems so.
+  author: Ray Bradbury
+  source: Every Day a Word Surprises Me & Other Quotes by Writers
+  tags: [stoicism, storms, time, suffering]
+-
+  text: You should feel slightly incompetent at what you're trying to do. The minute you start to feel like an expert, what you really are is a hack.
+  author: Michael Cunningham
+  source: Every Day a Word Surprises Me & Other Quotes by Writers
+  tags: [syndee, expert, imposter syndrom, expertise, competence, self-examination]
+-
+  text: Ruptures almost always lead to a stronger project.
+  author: Anne Carson
+  source: Every Day a Word Surprises Me & Other Quotes by Writers
+  tags: [project management, agile, fail fast, failure]
+-
+  text: Pay attention to what you pay attention to.
+  author: Amy Krouse Rosenthal
+  source: Every Day a Word Surprises Me & Other Quotes by Writers
+  tags: [attention, screens, social media, news, qary, mindfullness]
+-
+  text: Do not overlook the little joys!
+  author: Hermann Hesse
+  tags: [life, happiness, mindfulness]
+-
+  text: To affect the qulaity of the day, that is the highest of arts.
+  author: Henry David Thoreau
+  tags: [life, happiness]
+-
+  text: What I'm really concerned about is reaching one person.
+  author: Jorge Luis Borges
+  tags: [writing, audience, relationships, collective consciousness]
+-
+  text: I write for my wife, my agent, and my editor.
+  author: Denis Johnson
+  tags: [writing, relationships, collective consciousness]
+-
+  text: You can't just write and write and put thing in a drawer. They wither without the warm sun of someone else's appreciation.
+  author: Anne Morrow Lindbergh
+  tags: [writing, audience, relationships, prosocial, collective consciousness]
+-
+  text: Better to write for yourself and have no public, than to write for the public and have no self.
+  author: cyril connolly
+  tags: [writing, authenticity]
+-
+  text: I never had an audience until I was past fifty. But I wrote all the time anyway. I had to.
+  author: William Carlos Williams
+  tags: [writing, authenticity, passion]
+-
+  text: I don't even want to please the reader, I want to change them.
+  author: Jenette Winterson
+  tags: [writing, teaching]
+-
+  text: Stepping from the title to the first lines is like stepping into a canoe. A lot of things can go wrong.
+  author: Billy Collins
+  tags: [writing, title, first impressions, mistakes]
+-
+  text: Follow the accident, fear the fixed plan--that is the rule.
+  author: John Fowles
+  source: Every Day a Word Surprises Me & Other Quotes by Writers
+  tags: [oportunism, accident, failure, planning, agile]
+-
+  text: See other skies and seas.
+  author: Gustave Flaubert
+  source: Every Day a Word Surprises Me & Other Quotes by Writers
+  tags: [exploration, life, travel, sailing]
+
+-
+  text: "The reason to travel: there are inner transitions we can't properly cement without a change of locations."
+  author: Alain de Botton
+  source: Every Day a Word Surprises Me & Other Quotes by Writers
+  tags: [travel, digital nomad, growth, personal development, change, personality, mindfulness]
+-
+  text: Almost everything will work again if you unplug it for a few minutes -- including you.
+  author: Annie Lamott
+  source: Every Day a Word Surprises Me & Other Quotes by Writers
+  tags: [life, mindfulness, meditation, screens, ai, social media, news]
+-
+  text: Life is long if you know how to use it.
+  author: Seneca
+  source: Every Day a Word Surprises Me & Other Quotes by Writers
+  tags: [life]
+-
+  text: The last thing, we decide on in writing a book is what shall be the first we put in it.
+  author: Blaise Pascal
+  source: Every Day a Word Surprises Me & Other Quotes by Writers
+  tags: [writing, plot, proof, math, teaching]
+-
+  text: I begin to speak only when I'm certain what I'll say isn't better left unsaid."
+  author: Cato (Marcus Porcius Cato or Cato the Younger)
+  circa: 50's BC
+  tags: [stoicism, inspiration, stoic, philosophy, life]
+-
+  text: Make the mind tougher by exposing it to adversity.
+  author: Robert Greene
+  tags: [stoicism, inspiration, stoic, philosophy, life]
+-
+  text: To be calm is the highest achievement of the self.
+  author: Zen proverb
+  tags: [stoicism, inspiration, stoic, philosophy, life]
+-
+  text: The best revenge is not to be like your enemy.
+  author: Marcus Aurelius
+  tags: [stoicism, inspiration, stoic, philosophy, life, revenge, character]
+-
+  text: "We should always be asking ourselves: Is this something that is, or is not, in my control?"
+  tags: [stoicism, inspiration, stoic, philosophy, life]
+  author: Epictetus
+-
+  text: "Choose not to be harmed -- and you won't feel harmed. Don't feel harmed -- and you haven't been."
+  author: Marcus Aurelius"
+  tags: [stoicism, inspiration, stoic, philosophy, life, mindfulness]
+-
+  text: "Self-control is strength. Right thought is mastery. Calmness is power."
+  author: James Allen
+  tags: [stoicism, inspiration, stoic, philosophy, life, mindfulness]
+-
+  text: "External things are not the problem. It's your assessment of them. Which you can erase right now."
+  author: Marcus Aurelius
+  tags: [stoicism, inspiration, stoic, philosophy, life, mindfulness]
+-
+  text: "Be tolerant with others and strict with yourself."
+  author: Marcus Aurelius
+  tags: [stoicism, inspiration, stoic, philosophy, life, mindfulness]
+-
+  text: "We are more often frightened than hurt; and we suffer more in imagination than in reality."
+  author: Seneca
+  tags: [stoicism, inspiration, stoic, philosophy, life, mindfulness]
+-
+  text: To be even-minded is the greatest virtue.
+  author: Heraclitus
+  tags: [stoicism, inspiration, stoic, philosophy, life, mindfulness]
+-
+  text: Learn to be indifferent to what makes no difference.
+  author: Marcus Aurelius
+  tags: [stoicism, inspiration, stoic, philosophy, life, mindfulness]
+-
+  text: People hide their truest nature. I understood that; I even applauded it. What sort of world would it be if people bled all over the sidewalks, if they wept under trees, smacked whomever they despised, kissed strangers, revealed themselves?
+  author: Alice Hoffman
+  tags: [self, selfishness, mind, self-control, stoicism, stoic]
+-
+  text: If you are pained by any external thing, it is not this thing that disturbs you, but your own judgment about it. And it is in your power to wipe out this judgment now.
+  author: Marcus Aurelius
+  tags: [stoicism, inspiration, stoic, philosophy, life, mindfulness]
+
+-
+  text: "Be quiet, darling. Let pattern recognition have its way."
+  author: William Gibson
+  book: The Peripheral
+  tags: [ml, ai, generalization, machine learning, data science, ds]
+-
+  text: "I feel hindered by a surfeit of information, oceanic to the point of meaninglessness. The shortcomings of the system are best understood as the result of taking this ocean of data, and the decision points produced by our algorithms, as a near enough substitute for perfect certainty. My own best results are often due to pretending I know relatively little, and acting accordingly, though it's easier said than done."
+  author: William Gibson
+  book: The Peripheral
+  tags: [ml, ai, information overload, machine learning, data science, ds]
+-
+  text: "It was like the pictures in a box at a yard sale, nobody remembering who those people were, or even whose family, let alone how they came to be there. It gave her a sense of things falling, down some hole that had no bottom. Whole worlds falling, and maybe hers too, and it made her want to phone Janice, who was out at the house, and see how her mother was doing."
+  author: William Gibson
+  book: The Peripheral
+  tags: [disorientation, dystopia, history, truth, post truth, family, self, life]
+-
+  text: "I have already told you of the sickness and confusion that comes with time travelling."
+  author: H. G. Wells
+  source: William Gibson, The Peripheral
+-
+  text: "They'd started out as a church, or in a church, not liking anyone being gay or getting abortions or using birth control. Protesting military funerals, which was a thing. Basically they were just assholes, though, and took it as the measure of God's satisfaction with them that everybody else thought they were assholes."
+  author: William Gibson
+  book: The Peripheral
+  context: Activist group named after a bible verse, something like Luke-4:20
+-
+  text: "Algorithms are called the aunties. They're self-organising and so nobody fully understands them."
+  author: William Gibson
+  book: The Peripheral
+  page: 145
+  tags: [algorithms, ml, ai, machine learning, assistants, virtual assistants, siri, alexa, chatbot, complexity, self-organizing, agency]
+-
+  text: "'Encryption isn't optional, when we address one another,' she said."
+  author: William Gibson
+  book: The Peripheral
+  page: ~30
+  tags: [privacy, encryption, communication, language, nlp]
+-
+  text: "The day the soldiers stop bringing you their problems is the day you stopped leading them. They have either lost confidence that you can help them or concluded that you do not care. Either case is a failure of leadership."
+  author: Colin Powell
+  tags: [leadership, inspiration, problems, employees, team, ceo, mentorship, mentor, teaching, caring, engagement]
+-
+  text: "terror should remain the sole prerogative of the state."
+  tags: [terrorism, government, military, military industrial complex]
+  author: William Gibson
+  book: The Peripheral
+-
+  text: "'Reality television. It merged with politics. Then with performance art.' They walked on. 'I think that already happened, back home,'"
+  author: William Gibson
+  book: The Peripheral
+  tags: [entertainment, art, politics, television, reality tv, nonfiction, fiction, post truth, fake news, news]
+-
+  text: "There are times...when we are in the midst of life-moments of confrontation with birth or death, or moments of beauty when nature or love is fully revealed, or moments of terrible loneliness-times when a holy and awesome awareness comes upon us. It may come as deep inner stillness or as a rush of overflowing emotion. It may seem to come from beyond us, without any provocation, or from within us, evoked by music or by a sleeping child. If we open our hearts at such moments, creation reveals itself to us in all it's unity and fullness. And when we return from such a moment of awareness, our hearts long to find some way to capture it in words forever, so that we can remain faithful to it's higher truth."
+  tags: [god, faith, love, awe, clarity, inspiration, emotion]
+  author: Mary Doria Russel
+  book: The Sparrow
+  date: 1996
+-
+  text: "...I begin with songs. They provide a sort of skeleton grammar for me to flesh out. Songs of longing for future tense, songs of regret for past tense, and songs of love for present tense."
+  tags: [music, song, language, grammar, love, philosophy]
+  author: Mary Doria Russel
+  book: The Sparrow
+  date: 1996
+-
+  text: "Watching him with one eye, she wondered if men ever figured out that they were more appealing when they were pursuing their own work than when they were pursuing a woman."
+  author: Mary Doria Russel
+  book: The Sparrow
+  date: 1996
+-
+  text: "Faced with the Divine, people took refuge in the banal, as though answering a cosmic multiple-choice question: If you saw a burning bush, would you (a) call 911, (b) get the hot dogs, or (c) recognize God? A vanishingly small number of people would recognize God, Anne had decided years before, and most of them had simply missed a dose of Thorazine."
+  author: Mary Doria Russel
+  book: The Sparrow
+  date: 1996
+-
+  text: "Feelings are facts. Look straight at 'em and deal with 'em. Work it through, as honestly as you can. If God is anything like a middle-class white chick from the suburbs, which I admit is a long shot, it's what you do about what you feel that matters."
+  author: Mary Doria Russel
+  book: The Sparrow
+  date: 1996
+-
+  text: "There's an old Jewish story that says in the beginning God was everywhere and everything, a totality. But to make creation, God had to remove Himself from some part of the universe, so something besides Himself could exist. So He breathed in, and in the places where God withdrew, there creation exists."
+  author: Mary Doria Russel
+  book: The Sparrow
+  date: 1996
+-
+  text: "We do not here aim to discredit the accomplishments of science, which are mainly converted into menaces by the inadequacies of present political institutions."
+  author: Kenneth Burke, Permanence and Change
+  tags: [science, politics, control problem, techno optimism, techno pessimism]
+  source: "_Flash Effect: Science and the Rhetorical Origins of Cold War America_ by David J. Tietge, Introduction, p. vii"
+-
+  text: |+
+   I drive my care to supermarket
+   The way I take is superhigh
+   A superlot is where I park it
+   And Super Suds are what I buy.
+   Supersalesmen sell me tonic
+   Super-Ton O, for relief.
+   The planes I ride are supersonic.
+   In trains I like the Super Chief.
+   Supercilious men and women
+   Call me superficial, me!
+   Who so superbly learned to swim in
+   Supercolassality.
+   Superphosphate-fed foods feed me
+   Superservice keeps me new.
+   Who would dare to supercede me
+   Super-super-superwho?
+  tags: [poem, industrialization, cold ware america, capitalism, superman, supercompetitor]
+  original source: "'Superman' (poem) by John Updike"
+  author: John Updike
+  source: "_Flash Effect: Science and the Rhetorical Origins of Cold War America_ by David J. Tietge, Chapter 4, p. 91"
+-
+  text: "The right word is always a power, and communicates its definiteness to our action."
+  author: George Eliot
+  tags: [nlp, nlpia, ch1, words, power of words, power of pen, communication, thought]
+-
+  text: "Words are, of course, the most powerful drug used by mankind."
+  author: Rudyard Kipling
+  tags: [nlp, nlpia, ch1, words, power of words, power of pen, communication, thought]
+-
+  text: "The right word may be effective, but no word was ever as effective as a rightly timed pause."
+  author: Mark Twain
+  tags: [nlp, nlpia, ch1, ch6, ch7, stop-words, word sequence, n-gram, rnn, words, power of words, power of pen, communication, thought]
+-
+  text: "A powerful agent is the right word. Whenever we come upon one of those intensely right words in a book or newspaper the resulting effect is physical as well as spiritual, and electrically prompt."
+  author: Mark Twain
+-
+  text: "I have the right ideas, but my words are too... complicated. I need to simplify them, so that people won't get lost in the dark when they see and hear them. I want them to shine like beacons of light in a world of overly complicated darkness. One day I will find the right words, and they will be simple."
+  author: Jack Kerouac
+-
+  text: "Words matter, and the right words matter most of all. In the end they're all that remain of us."
+  author: John Birmingham
+-
+  text: "Getting rich begins with the right mindset, the right words and the right plan."
+  author: Robert Kiyosaki
+
+-
+  text: "Colors fade, temples crumble, empires fall, but wise words endure."
+  author: Edward Thorndike
+-
+  text: "Don't worry about having the right words; worry more about having the right heart. It's not eloquence he seeks, just honesty."
+  author: Max Lucado
+-
+  text: "If words are to enter men's minds and bear fruit, they must be the right words shaped cunningly to pass men's defenses and explode silently and effectually within their minds."
+  author: John Bertram Phillips
+
+######################################################################################3
+# Power of words
+# TODO: ch 1, 13, and front matter -- save the world?
+-
+  text: "the tongue is the instrument either of a great deal of good, or of a great deal of evil;"
+  source: Bible, Proverbs 18:21
+  author: Solomon
+-
+  text: "You don't have the power to make rainbows or waterfalls, sunsets or roses, but you do have the power to bless people by your words and smiles You carry within you the power to make the world better."
+  author: Sharon G. Larsen
+-
+  text: "Words are sacred. If you get the right ones in the right order you can nudge the world a little."
+  author: Tom Stoppard (playwright)
+  play: _The Real Thing_
+  source: goodreads
+  context: "Words... They're innocent, neutral, precise, standing for this, describing that, meaning the other, so if you look after them you can build bridges across incomprehension and chaos. But when they get their corners knocked off, they're no good any more... I don't think writers are sacred, but words are. They deserve respect. If you get the right ones in the right order, you can nudge the world a little or make a poem which children will speak for you when you're dead."
+  used: NLPiA 2, Chapter 7
+-
+  text: "Words are singularly the most powerful force available to humanity. We can choose to use this force constructively with words of encouragement, or destructively using words of despair. Words have energy and power with the ability to help, to heal, to hinder, to hurt, to harm, to humiliate and to humble."
+  author: Yehuda Berg
+-
+  text: "Without knowing the force of words, it is impossible to know more."
+  author: Confucius
+-
+  text: "Kind words can be short and easy to speak, but their echoes are truly endless."
+  author: Mother Teresa
+-
+  text: "Creative words generate energy; negative words drain out energy."
+  author: Robert H. Schuller
+-
+  text: "Occasionally in life there are those moments of unutterable fulfillment which cannot be completely explained by those symbols called words. Their meanings can only be articulated by the inaudible language of the heart."
+  author: Martin Luther King, Jr.
+-
+  text: "Words are the most powerful thing in the universe... Words are containers. They contain faith, or fear, and they produce after their kind."
+  author: Charles Capps
+-
+  text: "Throughout human history, our greatest leaders and thinkers have used the power of words to transform our emotions, to enlist us in their causes, and to shape the course of destiny. Words can not only create emotions, they create actions. And from our actions flow the results of our lives."
+  author: Tony Robbins
+-
+  text: "The power of words is immense. A well-chosen word has often sufficed to stop a flying army, to change defeat into victory and to save an empire."
+  author: Emile de Girardin
+-
+  text: "Here's what my love affair with quotations has taught me: the more you focus on words that uplift you, the more you embody the ideas contained in those words."
+  author: Oprah Winfrey
+### ch7 rnn
+-
+  text: "Words - so innocent and powerless as they are, as standing in a dictionary, how potent for good and evil they become in the hands of one who knows how to combine them."
+  author: Nathaniel Hawthorne
+  tags: [rnn]
+### pca
+-
+  text: "It is with words as with sunbeams - the more they are condensed, the deeper they burn."
+  author: Robert Southey
+  tags: [ch3, nlpia, 2-grams, n-grams, nlp, word embedding, words, glove, word2vec]
+### 2-grams
+-
+  text: "The difference between the right word and the almost right word is the difference between lightning and a lightning bug."
+  author: Mark Twain
+  tags: [ch3, nlpia, 2-grams, n-grams, nlp, word embedding, words, glove, word2vec]
+### ch 6 embeddings
+-
+  text: "A word is not a crystal, transparent and unchanged; it is the skin of a living thought and may vary greatly in color and content according to the circumstances and time in which it is used."
+  author: Oliver Wendell Holmes, Jr.
+-
+  text: "So in writing, there is always a right word, and every other than that is wrong. There is no beauty in words except in their collocation. The effect of a fanciful word misplaced, is like that of a horn of exquisite polish growing on a human head."
+  author: Ralph Waldo Emerson
+  tags: [ch6, nlpia, nlp, word embedding, words, glove, word2vec]
+### ch 1-13 philosophy, prosocial
+-
+  text: "Small deeds done are better than great deeds planned."
+  author: Peter Marshall
+  tags: [agile, mistakes, intuition pumps, ch1, nlpia, philosophy]
+-
+  text: "The thought manifests as the word. The word manifests as the deed. The deed develops into habit. And the habit hardens into character. So watch the thought and its ways with care. And let it spring from love, born out of concern for all beings."
+  author: Gautama Buddha
+  tags: [ch1, nlpia, philosophy]
+-
+  text: "Noble deeds that are concealed are most esteemed."
+  author: Blaise Pascal
+  tags: [widsom, altruisim, ch1, nlpia, philosophy]
+-
+  text: "The game of life is a game of boomerangs. Our thoughts, deeds and words return to us sooner or later with astounding accuracy."
+  author: Florence Scovel Shinn
+  tags: [karma, mindfulness, words, ch1, nlpia, philosophy]
+-
+  text: "Words can sometimes, in moments of grace, attain the quality of deeds."
+  author: Elie Wiesel
+  tags: [karma, mindfulness, words, ch1, nlpia, philosophy]
+- text: "Though it is possible to utter words only with the intention to fulfill the will of God, it is very difficult not to think about the impression which they will produce on men and not to form them accordingly. But deeds you can do quite unknown to men, only for God. And such deeds are the greatest joy that a man can experience."
+  author: Leo Tolstoy
+  tags: [words, god, karma, influence, good deeds, altruism, ch1, nlpia, philosophy]
+- text: "But we may want to keep in mind that deeds and words are not as distinguishable as often we presume. History does not belong only to its narrators, professional or amateur. While some of us debate what history is or was, others take it into their own hands."
+  author: Michel-Rolph Trouillot
+  tags: [post-truth, misinformation, history, writing, words, power of pen, ch1, nlpia, philosophy]
+- text: "To make a deep mental path, we must think over and over the kind of thoughts we wish to dominate our lives."
+  author: Henry David Thoreau
+  tags: [thought, habit, mindfulness, meditation, ch1, nlpia, philosophy]
+- text: "It doesn't take time to think right. It only takes the willingness to do so."
+  author: Kenneth G. Mills
+  tags: [intuition pumps, free will, discipline, philosophy]
+- text: "All that we are is the result of what we have thought; what we think we become."
+  author: Gautama Buddha
+  tags: [intuition pumps, free will, discipline, philosophy, Buddhism, ch1, nlpia, philosophy]
+- text: Never argue on Twitter
+  author: Peter Boghossian
+  title: "How to Have Impossible Conversations: A Very Practical Guide"
+  tags: [intuition pumps, argument, debate, toxic comments, social media, discipline, philosophy, nlp, nlpia, save the world, collective consciousness]
+- text: Beliefs matter because people act upon their beliefs--whether those beliefs are true or not (and it's far easier to be wrong than right).
+  author: Peter Boghossian
+  title: "How to Have Impossible Conversations: A Very Practical Guide"
+  tags: [beliefs, post-truth, misinformation, intuition pumps, argument, debate, toxic comments, misinformation, social media, discipline, philosophy, nlp, nlpia, save the world, collective consciousness]
+- text: First, when people post something on social media, unless explicitly stated, they probably do not want their belief to be corrected. Usually their purpose is to have their view confirmed.
+  author: Peter Boghossian
+  title: "How to Have Impossible Conversations: A Very Practical Guide"
+  tags: [confirmation bias, fallacy, biases, extremism, divisiveness, beliefs, post-truth, misinformation, intuition pumps, argument, debate, toxic comments, misinformation, social media, discipline, philosophy, nlp, nlpia, save the world, collective consciousness]
+- text: "In post modern culture, people not only have their own views, they think they are entitled to their own facts."
+  author: Peter Boghossian
+  tags: [confirmation bias, fallacy, biases, extremism, divisiveness, beliefs, post-truth, misinformation, intuition pumps, argument, debate, toxic comments, misinformation, fake news, social media, discipline, philosophy, nlp, nlpia, save the world, collective consciousness]
+-
+  text: "When you choose to see the good in others, you end up finding the good in yourself."
+  author: John Spence
+  tags: [optimism, intuition pumps, argument, debate, social media, discipline, philosophy, nlp, nlpia, save the world, collective consciousness]
+- text: "At the end of the day - the long day of your life - as people stand around your grave no one will talk about how big your house was, or how many cars you owned, or your boat or plane... they will only talk about ONE thing and ONE thing ONLY: LOVE!  How much you loved them and how much they loved you. So the goal then is to live a life of love. That is all."
+  tags: [love, optimism, intuition pumps, argument, debate, social media, discipline, philosophy, nlp, nlpia, save the world, collective consciousness]
+  author: John Spence
+- text: "Someone else doesn't have to be wrong for you to be right."
+  author: John Spence
+  tags: [optimism, belief, misinformation, intuition pumps, argument, debate, social media, discipline, philosophy, nlp, nlpia, save the world, collective consciousness]
+- text: "No matter how good or bad you have it, wake up each day thankful for your life.  Someone somewhere else is desperately fighting for theirs."
+  author: John Spence
+  tags: [optimism, depression, status, privilege, social media, philosophy, nlpia, save the world, collective consciousness]
+- text: "Until you can see, and admit, that YOU are the problem... You will be unable to realize that YOU must be the solution."
+  author: John Spence
+  tags: [mindfulness, self reflection, metacognition, philosophy, optimism, intuition pumps, argument, debate, social media, discipline, philosophy, nlp, nlpia, save the world, collective consciousness]
+- text: decisions are easy when values are clear
+  author: john Spence
+  tags: [objective function, ai, beneficial ai]
+- text: Faith is an unclassified cognition ve illness disguised as a virtue.
+  author: Peter Boghossian
+- text: "When one has a crisis of faith it means one is struck by the realization than one has been pretending know things that one doesn't know."
+  author: Peter Boghossian
+  tags: [religion, faith, misinformation, delusion, confirmation bias, fallacy, information bubble]
+- text: "Faith: Pretending to know things you don't know."
+  author: Peter Boghossian
+  tags: [religion, faith, misinformation, delusion, confirmation bias, fallacy, information bubble]
+- text: "Just as I am not upset with somebody who has caught a cold, so too I am not upset with somebody who's caught the faith virus."
+  author: Peter Boghossian
+  tags: [religion, faith, misinformation, delusion, confirmation bias, fallacy, information bubble]
+- text: "Keep your thoughts positive because your thoughts become your words. Keep your words positive because your words become your behavior. Keep your behavior positive because your behavior becomes your habits. Keep your habits positive because your habits become your values. Keep your values positive because your values become your destiny."
+  author: Mahatma Gandhi
+  tags: [habit, philosophy, thought, words]
+- text: "Thinking is a habit, and like any other habit, it can be changed; it just takes effort and repetition."
+  author: John Eliot
+  tags: [machine learning, reinforcement learning, habit, philosophical zombie, mindfulness]
+-
+  text: "I know nothing except the fact of my ignorance."
+  author: Socrates
+  tags: [knoweldge, truth]
+- text: "Anyone who holds a true opinion without understanding is like a blind man on the right road."
+  author: Socrates
+  tags: [knoweldge, truth]
+-
+  text: "I set to do you--each one of you, individually and in private--what I hold to be the greatest possible service. I tried to persuade each one of you to concern himself less with what he has than with what he is, so as to render himself as excellent and rational as possible."
+  author: Socrates
+  tags: [meaning of life, consumerism, capitalism, philosophy, values, objective function, life]
+-
+  text: "When the mind is thinking, is it simply talking to itself, asking questions and answering them, and saying yes or no."
+  author: Socrates
+  tags: [words, nlp, language, thought, language of thought]
+-
+  text: "Liberalism is a creation of the seventeenth century, fathered by British philosopher John Locke (1632-1704). For Locke, liberalism means limited government, the rule of law, due process, liberty, freedom of religion, freedom of speech, freedom of the press, freedom of assembly, separation of church and state, and separation of government powers into branches that oversee each other's authority."
+  author: Peter Boghossian
+-
+  text: "Faith is not a reliable path to the truth."
+  author: Peter Boghossian-
+-
+  text: Never argue on Twitter
+  author: Peter Boghossian
+  title: "How to Have Impossible Conversations: A Very Practical Guide"
+-
+  text: Beliefs matter because people act upon their beliefs--whether those beliefs are true or not (and it's far easier to be wrong than right).
+  author: Peter Boghossian
+  title: "How to Have Impossible Conversations: A Very Practical Guide"
+-
+  text: First, when people post something on social media, unless explicitly stated, they probably do not want their belief to be corrected. Usually their purpose is to have their view confirmed.
+  author: Peter Boghossian
+  title: "How to Have Impossible Conversations: A Very Practical Guide"
+-
+  text: "In post modern culture, people not only have their own views, they think they are entitled to their own facts."
+  author: Peter Boghossian
+-
+  text: "When you choose to see the good in others, you end up finding the good in yourself."
+  author: John Spence
+-
+  text: "At the end of the day - the long day of your life - as people stand around your grave no one will talk about how big your house was, or how many cars you owned, or your boat or plane... they will only talk about ONE thing and ONE thing ONLY: LOVE!  How much you loved them and how much they loved you. So the goal then is to live a life of love. That is all."
+  author: John Spence
+- text: "Someone else doesn't have to be wrong for you to be right."
+  author: John Spence
+- text: "No matter how good or bad you have it, wake up each day thankful for your life.  Someone somewhere else is desperately fighting for theirs."
+  author: John Spence
+- text: "Until you can see, and admit, that YOU are the problem... You will be unable to realize that YOU must be the solution."
+  author: John Spence
+- text: Decisions are easy when values are clear.
+  author: john Spence
+  tags: [objective function, ai, beneficial ai]
+-
+  text: Faith is an unclassified cognitive illness disguised as a virtue.
+  author: Peter Boghossian
+  tags: [religion, belief, mental health, delusion, religion, morality, ethics, misinformation, posttruth, postmodernism]
+-
+  text: "When one has a crisis of faith it means one is struck by the realization than one has been pretending know things that one doesn't know."
+  author: Peter Boghossian
+  tags: [religion, belief, knowledge, mental health, delusion, religion, morality, ethics, misinformation, posttruth, postmodernism]
+- text: "Faith: Pretending to know things you don't know."
+  author: Peter Boghossian
+  tags: [religion, belief, knowledge, mental health, delusion, religion, morality, ethics, misinformation, posttruth, postmodernism]
+- text: "Just as I am not upset with somebody who has caught a cold, so too I am not upset with somebody who's caught the faith virus."
+  author: Peter Boghossian
+- text: "Keep your thoughts positive because your thoughts become your words. Keep your words positive because your words become your behavior. Keep your behavior positive because your behavior becomes your habits. Keep your habits positive because your habits become your values. Keep your values positive because your values become your destiny."
+  author: Mahatma Gandhi
+- text: "Thinking is a habit, and like any other habit, it can be changed; it just takes effort and repetition."
+  author: John Eliot
+  tags: [machine learning, reinforcement learning, habit, philosophical zombie, mindfulness]
+-
+  text: "Liberalism is a creation of the seventeenth century, fathered by British philosopher John Locke (1632-1704). For Locke, liberalism means limited government, the rule of law, due process, liberty, freedom of religion, freedom of speech, freedom of the press, freedom of assembly, separation of church and state, and separation of government powers into branches that oversee each other's authority."
+  author: Peter Boghossian
+-
+  text: "Faith is not a reliable path to the truth."
+  author: Peter Boghossian
+-
+  text: "The gigantic challenge is the magnitude of the individual differences in the optimal set point for \"good stress.\" For one person, it's doing something risky with your bishop in a chess game; for someone else, it's becoming a mercenary in Yemen."
+  tags: [neuroscience, stress, hormones, nature nurture, risky behavior, aggression]
+  author: Robert M. Sapolsky
+-
+  text: "Individual differences in testosterone level predict very little about differences in aggression."
+  author: Robert M. Sapolsky
+  tags: [stress, hormones, testosterone, male, macho, sociopathy, aggression, violence]
+-
+  text: "...I might continue to believe that there is no god even if it were proved that there is. A religious friend of mine once remarked that the concept of god is useful, because you can berate god during the bad times. But it is clear to me that I don't need to believe there is a god in order to berate him."
+  tags: [god, religion]
+  author: Robert M. Sapolsky
+-
+  text: "The most important point of [Susan] Fiske's work is that it provides a taxonomy for our differing feelings about different Thems - sometimes fear, sometimes ridicule, sometimes contemptuous pity, sometimes savagery."
+  tags: [tribalism, others, discrimination, stereotypes]
+  author: Robert M. Sapolsky
+-
+  text: "Pulling a gun's trigger can be an appalling act. But if it is suicidal drawing fire to save someone, it has an utterly different meaning. Placing your hand on someone's arm can be an act of deep compassion or the first step of betrayal. The punch line? It's all about context, and the biology of context is vastly more complicated than the biology of the behavior itself."
+  author: Robert M. Sapolsky
+  tags: [context, ethics, behavior, biology, neuroscience, violence, morality, empathy]
+
+-
+  text: "Hormones influencing the sensitivity of the person to environmental stimuli."
+  tags: [hormones, emotion, id, ego, superego, environment, nature nurture, behavior, neuroscience, stress, trauma, anxiety]
+  author: "Robert M. Sapolsky"
+-
+  text: "The frontal cortex is an incredibly interesting part of the brain - ours is proportionately bigger and/or more complex than in any other species."
+  tags: [neuroscience, brain, superego, frontal cortex, humans, animals, intelligence]
+  author: Robert M. Sapolsky
+-
+  text: "I'm a primate, you know? I need to be pro-social, like all of us; I need to be pro-social and affiliative. I need to sit at the campfire with other women."
+  author: Wednesday Martin
+-
+  text: "Humans have a lot of pro-social tendencies."
+  author: Frans de Waal
+-
+  text: "Naturally, things are more complicated - those groovy, pro-social effects of oxytocin apply to how we interact with in-group members."
+  author: Robert M. Sapolsky
+-
+  text: "[The term prosocial] was created by social scientists as an antonym for antisocial."
+  author: C. Daniel Batson
+  tags: [prosocial AI, prosocial, cooperation, altruism, society]
+-
+  text: "If we fail to provide boys with pro-social models of the transition to adulthood, they may construct their own. In some cases, gang initiation rituals, street racing, and random violence may be the result."
+  author: Leonard Sax
+  tags: [prosocial, sociopathy, inequality, education, psychology]
+-
+  author: "Cathy McMorris Rodgers"
+  text: As the foundation of America's robust technology industry, computer science drives advancements in health care, aerospace, financial services, national defense, retail and so many other industries both at home and abroad. Young people should be exposed to computer science in our schools so they have the opportunity to learn, innovate, and develop new advancements to promote the future of technology."
+  tags: [computer science, programming, code school, teaching, career]
+-
+  author: "Satya Nadella"
+  text: "Computer science empowers students to create the world of tomorrow."
+  tags: [computer science, programming, code school, teaching, career]
+-
+  author: "Michael Bloomberg"
+  text: "We salute the coders, designers, and programmers already hard at work at their desks, and we encourage every student who can't decide whether to take that computer science class to give it a try. New York City's economic future depends on it, and while we're already giving thousands of our students the opportunity to learn how to code, much more can and should be done."
+  tags: [computer science, programming, code school, teaching, career]
+-
+  author: "President Barack Obama"
+  text: "Computers are going to be a big part of our future...and that future is yours to shape"
+  tags: [computer science, programming, code school, teaching, career]
+-
+  author: "Stephen Hawking"
+  text: "Whether you want to uncover the secrets of the universe, or you just want to pursue a career in the 21st century, basic computer programming is an essential skill to learn."
+  tags: [computer science, programming, code school, teaching, career]
+-
+  author: "Karlie Kloss"
+  text: "I quickly came to understand that code is a superpower every young woman should be able to access. Understanding that code is the underlying (and invisible) framework of tech means that we do not have to be passive bystanders in our ever-changing digital world."
+  tags: [computer science, programming, code school, teaching, career]
+-
+  author: "Malala Yousafzai"
+  text: "Every girl deserves to take part in creating the technology that will change our world, and change who runs it."
+  tags: [computer science, programming, code school, teaching, career, feminism, women]
+-
+  text: "In the great non zero sum games of history, if you're part of the problem, then you'll likely be a victim of the solution."
+  tags: [computer science, programming, code school, teaching, career]
+  author: Robert Wright
+-
+  text: "Programming is not a zero-sum game. Teaching something to a fellow programmer doesn't take it away from you. I'm happy to share what I can, because I'm in it for the love of programming."
+  tags: [computer science, programming, code school, teaching, career, zero sum game, positive sum game]
+  author: John Carmack
+-
+  text: "I don't look at business as a zero-sum game. I don't. I've never seen it play out that way in our industry, and I think you innovate and you add value, deliver value back to customers, and you get value back from the world."
+  tags: [business, open source, career, zero sum game, positive sum game]
+  author: Marc Benioff
+-
+  text: "We believe that economics does not necessarily have to be a zero-sum game; it can be a win-win proposition for everyone involved so long as they have the tools in which to succeed."
+  tags: [business, open source, career, zero sum game, positive sum game]
+  author: Ron Kind
+-
+  text: "It's perhaps not so much how your amygdala is tuned that makes you politically extreme, but that your intrinsic nervousness makes you more responsive to things that might seem to threaten your particular social world. Education probably plays an important role in dampening that response by allowing the brain's frontal lobes (where much of the brain's conscious work goes on) to counteract the emotional responses with a more considered view, so explaining why education is invariably the friend of liberal politics."
+  tags: [neuroscience, politics, extremism, brain, education, teaching, liberal democracy]
+  author: Robin Dunbar
+  title:  "How Many Friends Does One Person Need?: Dunbar's Number and Other Evolutionary Quirks"
+  source: goodreads
+  tags: [social networks, extremism, politics, confirmation bias, tribalism]
+-
+  text: "[Dunbar's number is] the number of people you would not feel embarrassed about joining uninvited for a drink if you happened to bump into them in a bar. [...] this limit is a direct function of relative neocortex size, and that this in turn limits group size [...] the limit imposed by neocortical processing capacity is simply on the number of individuals with whom a stable inter-personal relationship can be maintained."
+  tags: [neuroscience, tribalism, other, friends, social network, social networks, extremism, politics, confirmation bias, economics, dunbar's number, coop, tribalism, social network]
+  author: Robin Dunbar
+  title:  "How Many Friends Does One Person Need?: Dunbar's Number and Other Evolutionary Quirks"
+  source: wikipedia.org
+-
+  text: "Homo sapiens, it turns out, is the most cooperative species on the planet, outperforming ants, hyenas, and even the naked mole-rat when it comes to living alongside those who are beyond our next of kin."
+  tags: [neuroscience, evolution, biology, homo sapien, supercooperators, altruism, economics, dunbar's number, coop, supercooperators, social network]
+  author: Kate Raworth
+  title: "Doughnut Economics: Seven Ways to Think like a 21st-Century Economist"
+-
+  text: "Economics is the mother tongue of public policy,"
+  author: Kate Raworth
+  title: "Doughnut Economics: Seven Ways to Think like a 21st-Century Economist"
+  tags: [economics, public policy]
+-
+  text: "global greenhouse gas emissions is highly skewed: the top 10 percent of emitters--think of them as the global carbonistas living on every continent--generate around 45 percent of global emissions, while the bottom 50 percent of people contribute only 13 percent."
+  author: Kate Raworth
+  title: "Doughnut Economics: Seven Ways to Think like a 21st-Century Economist"
+  tags: [economics, global warming, inequality, environmental impact]
+-
+  text: "For over 70 years economics has been fixated on GDP, or national output, as its primary measure of progress. That fixation has been used to justify extreme inequalities of income and wealth coupled with unprecedented destruction of the living world. For the twenty-first century a far bigger goal is needed: meeting the human rights of every person within the means of our life-giving planet."
+  author: Kate Raworth
+  title: "Doughnut Economics: Seven Ways to Think like a 21st-Century Economist"
+  tags: [economics, regenerative economics, regenerative business, social impact,
+    externalities, doughnut economics, rational agent, behavioral economics]
+-
+  text: "Depicting rational economic man as an isolated individual - unaffected by the choices of others-
+  author:  proved highly convenient for modelling the economy, but it was long questioned even from within the discipline. At the end of the nineteenth century, the sociologist and economist Thorstein Veblen berated economic theory for depicting man as a \"self-contained globule of desire\", while the French polymath Henri Poincaré pointed out that it overlooked \"people's tendency to act like sheep\". He was right: we are not so different from herds as we might like to imagine. We follow social norms, typically preferring to do what we expect others will do and, especially if filled with fear or doubt, we tend to go with the crowd."
+  author: Kate Raworth
+  title: "Doughnut Economics: Seven Ways to Think like a 21st-Century Economist"
+  tags: [economics, regenerative economics, regenerative business, social impact, externalities, doughnut economics, rational agent, behavioral economics]
+  attribution: Thorstein Veblen, Henri Poincaré
+-
+  text: "The pessimist complains about the wind; the optimist expects it to change; the realist adjusts the sails."
+  author: William Arthur Ward
+  tags: [adversity, optimism, practicality]
+-
+  text: "Life isn't about finding yourself. Life is about creating yourself."
+  author: "George Bernard Shaw"
+  tags: [life, meaning, will, motivation]
+-
+  text: |+
+    "You're the reason she left. You can leave too, for all I care. I sure as hell would be better off without you."
+
+    The words were just as I remembered them, but it wasn't Nicole saying them.
+
+    It was me.
+  tags: [flawed human memory, pivotal moments in life, _Sliding Doors_ , Remem, cognitive assistants, memory assistant, Google Search, duckduckgo, life log, qary]
+  book: _Exhalation_ short story "Truth of Fact, Truth of Fiction"
+  title: Truth of Fact, Truth of Fiction
+  author: Ted Chiang
+  nlpia: ch02 stopwords
+-
+  text: "\"Tell me the story that the paper tells,\" he said."
+  book: _Exhalation_ short story "Truth of Fact, Truth of Fiction"
+  character: Moseby talking to Jinji
+  context: Genesis story of Adam and snake read to an African chief and oral storyteller.
+  concept: [fake news, written vs oral storytelling, memory, machines better eye witnesses]
+  title: Truth of Fact, Truth of Fiction
+  author: Ted Chiang
+  nlpia: ch02 about fake news and tokenizing quotes.
+-
+  text: "Evolution has no foresight. Complex machinery develops its own agendas. Brains -- cheat. Feedback loops evolve to promote stable heartbeats and then stumble upon the temptation of rhythm and music. The rush evoked by fractal imagery, the algorithms used for habitat selection, metastasize into art. Thrills that once had to be earned in increments of fitness can now be had from pointless introspection. Aesthetics rise unbidden from a trillion dopamine receptors, and the system moves beyond modeling the organism. It begins to model the very process of modeling. It consumes evermore computational resources, bogs itself down with endless recursion and irrelevant simulations. Like the parasitic DNA that accretes in every natural genome, it persists and proliferates and produces nothing but itself. Metaprocesses bloom like cancer, and awaken, and call themselves I."
+  tags: [evolution, survival of the fittest, competition, cooperation, neuroscience, conciousness]
+  book: Blindsight
+  author: Peter Watts
+-
+  text: "People aren't rational. We're not thinking machines, we're -- we're feeling machines that happen to think."
+  tags: [evolution, neuroscience, emotion, conciousness]
+  book: Blindsight
+  author: Peter Watts
+-
+  text: "This is how you communicate with a fellow intelligence: You hurt it, you keep on hurting it, until you can distinguish the speech from the screams."
+  tags: [decypher alien communication, sociopathy, cross-species empathy and ethics]
+  book]: Blindsight
+  author: Peter Watts
+-
+  text: "There's no such things as survival of the fittest. Survival of the most adequate, maybe. It doesn't matter whether a solution's optimal. All that matters is whether it beats the alternative."
+  tags: [evolution, survival of the fittest, consciousness]
+  book: Blindsight
+  author: Peter Watts
+-
+  text: "I brought her flowers one dusky Tuesday evening when the light was perfect. I pointed out the irony of that romantic old tradition -- the severed genitalia of another species, offered as a precopulatory bribe -- and then I recited my story just as we were about to fuck."
+  tags: [love, rommance, sex]
+-
+  text: "If information is to the mind what food is to the body, then it is time we become aware of the impact of our informational diet on our mental health"
+  author: Jodie Jackson
+  tags: [psychological impact of social media]
+  book: You are What you Read
+  author: Peter Watts
+-
+  text: "A primary object should be the education of our youth in the science of government. In a republic, what species of knowledge can be equally important? And what duty more pressing than communicating it to those who are to be the future guardians of the liberties of the country?"
+  tags: [social media, education, democracy, knowledge, fake news]
+  auth]or: George Washington
+-
+  text: "There is nothing which can better deserve our patronage than the promotion of science and literature. Knowledge is in every country the surest basis of public happiness."
+  author: George Washington
+  tags: [social media, education, democracy, science, knowledge, fake news]
+-
+  text: "Is it [the answer] just a rigorous parctice of dialectic synthesis as essentially conversations with a-holes of various flavors until they are not a-holes because you become deeply empathetic with their perspective."
+  tags: [Happiness quotient, HDP vs GDP]
+  auth]or: Lex Frideman
+  media: podcast
+  brainstorm partner: Daniel Schmachtenberg
+  url: https://lexfridman.com/daniel-schmachtenberger/
+-
+  text: "Let's throw out happines and comfort. They are useless. Personal growth which is intellectural growth, I think we are able to make that concrete for ourselves. I think we can ourselves report that and understand what that means. We all dream of becoming a certain kind of person and we think we have a sense of getting closer and not towards that person. e behave an idealistic sense of the person we want to become."
+  tags: [Happiness Quotient, GNH, beneficial ai, human compatible, utilitarianism]
+  author: Lex Frideman
+  media: podcast
+  brainstorm partner: Daniel Schmachtenberg
+  url: https://lexfridman.com/daniel-schmachtenberger/
+-
+  text: "What about love. F*@# if you're happy or not, F*@# if you are comfortable or not. That's a good metric. If I can quantify it. How many times a day have you thought positively about another person, put down that down as a number, and increase that number."
+  tags: [Happiness Quotient, GNH, beneficial ai, human compatible, utilitarianism]
+  auth]or: Lex Frideman
+  media: podcast
+  brainstorm partner: Daniel Schmachtenberg
+  url: https://lexfridman.com/daniel-schmachtenberger/
+-
+  text: "Think about the emergence of the plow, the ox-drawn plow and the beginning of agriculture that came with it. Where before that you had hunter gatherer and then you had a horticulture kind-of digging stick, but not the plow. Well the world changed a lot with that, right. And a few of the changes, that at least some of the theorists believe in, is when the ox drawn plow started to proliferate, any culture that utilized it was able to start to actually cultivate grain. Because just with the digging stick you couldn't get enough grain for it to matter. Grain was a storable caloric surplus. They could make it through the famines. They could grow their populations. So the ones that used it got so much ahead that it became obligate and everybody used it. That corresponding with the use of a plow, animism went away everywhere that it existed. Because you can't talk about the spirit of the buffalo while beating the cow all day long to pull a plow. So the moment that we do animal husbandry of that kind where you have to beat the cow all day you have to say it's just a dumb animal. Man has dominion over Earth. And the nature of our religious and even spiritual ideas change. You went from women primarily using the digging stick to do the horticulture or gathering before that. Men doing the hunting stuff, to now men had to use the plow because the upper body strength really mattered. Women would have more miscarriages when they would do it when they were pregnant. So all the caloric supply started to come from men where it had been from both before and the ratio of male/female gods changed to being mostly male gods. That particular line of thought says that then  Feminism followed the tractor. And the rise of feminism in the west followed women being able to say we can do what men can because the male upper body strength wasn't differential once the internal combustion engine was much stronger. And we [women] can drive a tractor. ... The plow is also the beginning of the anthropocene. It was the beginning of us changing the environment radically to clearcut areas to make them useful for people. Which also changed the view of the web of life, where we're just a part of it, etc."
+  concept: tech affects society;  plow created patriarchal society
+  tags: [technology, agriculture, plow, patriarchy, tractor created feminism, technooptimism, Jetsons Fallacy, bias, ethics, ai ethics]
+  location: 3:24:00 - 3:27:09
+  author: Daniel Schmachtenberger
+  secondary author: Lex Frideman
+-
+  text: "So I dont' think trying to trace complex things to one cause is a good idea. So the idea that technology is values agnostic is silly. Technology codes patterns of behavior that code rationalizing those patterns of behavior and believing in them."
+  location: 3:26:42
+  tags: [causal models, confounding factors, techno-optimism, ai ethics, agi, singularity, control problem]
+  author: Daniel Schmachtenberger
+  secondary author: Lex Frideman
+-
+  text: "In the film Star Wars and the cartoon The Jetsons, humans  are surrounded by sophisticated AIs, while themselves remaining unenhanced. In reality, AI will not just transform the world. It will transform us."
+  tags: [The Jetsons Fallacy, AI, AGI, consciousness, techno-optimism]
+  media: podcast
+  author: Susan Schneider
+  secondary author: Michael Bess
+-
+  text: "Because we do not understand the brain very well we are constantly tempted to use the latest technology as a model for trying to understand it. In my childhood we were always assured that the brain was a telephone switchboard...Sherrington, the great British neuroscientist, thought the brain worked like a telegraph system. Freud often compared the brain to hydraulic and electromagnetic systems. Leibniz compared it to a mill... At present, obviously, the metaphor is the digital computer."
+  author: John Searle
+  tags: [neuroscience, brain, mind, consciousness, communcation, nlp, neurons, psychology, metaphor, computationalism]
+-
+  text: "The problem posed by indirect speech acts is the problem of how it is possible for the speaker to say one thing and mean that but also to mean something else."
+  tags: [meaning, communication, nlp, natural language, semantics]
+  author: John Searle
+-
+  text: "If you can say it clearly, you don't understand it yourself"
+  tags: [nlp, language, teaching, mind, intelligence, thought]
+  concepts: [syntax doesn't suffice for semantics]
+  author: John Searle
+-
+  text: "Why does all the information processing the brain need to feel a certain way, from the inside?"
+  book: "The Conscious Mind"
+  author: David Chalmers
+-
+  text: "The reason that no computer program can ever be a mind is simply that a computer program is only syntactical, and minds are more than syntactical. Minds are semantical, in the sense that they have more than a formal structure, they have content."
+  tags: [computationalism, consciousness, ai, agi, self awareness, mind, neuroscience, nlp]
+  concepts: ["brains cause minds", "syntax doesn't suffice for semantics", "Strong AI", "AGI (Artificial General Intelligence)", "The Chinese Room"]
+  author: John Searle
+-
+  text: "CAC: Consciousness can be explained computationally, and further, the computational details of a system fix the kind of conscious experiences that it has and whether it has any."
+  concept: substrate independence (of consciousness and mind)
+  tags: [computationalism, consciousness, ai, agi, substrate independence, mind, neuroscience]
+  book: "Artificial You"
+  author: Susan Schneider
+-
+  text: "But, in our age, conscience and duty are not ideals: an excess of either is seen as a mental illness called social-pressure personality disorder."
+  tags: [ethics, morality, conscience, consciousness, social pressure, sociopathy, conformity, mob, individualism, future, intelligence, evolution]
+  character: AA
+  page: 122
+  book: "Death's End"
+  author: Cixin Liu
+-
+  text: "We have seen that fascism is not just something those other people did. No. It's right here. In this room."
+  tags: [fascism, authoritarianism, nazi, self examination, self criticism, sociopathy, self awareness, ethics, philosophy, politics, leadership, dicatatorship, democracy]
+  author: Ron Jones
+  utterer: Ron Jones
+  date: 1967
+  page: 9
+  book: The Third Wave (originaly titled Take as Directed)
+  url: "http://libcom.org/files/The%20third%20wave.pdf"
+-
+  text: "Of course, perhaps the real reason for sending her was only one of vanity, a wish that the Staircase Program would not be forgotten by the future."
+  tags: [emmisary, love, first contact, alien invasion, spy, intelligence, brain, neuroscience, dictatorship, leadership]
+  page: 99
+  book: "Death's End"
+  author: Cixin Liu
+-
+  text: "This moment resembled the rest of his life: a dedicated watch for a slim, slim ray of hope."
+  tags: [optimism, science, life, human condition]
+  page: 57
+  character: Cheng Xin
+  book: "Death's End"
+  author: Cixin Liu
+-
+  text: "The root cause for Crisis Infantilism may well be found in the interaction between these manifestations and the tremendous inertia of human society's inherent conservatism."
+  tags: [society, politics, change, alien invasion, dark forest, cooperation, fear, mob]
+  page: 43
+  book: "Death's End"
+  author: Cixin Liu
+-
+  text: "I crushed some weeds and added them to the water. It's the most organic drink."
+  tags: [invention, consumerism, tea, selling water]
+  page: 40
+  character: Tianming
+  tag: Green Tempest
+  book: "Death's End"
+  author: Cixin Liu
+-
+  text: "That most lovely day of his time in college held a golden glow in his mind. ... Tianming fell in love with drizzly days, ..."
+  tags: [love, youth, mind, neuroscience, memory, beauty]
+  page: 39
+  character: Tianming
+  book: "Death's End"
+  author: Cixin Liu
+-
+  text: "He thought of \"The Judgement\" by Franz Kafka, in which a father curses his son and sentences him to death. The son agrees, as easily as someone agreeing to take out the trash or to shut the door, ..."
+  tags: [life, death, suicide, respect for elders, authority, power, perfection, judging, being judged, son, childhood]
+  page: 38
+  book: "Death's End"
+  character: Tianming
+  author: Cixin Liu
+-
+  text: "It was as ridiculous to worry about the future as to lament the past."
+  tags: [life, anxiety, worry, time, future, past, memory, optimism, philosophy]
+  page: 33
+  book: "Death's End"
+  character: Tianming
+  author: Cixin Liu
+-
+  text: "But if we're talking about the universe, life is exceedingly rare, and its impact on the evolution of the universe can be ignored."
+  tags: [life, survival of the fittest, survival, death, meaning, scale, intelligence, big picture, power, impact, evolution, time, universe, optimism, cosmology]
+  page: 32
+  book: "Death's End"
+  character: Green Glasses
+  author: Cixin Liu
+-
+  text: "As long as you give it enough time, life is stronger than metal and stone, more powerful than typhoons and volcanoes."
+  tags: [life, survival of the fittest, survival, death, meaning, scale, intelligence, big picture, power, evolution, time, universe, optimism]
+  page: 31
+  book: "Death's End"
+  character: Yang Dong
+  author: Cixin Liu
+-
+  text: "Once, Yang Dong had held a basic belief: Life and the world were perhaps ugly, but at the limits of the micro and macro scales, everything was harmonious and beautiful."
+  tags: [life, beauty, meaning, symmetry, harmony, scale, intelligence, human condition, complexity, happiness, big picture, abstraction]
+  page: 28
+  book: "Death's End"
+  character: Yang Dong
+  author: Cixin Liu
+-
+  text: "As far as she could see, a considerable number of the people around her lived only half lives. As long as one was good at forgetting and adjusting, half a life could be lived in contentment and even happiness."
+  tags: [life, intelligence, human condition, memory, ignorance is bliss, contentment, happiness, forgetting, delusion, self delusion]
+  page: 29
+  book: "Death's End"
+  character: Yang Dong
+  author: Cixin Liu
+-
+  text: "Trisolaran writing was purely ideographic; unlike human scripts, which were mostly phonetic, Trisolaran writing had no connection to their speech, but expressed ideas directly."
+  tags: [language, nlp, deaf, deafness, visual language, pictograph, ideographs, mandarin, Chinese, thought, meaning, words, neuroscience, alien intelligence, alien]
+  footnote: "An introduction to how Chinese Characters really function may be found in John DeFrancis's _Chinese Language: Fact and Fantasy_"
+  page: 589
+  book: "Death's End"
+  author: Cixin Liu
+-
+  text: "Sophon bowed again. 'Welcome to Universe 647. I am its manager."
+  page: 585
+  book: "Death's End"
+  tags: [physics, dao of physics, bot, AI, AGI, parallel universes, heat death, thermodynamics, entropy]
+  author: Cixin Liu
+-
+  text: "We're going to advance! Advance! We'll stop at nothing to advance!"
+  tags: [sociopath, war, intelligence, spycraft, extraterrestrial intelligence, alien intelligence, dark forest]
+  character: Wade and Cheng Xin
+  page: 588
+  book: "Death's End"
+  author: Cixin Liu
+-
+  text: "Reading The Shoulder Shrug between two and three o'clock each morning, post-nightmare, or during the afternoon, in the basement."
+  tags: [nlp, words, language, thought, meaning, books, literature]
+  character: Liesel
+  book: "The Book Thief"
+  author: Markus Zusak
+  references:
+    - https://bookthiefbooks.weebly.com/the-shoulder-shrug.html
+-
+  page: 85
+  text: "Trust me, though, the words were on their way, and when they arrived, Liesel would hold them in her hands like the clouds, and she would wring them out, like the rain."
+  tags: [nlp, words, language, simile, word embeddings, thought, meaning, books, literature]
+  character: Liesel
+  book: "The Book Thief"
+  author: Markus Zusak
+-
+  author: Oliver Sacks
+  text: "Individuality is deeply imbued and us from the very start, at the neuronal level. Even at a motor level, researchers have shown, and infant does not follow a set pattern of learning to walk or how to reach for something. each baby experiments with different ways of reaching for objects and over the course of several months discovers or selects his own motor solutions. When we try to envisage the neural basis of such individual learning, we might imagine a population of movements (and their neural correlates) being strengthened or pruned away by experience."
+  book: On The Move
+  source: On The Move page 368 paragraph 2
+  tags: [childhood, active learning, growth, learning, brain development, neuroscience, brain, consciousness, therapy, mental health, individuality]
+-
+  location: page 368 paragraph 3
+  author: Oliver Sacks
+  text: "Similar considerations arise with regard to recovery and rehabilitation after strokes and other injuries. There are no rules; there is no prescribed path of recovery; every patient must discover or create his own motor and perceptual patterns, his own solutions to the challenges that faced him; and it is the function of a sensitive therapist to help him in this."
+  source: On the Move page 368 paragraph 3
+  book: On The Move
+  tags: [neuroscience, healthcare, brain, consciousness, therapy, mental health, natural selection, individuality, destiny, fate, learning, active learning]
+-
+  location: page 369 paragraph 1
+  author: Oliver Sacks
+  text: "And in its broadest sense, neural Darwinism implies that we are destined, whether we wish it or not, the life of a particularity and self-development, to make our own individual paths through life."
+  source: On the Move page 369 paragraph 1
+  book: On The Move
+  tags: [neuroscience, Darwinism, natural selection, individuality, destiny, fate, learning, active learning]
+-
+  location: 369 paragraph 3
+  source: On the Move page 369 paragraph 3
+  author: Oliver Sacks
+  book: On the Move
+  text: "In the 1980's, Edelman's theory was so novel that it could not easily be fitted into any of the existing models, the paradigms of Neuroscience, and it was this, I think, which prevented its wide acceptance -- coupled with Edelman's at times dense and difficult writing. Edelman's theory was \"premature,\" so ahead of its time, so complex and demanding of new ways of thinking, that it was resisted, or ignored, in the 1980's, but in the next 20 or 30 years, with new technologies, we will be in a good position to verify parentheses or disprove close parentheses its ultimate tenants. It remains, for me, the most powerful and elegant explanation of how we humans and our brains construct are very individual selves and world."
+  source: On the Move
+  tags: [neuroscience, Darwinism, natural selection, individuality, consciousness, personality]
+-
+  location: page 384 paragraph 4 (last paragraph)
+  author: Oliver Sacks
+  text: Over a lifetime, I have written millions of words, but the act of writing seems as fresh, and as much fun, as when I started it nearly 70 years ago.
+  book: On the Move
+  tags: [writing]

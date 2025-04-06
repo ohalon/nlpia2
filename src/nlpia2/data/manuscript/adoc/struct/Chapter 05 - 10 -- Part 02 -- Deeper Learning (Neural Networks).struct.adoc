@@ -1,0 +1,59 @@
+
+:toc: left
+:toclevels: 6
+
+++++
+  <style>
+  .first-sentence {
+    text-align: left;
+    margin-left: 0%;
+    margin-right: auto;
+    width: 66%;
+    background: Beige;
+  }
+  .last-sentence {
+    text-align: right;
+    margin-left: auto;
+    margin-right: 0%;
+    width: 66%;
+    background: AliceBlue;
+  }
+  </style>
+++++
+= Deeper learning (neural networks)
+[.first-sentence]
+Part 1 gathered the tools for natural language processing and dove into machine learning with statistics-driven vector space models.
+
+[.last-sentence]
+You learned about algorithms such as latent semantic analysis (LSA) that can help make sense of those connections by gathering words into topics.
+
+[.first-sentence]
+But part 1 considered only linear relationships between words.
+
+[.last-sentence]
+And the models of part 2 are often more accurate than those you could build with the hand-tuned feature extractors of part 1.
+
+[.first-sentence]
+The use of multilayered neural networks for machine learning is called _deep learning_.
+
+[.last-sentence]
+In part 2, we begin to peel open the "black box" that is deep learning and learn how to model text in deeper nonlinear ways.
+
+[.first-sentence]
+We start with a primer on neural networks.
+
+[.last-sentence]
+And finally we show you how to use machine learning to actually generate novel text.
+
+[.first-sentence]
+You could stack them one after each other, like nested `if` statements.
+
+[.last-sentence]
+Your logistic regression plot would look something like this figure.
+
+[.first-sentence]
+Autistic children often excel at games and activities
+
+[.last-sentence]
+Autism and German language and affect on precision/explicitness/rigidness of language. Dad's mentioning of it and his way of thinking as a doctor, and his inability to perform abstraction. Early on, machines were like my father, but with the fuzziness of word2vec and GloVe, machines became more adept at analogy and abstraction.
+

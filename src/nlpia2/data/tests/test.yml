@@ -1,0 +1,12 @@
+- &1 !list
+  - one
+  - two
+  - three
+- &2 !dict
+  k: v
+  k2: v2
+  l: *1
+- &3 !dict
+  k: v
+  k2: v2
+  d: *2

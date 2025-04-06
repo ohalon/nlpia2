@@ -1,0 +1,136 @@
+name: nlpia2
+channels:
+  # using anaconda channel is a bad idea:
+  # https://github.com/conda/conda/issues/9462
+  # - anaconda
+  # - spacy
+  - conda-forge
+  - huggingface
+  - pytorch
+  - spacy
+  # `defaults` should take prescedence (last channel):
+  # https://docs.conda.io/projects/conda/en/latest/user==guide/tasks/manage==channels.html#managing==channels
+  - defaults
+
+dependencies:
+  - asciidoctor
+  # - beautifulsoup4
+  - conda
+  - graphviz
+  # - h5py
+  - sentence-transformers==2.2.2
+  - jupyter
+  - pandas==2.1.4
+  - pip
+  - pynndescent
+  - pyyaml
+  - python>=3.10
+  # - python==3.7.10
+  - python-dotenv
+  - python-graphviz
+  - spacy==3.7.2
+  - xmltodict
+  # - pip:
+  #   - --requirement requirements.txt    
+      # boto3~=1.34.6
+      # fastapi~=0.105.0
+      # pandas~=2.1.4
+      # python-dotenv~=1.0.0
+
+      # sentence_transformers==2.2.2 
+      # #    huggingface-hub
+      # #    joblib==1.3.2
+      # #    scikit-learn==1.3.2
+      # #        scipy==1.11.4
+      # #        joblib
+      # #        numpy
+      # #        threadpoolctl
+      # #    tokenizers==0.15.0
+      # #    torchvision
+      # #        pillow
+      # #    transformers
+      # #        regex==2023.10.3
+
+      # spacy==3.7.2
+      # #    pydantic
+      # #        pydantic-core==2.14.5
+      # # tqdm
+      # # unidecode
+
+      # uvicorn==0.25.0
+
+# dependencies:
+#   - asciidoctor>=2.0.16
+#   - beautifulsoup4>=4.10.0
+#   - boto3>=1.21.25
+#   - configargparse>=1.5.3
+#   - django>=4.0.3
+#   - ffmpeg>=4.3
+#   # - gettext>=0.21.0
+#   - gitpython>=3.1.27
+#   - graphviz>=2.48.0
+#   - h5py
+#   - html2text>=2020.1.16
+#   - html5lib>=1.1
+#   - huggingface_hub
+#   - jupyter_console>=6.4.3  # 5.2.0 6.0.0 6.1.0 6.2.0 **6.3.0** 6.4.0 6.4.3
+#   # - lxml=4.6.3=py38h9120a33_0
+#   # - markupsafe=2.0.1
+#   - matplotlib-base>=3.4.2
+#   # - mistune=0.8.4=py38h7b6447c_1000
+#   # - mkl=2020.2=256
+#   # - mkl-service=2.3.0=py38he904b0f_0
+#   # - mkl_fft=1.3.0=py38h54f3939_0
+#   # - mkl_random=1.1.1=py38h0573a6f_0
+#   # - more-itertools=8.8.0=pyhd3eb1b0_0
+#   # - munkres=1.1.4=py_0
+#   # - murmurhash=1.0.5=py38h2531618_0
+#   # - nbclient=0.5.3=pyhd3eb1b0_0
+#   # - nbconvert=6.1.0
+#   - nltk>=3.6.7
+#   - numpy>=1.21.1
+#   # - pcre=8.45
+#   # - pexpect=4.8.0
+#   # - pickleshare=0.7.5
+#   # - pillow=8.4.0
+#   # - plac=1.1.0
+#   - pandas>=1.3.1
+#   - pip
+#   - pynndescent>=0.5.6
+#   - pre-commit=2.17.0
+#   - protobuf>=3.16.0
+#   - psutil>=5.8.0
+#   # - pyparsing=2.4.7
+#   # - pyqt=5.9.2
+#   - pytest-cov
+#   # - pyyaml=5.4.1
+#   # - pyzmq=22.2.1
+#   # - qt=5.9.7
+#   # - qtconsole=5.1.1
+#   # - qtpy=1.10.0
+#   - python=3.10.12
+#   - pytorch-cpu>=1.9.0
+#   - qtpy>=2.0.1
+#   - regex>=2021.8.3
+#   - ruby>=2.6.6
+#   - scikit-learn>=0.24.2
+#   - scipy>=1.7.0
+#   - seaborn>=0.11.2
+#   - sentence-transformers>=2.1.0
+#   - sentencepiece>=0.1.95
+#   - spacy>=3.1.1
+#   - spacy-legacy
+#   - sphinx>=4.4.0
+#   # - tokenizers=0.10.3
+#   # - toml=0.10.2
+#   - torchtext>=0.10.0
+#   - torchvision
+#   - transformers>=4.11.3
+#   - xmltodict>=0.12.0
+#   # - zeromq=4.3.4
+#   - pip:
+#     - spacy-experimental
+#     - -e git+https://gitlab.com/tangibleai/nlpia2_wikipedia
+#   #   - -e git+https://gitlab.com/tangibleai/Wikipedia.git#egg=wikipedia
+#   #    - -e git+https://gitlab.com/tangibleai/nessvec.git#egg=nessvec
+

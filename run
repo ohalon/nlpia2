@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# docker run -itv $PWD:/nlpia2 -p 8888:8888 tangibleai/nlpia
+docker run --interactive --tty --volume $(pwd)/:/nlpia2 --publish 8888:8888 tangibleai/nlpia2:latest

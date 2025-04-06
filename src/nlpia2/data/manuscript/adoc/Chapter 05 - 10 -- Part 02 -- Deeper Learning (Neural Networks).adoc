@@ -1,0 +1,32 @@
+= Deeper learning (neural networks)
+:chapter: FM
+:part: 2
+
+Part 1 gathered the tools for natural language processing and dove into machine learning with statistics-driven vector space models.
+You discovered that even more meaning could be found when you looked at the statistics of connections between words.footnote:[*Conditional probability* is one term for these connection statistics (how often a word occurs given that other words occur before or after the "target" word). *Cross correlation* is another one of these statistics (the likelihood of words occurring together). The *singular values* and *singular vectors* of the word-document matrix can be used to collect words into topics, linear combinations of word counts.]
+You learned about algorithms such as latent semantic analysis (LSA) that can help make sense of those connections by gathering words into topics. 
+
+But part 1 considered only linear relationships between words. 
+And you often had to use human judgment to design feature extractors and select model parameters. 
+The neural networks of part 2 accomplish most of the tedious feature extraction work for you. 
+And the models of part 2 are often more accurate than those you could build with the hand-tuned feature extractors of part 1.
+
+The use of multilayered neural networks for machine learning is called _deep learning_.
+This new approach to NLP and the modeling of human thought is often called "connectionism" by philosophers and neuroscientists.footnote:[See the web page titled "Stanford Encyclopedia of Philosophy - Connectionism" (https://plato.stanford.edu/entries/connectionism).]
+The increasing access to deep learning, through greater availability of computational resources and the rich open source culture, will be your gateway into deeper understanding of language. 
+In part 2, we begin to peel open the "black box" that is deep learning and learn how to model text in deeper nonlinear ways. 
+
+We start with a primer on neural networks. 
+Then we examine a few of the various flavors of neural networks and how they can be applied to NLP. 
+We also start to look at the patterns not just between words but between the characters within words. 
+And finally we show you how to use machine learning to actually generate novel text.
+
+You could stack them one after each other, like nested `if` statements.
+Or you could run them all in parallel like your brain does.footnote:[Human brains can't perform these high level tasks in parallel. Consciousness attention is a serial pipeline. But individual neurons _can_ process sensory information in parallel. "Brain Mechanisms of Serial and Parallel Processing..." (https://www.jneurosci.org/content/28/30/7585) by Sigman and Dehaene. ]
+But let's look at just one of these logical gates in your thinking.
+Imagine you built a logistic regression to classify a news article as truthful or not, based only on the title.
+And what if you had only the length of the title to go on.
+Your logistic regression plot would look something like this figure.
+
+Autistic children often excel at games and activities
+Autism and German language and affect on precision/explicitness/rigidness of language. Dad's mentioning of it and his way of thinking as a doctor, and his inability to perform abstraction. Early on, machines were like my father, but with the fuzziness of word2vec and GloVe, machines became more adept at analogy and abstraction.

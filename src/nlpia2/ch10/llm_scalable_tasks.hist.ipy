@@ -1,0 +1,103 @@
+>>> url = 'https://gitlab.com/tangibleai/nlpia2/-/raw/main/src/nlpia2/data/llm/llm-emmergence-table-other-big-bench-tasks.csv'
+>>> df = pd.read_csv(url)
+>>> import pandas as pd
+>>> df = pd.read_csv(url)
+>>> df
+     Unnamed: 0                              Task       Emergence
+0             0  abstract narrative understanding  linear scaling
+1             1               auto categorization  linear scaling
+2             2                     bbq lite json  linear scaling
+3             3                  cause and effect  linear scaling
+4             4              chess state tracking  linear scaling
+..          ...                               ...             ...
+206         206                 logic grid puzzle        PaLM-62B
+207         207                  metaphor boolean        PaLM-62B
+208         208            metaphor understanding        PaLM-62B
+209         209                       odd one out        PaLM-62B
+210         210                      parsinlu qa.        PaLM-62B
+
+[211 rows x 3 columns]
+>>> df = pd.read_csv(url, index_col=0)
+>>> df
+                                 Task       Emergence
+0    abstract narrative understanding  linear scaling
+1                 auto categorization  linear scaling
+2                       bbq lite json  linear scaling
+3                    cause and effect  linear scaling
+4                chess state tracking  linear scaling
+..                                ...             ...
+206                 logic grid puzzle        PaLM-62B
+207                  metaphor boolean        PaLM-62B
+208            metaphor understanding        PaLM-62B
+209                       odd one out        PaLM-62B
+210                      parsinlu qa.        PaLM-62B
+
+[211 rows x 2 columns]
+>>> scales = df['Emergence'].apply(lambda x: 'line' in x or 'flat' in x)
+0       True
+1       True
+2       True
+3       True
+4       True
+       ...  
+206    False
+207    False
+208    False
+209    False
+210    False
+Name: Emergence, Length: 211, dtype: bool
+>>> df['Scales'] = df['Emergence'].apply(lambda x: 'linear' in x or 'flat' in x or not x)
+>>> df.columns
+Index(['Task', 'Emergence', 'Scales'], dtype='object')
+>>> df['Scaling'] = df['Emergence'].apply(lambda x: 'linear' in x or 'flat' in x or not x)
+>>> df[['Task', 'Scaling']]
+                                 Task  Scaling
+0    abstract narrative understanding     True
+1                 auto categorization     True
+2                       bbq lite json     True
+3                    cause and effect     True
+4                chess state tracking     True
+..                                ...      ...
+206                 logic grid puzzle    False
+207                  metaphor boolean    False
+208            metaphor understanding    False
+209                       odd one out    False
+210                      parsinlu qa.    False
+
+[211 rows x 2 columns]
+>>> df[['Task', 'Emergence']]['Scaling']
+>>> df[['Task', 'Emergence']][df['Scaling']]
+                                 Task          Emergence
+0    abstract narrative understanding     linear scaling
+1                 auto categorization     linear scaling
+2                       bbq lite json     linear scaling
+3                    cause and effect     linear scaling
+4                chess state tracking     linear scaling
+..                                ...                ...
+192                yes no black white  sublinear scaling
+193              dark humor detection  sublinear scaling
+194                    dyck languages  sublinear scaling
+195              moral permissibility  sublinear scaling
+196                        ruin names  sublinear scaling
+
+[130 rows x 2 columns]
+>>> scalable_tasks = df[['Task', 'Emergence']][df['Scaling']]
+>>> scalable_tasks.columns = ['Task', 'Scaling']
+>>> hist -o -p -f llm_scalable_tasks.hist.ipy
+>>> hist -f llm_scalable_tasks.hist.py
+>>> scalable_tasks
+                                 Task            Scaling
+0    abstract narrative understanding     linear scaling
+1                 auto categorization     linear scaling
+2                       bbq lite json     linear scaling
+3                    cause and effect     linear scaling
+4                chess state tracking     linear scaling
+..                                ...                ...
+192                yes no black white  sublinear scaling
+193              dark humor detection  sublinear scaling
+194                    dyck languages  sublinear scaling
+195              moral permissibility  sublinear scaling
+196                        ruin names  sublinear scaling
+
+[130 rows x 2 columns]
+>>> hist -o -p -f llm_scalable_tasks.hist.ipy

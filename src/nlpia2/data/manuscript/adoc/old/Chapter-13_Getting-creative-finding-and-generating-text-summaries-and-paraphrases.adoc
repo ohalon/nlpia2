@@ -1,0 +1,51 @@
+= Getting creative (finding and generating text summaries and paraphrases)
+:chapter: 13
+:part: 3
+:secnums:
+:imagesdir: .
+:xrefstyle: short
+:figure-caption: Figure {chapter}.
+:listing-caption: Listing {chapter}.
+:table-caption: Table {chapter}.
+:stem: latexmath
+
+This chapter covers
+
+* Creative writing for machines, using a language model
+* Finding the sentences that best summarize a document
+* Abstracting from long text documents to summarize them
+* Rewording and paraphrasing sentences with generative models
+* Transforming statements into questions
+* Helping authors of books like this compose their thoughts
+
+You learned how to extract information from sentences in chapter 11, and you learned how transformers work in chapter 12.
+Now you'll learn how to use transformers to summarize and paraphrase text and even transform statements of fact into questions about that fact.
+This last skill can be used in any NLP pipeline to help reduce the information content of a body of text and focus it on what matters to users interacting with your system or chatbot.
+Summarization and paraphrasing are one of the most useful and advanced features for a chatbot or virtual assistant helping you filter and understand the flood of information flowing into your brain as text.
+
+== Too much information
+
+The amount of natural language information on the web is virtually limitless.
+Estimates for the number of pages on the public Internet  varies between 2 billion and 6 billion [https://www.internetlivestats.com/total-number-of-websites/] [https://www.worldwidewebsize.com/] and the number of pages is doubling every few years.
+And these billions of pages are just the ones that search engines think are important enough to include in their index.
+Many more pages are ignored, or hidden (dark web and deep web).
+
+This amounts to exabytes (10^18+ bytes) of data flowing through the Internet.
+Though most of that is video, much of it is natural language text.
+So sifting through all this data is a mamouth task for search engines like DuckDuckGo.
+And once a search engine finds the 100s of pages containing text you might be interested in, those search engines often try to summarize what they've found.
+This makes it easier for you to manually skim through a list of 10 most likely pages quickly.
+
+Summarized natural language text is also a mission-critical feature for NLP pipeline processing medical records where a good summary could save a life.
+The quality of summaries of documents for court-mandated natural language searches called "discovery" can mean that justice is served... or not.
+A quality summary of political proposals and party platforms can ensure that cities, states, and nations pass voter initiatives that do what voters intend and that accurately represent the policies likely to be implemented by candidates.
+
+
+
+
+
+== Summary
+
+* Abstraction and analogy are two of the most advanced NLP tasks, requiring you to automate thinking tasks that you may have previously thought only humans were capable of.
+* Summarization and paraphrasing require your NLP pipeline to focus on what's important and abstract that information.
+* Paraphrasing text can be useful in explaining new concepts to your user, including helping nonnative speakers of your system's language understand what your pipeline is **saying**.

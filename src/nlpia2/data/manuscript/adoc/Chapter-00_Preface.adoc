@@ -1,0 +1,122 @@
+= Preface
+:chapter: FM
+
+A lot has changed in the world of NLP since the first edition.
+You probably couldn't miss the release of BERT and GPT-3 and the rise of Transformers.
+More subtly,  while reviewing the First Edition at the San Diego Machine Learning group Book Club we watched as PyTorch and SpaCy rose to promenence.footnote:[Yes the lead singer of the NLPIA "band" absconded to sunny Sun Diego. SDML (https://github.com/SanDiegoMachineLearning/bookclub:) PyTorch (https://github.com/pytorch/pytorch:) SpaCy (https://spacy.io/:)]
+And the past few years have seen the rise of The Duck, Papers With Code, arxiv.org, and other Information Retrieval systems powered by prosocial NLP algorithms.footnote:[ARXIV (http://arxiv.org)]
+With this expansion of the toolbox has come rapid growth in the oportunities for applying NLP to benefit society.
+NLP algorithms have become ingrained in the core business processes from Big Tech to startups and small businesses.
+And this hasn't always been beneficial for society.
+In fact, these algorithms have so thoroughly captivated and *captured* business executives and engineers alike, that many feel we've ignored glaring warning signs about the misuse of NLP and AI.
+
+The unchecked growth in the power of algorithms to transform society is apparent to those able to escape the information bubble that these algorithms capture us in.
+Authoritarian governments and tech businesses both large and small have utilized NLP algorithms to dramatically shift our collective will and values.
+The breakup of the EU, the insurrection in the US, and the global addiction to "Like" buttons are all being fueled by Natural Language Processing algorithms.
+
+On a smaller scale Hannes, Cole, and I have used what we've learned in writing this book to help startups and social-impact businesses utilize the power of NLP for good.
+Some of you have too.
+In Stuart Russel's book, _Human-Compatible AI_ he estimates that out of approximately 100 thousand researchers focused on advancing the power of AI, only about 20 are focused on trying to protect humanity from that powerful AI that is rapidly emerging.
+And even the social tragedies of the past 4 years have been insufficient to wake up the collective consciousness of AI researchers.
+This may be due to social media and information retrieval tools insulating us from the inconvenient truth, that the technology we are advancing is putting society into a collective trance.
+For example Stuart Russel's interviews and lectures on Beneficial AI typically garner fewer than 20 likes per year on YouTube and Twitter.
+Comparable videos by gung ho AI researchers garner thousands of likes.
+Most AI researchers and the general public are seemingly ignorant of algorithms chipping away at their access to truthful information and profound ideas.
+
+So the Second Edition is a more strident "call to arms" for budding engineers, not yet captured by algorithms.
+We few, we happy few.
+Our hope for the future is powered by two things, 1) an idea, and 2) a skill.
+The idea is that we can out compete those businesses and individuals that degrade the collective consciousness with NLP.
+You only need put your faith in the supercooperator habits your parents and teachers taught you.
+You can pass along those powerful habits and instincts to the NLP algorithms that you build.
+
+The second pillar of our hope is your skill.
+The expertise in NLP that you will gain from this book will ensure that you can maintain that prosocial instinct by protecting yourself and those around you from manipulation and coercion.
+You will program, and not be programmed.
+Hopefully many of you will even achieve dramatic commercial success building on this idea and this toolbox of NLP skill.
+
+And we have a new lead author, bringing a fresh perspective and a wealth of experience in the impact of prosocial algorithms.
+Maria Dyshel and I were sitting in Geisel Library collaborating with our fellow San Diegans at a Python User Group meetup when we realized we had the same mission.footnote:[Geisel library was built with funds from the author Dr. Seuss, another promoter of prosocial habits and open mindedness among youth]
+Maria had just founded Tangible AI to harness the power of NLP for the social sector.
+I was working with SDML friends to build a cognitive assistant called Qary.
+She immediately saw how Qary and the tools you'll learn about here are such powerful forces for positive social impact.
+In the rest of this book, she and I will show you how NLP can be used to help nonprofits and social-impact businesses in ways that I'd never considered before that fateful encounter.
+
+From toxic comment filtering to emotional support and companionship, chatbots and NLP may just save society from itself.
+You'll find many new success stories of prosocial NLP in the real world within these pages.
+She's teaching me conversation design (and appropriate emojie use).
+I'm teaching her how to build dialog engines and information retrieval systems.
+And we're both showing businesses and nonprofits (and you) how to harness these tools for good.
+
+// TODO: see if this is redundant or if we can keep it...
+
+Bots are now generating natural language text for more and more industries such as entertainment, advertisement, financial news, and sports reporting, all without a human lifting a finger.
+NLP bots compose entire movie scripts.footnote:[Five Thirty Eight, http://fivethirtyeight.com/features/some-like-it-bot/]
+Video games and virtual worlds contain bots that converse with us, sometimes talking about bots and AI themselves.
+This "play within a play" will get ever more "meta" as movies about video games and then bots in the real world write reviews to help us decide which movies to watch.
+Authorship attribution will become harder and harder as natural language processing that can dissect natural language style and generate text in that style.footnote:[NLP has been used successfully to help quantify the style of 16th century authors like Shakespeare (https://pdfs.semanticscholar.org/3973/ff27eb173412ce532c8684b950f4cd9b0dc8.pdf).]
+
+NLP influences society in other less straightforward ways.
+NLP enables efficient information retrieval (search), and being a good filter or promoter of some pages affects the information we consume.
+Search was the first commercially successful application of NLP.
+Search powered faster and faster development of NLP algorithms, which then improved search technology itself.
+We help you contribute to this virtuous cycle of increasing collective brain power by showing you some of the natural language indexing and prediction techniques behind web search.
+We show you how to index this book so that you can free your brain to do higher-level thinking, allowing the machines to take care of memorizing the terminology, facts, and Python snippets here.
+Perhaps then you can influence your own culture for yourself and your friends with your own natural language search tools.
+
+The development of NLP systems has built to a crescendo of information flow and computation through and among human brains.
+We can now type only a few characters into a search bar, and often retrieve the exact piece of information we need to complete whatever task we're working on, like writing the software for a textbook on NLP.
+The top few autocomplete options are often so uncannily appropriate that we feel like we have a human assisting us with our search.
+Of course we authors used various search engines throughout the writing of this textbook.
+In some cases these search results included social posts and articles curated or written by bots, which in turn inspired many of the NLP explanations and applications in the following pages.
+
+What is driving NLP advances?
+
+* A new appreciation for the ever-widening web of unstructured data?
+* Increases in processing power catching up with researchers' ideas?
+* The efficiency of interacting with a machine in our own language?
+
+It's all of the above and much more.
+You can enter the question "Why is natural language processing so important right now?" into any search engine,footnote:[Duck Duck Go query about NLP (https://duckduckgo.com/?q=Why+is+natural+language+processing+so+important+right+now:)] and find the Wikipedia article full of good reasons.footnote:[See the Wikipedia article "Natural language processing" (https://en.wikipedia.org/wiki/Natural_language_processingWikipedia/NLP).]
+
+There are also some deeper reasons.
+One such reason is the accelerating pursuit of artificial general intelligence (AGI), or Deep AI.
+Human intelligence may only be possible because we are able to collect thoughts into discrete packets of meaning that we can store (remember) and share efficiently.
+This allows us to extend our intelligence across time and geography, connecting our brains to form a collective intelligence.
+
+One of the ideas in Steven Pinker's _The Stuff of Thought_ is that we actually think in natural language.footnote:[Steven Pinker, https://en.wikipedia.org/wiki/The_Stuff_of_Thought]
+It's not called an "inner dialog" without reason.
+Facebook, Google, and Elon Musk are betting on the fact that words will be the default communication protocol for thought.
+They have all invested in projects that attempt to translate thought, brain waves, and electrical signals into words.footnote:[See the Wired Magazine Article"We are Entering the Era of the Brain Machine Interface" (https://backchannel.com/we-are-entering-the-era-of-the-brain-machine-interface-75a3a1a37fd3).]
+In addition, the Sapir-Whorf hypothesis is that words affect the way we think.footnote:[See the web page titled "Linguistic relativity - Wikipedia" (https://en.wikipedia.org/wiki/Linguistic_relativity).]
+And natural language certainly is the communication medium of culture and the collective consciousness.
+
+So if it's good enough for human brains, and we'd like to emulate or simulate human thought in a machine, then natural language processing is likely to be critical.
+Plus there may be important clues to intelligence hidden in the data structures and nested connections between words that you're going to learn about in this book.
+After all, you're going to use these structures, and connection networks make it possible for an inanimate system to digest, store, retrieve, and generate natural language in ways that sometimes appear human.
+
+////
+TODO: OLD TEXT that seems redundant or outdated
+
+And there's another even more important reason why you might want to learn how to program a system that uses natural language well... you might just save the world.
+Hopefully you've been following the discussion among movers and shakers about the _AI Control Problem_ and the challenge of developing "Friendly AI".footnote:[Wikipedia, AI Control Problem, https://en.wikipedia.org/wiki/AI_control_problem] Nick Bostrom,footnote:[Nick Bostrom, home page, http://nickbostrom.com/Nick Bostrom], Calum Chace,footnote:[Calum Chace, _Surviving AI_, https://www.singularityweblog.com/calum-chace-on-surviving-ai/], Elon Musk,footnote:[See the web page titled "Why Elon Musk Spent $10 Million To Keep Artificial Intelligence Friendly" (http://www.forbes.com/sites/ericmack/2015/01/15/elon-musk-puts-down-10-million-to-fight-skynet/#17f7ee7b4bd0).] and many others believe that the future of humanity rests on our ability to develop friendly machines.
+And natural language is going to be an important connection between humans and machines for the foreseeable future.
+
+Even once we are able to "think" directly to/with machines, those thoughts will likely be shaped by natural words and languages within our brains.
+The line between natural and machine language will be blurred just as the separation between man and machine fades.
+In fact this line began to blur in 1984. That's the year of the Cyborg Manifesto footnote:[Haraway, _Cyborg Manifesto_, https://en.wikipedia.org/wiki/A_Cyborg_Manifesto], making George Orwell's dystopian predictions both more likely and easier for us to accept.footnote:[Wikipedia on George Orwell's _1984_, https://en.wikipedia.org/wiki/Nineteen_Eighty-Four]footnote:[Wikipedia, The Year 1984, https://en.wikipedia.org/wiki/1984]
+
+Hopefully the phrase "help save the world" didn't leave you incredulous.
+As you progress through this book, we show you how to build and connect several lobes of a chatbot "brain" together.
+As you do this, you'll notice that very small nudges to the social feedback loops between humans and machines can have a profound effect, both on the machines and on humans.
+Like a butterfly flapping its wings in China, one small decimal place adjustment to your chatbot's "selfishness" gain can result in a chaotic storm of antagonistic chatbot behavior and conflict.footnote:[A chatbot's main tool is to mimic the humans it is conversing with. So dialog participants can use that influence to engender both prosocial and antisocial behavior in bots. See the Tech Republic article "Why Microsoft's Tay AI Bot Went Wrong" (http://www.techrepublic.com/article/why-microsofts-tay-ai-bot-went-wrong).]
+And you'll also notice how a few kind, altruistic systems will quickly gather a loyal following of supporters that help quell the chaos wreaked by shortsighted bots -- bots that pursue "objective functions" targeting the financial gain of their owners.
+Prosocial, cooperative chatbots can have an outsized impact on the world, because of the network effect of prosocial behavior.footnote:[An example of autonomous machines "infecting" humans with their measured behavior can be found in studies of the impact self-driving cars are likely to have on rush-hour traffic (https://www.enotrans.org/wp-content/uploads/AV-paper.pdf) In some studies, if as few as 1 in 10 vehicles around you on the freeway will help moderate human behavior reducing congestion and producing smoother, safer traffic flow.]
+
+This is how and why the authors of this book came together.
+A supportive community emerged through open, honest, prosocial communication over the Internet using the language that came natural to us.
+And we're using our collective intelligence to help build and support other semi-intelligent actors (machines).footnote:[Toby Segaran's _Programming Collective Intelligence_ kicked off my adventure with machine learning in 2010 (https://www.goodreads.com/book/show/1741472.Programming_Collective_Intelligence).]
+We hope that our words will leave their impression in your mind and propagate like a meme through the world of chatbots, infecting others with passion for building prosocial NLP systems.
+And we hope that when superintelligence does eventually emerge, it will be nudged, ever so slightly, by this prosocial behavior as well.
+
+////

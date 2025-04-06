@@ -1,0 +1,14 @@
+user.email=hobs@totalgood.com
+user.name=Hobson Lane
+core.editor=nano
+core.autocrlf=input
+core.safecrlf=false
+pull.rebase=false
+merge.tool=meld
+mergetool.meld.path=/usr/bin/meld
+diff.tool=meld
+difftool.prompt=false
+difftool.meld.cmd=meld $LOCAL $REMOTE
+checkout.defaultremote=origin
+init.defaultbranch=main
+credential.helper=store

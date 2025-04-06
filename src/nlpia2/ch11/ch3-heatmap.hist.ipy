@@ -1,0 +1,84 @@
+# from nlpia2.text_processing.extractors import *
+# df = update_nlpia_lines()
+# >>> import spacy
+# >>> nlp = spacy.load("en_core_web_md")
+
+>>> import pandas as pd
+>>> url = 'https://gitlab.com/tangibleai/nlpia2/-/raw/main/'
+>>> url += 'src/nlpia2/data/nlpia_lines.csv'
+>>> df = pd.read_csv(url, index_col=0)
+>>> df9 = df[df.chapter == 9].copy()
+>>> df9.shape
+(2075, 23)
+
+>>> df3[['text', 'is_title', 'num_sents']]
+                                            text  is_title  num_sents
+1660  = Natural Language Processing in Action,...     True          0
+...
+3311  * Euclidean distance and similarity betw...     True          1
+3312  * Cosine distance, the amount of "overla...     True          1
+3313  * Cosine distance is the go-to similarit...     True          1
+[1654 rows x 3 columns]
+
+>>> texts = df3.text[df3.is_text | df3.is_title]
+>>> texts.shape
+(601,)
+
+>>> from sentence_transformers import SentenceTransformer
+>>> minibert = SentenceTransformer('all-MiniLM-L12-v2')
+>>> vecs = minibert.encode(list(texts))
+>>> vecs.shape
+(601, 384)
+
+>>> import numpy as np
+>>> vecs = embeddings.apply(np.linalg.norm)
+>>> dfe = pd.DataFrame([list(vec) for vec in embeddings])
+>>> similarity = dfe.values.dot(dfe.values.T)
+>>> similarity.shape
+
+dfe = pd.DataFrame([list(x / np.linalg.norm(x)) for x in embeddings])
+heatmap = dfe.values.dot(dfe.values.T)
+heatmap.shape
+heatmap
+import seaborn as sns
+sns.heatmap(heatmap)
+from matplotlib import pyplot as plt
+plt.show()
+dfe.shape
+heatmap.shape
+df.shape
+df3.shape
+labels = texts.index.values
+labels
+texts.iloc[labels]
+texts.loc[labels]
+texts.loc[labels].str[:14]
+labels = list(texts.loc[labels].str[:14])
+heatmap = pd.DataFrame(heatmap, columns=labels, index=labels)
+heatmap
+sns.heatmap(heatmap)
+plt.show()
+sns.heatmap?
+sns.heatmap(heatmap)
+plt.xticks(rotation=-70)
+plt.show()
+sns.heatmap(heatmap)
+plt.xticks(rotation=-30)
+plt.show()
+plt.xticks(rotation=-60)
+plt.show()
+plt.xticks(rotation=-60)
+sns.heatmap(heatmap)
+plt.xticks(rotation=-60)
+plt.show()
+sns.heatmap(heatmap)
+plt.xticks(rotation=70)
+plt.show()
+plt.xticks(rotation=70, ha='right')
+sns.heatmap(heatmap)
+plt.xticks(rotation=70, ha='right')
+plt.show()
+sns.heatmap(heatmap)
+plt.xticks(rotation=-35, ha='left')
+plt.show()
+

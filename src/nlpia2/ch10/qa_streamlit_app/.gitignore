@@ -1,0 +1,126 @@
+# BigData and Models
+.nlpia2-data
+*.joblib
+*.pickle
+# FIXME: move these to .nlpia2-data and create index with URLs in data sources.yml
+src/nlpia2/data/big
+
+# DL models
+*.pt
+**/checkpoints/
+**/checkpoint/
+
+# src/nlpia2/data
+db.sqlite3
+*.bz2
+*.zip
+*.pkl
+*.npy
+*.pkl
+**/simple-transformers
+**/albert-large-*
+/char_rnn_from_scratch_refactored.meta.json
+
+# submodules
+src/wikipedia
+src/nessvec
+
+# Temporary and binary files
+condaenv.*.requirements.txt
+*~
+*.py[cod]
+*.so
+*.cfg
+!.isort.cfg
+*.orig
+*.log
+disaster_tweets_cnn_pipeline*.json
+*.pot
+.pytest_cache/*
+__pycache__/*
+.DS_*
+.cache/*
+.*.swp
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+.coverage*
+cache_dir/
+pyproject.toml.bak
+
+# repo2docker
+.ipython
+.jupyter
+.jupyter-server-log.txt
+
+# pypi package setup files
+# pyproject must not be in root dir for `pip install -e .` to work
+# pyproject.toml
+# !scripts/pyproject.toml
+# !setup.cfg
+
+# Internal working cache for poetry
+poetry.lock
+
+# Project files
+.ropeproject
+.project
+.pydevproject
+.settings
+.idea
+.vscode
+tags
+*.code-workspace
+*.sublime-workspace
+
+# Package files
+*.egg
+*.eggs/
+.installed.cfg
+*.egg-info
+
+# Unittest and coverage
+htmlcov/*
+.coverage
+.tox
+junit.xml
+coverage.xml
+.pytest_cache/
+pytest-results*
+
+# Build and docs folder/files
+build/*
+dist/*
+sdist/*
+docs/api/*
+docs/_rst/*
+docs/_build/*
+cover/*
+runs/*
+MANIFEST
+
+# Mac
+__MACOSX
+
+# KDE
+.directory
+
+
+# Per-project virtualenvs
+.venv*/
+venv/
+
+# docs html
+docs/**/*.html
+
+# secrets
+.env
+**/*secret*
+**/*private*
+
+# Big Data
+src/nlpia2/data/meuller/*.pdf
+
+# other git repos
+src/nlpia2/ch08/nlpia-rnn/
+src/nlpia2/ch08/huggingface-spaces-nlpia-rnn/
+

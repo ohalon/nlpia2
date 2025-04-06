@@ -1,0 +1,3 @@
+source ./.venv/bin/activate
+# cd src/nlpia2/
+# cd rnn_word

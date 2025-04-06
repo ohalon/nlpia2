@@ -1,0 +1,247 @@
+>>> >>> from wikipediapi import Wikipedia
+... >>> wiki = Wikipedia('en')
+...
+>>> >>> from wikipediaapi import Wikipedia
+... >>> wiki = Wikipedia('en')
+...
+>>> dir(wiki)
+['__class__',
+ '__del__',
+ '__delattr__',
+ '__dict__',
+ '__dir__',
+ '__doc__',
+ '__eq__',
+ '__format__',
+ '__ge__',
+ '__getattribute__',
+ '__gt__',
+ '__hash__',
+ '__init__',
+ '__init_subclass__',
+ '__le__',
+ '__lt__',
+ '__module__',
+ '__ne__',
+ '__new__',
+ '__reduce__',
+ '__reduce_ex__',
+ '__repr__',
+ '__setattr__',
+ '__sizeof__',
+ '__str__',
+ '__subclasshook__',
+ '__weakref__',
+ '_build_backlinks',
+ '_build_categories',
+ '_build_categorymembers',
+ '_build_extracts',
+ '_build_info',
+ '_build_langlinks',
+ '_build_links',
+ '_common_attributes',
+ '_create_section',
+ '_query',
+ '_request_kwargs',
+ '_session',
+ 'article',
+ 'backlinks',
+ 'categories',
+ 'categorymembers',
+ 'extract_format',
+ 'extracts',
+ 'info',
+ 'langlinks',
+ 'language',
+ 'links',
+ 'page']
+>>> wiki.page("Creatity")
+Creatity (id: ??, ns: 0)
+>>> wiki.page("Creatity").exists()
+False
+>>> wiki.page("Creativity").exists()
+True
+>>> wiki.language
+'en'
+>>> wiki.categories
+<bound method Wikipedia.categories of <wikipediaapi.Wikipedia object at 0x7f417d1e1d00>>
+>>> wiki.links
+<bound method Wikipedia.links of <wikipediaapi.Wikipedia object at 0x7f417d1e1d00>>
+>>> wiki.links()
+>>> wiki.info
+<bound method Wikipedia.info of <wikipediaapi.Wikipedia object at 0x7f417d1e1d00>>
+>>> wiki.info()
+>>> import gzip
+>>> fin = gzip.open('/home/hobs/nessvec-data/enwiki-20220220-all-titles-in-ns0.gz')
+>>> fin.close()
+>>> import requests
+>>> gzip.open(
+...     "https://dumps.wikimedia.org/enwiki/latest/enwiki-latest-all-titles-in-ns0.gz"
+... )
+...
+>>> import pandas as pd
+>>> fin = gzip.open("/home/hobs/nessvec-data/enwiki-20220220-all-titles-in-ns0.gz")
+>>> for line in fin:
+...     print(line)
+...     break
+...
+>>> import pandas as pd
+>>> pd.read_csv(fin)
+>>> pd.read_csv(fin, sep="\t")
+                                                         se
+0         (5Z,13E)-(15S)-9alpha,11alpha-epidioxy-15-hydr...
+1         (5Z,13E)-(15S)-9alpha,11alpha-epidioxy-15-hydr...
+2         (5Z,13E)-(15S)-9alpha,11alpha-epidioxy-15-hydr...
+3         (5Z,13E)-(15S)-9alpha,15-dihydroxy-11-oxoprost...
+4         (5Z,13E)-(15S)-9alpha,15-dihydroxy-11-oxoprost...
+...                                                     ...
+16412139                                                  󯿿
+16412140                                                  󿿾
+16412141                                                  󿿿
+16412142                                                  􏿾
+16412143                                                  􏿿
+
+[16412144 rows x 1 columns]
+>>> fin = gzip.open("/home/hobs/nessvec-data/enwiki-20220220-all-titles-in-ns0.gz")
+>>> df = pd.read_csv(fin, sep="")
+>>> import csv
+>>> csv.QUOTE_NONE
+3
+>>> df = pd.read_csv(fin, sep="", quoting=3)  # csv.QUOTE_NONE == 3
+>>> pd.read_table
+<function pandas.io.parsers.readers.read_table(filepath_or_buffer: 'FilePath | ReadCsvBuffer[bytes] | ReadCsvBuffer[str]', sep=<no_default>, delimiter=None, header='infer', names=<no_default>, index_col=None, usecols=None, squeeze=None, prefix=<no_default>, mangle_dupe_cols=True, dtype: 'DtypeArg | None' = None, engine: 'CSVEngine | None' = None, converters=None, true_values=None, false_values=None, skipinitialspace=False, skiprows=None, skipfooter=0, nrows=None, na_values=None, keep_default_na=True, na_filter=True, verbose=False, skip_blank_lines=True, parse_dates=False, infer_datetime_format=False, keep_date_col=False, date_parser=None, dayfirst=False, cache_dates=True, iterator=False, chunksize=None, compression: 'CompressionOptions' = 'infer', thousands=None, decimal: 'str' = '.', lineterminator=None, quotechar='"', quoting=0, doublequote=True, escapechar=None, comment=None, encoding=None, encoding_errors: 'str | None' = 'strict', dialect=None, error_bad_lines=None, warn_bad_lines=None, on_bad_lines=None, delim_whitespace=False, low_memory=True, memory_map=False, float_precision=None, storage_options: 'StorageOptions' = None)>
+>>> pd.read_table?
+>>> df = pd.read_table(fin, sep="\\t", quoting=3)  # csv.QUOTE_NONE == 3
+>>> df = pd.read_table(fin, sep="\t", quoting=3)  # csv.QUOTE_NONE == 3
+>>> df.head()
+                      s
+0       Melitaea_deione
+1  Melitaea_deserticola
+2      Melitaea_diamina
+3     Melitaea_dictynna
+4       Melitaea_didyma
+>>> fin = gzip.open("/home/hobs/nessvec-data/enwiki-20220220-all-titles-in-ns0.gz")
+>>> lines = list(fin)
+>>> len(lines)
+16424822
+>>> len(df)
+6601058
+>>> lines[0]
+b'page_title\n'
+>>> lines[1]
+b'!\n'
+>>> lines[2]
+b'!!\n'
+>>> titles = pd.Series([s.rstrip("\n") for s in lines])
+>>> titles = pd.Series([s.decode().rstrip("\n") for s in lines])
+>>> titles
+0           page_title
+1                    !
+2                   !!
+3                  !!!
+4              !!!!!!!
+               ...    
+16424817             󯿿
+16424818             󿿾
+16424819             󿿿
+16424820             􏿾
+16424821             􏿿
+Length: 16424822, dtype: object
+>>> import yaml
+>>> yaml.dumps(list(titles.sample(100)))
+>>> yaml.dump(list(titles.sample(100)))
+'- Gaja_(surname)\n- Yunus_Nuzhet_Unat\n- Spring_Can_Really_Hang_You_Up_the_Most\n- 2009_Rochester,_Minn._airport_tarmac_stranding_incident\n- Kent_Olsson_(orienteering)\n- Francis_Patrick_Sheehan\n- Dinosaur_egg_melon\n- In-joke\n- Orson_Welles_Almanac\n- Graham_Bauer\n- Hector_Miguel_Bautista_Lopez\n- "Al\\u016Bksnes"\n- Ermacoras\n- Lee_Saek\n- Gary_Schwartz_(Mobile)\n- Louis_Iasiello\n- K269HH\n- Infect._Disord._Drug_Targets\n- Mare_orientalis\n- Military_Hospital_(Nouakchott)\n- Das_Geheimnis_der_Santa_Maria\n- John_Baptist_Malchair\n- Radio-Canada\n- 10Tm\n- "\\u2191_\\u2191_\\u2193_\\u2193_\\u2190_\\u2192_\\u2190_\\u2192_B_A_start"\n- Gertrud_Amon_Natzler\n- Chase_the_Clouds_Away_(Chuck_Mangione_album)\n- Leucopternis_schistaceus\n- Vrede_(song)\n- Yihhyah_Salahh\n- Miltonia_flavescens_var._stellata\n- List_of_Intangible_Cultural_Properties_of_Japan_(Gifu)\n- Thyreus_histrio\n- Circus_Devils\n- Edward_Gilroy\n- Nigeria_Rugby_League\n- New_England_Patriots_retired_numbers\n- Al-Asad_Airfield\n- East_Oolitic\n- Generous_orthodoxy\n- Veneziano_amplitude\n- Yahoo!_Tech\n- Faribault_Daily_News\n- Scotorythra_euryphaea\n- The_Barchans\n- La_Oroya_District\n- Roessner,_Stephen\n- Herman_Pitz\n- King_Uther\n- Read_Between_the_Lines_(Tom_Cardy_song)\n- Baron_Macaulay\n- Slipcover\n- Milaselu_River\n- "Luis_Manuel_Fern\\xE1ndez_de_Portocarrero"\n- Lawrence_Schlesinger_Kubie\n- Paradistichodus_dimidiatus\n- "\\xC9l\\xE9onore_d\'Olbreuse"\n- ABC_Providence\n- Mycoheterotroph\n- S._Gunasekaran_(AIADMK_politician)\n- Moonlight_on_the_highway\n- The_Detectorists\n- Frederick_brian_pickering\n- "Abdullah_Yi\\u011Fiter"\n- Passenger_Locomotive_No._460\n- Conference_House\n- "1993_World_Championships_in_Athletics_\\u2013_Men\'s_100_metres"\n- The_Brawl_for_it_All\n- The_Rolling_People\n- Marco_polo_netflix\n- Cities_of_Labrador\n- Male_and_Female_(disambiguation)\n- Mario_Figueira_Fernandes\n- Callomyia\n- Abd_Er-Rahman_II\n- 143rd_Division_(1st_Formation)(People\'s_Republic_of_China)\n- Karl_Gotthard_von_Langhans\n- Musee_National_du_Costume\n- MPs_elected_in_the_Northern_Ireland_general_election,_1965\n- Dimitra_Giakoumi\n- "Bojan_Krki\\u0107_P\\xE9rez"\n- Blackacre_Nature_Preserve_and_Historic_Homestead\n- KFMF\n- F._A._Maxse\n- "\\u201CBack_of_the_Dragon\\u201D"\n- Pesse_canoe\n- The_Sound_(John_M._Perkins_Blues)\n- Verticordia_sect._Platandra\n- Popa_Taungkalat_Shrine\n- Steve_Livingstone\n- Moussa_Traore_(footballer)\n- Isle_of_Man_at_the_1962_British_Empire_and_Commonwealth_Games\n- Ummayad_Caliphate\n- Parkerfield,_Kansas\n- Avro_Anson\n- Gerve\n- Calliostoma_aporia\n- Gmina_Latowicz\n- Wellcome_Museum_of_Anatomy_and_Pathology\n- Je_suis_heureux_que_ma_mere_soit_vivante\n'
+>>> import json
+>>> json.dumps(list(titles.sample(100)))
+'["Bancker_(disambiguation)", "Czerwonka,_Elk_County", "World_Rowing_Championships_in_1991", "Grafarholt_og_Ulfarsardalur", "Role-oriented_language", "I\'ll_Never_Slip_Around_Again", "Kuwait_-_U.S._relations", "67th_parallel", "Crompton_&_Knowles_Corporation", "Nicolaus_de_Autricuria", "7.5_cm_Infanteriegeschuetz_42", "William_A._Cant", "Gram-Gram", "Liu_Qiang_(boxer)", "The_Sonata_(film)", "Addison_(Webster_Springs),_WV", "Henrietta_Cotton_Wilson", "Sin_rodeos", "Conservation_and_restoration_of_textiles", "Numerical_phenetics", "Hatzinasios", "Sid_Espinosa", "Theodore_Kennedy", "HMS_Herald_(1806)", "Waverley_F.C.", "Graama_Panchaayathu", "Charles_Flower_(disambiguation)", "John_Dinham_(1359-1428)", "Museum_Gajah", "By_Request_(Boyzone_album)", "Dark_meteorite", "Jim_Culbreath", "Richard_Marsella", "Process_(iOS_application)", "Enema_Of_The_State", "Somniphilia", "ECAD_(company)", "Something_\'Bout_Love", "Democratic_People\'s_Republic_of_Yemen", "Spider\'s_Web_(film)", "Mimoopsis_crassepuncta", "Kitsune_Records", "Jeannie_Truman", "Chonggang_Station", "Vitex_peduncularis", "French_frigate_Auvergne", "Batik_Air", "Milon_IV_of_Bar", "KMRS", "Osteen_Bridge", "Henry_O\'Grady", "Executions_during_the_irish_civil_war", "Athanasius_II_Dabbas", "Engadine_Airport", "One_for_the_Ms.", "Nate_Kinsella", "Balnaca", "Brachycneme", "Claude_Diomar", "Matti_Kuusi", "Prosaist", "BA_Chidambaranath", "Empire_Fields", "Amazonian", "Trans-Texas_Highway", "Blalock\\u2013Hanlon_procedure", "Nasarkan-e_Sofla", "You_Don\'t_Mess_Around_With_Jim", "District_66", "Antonio_Smareglia", "Depression_Before_Spring", "Oberlarg", "1991_BC", "Coindre_Hall", "Lewisburg,_Penn.", "Verdabbio_(Graubunden)", "Kampong_Chhnang_municipality", "John_W._Darrah", "Pablo_Rojas_Paz", "F\\u00e1fnir", "Barleycorn", "Commissioner_of_Baseball", "Dundalk_F.C._(women)", "Freur", "Lygodesmia", "Irzio_Luigi_Magliacani", "Value_Process_Management", "Saint-Valeri", "Panela", "1915_Louisville_Cardinals_football_season", "1993_Australian_Open_\\u2013_Mixed_doubles", "Shmuel_Zalmanovich_Galkin", "Chrysanthemum_trichophyllum", "Coracina_dobsoni", "Iniquity", "Grande_Jacquerie", "Cassandre_(1901-1968)", "Code_Red_(song)", "North_River_Railway", "2018_in_Papua_New_Guinea"]'
+>>> writer = csv.writer()
+>>> titles.sample(100).to_csv("tmp.csv", index=None)
+>>> more tmp.csv
+>>> titles.sample(100000).to_csv("tmp.csv", index=None)
+>>> pd.read_csv("tmp.csv")
+                                       0
+0      State_Highway_63_(Andhra_Pradesh)
+1                              Karolówka
+2        Churchill_Drive_Shopping_Centre
+3                          Albert_Conway
+4                                  TİKKO
+...                                  ...
+99995                   Huset_Glücksborg
+99996                              LF-58
+99997                 Stojkovići,_Konjic
+99998                       KRT36_(gene)
+99999                       Cândido_Maia
+
+[100000 rows x 1 columns]
+>>> titles.to_csv(
+...     "~/nessvec-data/wikipedia-20220228-titles-all-in-ns0.csv.gz",
+...     index=None,
+...     compression="gzip",
+... )
+...
+>>> ls ~/ne
+>>> ls ~/nessvec-data/
+>>> ls - hal~/nessvec-data/
+>>> %ls -hal ~/nessvec-data/
+>>> !rm ~/nessvec-data/WikiT*.txt
+>>> %ls -hal ~/nessvec-data/
+>>> !rm ~/nessvec-data/WikiT*.json
+>>> !rm ~/nessvec-data/WikiT*.csv
+>>> %ls -hal ~/nessvec-data/
+>>> fin = gzip.open(
+...     "https://dumps.wikimedia.org/enwiki/latest/enwiki-latest-all-titles-in-ns0.gz"
+... )
+...
+>>> import requests
+>>> fin = requests.get(url, stream=True)
+>>> url = "https://dumps.wikimedia.org/enwiki/latest/enwiki-latest-all-titles-in-ns0.gz"
+>>> fin = requests.get(url, stream=True)
+>>> df = pd.read_table(fin, sep="\t", quoting=3)  # csv.QUOTE_NONE == 3
+>>> text_bytes = fin.read()
+>>> fin = requests.get(url, stream=True)
+>>> fin = gzip.open(fin)
+>>> from urllib.request import urlopen
+>>> with urlopen(url) as fin:
+...     df = pd.read_table(fin, sep="\t", quoting=3)  # csv.QUOTE_NONE == 3
+...
+>>> with urlopen(url) as fin:
+...     df = pd.read_table(
+...         fin, sep="\t", quoting=3, compression="gzip"
+...     )  # csv.QUOTE_NONE == 3
+...
+>>> df.sample()
+                                                page_title
+6954065  IEEE_Transactions_on_Control_Systems_and_Techn...
+>>> df.sample(100)
+                                                 page_title
+2140880                             Baptist_Retirement_Home
+3652195                                      Cofermentation
+7376128                         Jacques_Hurtubise_(painter)
+14340093                                     Thais_capensis
+14599642                                       The_Volume's
+...                                                     ...
+1163505                               Agnetha_Ase_Faeltskog
+3643655                                          Cock_tease
+4599890   Drill_a_hole_in_that_substrate_and_tell_me_wha...
+9416958                                        Mahesiadighi
+1822592                                   Arturo_Elías_Ayub
+
+[100 rows x 1 columns]
+>>> len(df)
+16424821
+>>> hist - o - p
+>>> %hist -o -p
+>>> with urlopen(url) as fin:
+...     df2 = pd.read_table(fin, compression="gzip")
+...
+>>> eq = (df2 == df)
+>>> eq = df2.values == df.values
+
+
+>>> len(df_everything)
+16424821
+>>> len(df_tab_sep)
+16424821
+>>> len(df_no_quoting)
+16424794
+

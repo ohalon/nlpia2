@@ -1,0 +1,11 @@
+= Getting real (real-world NLP challenges)
+:chapter: FM
+:part: 3
+
+Part 3 shows you how to extend your skills to tackle real-world problems. 
+You'll learn how to extract information such as dates and names to build applications such as the Twitter bot that helped manage the self-service scheduling of Open Spaces at PyCon US in 2017 and 2018. 
+
+In these last three chapters, we also tackle the trickier problems of NLP. 
+You'll learn about several different ways to build a chatbot, both with and without machine learning to guide it. 
+And to create complex behavior, you'll learn how to combine these techniques together. 
+You'll also learn about algorithms that can handle large corpora -- sets of documents that cannot be loaded into RAM all at once. 

@@ -1,0 +1,280 @@
+>>> >>> import spacy
+... 
+... >>> spacy_de = spacy.load('de')
+... >>> spacy_en = spacy.load('en')
+... 
+... >>> def tokenize_de(text):
+... ...     return [tok.text for tok in spacy_de.tokenizer(text)]
+... 
+... >>> def tokenize_en(text):
+... ...     return [tok.text for tok in spacy_en.tokenizer(text)]
+...
+>>> from pytorch import nn
+>>> from torch import nn
+>>> >>> class PositionalEncoding(nn.Module):
+... ...     def __init__(self, d_model, dropout=0.1, max_len=5000):
+... ...         super(PositionalEncoding, self).__init__()
+... ...         self.dropout = nn.Dropout(p=dropout)
+... 
+... ...         pe = torch.zeros(max_len, d_model)
+... ...         position = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)
+... ...         div_term = torch.exp(torch.arange(0, d_model, 2).float() *
+... ...                              (-math.log(10000.0) / d_model))
+... ...         pe[:, 0::2] = torch.sin(position * div_term)
+... ...         pe[:, 1::2] = torch.cos(position * div_term)
+... ...         pe = pe.unsqueeze(0).transpose(0, 1)
+... ...         self.register_buffer('pe', pe)
+... 
+... ...     def forward(self, x):
+... ...         x = x + self.pe[:x.size(0), :]
+... ...         return self.dropout(x)
+...
+>>> from spacy import cli
+>>> cli.download("de")
+>>> >>> import spacy
+... 
+... >>> spacy_de = spacy.load('de')
+... >>> spacy_en = spacy.load('en')
+... 
+... >>> def tokenize_de(text):
+... ...     return [tok.text for tok in spacy_de.tokenizer(text)]
+... 
+... >>> def tokenize_en(text):
+... ...     return [tok.text for tok in spacy_en.tokenizer(text)]
+...
+>>> spacy.load("de")
+>>> nlp_de = spacy.load('de_core_news_sm')
+>>> nlp_de("Sprechen Sie Deutche")
+Sprechen Sie Deutche
+>>> doc = nlp_de("Sprechen Sie Deutche")
+>>> for tok in doc:
+...     print(tok.text)
+...
+>>> for tok in doc:
+...     print(tok.pos_, tok.text)
+...
+>>> for tok in doc:
+...     print(tok.vector[:3], tok.pos_, tok.text)
+...
+>>> >>> import spacy
+... 
+... >>> spacy_de = spacy.load('de_core_news_sm')
+... >>> spacy_en = spacy.load('en')
+... 
+... >>> def tokenize_de(text):
+... ...     return [tok.text for tok in spacy_de.tokenizer(text)]
+... 
+... >>> def tokenize_en(text):
+... ...     return [tok.text for tok in spacy_en.tokenizer(text)]
+...
+>>> >>> import spacy
+... 
+... >>> spacy_de = spacy.load('de_core_news_sm')
+... >>> spacy_en = spacy.load("en_core_web_sm")
+... 
+... >>> def tokenize_de(text):
+... ...     return [tok.text for tok in spacy_de.tokenizer(text)]
+... 
+... >>> def tokenize_en(text):
+... ...     return [tok.text for tok in spacy_en.tokenizer(text)]
+...
+>>> >>> import spacy
+... 
+... >>> spacy_de = spacy.load('de_core_news_sm')
+... >>> spacy_en = spacy.load("en_core_web_md")
+... 
+... >>> def tokenize_de(text):
+... ...     return [tok.text for tok in spacy_de.tokenizer(text)]
+... 
+... >>> def tokenize_en(text):
+... ...     return [tok.text for tok in spacy_en.tokenizer(text)]
+...
+>>> cli.download("en_core_web_sm")
+>>> >>> import spacy
+... 
+... >>> spacy_de = spacy.load('de_core_news_sm')
+... >>> spacy_en = spacy.load("en_core_web_md")
+... 
+... >>> def tokenize_de(text):
+... ...     return [tok.text for tok in spacy_de.tokenizer(text)]
+... 
+... >>> def tokenize_en(text):
+... ...     return [tok.text for tok in spacy_en.tokenizer(text)]
+...
+>>> >>> import spacy
+... 
+... >>> spacy_de = spacy.load('de_core_news_sm')
+... >>> spacy_en = spacy.load("en_core_web_sm")
+... 
+... >>> def tokenize_de(text):
+... ...     return [tok.text for tok in spacy_de.tokenizer(text)]
+... 
+... >>> def tokenize_en(text):
+... ...     return [tok.text for tok in spacy_en.tokenizer(text)]
+...
+>>> >>> import torchtext
+... >>> from torchtext.datasets import Multi30k
+... >>> from torchtext.data import Field, BucketIterator
+... 
+... >>> SRC = Field(tokenize = tokenize_de,
+... ...             init_token = '<sos>',  
+... ...             eos_token = '<eos>',
+... ...             lower = True,
+... ...             batch_first = True)
+... 
+... >>> TRG = Field(tokenize = tokenize_en,
+... ...             init_token = '<sos>',
+... ...             eos_token = '<eos>',
+... ...             lower = True,
+... ...             batch_first = True)
+...
+>>> import torchtext.data
+>>> dir(torchtext.data)
+['__all__',
+ '__builtins__',
+ '__cached__',
+ '__doc__',
+ '__file__',
+ '__loader__',
+ '__name__',
+ '__package__',
+ '__path__',
+ '__spec__',
+ 'bleu_score',
+ 'custom_replace',
+ 'datasets_utils',
+ 'filter_wikipedia_xml',
+ 'functional',
+ 'generate_sp_model',
+ 'get_tokenizer',
+ 'interleave_keys',
+ 'load_sp_model',
+ 'metrics',
+ 'numericalize_tokens_from_iterator',
+ 'sentencepiece_numericalizer',
+ 'sentencepiece_tokenizer',
+ 'simple_space_split',
+ 'to_map_style_dataset',
+ 'utils']
+>>> dir(torchtext.data.functional)
+['__all__',
+ '__builtins__',
+ '__cached__',
+ '__doc__',
+ '__file__',
+ '__loader__',
+ '__name__',
+ '__package__',
+ '__spec__',
+ '_patterns',
+ 'custom_replace',
+ 'filter_wikipedia_xml',
+ 'generate_sp_model',
+ 'io',
+ 'load_sp_model',
+ 'numericalize_tokens_from_iterator',
+ 're',
+ 'sentencepiece_numericalizer',
+ 'sentencepiece_tokenizer',
+ 'simple_space_split',
+ 'to_map_style_dataset',
+ 'torch']
+>>> import torchtext.data.BucketIterator
+>>> from torchtext.data import *
+>>> who
+>>> from torchtext.data import field
+>>> import torchtext
+>>> torchtext.__version__
+'0.11.2'
+>>> from torchtext.datasets import field
+>>> from torchtext.datasets import Field
+>>> from torchtext.datasets import IWSLT2017
+>>> from torchtext.datasets import Multi30k
+>>> >> from torch import Tensor
+... >>> from typing import Optional, Any
+... 
+... >>> class CustomDecoderLayer(nn.TransformerDecoderLayer):
+... ...     def forward(self, tgt: Tensor, memory: Tensor, tgt_mask: Optional[Tensor] = None,
+... ...                 memory_mask: Optional[Tensor] = None,
+... ...                 tgt_key_padding_mask: Optional[Tensor] = None,
+... ...                 mem_key_padding_mask: Optional[Tensor] = None) -> Tensor:
+... ...         """Same as DecoderLayer but returns multi-head attention weights.
+... ...         """
+... ...         tgt2 = self.self_attn(tgt, tgt, tgt, attn_mask=tgt_mask,
+... ...                               key_padding_mask=tgt_key_padding_mask)[0]
+... ...         tgt = tgt + self.dropout1(tgt2)
+... ...         tgt = self.norm1(tgt)
+... ...         tgt2, attention_weights = self.multihead_attn(tgt, memory, memory,  
+... ...                                                       attn_mask=memory_mask,
+... ...                                                       key_padding_mask=mem_key_padding_mask,
+... ...                                                       need_weights=True)
+... ...         tgt = tgt + self.dropout2(tgt2)
+... ...         tgt = self.norm2(tgt)
+... ...         tgt2 = self.linear2(self.dropout(self.activation(self.linear1(tgt))))
+... ...         tgt = tgt + self.dropout3(tgt2)
+... ...         tgt = self.norm3(tgt)
+... ...         return tgt, attention_weights
+...
+>>> >>> from torch import Tensor
+... >>> from typing import Optional, Any
+... 
+... >>> class CustomDecoderLayer(nn.TransformerDecoderLayer):
+... ...     def forward(self, tgt: Tensor, memory: Tensor, tgt_mask: Optional[Tensor] = None,
+... ...                 memory_mask: Optional[Tensor] = None,
+... ...                 tgt_key_padding_mask: Optional[Tensor] = None,
+... ...                 mem_key_padding_mask: Optional[Tensor] = None) -> Tensor:
+... ...         """Same as DecoderLayer but returns multi-head attention weights.
+... ...         """
+... ...         tgt2 = self.self_attn(tgt, tgt, tgt, attn_mask=tgt_mask,
+... ...                               key_padding_mask=tgt_key_padding_mask)[0]
+... ...         tgt = tgt + self.dropout1(tgt2)
+... ...         tgt = self.norm1(tgt)
+... ...         tgt2, attention_weights = self.multihead_attn(tgt, memory, memory,  
+... ...                                                       attn_mask=memory_mask,
+... ...                                                       key_padding_mask=mem_key_padding_mask,
+... ...                                                       need_weights=True)
+... ...         tgt = tgt + self.dropout2(tgt2)
+... ...         tgt = self.norm2(tgt)
+... ...         tgt2 = self.linear2(self.dropout(self.activation(self.linear1(tgt))))
+... ...         tgt = tgt + self.dropout3(tgt2)
+... ...         tgt = self.norm3(tgt)
+... ...         return tgt, attention_weights
+...
+>>> decoder = CustomDecoderLayer()
+>>> decoder = CustomDecoderLayer(nhead=3)
+>>> decoder = CustomDecoderLayer?
+>>> decoder = CustomDecoderLayer(50_000, 3)
+>>> decoder = CustomDecoderLayer(300, 100)
+>>> import torch
+>>> from torch import Tensor
+>>> import nump as np
+>>> import numpy as np
+>>> np.random.randn()
+0.20432216939288086
+>>> np.random.randn((300, 100))
+>>> np.random.randn(300, 100)
+array([[ 0.58074611,  0.0530395 ,  0.3860191 , ..., -0.81203093,
+         1.1145332 , -0.81865405],
+       [-1.87318799, -0.39496454,  1.4253606 , ...,  0.15105999,
+        -1.26690148, -0.42223196],
+       [ 0.56468824,  0.63435571,  0.13911902, ..., -0.35443899,
+         0.32563268,  2.74039759],
+       ...,
+       [-0.63013767,  0.21485023,  0.99792491, ..., -1.46928589,
+         1.27268922,  0.42099799],
+       [ 1.64529259,  0.34211458, -0.06472117, ...,  0.35800377,
+        -1.05580143, -2.83799933],
+       [-1.56571068, -0.2760186 ,  1.78377526, ..., -1.90149228,
+         0.50448035,  0.81646291]])
+>>> Tensor(np.random.randn(300, 100))
+tensor([[-0.7338, -0.4502, -0.0230,  ..., -0.9022,  0.9627,  0.5890],
+        [-0.5713,  0.0348,  0.4743,  ..., -0.9765, -0.7536, -0.3880],
+        [-1.1320, -1.1181,  1.5553,  ...,  0.8808, -0.9340,  0.3851],
+        ...,
+        [ 0.2295,  0.3216, -1.1768,  ..., -0.3111,  0.5396, -0.1203],
+        [-0.0148, -0.7461,  0.8594,  ..., -1.6351,  1.3584, -1.4840],
+        [ 0.0285, -0.2930, -0.1882,  ...,  1.2503, -1.4206, -0.0448]])
+>>> inp = Tensor(np.random.randn(300, 100))
+>>> decoder.forward(inp)
+>>> history
+>>> %hist -o -p -f ch12.hist.ipy

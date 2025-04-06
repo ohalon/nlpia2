@@ -1,0 +1,465 @@
+>>> from sklearn.feature_extraction.text import TfidfVectorizer, CounterVectorizer
+>>> from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
+>>> ls
+>>> pwd
+'/home/hobs/code/teaching/nlpia-manuscript'
+>>> cd code
+>>> cd ch02
+>>> ls
+>>> %run fake_news_clean.py
+>>> who
+>>> df.head()
+                                               title  ... date_isna
+0  As U.S. budget fight looms, Republicans flip t...  ...     False
+1  U.S. military to accept transgender recruits o...  ...     False
+2  Senior U.S. Republican senator: 'Let Mr. Muell...  ...     False
+3  FBI Russia probe helped by Australian diplomat...  ...     False
+4  Trump wants Postal Service to charge 'much mor...  ...     False
+
+[5 rows x 6 columns]
+>>> pd.options.display.max_columns = 1000
+>>> df.head()
+                                               title  \
+0  As U.S. budget fight looms, Republicans flip t...   
+1  U.S. military to accept transgender recruits o...   
+2  Senior U.S. Republican senator: 'Let Mr. Muell...   
+3  FBI Russia probe helped by Australian diplomat...   
+4  Trump wants Postal Service to charge 'much mor...   
+
+                                                text       subject  \
+0  WASHINGTON (Reuters) - The head of a conservat...  politicsNews   
+1  WASHINGTON (Reuters) - Transgender people will...  politicsNews   
+2  WASHINGTON (Reuters) - The special counsel inv...  politicsNews   
+3  WASHINGTON (Reuters) - Trump campaign adviser ...  politicsNews   
+4  SEATTLE/WASHINGTON (Reuters) - President Donal...  politicsNews   
+
+                  date  isfake  date_isna  
+0  2017-12-31 00:00:00       0      False  
+1  2017-12-29 00:00:00       0      False  
+2  2017-12-31 00:00:00       0      False  
+3  2017-12-30 00:00:00       0      False  
+4  2017-12-29 00:00:00       0      False  
+>>> df = df.sample(len(df))
+>>> df.head()
+                                                   title  \
+31090  ONE BRUTAL IMAGE Perfectly Captures The Truth ...   
+5731    Trump says he would like to speed up NAFTA talks   
+20973  Britain's May to speak to U.S. President Trump...   
+33880  STUNNING! HERE’S HOW TRUMP SHOCKED The Media A...   
+41865  WATCH THIS: DID GOOGLE MANIPULATE Search For H...   
+
+                                                    text       subject  \
+31090  A spokesperson for the Clinton Foundation clai...      politics   
+5731   WASHINGTON (Reuters) - U.S. President Donald T...  politicsNews   
+20973  LONDON (Reuters) - British Prime Minister Ther...     worldnews   
+33880  Trump won among several groups of women roving...      politics   
+41865  While researching for a wrap-up on the June 7 ...     left-news   
+
+                      date  isfake  date_isna  
+31090                 mean       1       True  
+5731   2017-02-02 00:00:00       0      False  
+20973  2017-09-05 00:00:00       0      False  
+33880                 mean       1       True  
+41865                 mean       1       True  
+>>> df['title_len'] = df['title'].apply(len)
+>>> df.head()
+                                                   title  \
+31090  ONE BRUTAL IMAGE Perfectly Captures The Truth ...   
+5731    Trump says he would like to speed up NAFTA talks   
+20973  Britain's May to speak to U.S. President Trump...   
+33880  STUNNING! HERE’S HOW TRUMP SHOCKED The Media A...   
+41865  WATCH THIS: DID GOOGLE MANIPULATE Search For H...   
+
+                                                    text       subject  \
+31090  A spokesperson for the Clinton Foundation clai...      politics   
+5731   WASHINGTON (Reuters) - U.S. President Donald T...  politicsNews   
+20973  LONDON (Reuters) - British Prime Minister Ther...     worldnews   
+33880  Trump won among several groups of women roving...      politics   
+41865  While researching for a wrap-up on the June 7 ...     left-news   
+
+                      date  isfake  date_isna  title_len  
+31090                 mean       1       True        114  
+5731   2017-02-02 00:00:00       0      False         48  
+20973  2017-09-05 00:00:00       0      False         61  
+33880                 mean       1       True         67  
+41865                 mean       1       True         91  
+>>> vectorizer = TfidfVectorizer()
+>>> vectorizer
+TfidfVectorizer()
+>>> vectorizer = TfidfVectorizer()
+>>> vectorizer.fit(df['text'])
+TfidfVectorizer()
+>>> vectorizer.transform(df['text'][:2])
+<2x122002 sparse matrix of type '<class 'numpy.float64'>'
+	with 254 stored elements in Compressed Sparse Row format>
+>>> vectorizer.transform(df['text'][:2]).todense()
+matrix([[0.        , 0.07029451, 0.        , ..., 0.        , 0.        ,
+         0.        ],
+        [0.        , 0.        , 0.        , ..., 0.        , 0.        ,
+         0.        ]])
+>>> pd.DataFrame(vectorizer.transform(df['text'][:2]).todense()).T[:10]
+          0    1
+0  0.000000  0.0
+1  0.070295  0.0
+2  0.000000  0.0
+3  0.000000  0.0
+4  0.000000  0.0
+5  0.000000  0.0
+6  0.000000  0.0
+7  0.000000  0.0
+8  0.000000  0.0
+9  0.000000  0.0
+>>> pd.DataFrame(vectorizer.transform(df['text'][:2]).todense(), columns=vectorizer.get_feature_names()).T[:10]
+                 0    1
+00        0.000000  0.0
+000       0.070295  0.0
+0000      0.000000  0.0
+00000017  0.000000  0.0
+00004     0.000000  0.0
+000048    0.000000  0.0
+000063    0.000000  0.0
+00007     0.000000  0.0
+000270    0.000000  0.0
+00042     0.000000  0.0
+>>> vectorizer.df
+>>> vectorizer
+TfidfVectorizer()
+>>> dir(vectorizer)
+['__class__',
+ '__delattr__',
+ '__dict__',
+ '__dir__',
+ '__doc__',
+ '__eq__',
+ '__format__',
+ '__ge__',
+ '__getattribute__',
+ '__getstate__',
+ '__gt__',
+ '__hash__',
+ '__init__',
+ '__init_subclass__',
+ '__le__',
+ '__lt__',
+ '__module__',
+ '__ne__',
+ '__new__',
+ '__reduce__',
+ '__reduce_ex__',
+ '__repr__',
+ '__setattr__',
+ '__setstate__',
+ '__sizeof__',
+ '__str__',
+ '__subclasshook__',
+ '__weakref__',
+ '_char_ngrams',
+ '_char_wb_ngrams',
+ '_check_n_features',
+ '_check_params',
+ '_check_stop_words_consistency',
+ '_check_vocabulary',
+ '_count_vocab',
+ '_get_param_names',
+ '_get_tags',
+ '_limit_features',
+ '_more_tags',
+ '_repr_html_',
+ '_repr_html_inner',
+ '_repr_mimebundle_',
+ '_sort_features',
+ '_stop_words_id',
+ '_tfidf',
+ '_validate_data',
+ '_validate_params',
+ '_validate_vocabulary',
+ '_warn_for_unused_params',
+ '_white_spaces',
+ '_word_ngrams',
+ 'analyzer',
+ 'binary',
+ 'build_analyzer',
+ 'build_preprocessor',
+ 'build_tokenizer',
+ 'decode',
+ 'decode_error',
+ 'dtype',
+ 'encoding',
+ 'fit',
+ 'fit_transform',
+ 'fixed_vocabulary_',
+ 'get_feature_names',
+ 'get_params',
+ 'get_stop_words',
+ 'idf_',
+ 'input',
+ 'inverse_transform',
+ 'lowercase',
+ 'max_df',
+ 'max_features',
+ 'min_df',
+ 'ngram_range',
+ 'norm',
+ 'preprocessor',
+ 'set_params',
+ 'smooth_idf',
+ 'stop_words',
+ 'stop_words_',
+ 'strip_accents',
+ 'sublinear_tf',
+ 'token_pattern',
+ 'tokenizer',
+ 'transform',
+ 'use_idf',
+ 'vocabulary',
+ 'vocabulary_']
+>>> vectorizer.idf_
+array([ 5.84287389,  2.94390766,  8.82179904, ..., 11.01902362,
+       11.01902362, 11.01902362])
+>>> 1 / vectorizer.idf_
+array([0.17114865, 0.33968457, 0.11335556, ..., 0.09075214, 0.09075214,
+       0.09075214])
+>>> from sklearn.linear_model import LogisticRegression
+>>> model = LogisticRegression()
+>>> model.warm_start
+False
+>>> model.warm_start
+False
+>>> model = LogisticRegression(warm_start=True)
+>>> for i, (tfidfvec, isfake) in enumerate(zip(vectorizer.transform(df['text']), df['isfake'])):
+...     model.fit([tfidfvec], [isfake])
+...     print(i, isfake)
+...     if i > 100:
+...         break
+...
+>>> for i, (text, isfake) in enumerate(zip(df['text'], df['isfake'])):
+...     tfidfvec = vectorizer.transform([text])
+...     print(tfidfvec)
+...     model.fit([tfidfvec], [isfake])
+...     print(i, isfake)
+...     if i > 100:
+...         break
+...
+>>> for i, (text, isfake) in enumerate(zip(df['text'], df['isfake'])):
+...     tfidfvec = vectorizer.transform([text])
+...     print(tfidfvec)
+...     model.fit(tfidfvec, [isfake])
+...     print(i, isfake)
+...     if i > 100:
+...         break
+...
+>>> model.warm_start
+True
+>>> for i, (text, isfakes) in enumerate(zip(df['text'][i*10:i*10+10], df['isfake'][i*10:i*10+10])):
+...     tfidfvecs = vectorizer.transform(texts)
+...     print(tfidfvecs[0][:10])
+...     model.fit(tfidfvecs, isfakes)
+...     print(i, isfakes[0])
+...     if i > 100:
+...         break
+...
+>>> texts
+>>> for i, (texts, isfakes) in enumerate(zip(df['text'][i*10:i*10+10], df['isfake'][i*10:i*10+10])):
+...     tfidfvecs = vectorizer.transform(texts)
+...     print(tfidfvecs[0][:10])
+...     model.fit(tfidfvecs, isfakes)
+...     print(i, isfakes[0])
+...     if i > 100:
+...         break
+...
+>>> texts
+'A spokesperson for the Clinton Foundation claims the group will not return Weinstein s donations, which totaled between $100,000 and $250,000.Because oops! The Clinton Foundation has already spent the money. But don t worry, Harvey s dirty money went to very good causes supporting women and children. And we all know how much Bill loves to take care of women This image by cartoonist Antonio F. Branco, perfectly illustrates just how generous the Clinton s are with their charitable donations.The spokesman said the foundation already spent the money on its programs, such as lowering the cost of HIV medication and supporting women and girls in developing countries.The foundation said it supports commitments to combat human trafficking, and runs the No Ceilings Project  which aims to advance the full participation of girls and women around the world  through  data-driven analysis on gender inequality, an in-depth conversation series, innovative partnerships, and CGI commitments. The explanation comes after foundation board member Chelsea Clinton ducked questions about Weinstein s money from a DailyMail.com reporter while attending a Clinton Global Initiative University event at Northeastern University in Boston on Saturday.The former first daughter hustled out a side door after the event, evading a reporter as she rushed to her car surrounded by aides and security.The Clinton Foundation and a spokesperson for Hillary Clinton had previously declined to comment on the Weinstein matter.Organizations have been divided on whether to return money to Weinstein, who gave to numerous political and philanthropic causes over the years.  Daily Mail'
+>>> type(texts)
+str
+>>> for i, (text, isfake) in enumerate(zip(df['text'], df['isfake'])):
+...     if not i % 10:
+...         chunk = [[text, isfake]]
+...     else:
+...         chunk.append([text, isfake])
+...         print(len(chunk))
+...     if i > 100:
+...         break
+...
+>>> for i, (text, isfake) in enumerate(zip(df['text'], df['isfake'])):
+...     if not i % 10:
+...         chunk = [[text, isfake]]
+...         print(i, len(chunk))
+...     else:
+...         chunk.append([text, isfake])
+...        
+...     if i > 100:
+...         break
+...
+>>> for i, (text, isfake) in enumerate(zip(df['text'], df['isfake'])):
+...     if not i % 10:
+...         print(i, len(chunk))
+...         if i:
+...             X = vectorizer.transform(chunk[:,0])
+...             y = pd.np.array(chunk[:,1])
+...             print(X.shape)
+...        
+...         chunk = [[text, isfake]]
+...     else:
+...         chunk.append([text, isfake])
+...        
+...     if i > 100:
+...         break
+...
+>>> for i, (text, isfake) in enumerate(zip(df['text'], df['isfake'])):
+...     if not i % 10:
+...         print(i, len(chunk))
+...         if i:
+...             X = vectorizer.transform(chunk[:,0])
+...             y = pd.np.array(pd.np.array(chunk)[:,1])
+...             print(X.shape)
+...        
+...         chunk = [[text, isfake]]
+...     else:
+...         chunk.append([text, isfake])
+...        
+...     if i > 100:
+...         break
+...
+>>> for i, (text, isfake) in enumerate(zip(df['text'], df['isfake'])):
+...     if not i % 10:
+...         print(i, len(chunk))
+...         if i:
+...             X = vectorizer.transform(pd.np.array(chunk)[:,0])
+...             y = pd.np.array(pd.np.array(chunk)[:,1])
+...             print(X.shape)
+...        
+...         chunk = [[text, isfake]]
+...     else:
+...         chunk.append([text, isfake])
+...        
+...     if i > 100:
+...         break
+...
+>>> for i, (text, isfake) in enumerate(zip(df['text'], df['isfake'])):
+...     if not i % 10:
+...         print(i, len(chunk))
+...         if i:
+...             X = vectorizer.transform(pd.np.array(chunk)[:,0])
+...             y = pd.np.array(pd.np.array(chunk)[:,1])
+...             print(X.shape)
+...             model.fit(X, y)
+...         else:
+...             model = LogisticRegression(warm_start=True)
+...         chunk = [[text, isfake]]
+...     else:
+...         chunk.append([text, isfake])
+...        
+...     if i > 100:
+...         break
+...
+>>> model.predict(X)
+array(['1', '1', '1', '1', '1', '0', '1', '1', '1', '0'], dtype='<U6280')
+>>> y
+array(['0', '0', '1', '1', '1', '0', '1', '1', '1', '0'], dtype='<U6280')
+>>> for i, (text, isfake) in enumerate(zip(df['text'], df['isfake'])):
+...     if i < 100:
+...         continue
+...     elif i > 1000:
+...         break
+...     if not i % 10:
+...         print(i, len(chunk))
+...         if i:
+...             X = vectorizer.transform(pd.np.array(chunk)[:,0])
+...             y = pd.np.array(pd.np.array(chunk)[:,1])
+...             print(X.shape)
+...             model.fit(X, y)
+...         else:
+...             model = LogisticRegression(warm_start=True)
+...         chunk = [[text, isfake]]
+...     else:
+...         chunk.append([text, isfake])
+...
+>>> X
+<2x122002 sparse matrix of type '<class 'numpy.float64'>'
+	with 420 stored elements in Compressed Sparse Row format>
+>>> y
+array(['1', '1'], dtype='<U2562')
+>>> ls -al
+>>> cd ..
+>>> ls data
+>>> for chunk in pd.read_csv('data/all.csv.gz', chunksize=1000):
+...     print(chunk.shape)
+...
+>>> for i, chunk in enumerate(pd.read_csv('data/all.csv.gz', chunksize=1000)):
+...     print(i, vectorizer.transform(chunk['text']).shape)
+...     # print(chunk.shape)
+...
+>>> from tqdm import tqdm
+>>> for i, chunk in tqdm(enumerate(pd.read_csv('data/all.csv.gz', chunksize=1000))):
+...     # print(i, vectorizer.transform(chunk['text']).shape)
+...     # print(chunk.shape)
+...     pass
+...
+>>> for i, chunk in tqdm(enumerate(pd.read_csv('data/all.csv.gz', chunksize=1000)), total=len(df)):
+...     # print(i, vectorizer.transform(chunk['text']).shape)
+...     # print(chunk.shape)
+...     pass
+...
+>>> for i, chunk in tqdm(enumerate(pd.read_csv('data/all.csv.gz', chunksize=1000)), total=len(df)/1000):
+...     # print(i, vectorizer.transform(chunk['text']).shape)
+...     # print(chunk.shape)
+...     pass
+...
+>>> model = LogisticRegression(warm_start=True)
+... for i, df_chunk in tqdm(enumerate(pd.read_csv('data/all.csv.gz', chunksize=1000)), total=len(df)/1000):
+...     tfidfs = vectorizer.transform(df_chunk['text'])
+...     model.fit(tfidfs, df_chunk['isfake'])
+...
+>>> df = pd.read_csv('data/all.csv.gz')
+>>> df = df.sample(len(df))
+>>> df.to_csv('data/all.csv.gz', compression='gzip')
+>>> df.to_csv('data/all.csv.gz', compression='gzip', index=False)
+>>> df = pd.read_csv('data/all.csv.gz')
+>>> df.shape
+(44898, 6)
+>>> model = LogisticRegression(warm_start=True)
+... for i, df_chunk in tqdm(enumerate(pd.read_csv('data/all.csv.gz', chunksize=1000)), total=len(df)/1000):
+...     tfidfs = vectorizer.transform(df_chunk['text'])
+...     model.fit(tfidfs, df_chunk['isfake'])
+...
+>>> model = LogisticRegression(warm_start=True)
+... for i, df_chunk in tqdm(enumerate(pd.read_csv('data/all.csv.gz', chunksize=1000)), total=len(df)/1000):
+...     tfidfs = vectorizer.transform(df_chunk['text'])
+...     print(model.score(tfidfs, df_chunk['isfake']))
+...
+>>> model = LogisticRegression(warm_start=True)
+... for i, df_chunk in tqdm(enumerate(pd.read_csv('data/all.csv.gz', chunksize=1000)), total=len(df)/1000):
+...     tfidfs = vectorizer.transform(df_chunk['text'])
+...     model.fit(tfidfs, df_chunk['isfake'])
+...
+>>> for i, df_chunk in tqdm(enumerate(pd.read_csv('data/all.csv.gz', chunksize=1000)), total=len(df)/1000):
+...     tfidfs = vectorizer.transform(df_chunk['text'])
+...     print(model.score(tfidfs, df_chunk['isfake']))
+...
+>>> from sklearn.decomposition import PCA
+>>> transformer = PCA(ndim=10)
+>>> PCA?
+>>> transformer = PCA(n_components=100)
+>>> from sklearn.decomposition import PCA, IncrementalPCA
+>>> transformer = IncrementalPCA(ndim=10)
+>>> transformer = IncrementalPCA(n_components=100)
+>>> modelpca = LogisticRegression(warm_start=True)
+... for i, df_chunk in tqdm(enumerate(pd.read_csv('data/all.csv.gz', chunksize=1000)), total=len(df)/1000):
+...     tfidfs = vectorizer.transform(df_chunk['text'])
+...     tranformer.fit(tfidfs, warmstart=True)
+...     # modelpca.fit(tfidfs, df_chunk['isfake'])
+...
+>>> modelpca = LogisticRegression(warm_start=True)
+... for i, df_chunk in tqdm(enumerate(pd.read_csv('data/all.csv.gz', chunksize=1000)), total=len(df)/1000):
+...     tfidfs = vectorizer.transform(df_chunk['text'])
+...     transformer.fit(tfidfs, warmstart=True)
+...     # modelpca.fit(tfidfs, df_chunk['isfake'])
+...
+>>> modelpca = LogisticRegression(warm_start=True)
+... for i, df_chunk in tqdm(enumerate(pd.read_csv('data/all.csv.gz', chunksize=1000)), total=len(df)/1000):
+...     tfidfs = vectorizer.transform(df_chunk['text'])
+...     transformer.fit(tfidfs)
+...     # modelpca.fit(tfidfs, df_chunk['isfake'])
+...
+>>> hist -o -p -f ch02/fake_news_big_data_techniques.ipynb
+>>> hist -o -p -f ch02/fake_news_big_data_techniques.ipy

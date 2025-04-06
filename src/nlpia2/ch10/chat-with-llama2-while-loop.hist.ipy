@@ -1,0 +1,40 @@
+>>> import dotenv, os
+>>> dotenv.load_dotenv()
+>>> env = dict(os.environ)
+>>> auth_token = env['HUGGINGFACE_ACCESS_TOKEN']
+>>> from transformers import LlamaForCausalLM, LlamaTokenizer
+>>> model_name = "meta-llama/Llama-2-7b-chat-hf"
+>>> tokenizer = LlamaTokenizer.from_pretrained(
+...     model_name,
+...     token=auth_token)
+>>> llama = LlamaForCausalLM.from_pretrained(
+...     model_name,
+...     token=auth_token)
+
+
+>>> prompt = "Q: How do you know when you misunderstand the real world?\n"
+>>> prompt += "A: "
+>>> input_ids = tokenizer(prompt, return_tensors="pt").input_ids
+>>> input_ids
+tensor([[    1,   660, 29901,  1128,   437,   366,  1073,   746,   366, 19818,
+          1689,   278,  1855,  3186, 29973,    13, 29909, 29901, 29871]])
+
+>>> tok = ''
+>>> while tok and tok != '</s>':
+...     input_ids = tokenizer(prompt, return_tensors="pt").input_ids
+...     input_len = len(input_ids[0])
+...     print(f'input_len: {input_len}')
+...     output_ids = llama.generate(
+...         input_ids, max_length=input_len + 1)
+...     ans_ids = output_ids[0][input_len:]
+...     print(f'output_ids: {output_ids}')
+...     print(f'ans_ids: {ans_ids}')
+...     output_str = tokenizer.batch_decode(output_ids)[0]
+...     print(f'output_str: {output_str}')
+...     tok = output_str[len(input_str):] 
+...     print(f'tok: {tok}')
+...     prompt += '|' + tok
+...     print(f'new prompt: {prompt}')
+
+
+

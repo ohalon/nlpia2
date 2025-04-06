@@ -1,0 +1,845 @@
+= Scaling up (optimization, parallelization, and batch processing)
+:chapter: 14
+:part: 3
+:secnums:
+:imagesdir: .
+:xrefstyle: short
+:figure-caption: Figure {chapter}.
+:listing-caption: Listing {chapter}.
+:table-caption: Table {chapter}.
+:stem: latexmath
+
+This chapter covers
+
+* Scaling up an NLP pipeline
+* Speeding up search with indexing
+* Batch processing to reduce your memory footprint
+* Parallelization to speed up NLP
+* Running NLP model training on a GPU
+
+In chapter 12, you learned how to use all the tools in your NLP toolbox to build an NLP pipeline capable of carrying on a dialog.
+We demonstrated crude examples of this chatbot dialog capability on small datasets.
+The "humanness", or IQ, of your dialog system seems to be limited by the data you train it with.
+Most of the NLP approaches you've learned about give better and better results, if you can scale them to use larger datasets.
+
+But you may have noticed that your computer bogs down, even crashes, if you run some of the examples we gave you on large datasets.
+Some datasets in `nlpia.data.loaders.get_data()` will exceed the memory (RAM) in most PCs or laptops.
+
+Besides RAM, another bottleneck in your natural language processing pipelines is the processor.
+Even if you had unlimited RAM, larger corpora would take days to process with some of the more complex algorithms you have learned.
+
+So you need to come up with algorithms that minimize the resources they require:
+
+* Volatile storage (RAM)
+* Processing (CPU cycles)
+
+== Too much of a good thing (data)
+
+As you add more data, more knowledge, to your pipeline, the machine learning models take more and more RAM, storage, and CPU cycles to train.
+Even worse, some of the techniques relied on an latexmath:[O(N^{2})] computation of distance or similarity between vector representations of statements or documents.
+For these algorithms, things get slower faster as you add data.
+Each additional sentence in the corpora takes more bytes of RAM and more CPU cycles to process than the previous one, which is impractical for even moderately sized corpora.
+
+Two broad approaches help you avoid these issues so you can scale up your NLP pipeline to larger datasets:
+
+* _Increased scalability_ -- Improving or optimizing the algorithms
+* _Horizontal scaling_ -- Parallelizing the algorithms to run multiple computations simultaneously
+
+In this chapter, you'll learn techniques for both.
+
+Getting smarter about algorithms is almost always the best way to speed up a processing pipeline; so we talk about that first.
+We leave parallelization to the second half of this chapter, to help you run you sleek, optimized algorithms even faster.
+
+== Optimizing NLP algorithms
+
+Some of the algorithms you've looked at in previous chapters have expensive complexities, often quadratic latexmath:[O(N^2)] or higher:
+
+* Compiling a thesaurus of synonyms from `word2vec` vector similarity
+* Clustering web pages based on their topic vectors
+* Automatically clustering journal articles or other documents based on topic vectors
+* Clustering questions in a Q&A corpus to automatically compose a FAQ
+
+All of these NLP challenges fall under the category of indexed search, or k-nearest neighbors (KNN) vector search.
+We spend the next few sections talking about the scaling challenge: algorithm optimization.
+We show you one particular algorithm optimization, called indexing, that will help solve most vector search (KNN) problems.
+In the second half of the chapter, we show you how to hyper-parallelize your natural language processing by using thousands of CPU cores in a graphical processing unit (GPU).
+
+=== Indexing
+
+You probably use natural language indexes every day.
+Natural language text indexes (also called reverse indexes) are what you use when you turn to the back of a textbook to find the page for a topic you're interested in.
+The pages are the documents and the words are the lexicon of your bag of words vectors (BOW) for each document.
+And you use a text index every time you enter a search string in a web search tool.
+To scale up your NLP application, you need to do that for semantic vectors like LSA document-topic vectors or `word2vec` word vectors.
+
+Previous chapters have mentioned conventional "reverse indexes" used for searching documents to find a set of words or tokens based on the words in a query.
+But we've not yet talked about KNN search for similar text.
+For KNN search, you want to find strings that are similar even if they don't contain the exact same words.
+Levenshtein distance is one of the distance metrics used by packages such as `fuzzywuzzy` and ChatterBot to find similar strings.
+
+Databases implement a variety of text indexes that allow you to find documents or strings quickly.
+SQL queries allow you to search for text that matches patterns such as `SELECT book_title from manning_book WHERE book_title LIKE 'Natural Language%in Action'`.
+This query would find all the "in Action" Manning titles that start with "Natural Language".
+And there are trigram (`trgm`) indexes for a lot of databases that help you find similar text quickly (in constant time) without even specifying a pattern, just specifying a text query that is similar to what you're looking for.
+
+These database techniques for indexing text work great for text documents or strings of any sort.
+But they don't work well on semantic vectors such as `word2vec` vectors or dense document-topic vectors.
+Conventional database indexes rely on the fact that the objects (documents) they are indexing are either discrete, sparse, or low dimensional:
+
+* Strings (sequences of characters) are discrete: There are a limited number of characters.
+* TF-IDF vectors are sparse: Most terms have a frequency of 0 in any given document.
+* BOW vectors are discrete and sparse: Terms are discrete, and most words have zero frequency in a document.
+
+This is why web searches, document searches, or geographic searches execute in milliseconds.
+And it's been working efficiently (`O(1)`) for many decades.
+
+What makes continuous vectors such as document-topic LSA vectors (chapter 4) or `word2vec` vectors (chapter 6) so hard to index?
+After all, geographic information system (GIS) vectors are typically latitude, longitude, and altitude.
+And you can do a GIS search on Google Maps in milliseconds.
+Fortunately GIS vectors only have three continuous values so indexes can be built based on bounding boxes that gather together GIS objects in discrete groups.
+
+Several different index data structures can deal with this problem.
+
+* K-d Tree: Elastic search will implement this for up to 8-D in upcoming releases.
+* Rtree: PostgreSQL implements this in versions >= 9.0 for up to 200-D.
+* Minhash or locality sensitive hashes: `pip install lshash3`.
+
+These work up to a point.
+That point is at about 12 dimensions.
+If you play around with optimizing database indexes or locality sensitive hashes yourself, you'll find that it gets harder and harder to maintain that constant-time lookup speed.
+At about 12 dimensions it becomes impossible.
+
+So what are you to do with your 300-D `word2vec` vectors or 100+ dimension semantic vectors from LSA?
+Approximation to the rescue.
+Approximate nearest neighbor search algorithms don't try to give you the exact set of document vectors that are most similar to your query vector.
+Instead they just try to find some reasonably good matches.
+And they are usually pretty darn good, rarely missing any closer matches in the top 10 or so search results.
+
+But things are quite different if you're using the magic of SVD or "embedding" to reduce your token dimensions (your vocabulary size, typically in the millions) to say 200 or 300 topic dimensions.
+Three things are different.
+One change is good: You have fewer dimensions to search (think columns in a database table), which is a huge advantage.
+We've cured ourselves of the curse of dimensionality.
+
+=== Advanced indexing
+
+Semantic vectors check all the boxes for difficult objects.
+They are difficult because they are:
+
+* High dimensional
+* Real valued
+* Dense
+
+We've replaced the curse of dimensionality with two new difficulties.
+Our vectors are now dense (no zeros that you can ignore) and continuous (real valued).
+
+In your dense semantic vectors, every dimension has a meaningful value.
+You can no longer skip or ignore all the zeros that filled the TF-IDF or BOW table (see chapters 2 and 3).
+Even if you normalized or add-one (Laplace) smoothed your TF-IDF vectors, you'd still have some consistent values in your dense table that allow it to be handled like a sparse matrix.
+But there are no zeros or most-common values in your vectors anymore.
+Every topic has some weight associated with it for every document.
+This isn't an insurmountable problem.
+The reduced dimensionality more than makes up for the density problem.
+
+But the values in these dense vector are real numbers.
+But there's a bigger problem.
+Topic weight values in a semantic vector can be positive or negative and aren't limited to discrete characters or integer counts.
+The weights associated with each topic are now continuous real values (`float`). Nondiscrete values, such as floats, are impossible to index.
+They are no longer merely present or absent.
+They can't be vectorized with one-hot encoding of input as a feature into a neural net.
+And you certainly can't create an entry in an index table that refers to all the documents where that feature or topic was either present or absent.
+Topics are now everywhere, in all the documents, to varying degrees.
+
+You can solve the natural language search problems at the beginning of the chapter if you can find an efficient search or KNN algorithm.
+One of the ways to optimize the algorithm for such problems is to sacrifice certainty and accuracy in exchange for a huge speed-up.
+This is called approximate nearest neighbors (ANN) search.
+For example, Google's search doesn't try to find you a perfect match for the semantic vector in your search.
+Instead it attempts to provide you with the closest ten or so approximate matches.
+
+Fortunately, a lot of companies have open sourced much of their research software for making ANN more scalable.
+These research groups are competing with each other to give you the easiest, fastest ANN search software.
+Here are some of the Python packages from this competition that have been tested with standard benchmarks for NLP problems at the India Technical University (ITU):footnote:[ITU comparison of ANN Benchmarks: http://www.itu.dk/people/pagh/SSS/ann-benchmarks/]
+
+- Spotify's `annoy`-hamming footnote:[See the web page titled "GitHub - spotify/annoy: Approximate Nearest Neighbors in C++/Python optimized for memory usage and loading/saving to disk" (https://github.com/spotify/annoy).]
+- BallTree (using `nmslib`)footnote:[See the web page titled "GitHub - nmslib/nmslib: Non-Metric Space Library (NMSLIB): An efficient similarity search library and a toolkit for evaluation of k-NN methods for generic non-metric spaces." (https://github.com/searchivarius/nmslib).]
+- Brute Force using Basic Linear Algebra Subprograms library (BLAS)footnote:[See the web page titled "1.6. Nearest Neighbors — Scikit-Learn 0.19.2 documentation" (http://scikit-learn.org/stable/modules/neighbors.html#brute-force).]
+- Brute Force using Non-Metric Space Library (NMSlib)footnote:[See the web page titled "GitHub - nmslib/nmslib: Non-Metric Space Library (NMSLIB): An efficient similarity search library and a toolkit for evaluation of k-NN methods for generic non-metric spaces." (https://github.com/searchivarius/NMSLIB).]
+- Dimension reductiOn and LookuPs on a Hypercube for effIcient Near Neighbor (DolphinnPy)footnote:[See the web page titled "GitHub - ipsarros/DolphinnPy: High-dimensional approximate nearest neighbor in python" (https://github.com/ipsarros/DolphinnPy).]
+- Random Projection Tree Forest (`rpforest`)footnote:[See the web page titled "GitHub - lyst/rpforest: It is a forest of random projection trees" (https://github.com/lyst/rpforest).]
+- Locality sensitive hashing (`datasketch`)footnote:[See the web page titled "GitHub - ekzhu/datasketch: MinHash, LSH, LSH Forest, Weighted MinHash, HyperLogLog, HyperLogLog++" (https://github.com/ekzhu/datasketch).]
+- Multi index hashing (MIH)footnote:[See the web page titled "GitHub - norouzi/mih: Fast exact nearest neighbor search in Hamming distance on binary codes with Multi-index hashing" (https://github.com/norouzi/mih).]
+- Fast Lookup of cosine and Other Nearest Neighbors (FALCONN)footnote:[See the web page titled "FALCONN : PyPI" (https://pypi.python.org/pypi/FALCONN).]
+- Fast Lookup of Approximate Nearest Neighbors (FLANN)footnote:[See the web page titled "FLANN - Fast Library for Approximate Nearest Neighbors : FLANN" (http://www.cs.ubc.ca/research/flann/).]
+- Hierarchical Navigable Small World (HNSW) (in `nmslib`)footnote:[See the web page titled "nmslib/hnsw.h at master : nmslib/nmslib : GitHub" (https://github.com/searchivarius/nmslib/blob/master/similarity_search/include/factory/method/hnsw.h).]
+- K-Dimensional Trees (`kdtree`) footnote:[See the GitHub repository for kdtree (https://github.com/stefankoegl/kdtree).]
+- `nearpy`footnote:[See NearPy project on PyPi (https://pypi.python.org/pypi/NearPy).]
+
+One of the most straightforward of these indexing approaches is implemented in a package called `Annoy` by Spotify.
+
+=== Advanced indexing with Annoy
+
+The recent update to `word2vec` (`KeyedVectors`) in `gensim` added an advanced indexing approach.
+You can now retrieve approximate nearest neighbors for any vector in milliseconds, out of the box.
+But as we discussed in the beginning of the chapter, you need to use indexing for any kind of high-dimension dense continuous vector set, not just `word2vec` vectors.
+So let's use `annoy` to index the `word2vec` vectors and compare your results to `gensim`'s `KeyedVectors` index.
+
+First, you need to load the `word2vec` vectors like you did in chapter 6.
+
+.Load word2vec vectors
+[source,python]
+----
+>>> from nlpia.loaders import get_data
+>>> wv = get_data('word2vec')  # <1>
+100%|############################| 402111/402111 [01:02<00:00, 6455.57it/s]
+>>> len(wv.vocab), len(wv[next(iter(wv.vocab))])
+(3000000, 300)
+>>> wv.vectors.shape
+(3000000, 300)
+----
+<1> If you haven't already downloaded GoogleNews-vectors-negative300.bin.gz (https://bit.ly/GoogleNews-vectors-negative300) to `nlpia/src/nlpia/bigdata/` then `get_data()` will download it for you.
+
+Now let's set up an empty `annoy` index with the right number of dimensions for your vectors.
+
+.Initialize 300-D `AnnoyIndex`
+[source,python]
+----
+>>> from annoy import AnnoyIndex
+>>> num_words, num_dimensions = wv.vectors.shape  # <1>
+>>> index = AnnoyIndex(num_dimensions)
+----
+<1> The original GoogleNews `word2vec` model contains 3M word vectors, each with 300 dimensions.
+
+Now you can add your `word2vec` vectors to your `annoy` index one at a time.
+You can think of this process as reading through the pages of a book one at a time, and putting the page numbers where you found each word in the reverse index table at the back of the book.
+Obviously an ANN search is much more complicated, but `annoy` makes it easier.
+
+.Add each word vector to the `AnnoyIndex`
+[source,python]
+----
+>>> from tqdm import tqdm  # <1>
+>>> for i, word in enumerate(tqdm(wv.index2word)):  # <2>
+...     index.add_item(i, wv[word])
+22%|#######▏                   | 649297/3000000 [00:26<01:35, 24587.52it/s]
+----
+<1> `tqdm()` takes an iterable and returns an iterable (like `enumerate()`) and inserts code in your loop to display a progress bar
+<2> `.index2word` is an unsorted list of all 3M tokens in your vocabulary, equivalent to a map of the integer indexes (0-2999999) to tokens ('</s>' to 'snowcapped_Caucasus').
+
+Your `AnnoyIndex` object has to do one last thing: Read through the entire index and try to cluster your vectors into bite-size chunks that can be indexed in a tree structure.
+
+.Build Euclidean distance index with 15 trees
+[source,python]
+----
+>>> import numpy as np
+>>> num_trees = int(np.log(num_words).round(0))  # <1>
+>>> num_trees
+15
+>>> index.build(num_trees)  # <2>
+>>> index.save('Word2vec_euc_index.ann')  # <3>
+True
+>>> w2id = dict(zip(range(len(wv.vocab)), wv.vocab))
+----
+<1> This is just a rule of thumb -- you may want to optimize this hyperparameter if this index isn't performant for the things you care about (RAM, lookup, indexing) or accurate enough for your application.
+<2> round(ln(3000000)) => 15 indexing trees for our 3M vectors -- takes a few minutes on a laptop
+<3> Saves the index to a local file and frees up RAM, but may take several minutes.
+
+You built 15 trees (approximately the natural log of 3 million) because you have 3 million vectors to search through.
+If you have more vectors or want your index to be faster and more accurate, you can increase the number of trees.
+Just be careful not to make it too big or you'll have to wait a while for the indexing process to complete.
+
+Now you can try to look up a word from your vocabulary in the index.
+
+.Find `Harry_Potter` neighbors with AnnoyIndex
+[source,python]
+----
+>>> wv.vocab['Harry_Potter'].index  # <1>
+9494
+>>> wv.vocab['Harry_Potter'].count  # <2>
+2990506
+>>> w2id = dict(zip(
+...     wv.vocab, range(len(wv.vocab))))  # <3>
+>>> w2id['Harry_Potter']
+9494
+>>> ids = index.get_nns_by_item(
+...     w2id['Harry_Potter'], 11)  # <4>
+>>> ids
+[9494, 32643, 39034, 114813, ..., 113008, 116741, 113955, 350346]
+>>> [wv.vocab[i] for i in _]
+>>> [wv.index2word[i] for i in _]
+['Harry_Potter',
+ 'Narnia',
+ 'Sherlock_Holmes',
+ 'Lemony_Snicket',
+ 'Spiderwick_Chronicles',
+ 'Unfortunate_Events',
+ 'Prince_Caspian',
+ 'Eragon',
+ 'Sorcerer_Apprentice',
+ 'RL_Stine']
+----
+<1> The gensim `KeyedVectors.vocab` dict contains Vocab objects rather than raw strings or index numbers
+<2> The gensim `Vocab` object can tell you the number of times the "Harry_Potter" 2-gram was mentioned in the GoogleNews corpus.... nearly 3M times.
+<3> Create a map similar to wv.vocab, mapping the tokens to their index values (integer).
+<4> Annoy returns the target vector first, so we have to request 11 "neighbors" if we want 10 in addition to the target.
+
+The ten nearest neighbors listed by `annoy` are mostly books from the same general genre as _Harry Potter_ but they aren't really precise synonymous with the book title, movie title, or character name.
+So your results are definitely "approximate" nearest neighbors.
+Also, keep in mind, that the algorithm used by `annoy` is stochastic, similar to a random forest machine learning algorithm.footnote:[Annoy uses "random projections" to generate locality sensitive hashes (http://en.wikipedia.org/wiki/Locality-sensitive_hashing#Random_projection)]
+So your list won't be the same as what you see here.
+If you want repeatable results you can use the `AnnoyIndex.set_seed()` method to initialize the random number generator.
+
+It seems like an `annoy` index misses a lot of closer neighbors and provides results from the general vicinity of a search term rather than the closest 10.
+How about `gensim`?
+What would happen if you did that with gensim's built-in KeyedVector index to retrieve the correct closest 10 neighbors.
+
+.Top `Harry_Potter` neighbors with `gensim.KeyedVectors` index
+[source,python]
+----
+>>> [word for word, similarity in wv.most_similar('Harry_Potter', topn=10)]
+['JK_Rowling_Harry_Potter',
+ 'JK_Rowling',
+ 'boy_wizard',
+ 'Deathly_Hallows',
+ 'Half_Blood_Prince',
+ 'Rowling',
+ 'Actor_Rupert_Grint',
+ 'HARRY_Potter',
+ 'wizard_Harry_Potter',
+ 'HARRY_POTTER']
+----
+
+Now that looks like a more relevant top-10 synonym list.
+This lists the correct author, alternative title spellings, titles of other books in the series, and even an actor in the Harry Potter movie.
+But the results from `annoy` may be useful in some situations, when you're more interested in the "genre" or general sense of a word rather than precise synonyms.
+That's pretty cool.
+
+But the `annoy` indexing approximation really took some shortcuts.
+To fix that, rebuild the index using the cosine distance metric (instead of Euclidean) and add more trees.
+This should improve the accuracy of the nearest neighbors and make its results match gensim's more closely.
+
+.Build a cosine distance index
+[source,python]
+----
+>>> index_cos = AnnoyIndex(
+...     f=num_dimensions, metric='angular')  # <1>
+>>> for i, word in enumerate(wv.index2word):
+...     if not i % 100000:
+...         print('{}: {}'.format(i, word))  # <2>
+...     index_cos.add_item(i, wv[word])
+0: </s>
+100000: distinctiveness
+    ...
+2900000: BOARDED_UP
+----
+<1> `metric='angular'` uses the angular (cosine) distance metric to compute your clusters and hashes. Your options are: 'angular', 'euclidean', 'manhattan', or 'hamming'.
+<2> Another way to keep informed of your progress, if you don't like tqdm
+
+Now let's build twice the number of trees.  And set the random seed, so you can get the same results that you see here:
+
+.Build a cosine distance index
+[source,python]
+----
+>>> index_cos.build(30)  # <1>
+>>> index_cos.save('Word2vec_cos_index.ann')
+True
+----
+<1> 30 = `int(np.log(num_vectors).round(0))`, double what you had before
+
+This indexing should take twice as long to run, but once it finishes you should expect results closer to what gensim produces.
+Now let's see how approximate those nearest neighbors are for the term "Harry Potter" for your more precise index.
+
+.`Harry_Potter` neighbors in a cosine distance world
+[source,python]
+----
+>>> ids_cos = index_cos.get_nns_by_item(w2id['Harry_Potter'], 10)
+>>> ids_cos
+[9494, 37681, 40544, 41526, 14273, 165465, 32643, 420722, 147151, 28829]
+>>> [wv.index2word[i] for i in ids_cos]  # <1>
+['Harry_Potter',
+ 'JK_Rowling',
+ 'Deathly_Hallows',
+ 'Half_Blood_Prince',
+ 'Twilight',
+ 'Twilight_saga',
+ 'Narnia',
+ 'Potter_mania',
+ 'Hermione_Granger',
+ 'Da_Vinci_Code']
+----
+<1> You will not get the same results. Random projection for LSH is stochastic. Use `AnnoyIndex.set_seed()` if you need repeatability.
+
+That's a bit better.
+At least the correct author is listed.
+Let's compare the results for the two `annoy` searches to the "correct" answer from gensim.
+
+.Search results accuracy for top 10
+[source,python]
+----
+>>> pd.DataFrame(annoy_top10, columns=['annoy_15trees',
+...                                    'annoy_30trees'])  # <1>
+                                 annoy_15trees      annoy_30trees
+gensim
+JK_Rowling_Harry_Potter           Harry_Potter       Harry_Potter
+JK_Rowling                              Narnia         JK_Rowling
+boy_wizard                     Sherlock_Holmes    Deathly_Hallows
+Deathly_Hallows                 Lemony_Snicket  Half_Blood_Prince
+Half_Blood_Prince        Spiderwick_Chronicles           Twilight
+Rowling                     Unfortunate_Events      Twilight_saga
+Actor_Rupert_Grint              Prince_Caspian             Narnia
+HARRY_Potter                            Eragon       Potter_mania
+wizard_Harry_Potter        Sorcerer_Apprentice   Hermione_Granger
+HARRY_POTTER                          RL_Stine      Da_Vinci_Code
+----
+<1> We leave it to you to figure out how to combine these top-10 lists into a single DataFrame.
+
+To get rid of the redundant "Harry_Potter" synonym, you should have listed the top 11, and skipped the first one.
+But you can see the progression here.
+As you increase the number of `annoy` index trees, you push down the ranking of less-relevant terms (such as "Narnia") and insert more-relevant terms from the true nearest neighbors (such as "JK_Rowling" and "Deathly_Hallows").
+
+And the approximate answer from the `annoy` index is significantly faster than the gensim index that provides exact results.
+And you can use this `annoy` index for any high-dimensional, continuous, dense vectors that you need to search, such as LSA document-topic vectors or `doc2vec` document embeddings (vectors).
+
+=== Why use approximate indexes at all?
+
+Those of you with some experience analyzing algorithm efficiency may say to yourself that latexmath:[O(N^2)] algorithms are theoretically "efficient". After all, they are more efficient than exponential algorithms and even more efficient than polynomial algorithms.
+They certainly aren't n-p hard to compute or solve.
+They aren't the kind of impossible thing that takes the lifetime of the universe to compute.
+
+Because these latexmath:[O(N^2)] computations are only required to train the machine learning models in your NLP pipeline, they can be precomputed.
+Your chatbot doesn't need to compute latexmath:[O(N^2)] operations with each reply to a new statement.
+And latexmath:[N^2] operations are inherently "parallelizable". You can almost always run one of the _N_ sequences of computations independent of the other _N_ sequences.
+So you could just throw more RAM and processors at the problem and just run some batch training process every night or every weekend to keep your bot's brain up to date.footnote:[This is the real-world architecture you used on a N^2 document matching problem.]
+Even better, you may be able to just bite off chunks of the latexmath:[N^2] computation and run them one by one, incrementally, as data comes in that increases that _N_.
+
+For example, imagine you've trained a chatbot on some small dataset to get started and then turned it loose on the world. Imagine that _N_ is the number of statements and replies in its persistent memory (database).
+Each time someone addresses the chatbot with a new statement, the bot might want to search its database for the most similar statement so it can reuse any replies that worked for that statement in the past.
+So you compute some similarity score (metric) between the _N_ existing statements and the new statement and store the new similarity scores in your latexmath:[(N+1)^2] similarity matrix as a new row and column. Or you just add _N_ more "connections" or relationships to your graph data structure storing all the similarity scores between statements. Now you can just do a query on these connections (or cells in the connection matrix) to find the minimum distance value. For the simplest approach, you only really have to check those _N_ scores you just computed. But if you wanted to be more thorough, you could check other rows and columns (walk the graph a little deeper) to find, for instance, some replies to similar statements and check metrics such as kindness, information content, sentiment, grammaticality, well-formedness, brevity, and style. Either way you have an latexmath:[O(N)] algorithm for compute the best reply, even though the overall complexity for a "full" training run is latexmath:[O(N^2)].
+
+But what if latexmath:[O(N)] still isn't enough. What if you're building a really big brain, such as Google, where _N_ is more than 60 trillion.footnote:[Google tutorial on web indexing (https://www.google.com/insidesearch/howsearchworks/thestory/)].
+Even if your _N_ isn't quite that large, if the individual computations are pretty complex, or you want to respond in a reasonable amount of time (10s of milliseconds), you'll need to employ an index.
+
+=== An indexing workaround: Discretizing
+
+So we've just claimed that floats (real values) are impossible to naively index.
+What is one way to prove us wrong, or be less naive about your indexing?
+Those of you with experience working with sensor data and analog-to-digital converters may be thinking to yourself that continuous values can easily be made digital or discrete.
+And a `float` isn't really continuous anyway.
+They're a bunch of bits, after all.
+But you need to make them **really** discrete if you want them to fit into your concept of an index and maintain that low dimensionality.
+You need to "bin" them into something manageable.
+The simplest way to turn a continuous variable into a manageable number of categorical or ordinal values is something like listing 13.11.
+
+.`MinMaxScaler` for low-dimensional vectors
+[source,python]
+----
+>>> from sklearn.preprocessing import MinMaxScaler
+>>> real_values = [-1.2, 3.4, 5.6, -7.8, 9.0]
+>>>
+>>> scaler = MinMaxScaler()  # <1>
+>>> scaler.fit(real_values)
+
+[int(x * 100.) for x in scaler.transform(real_values)]  # <2>
+[39, 66, 79, 0, 100]
+----
+<1> Confine our floats to be between 0.0 and 1.0.
+<2> Scaled, discretized ints, 0 - 100
+
+This works fine for low-dimensional spaces. This is essentially what some 2D GIS indexes use to discretize lat/lon values into a grid of bounding boxes.
+Points in 2D space are either present or absent for each of the grid points.
+
+As the number of dimensions grows, you need to use more and more sophisticated efficient indexes than your simple 2D grid.
+
+Let's use spatial dimensions to think about 3D space before diving into 300-D natural language semantic vectors.
+For example, think about what changes when you grow from two to three dimensions by adding altitude to some database of 2D GPS latitude and longitude values.
+Now imagine you divided the Earth up into 3D cubes rather than the 2D grid you used earlier.
+Most of those cubes wouldn't have much in them that humans would be interested in finding.
+And doing proximity searches, such as finding all the objects within some 3D sphere or 3D cube, becomes a much more difficult operation.
+The number of grid points you have to search through increases with latexmath:[N^3], where _N_ is the "diameter" of a search region.
+You can see how when 3 (the number of dimensions) goes up to 4 or 5 you really need to be smart about your search.
+
+== Constant RAM algorithms
+One of the main challenges in working with large corpora and TF-IDF matrices is fitting it all in RAM.
+The reason why we used `gensim` throughout this book is that their algorithms attempt to maintain a constant RAM footprint.
+
+=== Gensim
+
+What if you have more documents than you can hold in RAM?
+As the size and variety of the documents in your corpus grows, you may eventually exceed the RAM capacity of even the largest machines you can rent from a cloud service.
+Have no fear, the mathematicians are here.
+
+The math behind algorithms such as LSA has been around for decades.
+Mathematicians and computer scientists have had a lot of time to play with it and get it to work "out of core", which just means that the objects required to run an algorithm do not all have to be present in core memory (RAM) at once.
+This means you're no longer limited by the RAM on your machine.
+
+Even if you don't want to parallelize your training pipeline on multiple machines, constant RAM implementations will be required for large datasets.
+Gensim's `LsiModel` is one such out-of-core implementation of singular value decomposition for LSA.footnote:[See the web page titled "gensim: models.lsimodel – Latent Semantic Indexing" (https://radimrehurek.com/gensim/models/lsimodel.html).]
+
+Even for smaller datasets, the `gensim` `LSIModel` has the advantage that it doesn't require increasing amounts of RAM to deal with a growing vocabulary or set of documents.
+So you don't have to worry about it starting to swap to disk halfway through your corpus or grinding to a halt when it runs out of RAM.
+You can even continue to use your laptop for other tasks while a `gensim` model is training in the background.
+
+Gensim uses what's called batch training to accomplish this memory efficiency.
+It trains your LSA model (`gensim.models.LsiModel`) on batches of documents and merges the results from these batches incrementally.
+All of gensim's models are designed to be "constant RAM," which makes them run faster on large datasets by avoiding swapping data to disk and using your precious CPU cache RAM efficiently.
+
+[TIP]
+====
+In addition to being constant RAM, the training of gensim models is parallelizable, at least for many of the long-running steps in these pipelines.
+====
+
+So packages such as `gensim` are worth having in your toolbox.
+They can speed up your small-data experiments (like in this book) and also power your hyperspace travel on Big Data in the future.
+
+=== Graph computing
+
+Hadoop, TensorFlow, Caffe, Theano, Torch, and Spark were designed from the ground up to be constant RAM.
+If you can formulate your machine learning pipeline as a Map-Reduce problem or a general computational graph, you can take advantage of these frameworks to avoid running out of RAM.
+These frameworks automatically traverse your computational graph to allocate resources and optimize your throughput.
+
+Peter Goldsborough implemented several benchmark models and datasets using these frameworks to compare their performance.
+Even though Torch has been around since 2002, it fared well on most of his benchmarks, outperforming all of the others on CPUs, and sometimes even on GPUs.
+In many cases, it was 10 times faster than the nearest competitor.
+
+And Torch (and its PyTorch Python API) is integrated into many cluster compute frameworks such as RocketML.
+Though we haven't used PyTorch for the examples in this book (to avoid overwhelming you with options), you may want to look into it if RAM or throughput are blockers for your NLP pipeline.
+
+We've had success parallelizing NLP pipelines using RocketML (rocketml.net).
+They contributed research and development time to help Aira and TotalGood parallelize our NLP pipelines to assist those who have blindness or low vision:
+
+* Extracting images from videos
+* Inference and embedding on pretrained Caffe, PyTorch, Theano, and TensorFlow (Keras) models
+* SVD on large TF-IDF matrices spanning GB corpora.footnote:[At SAIS 2008 Santi Adavani explained his optimizations that make SVD faster and more scalable on a RocketML HPC platform (databricks.com/speaker/santi-adavani)]
+
+RocketML pipelines scale well, often linearly, depending on the algorithm.footnote:[Santi Adavani and Vinay Rao (http://www.rocketml.net/) are contributing to the Real-Time Video Description project (github.com/totalgood/viddesc)]
+So if you double the machines in your cluster, you'll have a trained model twice as fast.
+This is harder than it seems.
+More general computational graph parallelization frameworks like PySpark and TensorFlow can rarely claim this.
+
+== Parallelizing your NLP computations
+There are two popular approaches to _high-performance computing_ for NLP.
+You can either add GPUs to your server (and even your laptop, in some cases), or you can connect CPUs together from multiple servers.
+
+=== Training NLP models on GPUs
+
+GPUs have become an important and sometimes necessary tool to develop real-world NLP applications. GPUs, first introduced in 2007, are designed to parallelize a large number of computational tasks and to access large amounts of memory. This contrasts the design of CPUs, which are the core of every computer. They are designed handle tasks sequentially at a high speed, and they can access their limited processing memory at a high speed (see figure 13.1).
+
+.Comparison between a CPU and GPU
+image::../images/ch13/gpuvscpu.png[Comparison between a CPU and GPU, width=50%, link="../images/ch13/gpuvscpu.png"]
+
+As it turns out, training deep learning models involves various operations that can be parallelized, such as the multiplication of matrices.
+Similar to graphical animations, which were the initial target market for GPUs, the training of deep learning models is heavily accelerated by parallelized matrix multiplications.
+
+Figure 13.2 shows the multiplication of an input vector with a weight matrix, a frequent operation during a forward-pass of the neural network training.
+The individual cores of a GPU are slow compared to a CPU, but each core can compute one of the result vector components.
+If the training is executed on a CPU, each row multiplication would be executed sequentially, assuming that no specific linear algebra library is used.
+It will require _n_ (number of matrix rows) time steps to complete the multiplication.
+If the same task is executed on a GPU, the multiplication will be parallelized and each row multiplication can happen at the same time in the individual cores of the GPU.
+
+.Matrix multiplication where each row multiplication can be parallelized on a GPU
+image::../images/ch13/matrix_multiplication.png[Matrix Multiplication where each row multiplication can be parallelized on a GPU, width=100%, link="../images/ch13/matrix_multiplication"]
+
+.Do I need to run my model on a GPU after the training is complete?
+[TIP]
+====
+You don't need to use a GPU for running your models in production, even if you used a GPU to train your model. In fact, unless you need to run forward passes (inference or activation of a neural net) of a pretrained model with millions of samples or with high throughput (real-time streaming) you probably should only use GPUs when training a new model. Backpropagation is much more computationally expensive than forward activation (inference) on a neural net.
+====
+
+GPUs introduce complexity and cost to your pipeline.
+But this upfront cost will quickly pay for itself if you can achieve faster turnaround on your models.
+If you can retrain your model with new hyperparameters in a tenth the time, you can try ten times as many different approaches and achieve much better accuracy.
+
+Once the training is completed, Keras or your deep learning framework provides you a way to export the model weights and structure.
+You can then load the weights and the model setup on almost any hardware to compute the model prediction (forward pass or inference pass), even on a smartphone footnote:[See Apple's Core ML documentation (https://developer.apple.com/documentation/coreml) or Google's TensorFlow Lite documentation (https://www.tensorflow.org/mobile/tflite/)] or in a browser.footnote:[See the web page titled "Keras.js - Run Keras models in the browser" (https://transcranial.github.io/keras-js/#/).]
+
+=== Renting vs. buying
+The use of GPUs can accelerate your model development and allow you to iterate through your model development more quickly.
+GPUs are useful, but should you buy one?
+
+The answer in most cases is no.
+The performance of GPUs is improving so rapidly that a purchased graphic card could quickly get out-of-date.
+Unless you plan to use your GPU around the clock, you might be better off with renting a GPU via a service such as Amazon Web Services or Google Cloud.
+The GPU service allows you to switch instance sizes between model training runs.
+That way, you can scale up or down your GPU size depending to your needs.
+These providers also often provide fully configured installations, which can save you time and let you focus on your model development.
+
+We built and maintained our own GPU server to speed some of the model training used in this book, but you should do as we say and not as we do.
+Selecting components that are compatible with each other and minimizing the data throughput bottlenecks was a challenge.
+We imitated successful architectures described by others and bought RAM and GPUs before the recent Bitcoin surge and the resulting high performance computing (HPC) component price spike.
+Keeping all the libraries up to date and coordinating usage and configuration between authors was a challenge.
+It was fun and educational, but it wasn't an efficient use of our time nor dollars.
+
+The flexible setup of renting GPU instances has one drawback: You need to watch your costs closely.
+Completing your training won't stop your instance automatically.
+To stop the ticking of the meter (incurring ongoing cost), you'll need to turn off your GPU instance between training runs.
+For more details, check out the section "Cost control" in Appendix G.
+
+=== GPU rental options
+
+Various companies provide GPU rental options, starting with the well-known platform-as-a-service companies such as Microsoft, Amazon Web Services, or Google. Other startups, such as Paperspace or FloydHub, are breaking into the industry with interesting product offerings that can get you started quickly with your deep learning project.
+
+Table 1 compares the different GPU options from platform-as-a-service_ providers. The services range from a bare GPU machine with a minimal installation to fully configured machines with drag-and-drop clients. Due to the regional variability in the service pricing, we can't compare the providers based on price. Price for the services range from $0.65 to multiple dollars per hour and instance, depending on the server's location, configuration, and setup.
+
+.Comparison of GPU Platform-as-a-Service options
+[width="100%",frame="topbot",options="header"]
+|======================
+|Company   | Why? | GPU options | Ease to get started | Flexibility
+|Amazon Web Services (AWS) |Wide range of GPU options; spot prices; available in various data centers around the world | NVIDIA GRID K520, Tesla M60, Tesla K80, Tesla V100       | Medium | High
+|Google Cloud         |Integrates Google Cloud Kubernetes, DialogFlow, Jupyter notebooks (colab.research.google.com) | NVIDIA Tesla K80, Tesla P100       | Medium | High
+|Microsoft Azure         |Good option if you are using other Azure services | NVIDIA Tesla K80       | Medium | High
+|FloydHub         |Command-line interface to bundle your code | NVIDIA Tesla K80, Tesla V100       | Easy | Medium
+|Paperspace         |Virtual servers and hosted iPython/Jupyter notebooks with GPU support | NVIDIA Maxwell, Tesla P5000, Tesla P6000, Tesla V100  | Easy | Medium
+|======================
+
+.Setting up your own GPU on AWS
+[TIP]
+====
+Appendix G shows a summary of the necessary steps for you to get started with your own GPU instance.
+====
+
+=== Tensor processing units
+
+You might have heard of another abbreviation TPU (tensor processing units), which are highly optimized computational units for deep learning.
+They are particularly efficient at computing back-propagation for TensorFlow models.
+TPUs are optimized for multiplying tensors of any dimensionality and use specialized FPGA and ASIC chips to preprocess and transport data around.
+GPUs are optimized for graphical processing, which mostly consists of the 2D matrix multiplications required to render and move around in a 3D game worlds.
+
+Google claims that TPUs are ten times more power efficient at computing deep learning models than an equivalent GPU.
+At the time of this writing, Google, which designed and invented the TPUs in 2015, just released them to the general public in a beta stage (no service-level agreement is provided).
+In addition, researchers can apply to become part of the TensorFlow Research Cloud footnote:[See the web page titled "TensorFlow Research Cloud" (https://www.tensorflow.org/tfrc/).] to train their models on TPUs.
+
+== Reducing the memory footprint during model training
+
+When you train your NLP models on a GPU and you train with a large corpus, you'll probably eventually encounter the following error during training: MemoryError
+
+.Error message if your training data exceeds the GPU's memory
+[source,python]
+----
+Epoch 1/10
+Exception in thread Thread-27:
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/threading.py", line 801, in __bootstrap_inner
+    self.run()
+  File "/usr/lib/python2.7/threading.py", line 754, in run
+    self.__target(*self.__args, **self.__kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/keras/engine/training.py",
+    line 606, in data_generator_task
+    generator_output = next(self._generator)
+  File "/home/ubuntu/django/project/model/load_data.py", line 54,
+    in load_training_set
+    rv = np.array(rv)
+MemoryError
+----
+
+To achieve the high performance of GPUs, the units use their own internal GPU memory in addition to the CPU memory.
+The card's memory is usually limited to a few gigabytes, and in most cases, not near as much as the CPU has access to.
+When you trained your model on a CPU, your training data was probably loaded into the computer memory in one large table or sequence of tensors.
+This isn't possible anymore with the memory restrictions by the GPU (see figure 13.3).
+
+.Loading the training data without a generator function
+image::../images/ch13/no_generator.png[.Loading the Training Data without a Generator Function, width=80%, link="../images/ch13/no_generator.png"]
+
+One efficient workaround is using Python's concept of a _generator_ -- a function that returns an iterator object.
+You can pass the iterator object to the model training method, and it will "pull off" one or more training items at each training iteration.
+It never requires the whole training dataset in memory.
+This efficient way to reduce your memory footprint comes with caveats:
+
+* Generators only provide one sequence element at a time, so you don't know how many elements it contains until you reach the end.
+* Generators can only be run once. They are disposable and not recyclable.
+
+With these two difficulties, making multiple training passes through your data is much more tedious.
+But Keras comes to the rescue with methods that take care of all this tedious bookkeeping for you (see figure 13.4)
+
+.Loading the training data with a generator function
+image::../images/ch13/generator.png[.Loading the Training Data with a Generator Function, width=80%, link="../images/ch13/generator.png"]
+
+The generator function handles the loading of the training data store and returns the training "chunks" to the training methods. In listing 13.13, the training data store is a csv file with the input data separated from the expected output data by the | delimiter. The chunks are limited to the batch size, and only one batch at a time has to be stored in memory. That way, you can heavily reduce the model training dataset's memory footprint.
+
+.Generator for improved RAM efficiency
+[source,python]
+----
+>>> import numpy as np
+>>>
+>>> def training_set_generator(data_store,
+...                            batch_size=32):  # <1>
+...     X, Y = [], []
+...     while True: <2>
+...         with open(data_store) as f:  # <3>
+...             for i, line in enumerate(f): <4>
+...                 if i % batch_size == 0 and X and Y: # <5>
+...                     yield np.array(X), np.array(Y)
+...                     X, Y = [], []
+...                 x, y = line.split('|')  # <6>
+...                 X.append(x)
+...                 Y.append(y)
+>>>
+>>> data_store = '/path/to/your/data.csv'
+>>> training_set = training_set_generator(data_store)
+
+----
+<1> In the function setup, you can set the batch size dynamically.
+<2> This endless loop provides training batches forever; Keras stops requesting more training examples when an epoch ends.
+<3> This opens the training data store and creating the file handler _f_.
+<4> Loop over the training data stores content line by line until your entire data has been served as training samples; afterwards start from the beginning of the training set.
+<5> If you have gathered enough training data samples, return the training data and the expected training output via a function `yield`. Python jumps back after the `yield` statement after the data is served to the model fit method.
+<6> If you don't have enough samples yet, read more lines, split them on the delimiter |, and keep them in the lists X and Y.
+
+In your example, the `training_set_generator` function reads from a comma-separated values file, but it could load the data from any database or any other data storage system.
+
+One disadvantage of the generator is that it doesn't return any information about the size of the training data array. Because you don't know how much training data is available, you have to use slightly different `fit`, `predict`, and `evaluate` methods of the Keras model.
+
+Instead of using training your model with
+
+[source,python]
+----
+>>> model.fit(x=X,
+...           y=Y,
+...           batch_size=32,
+...           epochs=10,
+...           verbose=1,
+...           validation_split=0.2)
+----
+
+you have to kick off the training of your model with
+
+[source,python]
+----
+>>> data_store = '/path/to/your/data.csv'
+>>> model.fit_generator(generator=training_set_generator(data_store,
+...     batch_size=32),  # <1>
+...                     steps_per_epoch=100,  # <2>
+...                     epochs=10,  # <3>
+...                     verbose=1,
+...                     validation_data=[X_val, Y_val])  # <4>
+----
+
+<1> `fit_generator` expects a generator being passed to, which can be your `training_set_generator` or any other generator you program
+<2> In contrast to defining your training `batch_size` like you did in the original `fit` method, the `fit_generator` expects the number of steps per epoch `steps_per_epoch`. For every step, the generator is called. Set `steps_per_epoch` to training samples divided by batch_size, so that your model is exposed to the full training set once per epoch.
+<3> Set your number of epochs as usual.
+<4> Because the full training data isn't available to the `fit_generator`, it doesn't allow the usual `validation_split`; instead you need to define `validation_data`.
+
+If you use a generator, you might also want to update your model's `evaluate` and `predict` methods with
+
+[source,python]
+----
+>>> model.evaluate_generator(generator=your_eval_generator(eval_data,
+...     batch_size=32), steps=10)
+----
+
+and
+
+[source,python]
+----
+>>> model.predict_generator(generator=your_predict_generator(\
+...     prediction_data, batch_size=32), steps=10)
+----
+
+[WARNING]
+====
+Generators are memory efficient, but they can also become a bottleneck during the model training and slow down the training iterations. Pay attention to the generator speed while developing the training functions. If the on-the-fly processing slows done the generator, it might be beneficial to preprocess the training data and/or rent an instance with larger memory configuration.
+====
+
+== Gaining model insights with TensorBoard
+
+Wouldn't it be nice to get insights into your model performance while you train your model and compare it to previous training runs? Or quickly plot word embeddings to check semantic similarities? Google's TensorBoard provides you exactly that.
+
+While training your model using TensorFlow (or with Keras and a TF backend), you can use TensorBoard to gain insights into your NLP models. You can use it to track model training metrics, plot network weight distributions, visualize your word embeddings, and various other things. TensorBoard is easy to use, and it connects to the training instance via your browser.
+
+If you want to use TensorBoard side-by-side with Keras, you need to install TensorBoard like any other Python package.
+
+[source,bash]
+----
+pip install tensorboard
+----
+
+After the installation is complete, you can now start it up:
+
+[source,bash]
+----
+tensorboard --logdir=/tmp/
+----
+
+After TensorBoard is running, access it in your browser at `localhost` on port 6006 (http://127.0.0.1:6006) if you train on your laptop or desktop PC. If you train your model on a rented GPU instance, use the public IP address of your GPU instance and make sure the GPU provider allows access via the port 6006.
+
+Once you're logged in, you can explore the model performance.
+
+=== How to visualize word embeddings
+
+TensorBoard is a great tool to visualize word embeddings. Especially when you train your own, domain-specific word embeddings, the embedding visualization can help to verify semantic similarities. Converting a word model into a format TensorBoard can handle is straightforward. Once the word vectors and the vector labels are loaded into TensorBoard, it will perform the dimensionality reductions to 2D or 3D for you. TensorBoard currently provides three methods of dimensionality reduction: PCA, t-SNE, and custom reductions.
+
+Listing 13.14 shows how to convert your word embedding into a TensorBoard format and generate the projection data.
+
+.Convert an embedding into a TensorBoard projection
+[source,python]
+----
+>>> import os
+>>> import tensorflow as tf
+>>> import numpy as np
+>>> from io import open
+>>> from tensorflow.contrib.tensorboard.plugins import projector
+>>>
+>>>
+>>> def create_projection(projection_data,
+...                       projection_name='tensorboard_viz',
+...                       path='/tmp/'):  # <1>
+...     meta_file = "{}.tsv".format(projection_name)
+...     vector_dim = len(projection_data[0][1])
+...     samples = len(projection_data)
+...     projection_matrix = np.zeros((samples, vector_dim))
+...
+...     with open(os.path.join(path, meta_file), 'w') as file_metadata:
+...         for i, row in enumerate(projection_data):  # <2>
+...             label, vector = row[0], row[1]
+...             projection_matrix[i] = np.array(vector)
+...             file_metadata.write("{}\n".format(label))
+...
+...     sess = tf.InteractiveSession()  # <3>
+...
+...     embedding = tf.Variable(projection_matrix,
+...                             trainable=False,
+...                             name=projection_name)
+...     tf.global_variables_initializer().run()
+...
+...     saver = tf.train.Saver()
+...     writer = tf.summary.FileWriter(path, sess.graph)  # <4>
+...
+...     config = projector.ProjectorConfig()
+...     embed = config.embeddings.add()
+...     embed.tensor_name = '{}'.format(projection_name)
+...     embed.metadata_path = os.path.join(path, meta_file)
+...
+...     projector.visualize_embeddings(writer, config) <5>
+...     saver.save(sess, os.path.join(path, '{}.ckpt'\
+...         .format(projection_name)))
+...     print('Run `tensorboard --logdir={0}` to run\
+...           visualize result on tensorboard'.format(path))
+----
+
+<1> The `create_projection` function takes three arguments: the embedding data, a name for the projection and a path, and where to store the projection files.
+<2> The function loop over the embedding data and creates a numpy array, which will then be converted to a TensorFlow variable.
+<3> To create the TensorBoard projection, you need to create a TensorFlow session.
+<4> TensorFlow provides built-in methods to create projections.
+<5> `visualize_embeddings` writes the projection to your path and is then available for TensorBoard.
+
+The function `create_projection` takes a list of tuples (expects the vector and then the label) and converts it into TensorBoard projection files. Once the projection files are created and available to TensorBoard (in your case, TensorBoard expects the files in the _tmp_ directory), head over to TensorBoard in your browser and check out the embedding visualization (see figure 13.5).
+
+[source,python]
+----
+>>> projection_name = "NLP_in_Action"
+>>> projection_data = [
+>>>     ('car', [0.34, ..., -0.72]),
+>>>     ...
+>>>     ('toy', [0.46, ..., 0.39]),
+>>> ]
+>>> create_projection(projection_data, projection_name)
+----
+
+.Visualize `word2vec` embeddings with Tensorboard
+image::../images/ch13/tensorboard.png[Using Tensorboard to visualize Google's `word2vec` embedding, width=100%, link="../images/ch13/tensorboard"]
+
+
+== Summary
+
+* Locality sensitive hashes like `annoy` make the promise of latent semantic indexing a reality.
+* GPUs speed up model training, reducing the turn-around time on your models, making it easier to build better models faster.
+* CPU parallelization can make sense for algorithms that don't benefit from speedier multiplication of large matrices.
+* You can bypass the system RAM bottleneck using Python's generators, saving you money on your GPU and CPU instances.
+* Google's TensorBoard can help you visualize and extract natural language embeddings that you might not have thought of otherwise.
+* Mastering NLP parallelization can expand your brainpower by giving you a "society of minds" -- machine clusters to help you think.footnote:[Conscious Ants and Human Hives by Peter Watts (https://youtu.be/v4uwaw_5Q3I?t=45s)]

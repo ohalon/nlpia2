@@ -1,0 +1,1652 @@
+= Natural Language Processing in Action, Second Edition
+:chapter: 3
+:part: 1
+:sectnumoffset: 2
+:sectnums:
+:imagesdir: .
+:xrefstyle: short
+:figure-caption: Figure {chapter}.
+:listing-caption: Listing {chapter}.
+:table-caption: Table {chapter}.
+:leveloffset: 1
+:xrefstyle: short
+:stem: latexmath
+:toc:
+:source-highlighter: coderay
+:bibliography-database: dl4nlp.bib
+:bibliography-style: ieee
+:index::[]
+
+= Math with words (TF-IDF vectors)
+
+This chapter covers
+
+* Counting words, _n_-grams and _term frequencies_ to analyze meaning
+* Predicting word occurrence probabilities with _Zipf's Law_
+* Representing natural language texts as vectors
+* Finding relevant documents in a collection of text using _document frequencies_
+* Estimating the similarity of pairs of documents with _cosine similarity_
+
+Having collected and counted words (tokens), and bucketed them into stems or lemmas, it's time to do something interesting with them.
+Detecting words is useful for simple tasks, like getting statistics about word usage or doing keyword search. But you would like to know which words are more important to a particular document and across the corpus as a whole.
+So you can use that "importance" value to find relevant documents in a corpus based on keyword importance within each document.
+That will make a spam detector a little less likely to get tripped up by a single curse word or a few slightly-spammy words within an email.
+And you would like to measure how positive and prosocial a tweet is when you have a broad range of words with various degrees of "positivity" scores or labels.
+If you have an idea about the frequency with which those words appear in a document _in relation to_ the rest of the documents, you can use that to further refine the "positivity" of the document.
+In this chapter, you'll learn about a more nuanced, less binary measure of words and their usage within a document.
+This approach has been the mainstay for generating features from natural language for commercial search engines and spam filters for decades.
+
+The next step in your adventure is to turn the words of Chapter 2 into continuous numbers rather than just integers representing word counts or binary "bit vectors" that detect the presence or absence of particular words.
+With representations of words in a continuous space, you can operate on their representation with more exciting math.
+Your goal is to find numerical representations of words that somehow capture the importance or information content of the words they represent. You'll have to wait until chapter 4 to see how to turn this information content into numbers that represent the **meaning** of words.
+
+In this chapter, we look at three increasingly powerful ways to represent words and their importance in a document:
+
+* _Bags of words_ -- Vectors of word counts or frequencies
+* _Bags of n-grams_ -- Counts of word pairs (bigrams), triplets (trigrams), and so on
+* _TF-IDF vectors_ -- Word scores that better represent their importance
+
+[IMPORTANT, definition]
+TF-IDF stands for _**t**erm **f**requency times **i**nverse **d**ocument **f**requency_.
+Term frequencies are the counts of each word in a document, which you learned about in previous chapters.
+Inverse document frequency means that you'll divide each of those word counts by the number of documents in which the word occurs.
+
+Each of these techniques can be applied separately or as part of an NLP pipeline.
+These are all statistical models in that they are _frequency_ based.
+Later in the book, you'll see various ways to peer even deeper into word relationships and their patterns and non-linearities.
+
+But these "shallow" NLP machines are powerful and useful for many practical applications such as search, spam filtering, sentiment analysis, and even chatbots.
+
+== Bag of words
+
+In the previous chapter, you created your first vector space model of a text.
+You used one-hot encoding of each word and then combined all those vectors with a binary OR (or clipped `sum`) to create a vector representation of a text.
+And this binary bag-of-words vector makes a great index for document retrieval when loaded into a data structure such as a Pandas DataFrame.
+
+You then looked at an even more useful vector representation that counts the number of occurrences, or frequency, of each word in the given text.
+As a first approximation, you assume that the more times a word occurs, the more meaning it must contribute to that document.
+A document that refers to "wings" and "rudder" frequently may be more relevant to a problem involving jet airplanes or air travel, than say a document that refers frequently to "cats" and "gravity".
+Or if you have classified some words as expressing positive emotions -- words like "good", "best", "joy", and "fantastic" -- the more a document that contains those words, the more likely it is to have positive "sentiment".
+You can imagine though how an algorithm that relied on these simple rules might be mistaken or led astray.
+
+Let's look at an example where counting occurrences of words is useful:
+
+[source,python]
+----
+>>> import spacy
+>>> spacy.cli.download("en_core_web_sm")
+>>> nlp = spacy.load("en_core_web_sm")
+>>> sentence = ('It has also arisen in criminal justice, healthcare, and '
+...     'hiring, compounding existing racial, economic, and gender biases.')
+>>> doc = nlp(sentence)
+>>> tokens = [token.text for token in doc]
+>>> tokens
+['It', 'has', 'also', 'arisen', 'in', 'criminal', 'justice', ',',
+'healthcare', ',', 'and', 'hiring', ',', 'compounding', 'existing',
+'racial', ',', 'economic', ',', 'and', 'gender', 'biases', '.']
+----
+
+You could tokenize the entire Wikipedia article to get a sequence of tokens (words).
+With the Python `set()` type you could get the set of unique words in your document.
+This is called the _vocabulary_ for a particular NLP pipeline (including the corpus used to train it).
+To count up the occurrences of all the words in your vocabulary, you can use a Python `Counter` type.
+In Chapter 2, you learned that a `Counter` is a special kind of dictionary where the keys are all the unique objects in your array, and the dictionary values are the counts of each of those objects.
+
+[source,python]
+----
+>>> from collections import Counter
+>>> bag_of_words = Counter(tokens)
+>>> bag_of_words
+Counter({',': 5, 'and': 2, 'It': 1, 'has': 1, 'also': 1, 'arisen': 1, ...})
+----
+
+A `collections.Counter` object is a `dict` under the hood.
+And that means that the keys are technically stored in an unordered collection or `set`, also sometimes called a "bag."
+It may look like this dictionary has maintained the order of the words in your sentence, but that's just an illusion.
+You got lucky because your sentence didn't contain many repeated tokens.
+And the latest versions of Python (3.6 and above) maintain the order of the keys based on when you insert new keys into a dictionary.footnote:[StackOverflow discussion of whether to rely on this feature (https://stackoverflow.com/questions/39980323/are-dictionaries-ordered-in-python-3-6/39980744#39980744)]
+But you are about to create vectors out of these dictionaries of tokens and their counts.
+You need vectors to do linear algebra and machine learning on a collection of documents (sentences in this case).
+Your bag-of-words vectors will keep track of each unique token with a consistent index number for a position within your vectors.
+This way the counts for tokens like "and" or the comma add up across all the vectors for your documents -- the sentences in the Wikipedia article titled "Algorithmic Bias."
+
+[IMPORTANT]
+====
+For NLP the order of keys in your dictionary won't matter, because you'll need to work with vectors.
+Just as in Chapter 2, your token count vectors arrange the vocabulary (token count `dict` keys) according to when you processed each of the documents of your corpus.
+And sometimes you may want to alphabetize your vocabulary to make it easier to analyze.
+This means it's critical to record the order of the tokens of your vocabulary when you save or persist your pipeline to disk.
+And if you are trying to reproduce someone else's NLP pipeline you'll want to either use their vocabulary (token list) ordering or make sure you process the dataset in the same order the original code did.
+====
+
+For short documents like this one, the jumbled bag of words still contains a lot of information about the original intent of the sentence.
+And the information in a bag of words is sufficient to do some powerful things such as detect spam, compute sentiment (positivity or other emotions), and even detect subtle intent, like sarcasm.
+It may be a bag, but it's full of meaning and information.
+So let's get these words ranked, sorted in some order that's easier to think about.
+The Counter object has a handy method, _most_common_, for just this purpose.
+
+[source,python]
+----
+>>> bag_of_words.most_common(3)  # <2>
+[(',', 5), ('and', 2), ('It', 1)]
+
+>>> counts = pd.Series(dict(bag_of_words.most_common()))  # <1>
+>>> counts
+,              5
+and            2
+It             1
+has            1
+also           1
+...
+
+>>> len(tokens)
+23
+>>> counts.sum()
+23
+>>> counts / counts.sum()  # <3>
+,              0.217391
+and            0.086957
+It             0.043478
+has            0.043478
+also           0.043478
+...
+----
+<1> the argument "3" means you will list only the top three tokens
+<2> by default, `most_common()` lists all tokens from most frequent to least
+<3> the sum of the counts is equivalent to the `len` of the sentence in words
+
+The number of times a word occurs in a given document is called the _term frequency_, commonly abbreviated "TF."
+In some examples, you may see the count of word occurrences normalized (divided) by the number of terms in the document.
+This would give you the relative frequency independent of the length of the document.
+
+So your top two terms or tokens in this particular sentence are ",", and "and".
+This is a pretty common problem with natural language text -- the most common words are often the least meaningful.
+The word "and" and the comma (",") aren't very informative about the intent of this document.
+And these uninformative tokens are likely to appear a lot as you wage a battle against bias and injustice.
+
+[source,python]
+----
+>>> counts['justice']
+1
+>>> counts['justice'] / counts.sum()
+0.043478260869565216
+----
+<1> The number of tokens from the original Wikipedia sentence
+
+This is the _normalized term frequency_ of the term "justice" in this particular document which happens to be a single sentence.
+It's important to normalize word counts to help your NLP pipeline detect important words and to compare usages of words in documents of different lengths.
+But normalizing by document length doesn't help you a whole lot in this case.
+But this is because you're only looking at a single document.
+Imagine you had one really long sentence and one very long document, say the entire Wikipedia article.
+If the sentence and the article were both talking about "justice" about the same amount, you would want this _normalized term frequency_ score to produce roughly the same value.
+
+////
+Equations 3.1 and 3.2 take the document length into account when calculating normalized term frequency:
+
+[[equation_3_1]]
+.equation 3.1
+[latexmath,alt="TF of dog in document A",align="left"]
+++++
+\begin{equation}
+TF(\text{"dog"}, document_A) = 3/30 = .1
+\end{equation}
+++++
+
+[[equation_3_2]]
+.equation 3.2
+[latexmath,alt="TF of dog in document B",align="left"]
+++++
+\begin{equation}
+TF(\text{"dog"}, document_B) = 100/580000 = .00017
+\end{equation}
+++++
+
+Now you have something you can see that describes "something" about the two documents and their relationship to the word "dog" and each other.
+So instead of raw word counts to describe your documents in a corpus, you can use term frequencies.
+////
+
+Now you know how to calculate normalized term frequency and get the relative importance of each term to the document where it was used.
+So you've progressed nicely from just detecting the presence and absence of a word to counting up its usage frequency and now you know how to normalize this frequency.
+You're not done yet.
+This is where things get really meaningful.
+Now you know how important the word "justice" is to the meaning of this text.
+But how can a machine get that same sense that you have?
+
+For that, you're going to have to show the machine how much "justice" is used in a lot of other texts.
+Fortunately for budding NLP engineers, Wikipedia is full of high quality accurate natural language text in many languages.
+You can use this text to "teach" your machine about the importance of "justice."
+And all you need is a few paragraphs from the Wikipedia article on algorithmic bias.
+
+[quote, Wikipedia, Algorithmic Bias (https://en.wikipedia.org/wiki/Algorithmic_bias)]
+____
+
+Algorithmic bias describes systematic and repeatable errors in a computer system that create unfair outcomes, such as privileging one arbitrary group of users over others.
+Bias can emerge due to many factors, including but not limited to the design of the algorithm or the unintended or unanticipated use or decisions relating to the way data is coded, collected, selected or used to train the algorithm.
+Algorithmic bias is found across platforms, including but not limited to search engine results and social media platforms, and can have impacts ranging from inadvertent privacy violations to reinforcing social biases of race, gender, sexuality, and ethnicity.
+The study of algorithmic bias is most concerned with algorithms that reflect "systematic and unfair" discrimination.
+This bias has only recently been addressed in legal frameworks, such as the 2018 European Union's General Data Protection Regulation.
+More comprehensive regulation is needed as emerging technologies become increasingly advanced and opaque.
+
+As algorithms expand their ability to organize society, politics, institutions, and behavior, sociologists have become concerned with the ways in which unanticipated output and manipulation of data can impact the physical world.
+Because algorithms are often considered to be neutral and unbiased, they can inaccurately project greater authority than human expertise, and in some cases, reliance on algorithms can displace human responsibility for their outcomes.
+Bias can enter into algorithmic systems as a result of pre-existing cultural, social, or institutional expectations; because of technical limitations of their design; or by being used in unanticipated contexts or by audiences who are not considered in the software's initial design.
+
+Algorithmic bias has been cited in cases ranging from election outcomes to the spread of online hate speech.
+It has also arisen in criminal justice, healthcare, and hiring, compounding existing racial, economic, and gender biases.
+The relative inability of facial recognition technology to accurately identify darker-skinned faces has been linked to multiple wrongful arrests of men of color, an issue stemming from imbalanced datasets.
+Problems in understanding, researching, and discovering algorithmic bias persist due to the proprietary nature of algorithms, which are typically treated as trade secrets.
+Even when full transparency is provided, the complexity of certain algorithms poses a barrier to understanding their functioning.
+Furthermore, algorithms may change, or respond to input or output in ways that cannot be anticipated or easily reproduced for analysis.
+In many cases, even within a single website or application, there is no single "algorithm" to examine, but a network of many interrelated programs and data inputs, even between users of the same service.
+____
+
+Look at a sentence from this article and see if you can figure out how you could use the `Counter` dictionary to help your algorithm understand something about algorithmic bias.
+
+[source,python]
+----
+>>> sentence = "Algorithmic bias has been cited in cases ranging from " \
+...     "election outcomes to the spread of online hate speech."
+>>> tokens = [tok.text for tok in nlp(sentence)]
+>>> counts = Counter(tokens)
+>>> counts
+Counter({'Algorithmic': 1,
+         'bias': 1,
+         'has': 1,
+         'been': 1,
+         'cited': 1,
+         'in': 1,
+         'cases': 1,
+         'ranging': 1,
+         'from': 1,
+         'election': 1,
+         'outcomes': 1,
+         'to': 1,
+         'the': 1,
+         'spread': 1,
+         'of': 1,
+         'online': 1,
+         'hate': 1,
+         'speech': 1,
+         '.': 1})
+----
+
+Looks like this sentence doesn't reuse any words at all.
+The key to frequency analysis and term frequency vectors is the statistics of word usage.
+So we need to input the other sentences and create some useful word counts.
+To really grok "Algorithmic Bias" you could type all of the Wikipedia article into Python yourself.
+Or you can download it from Wikipedia directly into Python using the `wikipedia` Python package, so that you can save time to build less biased algorithms.
+And we've given you a head start by giving you these paragraphs in the `nlpia2` package that comes with this book.
+
+[source,python]
+----
+>>> import requests
+>>> url = ('https://gitlab.com/tangibleai/nlpia2/'
+...        '-/raw/main/src/nlpia2/ch03/bias_intro.txt')
+>>> response = requests.get(url)
+>>> response
+<Response [200]>
+----
+
+The `requests` package returns a request object with header and content attributes containing the headers and body of an HTTP response.
+For a plain text document you can the `response.content` attributes contains the `bytes` of the raw document.
+If you want to retrieve a string you can use the `response.text` property to automatically decode the bytes content to create a unicode `str`.
+
+[source,python]
+----
+>>> bias_intro_bytes = response.content  # <1>
+>>> bias_intro = response.text  # <2>
+>>> assert bias_intro_bytes.decode() == bias_intro    # <3>
+>>> bias_intro[:60]
+'Algorithmic bias describes systematic and repeatable errors '
+----
+<1> `requests.get` returns an object with a `bytes` in the `content` attribute
+<2> the `.text` property contains the unicode `str` for the HTTP body
+<3> `bytes.decode()` transforms the content into a unicode `str`
+
+The `Counter` class from the Python standard library in the `collections` module is great for efficiently counting any sequence of objects.
+That's perfect for NLP when you want to count up occurrences of unique words and punctuation in a list of tokens:
+
+[source,python]
+----
+>>> tokens = [tok.text for tok in nlp(bias_intro)]
+>>> counts = Counter(tokens)
+>>> counts
+Counter({'Algorithmic': 3, 'bias': 6, 'describes': 1, 'systematic': 2, ...
+>>> counts.most_common(5)
+[(',', 35), ('of', 16), ('.', 16), ('to', 15), ('and', 14)]
+----
+
+Okay, now that's a bit more statistically significant counts.
+But that is a lot of meaningless words and punctuation.
+It's not likely that this Wikipedia article is really about tokens like "of", "to", commas, and periods.
+But that's the magic of normalization.
+We just need to split our document so we can normalize by the counts of words across many different documents or sentences talking about different things!
+And it looks like you are going to want to pay attention to the least common words rather than the most common ones.
+
+[source,python]
+----
+>>> counts.most_common()[-4:]
+('inputs', 1), ('between', 1), ('same', 1), ('service', 1)]
+----
+
+Well that didn't work out so well.
+You were probably hoping to find terms such as "bias", "algorithmic", and "data."
+So you're going to have to use a formula that balances the counts to come up with the "Goldilocks" score for the ones that are "just right."
+The way you can do that is to come up with another useful count -- the number of documents that a word occurs in, called the "document frequency."
+This is when things get really interesting.
+
+[source,python]
+----
+>>> counts.most_common()[-4:]
+('inputs', 1), ('between', 1), ('same', 1), ('service', 1)]
+----
+
+Across multiple documents in a corpus, things get a even more interesting.
+That's when vector representations of counts really shine.
+
+== Vectorizing text
+
+`Counter` dictionaries are great for counting up tokens in text.
+But vectors are where it's really at.
+And it turns out that dictionaries can be coerced into a `DataFrame` or `Series` just by calling the `DataFrame` constructor on a list of dictionaries.
+Pandas will take care of all the bookkeeping so that each unique token or dictionary key has it's own column.
+And it will create NaNs whenever the `Counter` dictionary for a document is missing a particular key because the document doesn't contain that word.
+
+So let's add a few more documents to your corpus of sentences from the Algorithmic Bias article.
+This will reveal the power of vector representations.
+
+[source,python]
+----
+>>> docs = [nlp(s) for s in bias_intro.split('\n') if s.strip()]  # <1>
+>>> counts = []
+>>> for doc in docs:
+...     counts.append(Counter([t.text.lower() for t in doc]))  # <2>
+>>> df = pd.DataFrame(counts)
+>>> df = df.fillna(0).astype(int)  # <3>
+>>> df.head()
+  algorithmic bias describes  systematic  ... inputs  between  same service
+0           1    1         1           1  ...      0        0     0       0
+1           0    1         0           0  ...      0        0     0       0
+2           1    1         0           0  ...      0        0     0       0
+3           1    1         0           1  ...      0        0     0       0
+4           0    1         0           0  ...      0        0     0       0
+----
+<1> Run the SpaCy tokenizer on each line and skip empty lines
+<2> Tokenize text with SpaCy before lowercasing it, to improve sentence segmentation
+<3> Replace NaNs with zeros and convert to integers to make it more readable
+
+And when the dimensions of your vectors are used to hold scores for tokens or strings, that's when you want to use a Pandas `DataFrame` or `Series` to store your vectors.
+That way you can see what each dimension is for.
+Check out that sentence that we started this chapter with.
+It happens to be the eleventh sentence in the Wikipedia article.
+
+// TODO: sort_values?
+
+[source,python]
+----
+>>> df.loc[10]  # <1>
+algorithmic    0
+bias           0
+describes      0
+systematic     0
+and            2
+  ...
+Name: 10, Length: 247, dtype: int64
+----
+<1> the eleventh row of a zero-offset DataFrame is at row index 10
+
+Now this Pandas `Series` is a _vector_.
+That's something you can do math on.
+And when you do that math, Pandas will keep track of which word is where so that "bias" and "justice" aren't accidentally added together.
+Your row vectors in this DataFrame have a "dimension" for each word in your vocabulary.
+In fact, the `df.columns` attribute contains your vocabulary.
+
+But wait, there are more than 30,000 words in a standard English dictionary.
+If you start processing a lot of Wikipedia articles instead of just a few paragraphs, that'll be a lot of dimensions to deal with.
+You are probably used to 2D and 3D vectors because they are easy to visualize.
+But do concepts like distance and length even work with 30,000 dimensions?
+It turns out they do, and you'll learn how to improve on these high-dimensional vectors later in the book.
+For now just know that each element of a vector is used to represent the count, weight or importance of a word in the document you want the vector to represent.
+
+You'll find every unique word in each document and then find all the unique words in all of your documents.
+In math, this is the union of all the sets of words in each document.
+This master set of words for your documents is called the _vocabulary_ of your pipeline.
+And if you decide to keep track of additional linguistic information about each word, such as spelling variations or parts of speech, you might call it a _lexicon_.
+And you might find academics that use the term _corpus_ to describe a collection of documents will likely also use the word "lexicon," just because it is a more precise technical term than "vocabulary."
+
+So take a look at the vocabulary or lexicon for this corpus.
+Ignoring proper nouns for now, you can lowercase your words and reduce the vocabulary size a little bit.
+
+[source,python]
+----
+>>> docs = list(nlp(bias_intro).sents)
+>>> counts = []
+>>> for doc in docs:
+...     counts.append(Counter([t.text.lower() for t in doc]))
+>>> df = pd.DataFrame(counts)
+>>> df = df.fillna(0).astype(int)  # <1>
+>>> df
+----
+
+[source,python]
+----
+>>> docs_tokens = []
+>>> for doc in docs:
+...     doc_text = doc.text.lower()  # <1>
+...     docs_tokens.append([tok.text for tok in nlp(doc_text)])
+>>> len(docs_tokens[0])
+17
+----
+
+Create a list of all the tokens in the paragraph about algorithmic bias.
+
+----
+>>> all_doc_tokens = []
+>>> for doc_tokens in docs_tokens:
+...     all_doc_tokens.extend(doc_tokens)
+>>> len(all_doc_tokens)
+498
+----
+
+Create a vocabulary from the sequence of tokens for the entire paragraph.
+
+----
+>>> vocab = sorted(set(all_doc_tokens))
+>>> len(vocab)
+248
+----
+
+A lexicon is the list of the actual words in your vocabulary.
+
+----
+>>> vocab  # <1>
+[',',
+ '.',
+ 'and',
+ 'as',
+ 'faster',
+ 'get',
+ ...
+ 'would']
+----
+<1> Going forward, remember that the lexicon is stored in the `vocab` variable.
+
+Each of your three document vectors will need to have 18 values, even if the document for that vector does not contain all 18 words in your lexicon.
+Each token is assigned a "slot" in your vectors corresponding to its position in your lexicon.
+Some of those token counts in the vector will be zeros, which is what you want.
+
+[source,python]
+----
+>>> from collections import OrderedDict
+>>> zero_vector = OrderedDict((token, 0) for token in vocab)
+>>> list(zero_vector.items())[:10]  # <1>
+[('got', 0),
+  ('to', 0),
+  ('hairy', 0),
+  ('.', 0),
+  ('would', 0),
+  (',', 0),
+  ('harry', 0),
+  ('as', 0),
+  ('the', 0),
+  ('faster', 0),
+  ('and', 0)]
+----
+<1> To return the first 10 items of the `OrderedDict`, we first need to turn it into a list
+
+Now you'll make copies of that base vector, update the values of the vector for each document, and store them in an array.
+
+[source,python]
+----
+>>> import copy
+>>> doc_vectors = []
+>>> for doc in docs:
+...     vec = copy.copy(zero_vector)  # <1>
+...     tokens = [token.text for token in nlp(doc.lower())]
+...     token_counts = Counter(tokens)
+...     for key, value in token_counts.items():
+...         vec[key] = value / len(vocab)
+...     doc_vectors.append(vec)
+----
+<1> `copy.copy()` creates an independent copy, a separate instance of your zero vector, rather than reusing a reference (pointer) to the original object's memory location.
+
+=== An easier way to vectorize text
+
+Now that you've manually created your Bag of Words vector, you might wonder if someone already found a faster way to do it.
+And indeed, there is!
+You can avoid going through tokenizing, frequency counting and manually vectorizing your bag of words vector using Scikit-Learn (`sklearn`) package.footnote:[You can check out this package's full documentation on its webpage (http://scikit-learn.org/) - we'll be using it a lot in this book.]
+If you haven't already set up your environment using Appendix A so that it includes this package, here's one way to install it.
+
+[source,bash]
+pip install scipy
+pip install sklearn
+
+Here is how you would create the term frequency vector in Scikit-Learn.
+We'll use the `CountVectorizer` class.
+It is a _model_ class with `.fit()` and `.transform()` methods that comply with the sklearn API for all machine learning models.
+
+.Using `sklearn` to compute word count vectors
+[source,python]
+----
+>>> from sklearn.feature_extraction.text import CountVectorizer
+>>> corpus = [doc.text for doc in docs]
+>>> vectorizer = CountVectorizer()
+>>> count_vectors = vectorizer.fit_transform(corpus)  # <1>
+>>> print(count_vectors.toarray()) # <2>
+[[1 0 3 1 1 0 2 1 0 0 0 1 0 3 1 1]
+ [1 0 1 0 0 1 1 0 1 1 0 0 1 0 0 0]
+ [0 2 0 0 0 1 1 0 1 1 1 0 0 0 0 0]]
+----
+<1> The `CounterVectorizer` model produces a sparse `numpy` matrix, since most documents use a small portion of the total words in the vocabulary.
+<2> The `.toarray()` method converts a sparse matrix back into a regular `numpy` array (filling in the gaps with zeros) for your viewing pleasure.
+
+
+Now you have a matrix (practically a list of lists in Python) that represents the three documents (the three rows of the matrix) and the count of each term, token, or word in your lexicon makes up the columns of the matrix.
+That was fast!
+With just 1 line of code, `vectorize.fit_transform(corpus)`, we have gotten to the same result as with dozens of lines you needed to manually tokenize, create a lexicon and count the terms.
+Note that these vectors have a length of 16, rather than 18 like the vectors you created manually.
+That's because Scikit-Learn tokenizes the sentences slightly differently (it only considers words of 2 letters or more as tokens) and drops the punctuation.
+
+So, you have three vectors, one for each document.
+Now what?
+What can you do with them?
+Your document word-count vectors can do all the cool stuff any vector can do, so let's learn a bit more about vectors and vector spaces first.footnote:[If you would like more details about linear algebra and vectors take a look at Appendix C.]
+
+=== Vectorize your code
+
+If you read about "vectorizing code" on the internet means something entirely different than "vectorizing text."
+Vectorizing text is about converting text into a meaningful vector representation of that text.
+Vectorizing code is about speeding up your code by taking advantage of powerful compiled libraries like `numpy` and using Python to do math as little as possible.
+The reason it's called "vectorizing" is because you can use vector algebra notation to eliminate the for loops in your code, the slowest part of many NLP pipelines.
+Instead of `for` loops iterating through all the elements of a vector or matrix to do math you just use numpy to do the for loop for you in compiled C code.
+And Pandas uses `numpy` under the hood for all its vector algebra, so you can mix and match a DataFrame with a numpy arrary or a Python float and it will all run really fast.
+
+[source,python]
+----
+>>> v1 = np.array(list(range(5)))
+>>> v2 = pd.Series(reversed(range(5)))
+>>> slow_answer = sum([4.2 * (x1 * x2) for x1, x2 in zip(v1, v2)])
+>>> slow_answer
+42.0
+
+>>> faster_answer = sum(4.2 * v1 * v2)  # <1>
+>>> faster_answer
+42.0
+
+>>> fastest_answer = 4.2 * v1.dot(v2)  # <2>
+>>> fastest_answer
+42.0
+----
+<1> vectorizes the for loop -- the `sum()` function is already vectorized within Python
+<2> this uses the dot product to multiply and sum the arrays
+
+Python's dynamic typing design makes all this magic possible.
+When you multiply a `float` by an `array` or `DataFrame`, instead of raising an error because you're doing math on two different types, the interpreter will figure out what you're trying to do and "make is so," just like Sulu.
+And it will compute what you're looking for in the fastest possible way, using compiled C code rather than a Python `for` loop.
+
+[TIP]
+====
+If you use vectorization to eleminate some of the `for` loops in your code, you can speed up your NLP pipeline by a 100x or more.
+This is 100x more models that you can try.
+The Berlin Social Science Center (WZB) has a great tutorial on vectorization.footnote:["Vectorization and Parallelization" by WZB.eu (https://datascience.blog.wzb.eu/2018/02/02/vectorization-and-parallelization-in-python-with-numpy-and-pandas/).].
+And if you poke around elsewhere on the site you'll find perhaps the only trustworthy source of statistics and data on the effect NLP and AI are having on society.footnote:["Knowledge and Society in Times of Upheaval" (https://wzb.eu/en/node/60041)]
+====
+
+=== Vector spaces
+
+Vectors are the primary building blocks of linear algebra, or vector algebra.
+They are an ordered list of numbers, or coordinates, in a vector space.
+They describe a location or position in that space.
+Or they can be used to identify a particular direction and magnitude or distance in that space.
+A _vector space_ is the collection of all possible vectors that could appear in that space.
+So a vector with two values would lie in a 2D vector space, a vector with three values in 3D vector space, and so on.
+
+A piece of graph paper, or a grid of pixels in an image, are both nice 2D vector spaces.
+You can see how the order of these coordinates matter.
+If you reverse the x and y coordinates for locations on your graph paper, without reversing all your vector calculations, all your answers for linear algebra problems would be flipped.
+Graph paper and images are examples of rectilinear, or Euclidean, spaces because the x and y coordinates are perpendicular to each other.
+The vectors you talk about in this chapter are all rectilinear, Euclidean spaces.
+
+What about latitude and longitude on a map or globe?
+That geographic coordinate space is definitely two-dimensional because it's an ordered list of two numbers: latitude and longitude.
+But each of the latitude-longitude pairs describes a point on an approximately spherical surface -- the Earth's surface.
+The latitude-longitude vector space is not rectilinear, and Euclidean geometry doesn't exactly work in it.
+That means you have to be careful when you calculate things like distance or closeness between two points represented by a pair of 2D geographic coordinates, or points in any non-Euclidean space.
+Think about how you would calculate the distance between the latitude and longitude coordinates of Portland, OR and New York, NY.footnote:[You'd need to use a package like GeoPy (geopy.readthedocs.io) to get the math right.]
+
+Figure <<figure-2d-vectors>> shows one way to visualize the three 2D vectors `(5, 5)`, `(3, 2)`, and `(-1, 1)`.
+The head of a vector (represented by the pointy tip of an arrow) is used to identify a location in a vector space.
+So the vector heads in this diagram will be at those three pairs of coordinates.
+The tail of a position vector (represented by the "rear" of the arrow) is always at the origin, or `(0, 0)`.
+
+[#figure-2d-vectors, reftext={chapter}.{counter:figure}]
+.2D vectors
+image::../images/ch03/vecs.png[alt=2D Vectors, width=80%, link="../images/ch03/vecs.png"]
+
+What about 3D vector spaces?
+Positions and velocities in the 3D physical world you live in can be represented by x, y, and z coordinates in a 3D vector.
+But you aren't limited to normal 3D space.
+You can have 5 dimensions, 10 dimensions, 5,000, whatever.
+The linear algebra all works out the same.
+You might need more computing power as the dimensionality grows.
+And you'll run into some "curse-of-dimensionality" issues, but you can wait to deal with that until chapter 10.footnote:[The curse of dimensionality is that vectors will get exponentially farther and farther away from one another, in Euclidean distance, as the dimensionality increases. A lot of simple operations become impractical above 10 or 20 dimensions, like sorting a large list of vectors based on their distance from a "query" or "reference" vector (approximate nearest neighbor search). To dig deeper, check out Wikipedia's "Curse of Dimensionality" article (https://en.wikipedia.org/wiki/Curse_of_dimensionality).]
+
+For a natural language document vector space, the dimensionality of your vector space is the count of the number of distinct words that appear in the entire corpus.
+For TF (and TF-IDF to come), we call this dimensionality capital letter "K".
+This number of distinct words is also the vocabulary size of your corpus, so in an academic paper it'll usually be called "|V|"
+You can then describe each document, within this K-dimensional vector space by a K-dimensional vector.
+K = 18 in your three-document corpus about Harry and Jill (or 16, if your tokenizer drops the punctuation).
+Because humans can't easily visualize spaces of more than three dimensions, let's set aside most of those dimensions and look at two for a moment, so you can have a visual representation of the vectors on this flat page you're reading.
+So in figure <<figure-2d-term-frequency-vectors>>, K is reduced to two for a two-dimensional view of the 18-dimensional Harry and Jill vector space.
+
+[#figure-2d-term-frequency-vectors, reftext={chapter}.{counter:figure}]
+.2D term frequency vectors
+image::../images/ch03/harry_faster_vecs.png[alt=2D Term Frequency Vectors, width=80%, link="../images/ch03/harry_faster_vecs.png"]
+
+K-dimensional vectors work the same way, just in ways you can't easily visualize.
+Now that you have a representation of each document and know they share a common space, you have a path to compare them.
+You could measure the Euclidean distance between the vectors by subtracting them and computing the length of that distance between them, which is called the 2-norm distance.
+It's the distance a "crow" would have to fly (in a straight line) to get from a location identified by the tip (head) of one vector and the location of the tip of the other vector.
+Check out appendix C on linear algebra to see why this is a bad idea for word count (term frequency) vectors.
+
+Two vectors are "similar" if they share similar direction.
+They might have similar magnitude (length), which would mean that the word count (term frequency) vectors are for documents of about the same length.
+But do you care about document length in your similarity estimate for vector representations of words in documents?
+Probably not.
+You'd like your estimate of document similarity to find use of the same words about the same number of times in similar proportions.
+This accurate estimate would give you confidence that the documents they represent are probably talking about similar things.
+
+[figure-vecs-cosine]
+.2D vectors and the angles between them
+image::../images/ch03/vecs_cosine.png[alt="2D vectors and cosine distance between them (angle between them and the perpendicular shadow of one on the other)", width=80%, link="../images/ch03/vecs_cosine.png"]
+// FIXME: Redraw this diagram and rewrite the text.
+//        This figure refers to 'TF of "harry"' in the diagram and the thetas are numbered and diagrammed incorrectly.
+
+_Cosine similarity_, is the cosine of the angle between two vectors (theta).
+Figure <<figure-vecs-cosine>> shows how you can compute the cosine similarity dot product using <<equation_3_3>>.
+Cosine similarity is a popular among NLP engineers because:
+
+* Fast to compute even for high dimensional vectors
+* Sensitive to changes in a single dimension
+* Work well for high-dimensional vectors
+* Has a value between -1 and 1
+
+You can use cosine similarity without bogging down your NLP pipeline because you only need to compute the dot product.
+And you may be surprised to learn that you do not need to compute the cosine function to get the cosine similarity.
+You can use the linear algebra dot product, which does not require any trigonometric function evaluation.
+This makes it very efficient (fast) to calculate.
+And cosine similarity considers each dimension independently and their effect on the direction of the vector adds up, even for high dimensional vectors.
+TF-IDF can have thousands or even millions of dimensions, so you need to use a metric that doesn't degrade in usefulness as the number of dimensions increases (called the curse of dimensionality).
+
+Another big advantage of cosine similarity is that it outputs a value between -1 and +1:
+
+* -1 means the vectors point in exactly opposite directions - this can only happen for vectors that have negative values (TF-IDF vectors do not)
+* 0 means the vectors are perpendicular or orthogonal - this happens whenever your two TF-IDF vectors do not share any of the same words (dimensions)
+* +1 means the two vectors are perfectly aligned - this can happen whenever your two documents use the same words with the same relative frequency
+
+This makes it easier to guess at good thresholds to use in conditional expression within your pipeline.
+Here's what the normalized dot product looks like in your linear algebra textbook:
+
+[[equation_3_3]]
+.equation 3.3
+[latexmath,alt="A dot B == norm(A) * norm(B) * cos(theta),align="left"]
+++++
+\begin{equation}
+\boldsymbol{A} \cdot \boldsymbol{B} = |\boldsymbol{A}| |\boldsymbol{B}| * cos(\theta)
+\end{equation}
+++++
+
+In Python you might use code like this to compute cosine similarity:
+
+[source,python]
+----
+A.dot(B) == (np.linalg.norm(A) * np.linalg.norm(B)) * np.cos(angle_between_A_and_B)
+----
+
+If you solve this equation for `np.cos(angle_between_A_and_B)` (called "cosine similarity between vectors A and B") you can derive code to computer the cosine similarity:
+
+.Cosine similarity formula in Python
+[source,python]
+----
+cos_similarity_between_A_and_B = np.cos(angle_between_A_and_B) \
+    = A.dot(B) / (np.linalg.norm(A) * np.linalg.norm(B))
+----
+
+In linear algebra notation this becomes <<equation_3_4>>:
+
+[[equation_3_4]]
+.equation 3.4: cosine similarity between two vectors
+[latexmath,alt="cos(theta) = (A dot B) / (norm(A) * norm(B)),align="center"]
+++++
+\begin{equation}
+cos(\theta) = \frac{\boldsymbol{A} \cdot \boldsymbol{B}}{|\boldsymbol{A}||\boldsymbol{B}|}
+\end{equation}
+++++
+
+Or in pure Python without `numpy`:
+
+[[listing-compute-cosine-similarity-in-python]]
+.Compute cosine similarity in python
+[source,python]
+----
+>>> import math
+>>> def cosine_sim(vec1, vec2):
+...     vec1 = [val for val in vec1.values()] # <1>
+...     vec2 = [val for val in vec2.values()]
+...
+...     dot_prod = 0
+...     for i, v in enumerate(vec1):
+...         dot_prod += v * vec2[i]
+...
+...     mag_1 = math.sqrt(sum([x**2 for x in vec1]))
+...     mag_2 = math.sqrt(sum([x**2 for x in vec2]))
+...
+...     return dot_prod / (mag_1 * mag_2)
+----
+<1> Converting our dictionaries to lists for easier matching.
+
+So you need to take the dot product of two of your vectors in question -- multiply the elements of each vector pairwise -- and then sum those products up.
+You then divide by the norm (magnitude or length) of each vector.
+The vector norm is the same as its Euclidean distance from the head to the tail of the vector -- the square root of the sum of the squares of its elements.
+This _normalized dot product_, like the output of the cosine function, will be a value between -1 and 1.
+It is the cosine of the angle between these two vectors.
+It gives you a value for how much the vectors point in the same direction.footnote:[These videos show how to create vectors for words and then compute their cosine similarity to each other using SpaCy and numpy (https://www.dropbox.com/sh/3p2tt55pqsisy7l/AAB4vwH4hV3S9pUO0n4kTZfGa?dl=0)]
+
+A cosine similarity of **1** represents identical normalized vectors that point in exactly the same direction along all dimensions.
+The vectors may have different lengths or magnitudes, but they point in the same direction.
+Remember you divided the dot product by the norm of each vector.
+So the closer a cosine similarity value is to 1, the closer the two vectors are in angle.
+For NLP document vectors that have a cosine similarity close to 1, you know that the documents are using similar words in similar proportion.
+So the documents whose document vectors are close to each other are likely talking about the same thing.
+
+A cosine similarity of **0** represents two vectors that share no components.
+They are orthogonal, perpendicular in all dimensions.
+For NLP TF vectors, this situation occurs only if the two documents share no words in common.
+This doesn't necessarily mean they have different meanings or topics, just that they use completely different words.
+
+A cosine similarity of **-1** represents two vectors that are anti-similar, completely opposite.
+They point in opposite directions.
+This can never happen for simple word count (term frequency) vectors or even normalized TF vectors (which we talk about later).
+Counts of words can never be negative.
+So word count (term frequency) vectors will always be in the same "quadrant" of the vector space.
+None of the term frequency vectors can sneak around into one of the quadrants in the vector space.
+None of your term frequency vectors can have components (word frequencies) that are the negative of another term frequency vector, because term frequencies just can't be negative.
+
+You won't see any negative cosine similarity values for pairs of vectors for natural language documents in this chapter.
+But in the next chapter, we develop a concept of words and topics that are "opposite" to each other.
+And this will show up as documents, words, and topics that have cosine similarities of less than zero, or even **-1**.
+
+If you want to compute cosine similarity for regular `numpy` vectors, such as those returned by `CountVectorizer`, you can use Scikit-Learn's built-in tools.
+Here is how you can calculate the cosine similarity between word vectors 1 and 2 that we computed in <<listing-cosine-similarity>>:
+
+[#listing-cosine-similarity, reftext={chapter}.{counter:listing}]
+.Cosine similarity
+[source,python]
+----
+>>> from sklearn.metrics.pairwise import cosine_similarity
+>>> vec1 = count_vectors[1,:]
+>>> vec2 = count_vectors[2,:]
+>>> cosine_similarity(vec1, vec2)
+array([[0.55901699]])
+----
+
+Note that because the vectors we got from `CountVectorizer` are slightly shorter, this distance is going to be different from cosine similarity between our DIY document vectors.
+As an exercise, you can check that the `sklearn` cosine similarity gives the same result for our `OrderedDict` vectors created with `Counter` class - see if you can figure it out!
+
+== Bag of n-grams
+
+You have already seen in the last chapter how to create _n_-grams from the tokens in your corpus.
+Now, it's time to use them to create a better representation of documents.
+Fortunately for you, you can use the same tools you are already familiar with, just tweak the parameters slightly.
+
+First, let's add another sentence to our corpus, which will illustrate why bag-of-ngrams can sometimes be more useful than bag-of-words.
+
+[source,python]
+----
+>>> new_sentence = "What is algorithmic bias?"
+>>> ngram_docs = copy.copy(docs)
+>>> ngram_docs.append(new_sentence)
+----
+
+If you compute the vector of word counts for this last sentence, using the same vectorizer we trained in Listing 3.2, you will see that it is exactly equal to the representation of the second sentence:
+
+[source,python]
+----
+>>> new_sentence_vector = vectorizer.transform([new_sentence])
+>>> print(new_sentence_vector.toarray())
+[[1 0 1 0 0 1 1 0 1 1 0 0 1 0 0 0]]
+----
+
+To be sure, let's calculate the cosine similarity between the two document vectors:
+
+[source,python]
+----
+>>> cosine_similarity(count_vectors[1,:], new_sentence)
+[[1.]]
+----
+
+Let's now do the same vectorization process we did a few pages ago with `CountVectorizer`, but instead you'll "order" your `CountVectorizer` to count 2-grams instead of tokens:
+
+[source,python]
+----
+>>> ngram_vectorizer = CountVectorizer(ngram_range=(1, 2))
+>>> ngram_vectors = ngram_vectorizer.fit_transform(corpus)
+>>> print(ngram_vectors.toarray())
+[[1 0 0 1 2 0 1 1 0 0 1 0 0 1 0 0 0 0 0 1 0 2 1 1 1]
+ [1 0 0 0 0 1 0 0 1 0 0 0 1 0 1 0 0 0 0 0 1 0 0 0 0]
+ [0 1 1 0 0 0 0 0 0 1 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0]
+ [1 0 0 0 0 1 0 0 1 0 0 1 0 0 0 1 0 0 0 0 1 0 0 0 0]]
+----
+
+You can immediately notice that these vectors are significantly longer, as there are always more 2-grams than tokens.
+If you look closer, you can even notice that the representations of the second and fourth sentence are no longer the same.
+To be sure, let's compute the cosine similarity between them:
+
+[source,python]
+----
+>>> cosine_similarity(ngram_vectors[1,:], ngram_vectors[2,:])
+[[0.66666667]]
+----
+
+And now we can distinguish between the two sentences!
+It is worth noting that bag-of-_n_-grams approach has its own challenges.
+With large texts and corpora, the amount of _n_-grams increases exponentially, causing "curse-of-dimensionality" issues we mentioned before.
+However, as you saw in this section, there might be cases where you will want to use it instead of single token counting.
+
+=== Analyzing `this`
+
+Even though until now we only dealt with _n_-grams of word token, _n_-gram of characters can be useful too.
+For example, they can be used for language detection, or authorship attribution (deciding who among the set of authors wrote the document analyzed).
+Let's solve a puzzle using character _n_-grams and the `CountVectorizer` class you just learned how to use.
+
+We'll start by importing a small and interesting Python package called `this`, and examining some of its constants:
+
+[source,python]
+----
+>>> from this import s
+>>> print (s)
+Gur Mra bs Clguba, ol Gvz Crgref
+Ornhgvshy vf orggre guna htyl.
+Rkcyvpvg vf orggre guna vzcyvpvg.
+Fvzcyr vf orggre guna pbzcyrk.
+Pbzcyrk vf orggre guna pbzcyvpngrq.
+Syng vf orggre guna arfgrq.
+Fcnefr vf orggre guna qrafr.
+Ernqnovyvgl pbhagf.
+Fcrpvny pnfrf nera'g fcrpvny rabhtu gb oernx gur ehyrf.
+Nygubhtu cenpgvpnyvgl orngf chevgl.
+Reebef fubhyq arire cnff fvyragyl.
+Hayrff rkcyvpvgyl fvyraprq.
+Va gur snpr bs nzovthvgl, ershfr gur grzcgngvba gb thrff.
+Gurer fubhyq or bar-- naq cersrenoyl bayl bar --boivbhf jnl gb qb vg.
+Nygubhtu gung jnl znl abg or boivbhf ng svefg hayrff lbh'er Qhgpu.
+Abj vf orggre guna arire.
+Nygubhtu arire vf bsgra orggre guna *evtug* abj.
+Vs gur vzcyrzragngvba vf uneq gb rkcynva, vg'f n onq vqrn.
+Vs gur vzcyrzragngvba vf rnfl gb rkcynva, vg znl or n tbbq vqrn.
+Anzrfcnprf ner bar ubaxvat terng vqrn -- yrg'f qb zber bs gubfr!
+----
+
+What are these strange words?
+In what language are they written?
+H.P. Lovecraft fans may think of the ancient language used to summon the dead deity Cthulhu.footnote:[If the reference is unfamiliar to you, check out the story _Call of Cthulhu_ by H.P. Lovecraft: https://www.hplovecraft.com/writings/texts/fiction/cc.aspx]
+But even to them, this message will be incomprehensible.
+
+To figure out the meaning of our cryptic piece of text, you'll use the method you just learned - figuring out token frequency.
+Only this time, a little bird is telling you it might be worth to start with character tokens rather than word tokens!
+Luckily, `CountVectorizer` can serve you here as well.
+You can see the results of listing <<listing-countvectorizer-histogram>> in figure 3.4a
+
+[#listing-countvectorizer-histogram, reftext={chapter}.{counter:listing}]
+.CountVectorizer histogram
+[source,python]
+----
+>>> char_vectorizer = CountVectorizer(
+...     ngram_range=(1,1), analyzer='char')  # <1>
+>>> s_char_frequencies = char_vectorizer.fit_transform(s)
+>>> generate_histogram(
+...     s_char_frequencies, s_char_vectorizer)  # <2>
+----
+<1> This line generates a `CountVectorizer` that generates 1-grams of characters
+<2> To see the code of `generate_histogram`, check out the `nlpia` repository
+
+Hmmm. Not quite sure what you can do with these frequency counts.
+But then again, you haven't even seen the frequency counts for any other text yet.
+Let's choose some big document - for example, the Wikipedia article for Machine Learning,footnote:[Retrieved on July 9th 2021 from here: https://en.wikipedia.org/wiki/Machine_learning] and try to do the same analysis (check out the results in Figure 3.4b):
+
+[source,python]
+----
+>>> DATA_DIR = ('https://gitlab.com/tangibleai/nlpia/'
+...             '-/raw/master/src/nlpia/data')
+
+>>> url = DATA_DIR + '/machine_learning_full_article.txt'
+>>> ml_text = requests.get(url).content.decode()
+>>> ml_char_frequencies = char_vectorizer.fit_transform(ml_text)
+>>> generate_histogram(s_char_frequencies, s_char_vectorizer)
+----
+
+Now that looks interesting!
+If you look closely at the two frequency histograms, you might notice a pattern.
+The peaks and valleys of the histograms seem to be arranged in the same order.
+If you've worked with frequency spectra before, this may make sense.
+The pattern of character frequency peaks and valleys is similar, but shifted.
+
+To determine whether your eyes are seeing a real pattern, you need to check to see if the shift in the peaks and valleys is consistent.
+This signal processing approach is called _spectral analysis_.
+You can compute the relative position of the peaks by subtracting the positions of the highest points of each signal from each other.
+
+You can use a couple of built-in python functions, `ord()` and `chr()`, to convert back and forth between integers and characters.
+Fortunately these integers and character mappings are in alphabetical order "ABC...".
+
+[source,python]
+----
+>>> peak_distance = ord('R') - ord('E')
+>>> peak_distance
+13
+>>> chr(ord('v') - peak_distance)  # <1>
+'I'
+>>> chr(ord('n') - peak_distance)  # <2>
+'A'
+----
+<1> The letter "I" is is 13 positions before the letter 'V' in the English alphabet
+<2> The letter "A" is is 13 before the letter 'N'
+
+So if you want to decode the letter "R" in this secret message you should probably subtract 13 from its _ordinal_ (`ord`) value to get the letter "E" - the most frequently used letter in English.
+Likewise to decode the letter "V" you would replace it with "I" - the second most frequently use letter.
+The three most frequent letters have been shifted by the same `peak_distance` (13) to create the encoded message.
+And that distance is preserved between the least frequent letters, too:
+
+[source,python]
+----
+>>> chr(ord('W') - peak_distance)
+'J'
+----
+
+By this point, you have probably MetaGered (searched the web) for information about this puzzle.footnote:[The nonprofit MetaGer search engine takes privacy, honesty, and ethics seriously unlike the top search engines you're already familiar with (https://metager.org/)]
+Maybe you discovered that this secret message is probably encoded using a ROT13 cipher (encoding).footnote:[Wikipedia ROT13 article (https://en.wikipedia.org/wiki/ROT13)]
+The ROT13 algorithm rotates each letter in a string 13 positions forward in the alphabet.
+To decode a supposedly secret message that has been encoded with ROT13 you would only need to apply the inverse algorithm and rotate your alphabet backwards 13 positions.
+You can probably create the encoder and decoder functions yourself in a single line of code.
+Or you can use python's builtin `codecs` package to reveal what `this` is all about:
+
+[source,python]
+----
+>>> import codecs
+>>> print(codecs.decode(s, 'rot-13'))
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+----
+
+Now you know The Zen of Python!
+These words of wisdom were written by one of the Python tribe elders, Tim Peters, back in 1999 and since then have been placed in public domain, put to music,footnote:[Zbwedicon's YouTube video about the Zen of Python (https://www.youtube.com/watch?v=i6G6dmVJy74)] and even parodied.footnote:[You can install and import PyDanny's `that` package to have a laugh about Python antipatterns (https://pypi.org/project/that)]
+The Zen of Python has helped the authors of this book write more readable and reusable code for more than a decade.
+And thanks to a character-based `CountVectorizer`, you were able to decode these words of wisdom.
+
+== Zipf's Law
+
+Now on to our main topic -- Sociology.
+Okay, not, but you'll make a quick detour into the world of counting people and words, and you'll learn a seemingly universal rule that governs the counting of most things.
+It turns out, that in language, like most things involving living organisms, patterns abound.
+
+In the early twentieth century, the French stenographer Jean-Baptiste Estoup noticed a pattern in the frequencies of words that he painstakingly counted by hand across many documents (thank goodness for computers and `Python`).
+In the 1930s, the American linguist George Kingsley Zipf sought to formalize Estoup's observation, and this relationship eventually came to bear Zipf's name.
+
+[quote, Wikipedia, Zipf's Law https://en.wikipedia.org/wiki/Zipf's_law]
+Zipf's law states that given some corpus of natural language utterances, the frequency of any word is inversely proportional to its rank in the frequency table.
+
+Specifically, _inverse proportionality_ refers to a situation where an item in a ranked list will appear with a frequency tied explicitly to its rank in the list.
+The first item in the ranked list will appear twice as often as the second, and three times as often as the third, for example.
+One of the quick things you can do with any corpus or document is plot the frequencies of word usages relative to their rank (in frequency).
+If you see any outliers that don't fall along a straight line in a log-log plot, it may be worth investigating.
+
+As an example of how far Zipf's Law stretches beyond the world of words, figure 3.6 charts the relationship between the population of US cities and the rank of that population.
+It turns out that Zipf's Law applies to counts of lots of things.
+Nature is full of systems that experience exponential growth and "network effects" like population dynamics, economic output, and resource distribution.footnote:[See the web page titled "There is More than a Power Law in Zipf" (https://www.nature.com/articles/srep00812).]
+It's interesting that something as simple as Zipf's Law could hold true across a wide range of natural and manmade phenomena.
+Nobel Laureate Paul Krugman, speaking about economic models and Zipf's Law, put it succinctly:
+
+_The usual complaint about economic theory is that our models are oversimplified -- that they offer excessively neat views of complex, messy reality. [With Zipf's law] the reverse is true: You have complex, messy models, yet reality is startlingly neat and simple._
+
+Here is an updated version of Krugman's city population plot:footnote:[Population data downloaded from Wikipedia using Pandas. See the ``nlpia.book.examples` code on GitHub (https://gitlab.com/tangibleai/nlpia2/-/blob/main/src/nlpia2/ch03/ch03_zipf.py)]
+
+.City population distribution
+image::../images/ch03/log_pop_from_wikipedia.png[City Population Distributions, width=80%, link="../images/ch03/log_pop_from_wikipedia.png"]
+
+As with cities and social networks, so with words.
+Let's first download the Brown Corpus from NLTK.
+
+[quote, NLTK Documentation]
+The Brown Corpus was the first million-word electronic corpus of English, created in 1961 at Brown University. This corpus contains text from 500 sources, and the sources have been categorized by genre, such as news, editorial, and so on.footnote:[For a complete list, see http://icame.uib.no/brown/bcm-los.html.]
+
+
+[source,python]
+----
+>>> nltk.download('brown')  # <1>
+>>> from nltk.corpus import brown
+>>> brown.words()[:10]  # <2>
+['The',
+ 'Fulton',
+ 'County',
+ 'Grand',
+ 'Jury',
+ 'said',
+ 'Friday',
+ 'an',
+ 'investigation',
+ 'of']
+>>> brown.tagged_words()[:5]  # <3>
+[('The', 'AT'),
+ ('Fulton', 'NP-TL'),
+ ('County', 'NN-TL'),
+ ('Grand', 'JJ-TL'),
+ ('Jury', 'NN-TL')]
+>>> len(brown.words())
+1161192
+----
+<1> The Brown corpus is about 3MB
+<2> `.words()` is a built-in method of the NTLK corpus object that returns the tokenized corpus as sequence of strs.
+<3> You'll learn about part-of-speech tagging in chapter 11.
+
+So with over 1 million tokens, you have something meaty to look at.
+
+[source,python]
+----
+>>> from collections import Counter
+>>> puncs = set((',', '.', '--', '-', '!', '?',
+...     ':', ';', '``', "''", '(', ')', '[', ']'))
+>>> word_list = (x.lower() for x in brown.words() if x not in puncs)
+>>> token_counts = Counter(word_list)
+>>> token_counts.most_common(10)
+[('the', 69971),
+ ('of', 36412),
+ ('and', 28853),
+ ('to', 26158),
+ ('a', 23195),
+ ('in', 21337),
+ ('that', 10594),
+ ('is', 10109),
+ ('was', 9815),
+ ('he', 9548)]
+----
+
+A quick glance shows that the word frequencies in the Brown corpus follow the logarithmic relationship Zipf predicted.
+"The" (rank 1 in term frequency) occurs roughly twice as often as "of" (rank 2 in term frequency), and roughly three times as often as "and" (rank 3 in term frequency).
+If you don't believe us, use the example code (https://gitlab.com/tangibleai/nlpia2/-/blob/main/src/nlpia2/ch03/ch03_zipf.py) in the `nlpia` package to see this yourself.
+
+In short, if you rank the words of a corpus by the number of occurrences and list them in descending order, you'll find that, for a sufficiently large sample, the first word in that ranked list is twice as likely to occur in the corpus as the second word in the list.
+And it is four times as likely to appear as the fourth word on the list.
+So given a large corpus, you can use this breakdown to say statistically how likely a given word is to appear in any given document of that corpus.
+
+== Inverse Document Frequency (IDF)
+
+Now back to your document vectors.
+Word counts and _n_-gram counts are useful, but pure word count, even when normalized by the length of the document, doesn't tell you much about the importance of that word in that document _relative_ to the rest of the documents in the corpus.
+If you could suss out that information, you could start to describe documents within the corpus.
+Say you have a corpus of every book about artificial intelligence (AI) ever written.
+"Intelligence" would almost surely occur many times in every book (document) you counted, but that doesn't provide any new information, it doesn't help distinguish between those documents.
+Whereas something like "neural network" or "conversational engine" might not be so prevalent across the entire corpus, but for the documents where it frequently occurred, you would know more about their nature.
+For this, you need another tool.
+
+_Inverse document frequency_, or IDF, is your window through Zipf in topic analysis.
+Let's take your term frequency counter from earlier and expand on it.
+You can count tokens and bin them up two ways: per document and across the entire corpus.
+You're going to be counting just by document.
+
+Let's return to the Algorithmic Bias example from Wikipedia and grab another section (that deals with algorithmic racial and ethnic discrimination) and say it is the second document in your Bias corpus.
+
+[quote, Wikipedia, Algorithmic Bias: Racial and ethnic discrimination ('https://en.wikipedia.org/wiki/Algorithmic_bias#Racial_and_ethnic_discrimination')]
+____
+Algorithms have been criticized as a method for obscuring racial prejudices in decision-making. Because of how certain races and ethnic groups were treated in the past, data can often contain hidden biases. For example, black people are likely to receive longer sentences than white people who committed the same crime. This could potentially mean that a system amplifies the original biases in the data.
+
+In 2015, Google apologized when black users complained that an image-identification algorithm in its Photos application identified them as gorillas. In 2010, Nikon cameras were criticized when image-recognition algorithms consistently asked Asian users if they were blinking. Such examples are the product of bias in biometric data sets. Biometric data is drawn from aspects of the body, including racial features either observed or inferred, which can then be transferred into data points. Speech recognition technology can have different accuracies depending on the user's accent. This may be caused by the a lack of training data for speakers of that accent.
+
+Biometric data about race may also be inferred, rather than observed. For example, a 2012 study showed that names commonly associated with blacks were more likely to yield search results implying arrest records, regardless of whether there is any police record of that individual's name. A 2015 study also found that Black and Asian people are assumed to have lesser functioning lungs due to racial and occupational exposure data not being incorporated into the prediction algorithm's model of lung function.
+
+In 2019, a research study revealed that a healthcare algorithm sold by Optum favored white patients over sicker black patients. The algorithm predicts how much patients would cost the health-care system in the future. However, cost is not race-neutral, as black patients incurred about $1,800 less in medical costs per year than white patients with the same number of chronic conditions, which led to the algorithm scoring white patients as equally at risk of future health problems as black patients who suffered from significantly more diseases.
+
+A study conducted by researchers at UC Berkeley in November 2019 revealed that mortgage algorithms have been discriminatory towards Latino and African Americans which discriminated against minorities based on "creditworthiness" which is rooted in the U.S. fair-lending law which allows lenders to use measures of identification to determine if an individual is worthy of receiving loans. These particular algorithms were present in FinTech companies and were shown to discriminate against minorities.
+____
+
+First let's get the total word count for each document in your corpus:
+
+[source,python]
+----
+>>> DATA_DIR = ('https://gitlab.com/tangibleai/nlpia/'
+...             '-/raw/master/src/nlpia/data')
+
+>>> url = DATA_DIR + '/bias_discrimination.txt'
+>>> bias_discrimination = requests.get(url).content.decode()
+>>> intro_tokens = [token.text for token in nlp(bias_intro.lower())]
+>>> disc_tokens = [token.text for token in nlp(bias_discrimination.lower())]
+>>> intro_total = len(intro_tokens)
+>>> intro_total
+479
+>>> disc_total = len (disc_tokens)
+>>> disc_total
+451
+----
+
+Now with a couple of tokenized documents about bias in hand, let's look at the term frequency of the term "bias" in each document. You'll store the TFs you find in two dictionaries, one for each document.
+
+[source,python]
+----
+>>> intro_tf = {}
+>>> disc_tf = {}
+>>> intro_counts = Counter(intro_tokens)
+>>> intro_tf['bias'] = intro_counts['bias'] / intro_total
+>>> disc_counts = Counter(disc_tokens)
+>>> disc_tf['bias'] = disc_counts['bias'] / disc_total
+>>> 'Term Frequency of "bias" in intro is:{:.4f}'.format(intro_tf['bias'])
+Term Frequency of "bias" in intro is:0.0167
+>>> 'Term Frequency of "bias" in discrimination chapter is: {:.4f}'\
+...     .format(disc_tf['bias'])
+'Term Frequency of "bias" in discrimination chapter is: 0.0022'
+----
+
+Okay, you have a number eight times as large as the other. Is the intro section eight times as much about bias?  No, not really.  So let's dig a little deeper. First, let's see how those numbers relate to some other word, say "and".
+
+[source,python]
+----
+>>> intro_tf['and'] = intro_counts['and'] / intro_total
+>>> disc_tf['and'] = disc_counts['and'] / disc_total
+>>> print('Term Frequency of "and" in intro is: {:.4f}'\
+...     .format(intro_tf['and']))
+Term Frequency of "and" in intro is: 0.0292
+>>> print('Term Frequency of "and" in discrimination chapter is: {:.4f}'\
+...     .format(disc_tf['and']))
+Term Frequency of "and" in discrimination chapter is: 0.0303
+----
+
+Great! You know both of these documents are about "and" just as much as they are about "bias" - actually, the discrimination chapter is more about "and" than about "bias"!
+Oh, wait.
+That's not helpful, huh?
+Just as in your first example, where the system seemed to think "the" was the most important word in the document about your fast friend Harry, in this example "and" is considered highly relevant. Even at first glance, you can tell this isn't revelatory.
+
+A good way to think of a term's inverse document frequency is this: How strange is it that this token is in this document?
+If a term appears in one document a lot of times, but occurs rarely in the rest of the corpus, one could assume it is important to that document specifically.
+Your first step toward topic analysis!
+
+A term's IDF is merely the ratio of the total number of documents to the number of documents the term appears in.
+In the case of "and" and "bias" in your current example, the answer is the same for both:
+
+[source,text]
+----
+2 total documents / 2 documents contain "and"  = 2/2 = 1
+2 total documents / 2 documents contain "bias" = 2/2 = 1
+----
+
+Not very interesting. So let's look at another word "black".
+
+2 total documents / 1 document contains "black" = 2/1 = 2
+
+Okay, that's something different. Let's use this "rarity" measure to weight the term frequencies.
+
+[source,python]
+----
+>>> num_docs_containing_and = 0
+>>> for doc in [intro_tokens, disc_tokens]:
+...     if 'and' in doc:
+...         num_docs_containing_and += 1  # <1>
+----
+<1> similarly for "bias" and "black" and any other words you are interested in
+
+And let's grab the TF of "black" in the two documents:
+
+[source,python]
+----
+>>> intro_tf['black'] = intro_counts['black'] / intro_total
+>>> disc_tf['black'] = disc_counts['black'] / disc_total
+----
+
+And finally, the IDF for all three. You'll store the IDFs in dictionaries per document like you did with TF:
+
+[source,python]
+----
+>>> num_docs = 2
+>>> intro_idf = {}
+>>> disc_idf = {}
+>>> intro_idf['and'] = num_docs / num_docs_containing_and
+>>> disc_idf['and'] = num_docs / num_docs_containing_and
+>>> intro_idf['bias'] = num_docs / num_docs_containing_bias
+>>> disc_idf['bias'] = num_docs / num_docs_containing_bias
+>>> intro_idf['black'] = num_docs / num_docs_containing_black
+>>> disc_idf['black'] = num_docs / num_docs_containing_black
+----
+
+And then for the intro document you find:
+
+[source,python]
+----
+>>> intro_tfidf = {}
+>>> intro_tfidf['and'] = intro_tf['and'] * intro_idf['and']
+>>> intro_tfidf['bias'] = intro_tf['bias'] * intro_idf['bias']
+>>> intro_tfidf['black'] = intro_tf['black'] * intro_idf['black']
+----
+
+And then for the history document:
+
+[source,python]
+----
+>>> disc_tfidf = {}
+>>> disc_tfidf['and'] = disc_tf['and'] * disc_idf['and']
+>>> disc_tfidf['bias'] = disc_tf['bias'] * disc_idf['bias']
+>>> disc_tfidf['black'] = disc_tf['black'] * disc_idf['black']
+----
+
+=== Return of Zipf
+
+You're almost there.
+Let's say, though, you have a corpus of 1 million documents (maybe you're baby-Google), and someone searches for the word "cat", and in your 1 million documents you have exactly 1 document that contains the word "cat".
+The raw IDF of this is:
+
+1,000,000 / 1 = 1,000,000
+
+Let's imagine you have 10 documents with the word "dog" in them. Your IDF for "dog" is:
+
+1,000,000 / 10 = 100,000
+
+That's a big difference.
+Your friend Zipf would say that's *too* big because it's likely to happen a lot.
+Zipf's Law showed that when you compare the frequencies of two words, like "cat" and "dog", even if they occur a similar number of times the more frequent word will have an exponentially higher frequency than the less frequent one.
+So Zipf's Law suggests that you scale all your word frequencies (and document frequencies) with the `log()` function, the inverse of `exp()`.
+This ensures that words with similar counts, such as "cat" and "dog", aren't vastly different in frequency.
+And this distribution of word frequencies will ensure that your TF-IDF scores are more uniformly distributed.
+So you should redefine IDF to be the log of the original probability of that word occurring in one of your documents.
+You'll also want to take the log of the term frequency as well.footnote:[Gerard Salton and Chris Buckley first demonstrated the usefulness of log scaling for information retrieval in their paper Term Weighting Approaches in Automatic Text Retrieval (https://ecommons.cornell.edu/bitstream/handle/1813/6721/87-881.pdf).]
+
+The base of log function is not important, since you just want to make the frequency distribution uniform, not to scale it within a particular numerical range.footnote:[Later we show you how to normalize the TF-IDF vectors after all the TF-IDF values have been calculated using this log scaling.]
+If you use a base 10 log function, you'll get:
+
+search: cat
+
+.equation 3.5
+[latexmath,alt="idf for cat,align="left"]
+++++
+\begin{equation}
+\text{idf} = \log \left(\text{1,000,000} / 1 \right) = 6
+\end{equation}
+++++
+
+search: dog
+
+.equation 3.6
+[latexmath,alt="idf for dog,align="left"]
+++++
+\begin{equation}
+\text{idf} = \log \left(\text{1,000,000} / 10 \right) = 5
+\end{equation}
+++++
+
+So now you're weighting the TF results of each more appropriately to their occurrences in language, in general.
+
+And then finally, for a given term, _t_, in a given document, _d_, in a corpus, _D_, you get:
+
+.equation 3.7
+[latexmath,alt="term frequency",align="left"]
+++++
+\begin{equation}
+\text{tf}\left(t, d\right) = \frac{\text{count}(t)}{\text{count}(d)}
+\end{equation}
+++++
+
+.equation 3.8
+[latexmath,alt="Inverse document frequency",align="left"]
+++++
+\begin{equation}
+\text{idf}\left(t,D\right) = \log \left(\frac{\text{number of documents}}{\text{number of documents containing t}}\right)
+\end{equation}
+++++
+
+.equation 3.9
+[latexmath,alt="idf for dog,align="left"]
+++++
+\begin{equation}
+\text{tfidf}\left(t,d,D\right)  = \text{tf}(t,d) \ast \text{idf}(t,D)
+\end{equation}
+++++
+
+The more times a word appears in the document, the TF (and hence the TF-IDF) will go up.
+At the same time, as the number of documents that contain that word goes up, the IDF (and hence the TF-IDF) for that word will go down.
+So now, you have a number.
+Something your computer can chew on.
+But what is it exactly?
+It relates a specific word or token to a specific document in a specific corpus, and then it assigns a numeric value to the importance of that word in the given document, given its usage across the entire corpus.
+
+In some classes, all the calculations will be done in log space so that multiplications become additions and division becomes subtraction:
+
+[source,python,alt="Thank you Kyle Gorman for describing this approach, taking the log of term and document counts first, before computing the ratios for TF-IDF and scaling again with the log function."]
+----
+>>> log_tf = log(term_occurences_in_doc) -\
+...     log(num_terms_in_doc)  # <1>
+>>> log_log_idf = log(log(total_num_docs) -\
+...     log(num_docs_containing_term))  # <2>
+>>> log_tf_idf = log_tf + log_log_idf  # <3>
+----
+<1> Log probability of a particular term in a particular document
+<2> Log of the log probability of a particular term occurring at least once in a document -- the first log is to linearize the IDF (compensate for Zipf's Law).
+<3> Log TF-IDF is the log of the product of TF and IDF or the sum of the logs of TF and IDF.
+
+This single number, the TF-IDF is the humble foundation of a simple search engine.
+As you've stepped from the realm of text firmly into the realm of numbers, it's time for some math.
+You won't likely ever have to implement the preceding formulas for computing TF-IDF. Linear algebra isn't necessary for full understanding of the tools used in natural language processing, but a general familiarity with how the formulas work can make their use more intuitive.
+
+=== Relevance ranking
+
+As you saw earlier, you can easily compare two vectors and get their similarity, but you have since learned that merely counting words isn't as descriptive as using their TF-IDF, so in each document vector let's replace each word's word_count with the word's TF-IDF.
+Now your vectors will more thoroughly reflect the meaning, or topic, of the document.
+// FIXME: What about harry?
+Back to your Harry example:
+
+[source,python]
+----
+>>> doc_tfidf_vectors = []
+>>> for doc in docs:  # <1>
+...     vec = copy.copy(zero_vector)  # <2>
+...     tokens = [token.text for token in nlp(doc.lower())]
+...     token_counts = Counter(tokens)
+...
+...     for token, count in token_counts.items():
+...         docs_containing_key = 0
+...         for d in docs:
+...             if token in d:
+...                 docs_containing_key += 1
+...         tf = value / len(vocab)
+...         if docs_containing_key:
+...             idf = len(docs) / docs_containing_key
+...         else:
+...             idf = 0
+...         vec[key] = tf * idf
+...     doc_tfidf_vectors.append(vec)
+----
+<1> The `docs` variable is a list of SpaCy `Doc` objects - sentences from the Wikipedia article on bias.
+<2> Copy the `zero_vector` to create a new object to hold the TF-IDF vector for this document (sentence about bias)
+
+With this setup, you have K-dimensional vector representation of each document in the corpus.
+And now on to the hunt!
+Or search, in your case.
+From the previous section, you might remember how we defined similarity between vectors.
+Two vectors are considered similar if their cosine similarity is high, so you can find two similar vectors near each other if they maximize the cosine similarity.
+
+Now you have all you need to do a basic TF-IDF-based search.
+You can treat the search query itself as a document, and therefore get a TF-IDF-based vector representation of it.
+The last step is then to find the documents whose vectors have the highest cosine similarities to the query and return those as the search results.
+
+If you take your three documents about Harry, and make the query "How long does it take to get to the store?":
+
+[source,python]
+----
+>>> query = "How long does it take to get to the store?"
+>>> query_vec = copy.copy(zero_vector)  # <1>
+
+>>> tokens = [token.text for token in nlp(query.lower())]
+>>> token_counts = Counter(tokens)
+
+>>> for key, value in token_counts.items():
+...     docs_containing_key = 0
+...     for _doc in docs:
+...       if key in _doc.lower():
+...         docs_containing_key += 1
+...     if docs_containing_key == 0:  # <1>
+...         continue
+...     tf = value / len(tokens)
+...     idf = len(docs) / docs_containing_key
+...     query_vec[key] = tf * idf
+>>> cosine_sim(query_vec, doc_tfidf_vectors[0])
+0.5235048549676834
+>>> cosine_sim(query_vec, doc_tfidf_vectors[1])
+0.0
+>>> cosine_sim(query_vec, doc_tfidf_vectors[2])
+0.0
+----
+<1> You didn't find that token in the lexicon, so go to the next key.
+
+You can safely say document 0 has the most relevance for your query!
+And with this, you can find relevant documents amidst any corpus, be it articles in Wikipedia, books from Project Gutenberg, or tweets from the wild West that is Twitter.
+Google look out!
+
+Actually, Google's search engine is safe from competition from us.
+You have to do an "index scan" of your TF-IDF vectors with each query.
+That's an latexmath:[O(N)] algorithm.
+Most search engines can respond in constant time (latexmath:[O(1)]) because they use an _inverted index_.footnote:[See the web page titled "Inverted index - Wikipedia" (https://en.wikipedia.org/wiki/Inverted_index).]
+You aren't going to implement an index that can find these matches in constant time here, but if you're interested you might like exploring the state-of-the-art Python implementation in the `Whoosh` footnote:[See the web page titled "Whoosh : PyPI" (https://pypi.python.org/pypi/Whoosh).] package and its source code.footnote:[See the web page titled "GitHub - Mplsbeb/whoosh: A fast pure-Python search engine" (https://github.com/Mplsbeb/whoosh).]
+
+[TIP]
+====
+In the preceding code, you dropped the keys that were not found in your pipeline's lexicon (vocabulary) to avoid a divide-by-zero error. But a better approach is to +1 the denominator of every IDF calculation, which ensures no denominators are zero. In fact this approach is so common it has a name, _additive smoothing_ or "Laplace smoothing" footnote:[See the web page titled "Additive smoothing - Wikipedia" (https://en.wikipedia.org/wiki/Additive_smoothing).] -- will usually improve the search results for TF-IDF keyword-based searches.
+====
+
+=== Another vectorizer
+
+Now that was a lot of code for things that have long since been automated.
+The `sklearn` package you used at the beginning of this chapter has a tool for TF-IDF too.
+Just as `CountVectorizer` you saw previously, it does tokenization, omits punctuation, and computes the tf-idf scores all in one.
+
+Here's how you can use `sklearn` to build a TF-IDF matrix.
+The syntax is almost exactly the same as for `CountVectorizer`.
+
+[#listing-computing-tfidf-matrix, reftext={chapter}.{counter:listing}]
+.Computing TF-IDF matrix using Scikit-Learn
+[source,python]
+----
+>>> from sklearn.feature_extraction.text import TfidfVectorizer
+>>> corpus = docs
+>>> vectorizer = TfidfVectorizer(min_df=1) # <1>
+>>> vectorizer = vectorizer.fit(corpus)  # <2>
+>>> vectors = vectorizer.transform(corpus)  # <3>
+>>> print(vectors.todense().round(2))  # <4>
+[[0.16 0.   0.48 0.21 0.21 0.   0.25 0.21 ... 0.21 0.   0.64 0.21 0.21]
+ [0.37 0.   0.37 0.   0.   0.37 0.29 0.   ... 0.   0.49 0.   0.   0.  ]
+ [0.   0.75 0.   0.   0.   0.29 0.22 0.   ... 0.   0.   0.   0.   0.  ]]
+----
+<1> `min_df` defaults to 1, because a vectorizer can't include a word in your vocabulary if it doesn't appear at least once in your texts
+<2> Count the total word occurrences in your texts to create a vocabulary of words that match your min_df and max_df settings
+<3> `TFIDFVectorizer` transforms text into a sparse numpy matrix
+<4> The `.todense()` method converts a sparse matrix back into a regular 2-D numpy matrix (filling in the gaps with zeros)
+
+With Scikit-Learn, in four lines of code, you created a matrix of your three documents and the inverse document frequency for each term in the lexicon.
+It's very similar to the matrix you got from `CountVectorizer`, only this time it contains TF-IDF of each term, token, or word in your lexicon make up the columns of the matrix.
+On large texts this or some other pre-optimized TF-IDF model will save you scads of work.
+
+=== Alternatives
+
+TF-IDF matrices (term-document matrices) have been the mainstay of information retrieval (search) for decades.
+As a result, researchers and corporations have spent a lot of time trying to optimize that IDF part to try to improve the relevance of search results.
+<<Table 3.1>> lists some of the ways you can normalize and smooth your term frequency weights.
+
+[[alternative_tfidf_normalizations_table]]
+.Alternative TF-IDF normalization approaches (Molino 2017)footnote:[_Word Embeddings Past, Present and Future_ by Piero Molino at AI with the Best 2017]
+[width="90%",cols="1,6",options="header"]
+|=======
+|Scheme     |Definition
+|None       |stem:[w_{ij} = f_{ij}]
+|TD-IDF     |stem:[w_{ij} = \log \left(f_{ij}\right) \times \log \left(\frac{N}{n_j}\right)\]
+|TF-ICF     |stem:[w_{ij} = \log \left(f_{ij}\right) \times \log \left(\frac{N}{f_j}\right)\]
+|Okapi BM25 |stem:[w_{ij} = \frac{f_{ij}}{0.5+ 1.5 \times \frac{f_j}{\frac{f_j}{j}} + f_{ij}} \log \frac{N-n_j+0.5}{f_{ij}+0.5}\]
+|ATC        |stem:[w_{ij} = \frac{\left(0.5 + 0.5 \times \frac{f_{ij}}{\max_f}\right) \log \left( \frac{N}{n_j} \right) } { \sqrt{\sum_{i=1}^{N} \Big[ \left( 0.5 + 0.5 \times \frac{f_{ij}}{\max_f}\right) \log \left( \frac{N}{n_j} \right) \Big]^2 } } \]
+|LTU        |stem:[w_{ij} = \frac{ \left( \log \left( f_{ij} \right) + 1.0 \right) \log \left( \frac{N}{n_j} \right) }{0.8 + 0.2 \times f_j \times \frac{j}{f_j}} \]
+|MI         |stem:[w_{ij} = \log \frac{P\left(t_{ij} \mathbin{\vert} c_j \right) }{ P\left(t_{ij}\right) P\left(c_j \right) } \]
+|PosMI      |stem:[w_{ij} = \max\left(0, MI\right)\]
+|T-Test     |stem:[w_{ij} = \frac{P\left(t_{ij} \mathbin{\vert} c_j \right) - P\left(t_{ij}\right) P\left(c_j \right)}{\sqrt{P\left(t_{ij}\right) P\left(c_j \right)}}\]
+| chi^2^ | See section 4.3.5 of _From Distributional to Semantic Similarity_ (https://www.era.lib.ed.ac.uk/bitstream/handle/1842/563/IP030023.pdf#subsection.4.3.5) by James Richard Curran
+|Lin98a     |stem:[w_{ij} = \frac{f_{ij} \times f}{f_j \times f_j} \]
+|Lin98b     |stem:[w_{ij} = -1 \times \log \frac{n_j}{N}\]
+|Gref94     |stem:[w_{ij} = \frac{\log f_{ij} + 1}{\log n_{j} + 1}\]
+|=======
+
+Search engines (information retrieval systems) match keywords (term) between queries and documents in a corpus.
+If you're building a search engine and want to provide documents that are likely to match what your users are looking for, you should spend some time investigating the alternatives described by Piero Molino in figure 3.7.
+
+One such alternative to using straight TF-IDF cosine distance to rank query results is Okapi BM25, or its most recent variant, BM25F.
+
+=== Okapi BM25
+
+The smart people at London's City University came up with a better way to rank search results.
+Rather than merely computing the TF-IDF cosine similarity, they normalize and smooth the similarity.
+They also ignore duplicate terms in the query document, effectively clipping the term frequencies for the query vector at 1.
+And the dot product for the cosine similarity is not normalized by the TF-IDF vector norms (number of terms in the document and the query), but rather by a nonlinear function of the document length itself.
+
+[source,python]
+----
+q_idf * dot(q_tf, d_tf[i]) * 1.5 / (dot(q_tf, d_tf[i]) + .25 + .75 * d_num_words[i] / d_num_words.mean()))
+----
+
+You can optimize your pipeline by choosing the weighting scheme that gives your users the most relevant results.
+But if your corpus isn't too large, you might consider forging ahead with us into even more useful and accurate representations of the meaning of words and documents.
+
+== Using TF-IDF for your bot
+
+In this chapter, you learned how TF-IDF can be used to represent natural language documents with vectors, find similarities between them, and perform keyword search.
+But if you want to build a chatbot, how can you use those capabilities to make your first intelligent assistant?
+
+Actually, many chatbots rely heavily on a search engine.
+And some chatbots use their search engine as their only algorithm for generating responses.
+You just need to take one additional step to turn your simple search index (TF-IDF) into a chatbot.
+To make this book as practical as possible, every chapter will show you how to make your bot smarter using the skills you picked up in that chapter.
+
+In this chapter, you're going to make your chatbot answer data science questions.
+The trick is simple: you're store your training data in pairs of questions and appropriate responses.
+Then you can use TF-IDF to search for a question most similar to the user input text.
+Instead of returning the most similar statement in your database, you return the response associated with that statement.
+And with that, you’re chatting!
+
+Let's do it step by step.
+First, let's load our data.
+You'll use the corpus of data science questions that Hobson was asked by his mentees in the last few years.
+They are located  in the `qary` repository:
+
+//The code for this section is in nlpia2/src/nlpia2/ch03/ch03-bot.py
+
+[source,python]
+----
+>>> DS_FAQ_URL = ('https://gitlab.com/tangibleai/qary/-/raw/main/'
+                  'src/qary/data/faq/faq-python-data-science-cleaned.csv')
+>>> qa_dataset = pd.read_csv(DS_FAQ_URL)
+----
+
+Next, let's create TF-IDF vectors for the questions in our dataset.
+You'll use the Scikit-Learn TfidfVectorizer class you've seen in the previous section.
+
+[source,python]
+----
+>>> vectorizer = TfidfVectorizer()
+>>> vectorizer.fit(df['question'])
+>>> tfidfvectors_sparse = vectorizer.transform(df['question'])  # <1>
+>>> tfidfvectors = tfidfvectors_sparse.todense()  # <2>
+----
+<1> Vectorizing all the questions in our dataset
+<2> Making the vectors dense so that we can do cosine similarity
+
+We're now ready to implement the question-answering itself.
+Your bot will reply to the user's question by using the same vectorizer you trained on the dataset, and finding the most similar questions.
+
+[source,python]
+----
+>>> def bot_reply(question):
+...    question_vector = vectorizer.transform([question]).todense()
+...    idx = question_vector.dot(tfidfvectors.T).argmax() # <1>
+...
+...    print(
+...        f"Your question:\n  {question}\n\n"
+...        f"Most similar FAQ question:\n  {df['question'][idx]}\n\n"
+...        f"Answer to that FAQ question:\n  {df['answer'][idx]}\n\n"
+...    )
+----
+<1> We find the cosine similarity of every question with our query and find the most similar one
+
+And your first question-answering chatbot is ready!
+Let's ask it its first question: 
+
+[source,python]
+----
+>>> bot_reply("What's overfitting a model?")
+Your question:
+  What's overfitting a model?
+
+Most similar FAQ question:
+  What is overfitting?
+
+Answer to that FAQ question:
+  When your test set accuracy is significantly lower than your training set accuracy?
+----
+
+Try to play with it and ask it a couple more questions, such as: 
+- What is a Gaussian distribution? 
+- Who came up with the perceptron algorithm?
+
+You'll realize quickly, however, that your chatbot fails quite often - and not just because the dataset you trained it upon is small. 
+
+For example, let's try the following question:
+
+[source,python]
+----
+>>> bot_reply('How do I decrease overfitting for Logistic Regression?')
+Your question:
+  How do I decrease overfitting for Logistic Regression?
+Most similar FAQ question:
+  How to decrease overfitting in boosting models?
+Answer to that FAQ question:
+  What are some techniques to reduce overfitting in general? Will they work with boosting models?
+----
+
+If you looked closely at the dataset, you might have seen it actually has an answer about decreasing overfitting for boosting models. 
+However, our vectorizer is just a little bit too literal - and when it saw the word "decrease" in the wrong question, that caused the dot product to be higher for the wrong question.
+In the next chapter, we'll see how we can overcome this challenge by looking at _meaning_ rather than particular words. 
+
+
+== What's next
+
+Now that you can convert natural language text to numbers, you can begin to manipulate them and compute with them.
+Numbers firmly in hand, in the next chapter you'll refine those numbers to try to represent the *meaning* or *topic* of natural language text instead of just its words.
+In subsequent chapters, we show you how to implement a semantic search engine that finds documents that "mean" something similar to the words in your query rather than just documents that use those exact words from your query.
+Semantic search is much better than anything TF-IDF weighting and stemming and lemmatization can ever hope to achieve.
+State-of-the-art search engines combine both TF-IDF vectors and semantic embedding vectors to achieve both higher accuracy than conventional search.
+
+The well-funded OpenSearch project, an ElasticSearch fork, is now leading the way in search innovation.footnote:["The ABCs of semantic search in OpenSearch" by Milind Shyani (https://opensearch.org/blog/semantic-science-benchmarks/)]
+ElasticSearch started walling off their technology garden in 2021.
+The only reason Google and Bing and other web search engines don't use the semantic search approach is that their corpus is too large.
+Semantic word and topic vectors don't scale to billions of documents, but millions of documents are no problem.
+And some scrappy startups such as You.com are learning how to use open source to enable semantic search and conversational search (chat) on a web scale. 
+
+So you only need the most basic TF-IDF vectors to feed into your pipeline to get state-of-the-art performance for semantic search, document classification, dialog systems, and most of the other applications we mentioned in Chapter 1.
+TF-IDFs are just the first stage in your pipeline, a basic set of features you'll extract from text.
+In the next chapter, you will compute topic vectors from your TF-IDF vectors.
+Topic vectors are an even better representation of the meaning of a document than these carefully normalized and smoothed TF-IDF vectors.
+And things only get better from there as we move on to Word2vec word vectors in chapter 6 and deep learning embeddings of the meaning of words and documents in later chapters.
+
+== Test yourself
+
+1. What are the differences between the count vectors that `CountVectorizer.transform()` creates and a list of python `collections.Counter` objects? Can you convert them to identical `DataFrame` objects?
+2. Can you use `TFIDFVectorizer` on a large corpus (more than 1M documents) with a huge vocabulary (more than 1M tokens)? What problems do you expect to encounter?
+3. Think of an example of corpus or task where term frequency (TF) will perform better than TF-IDF.
+4. We mentioned that bag of character n-grams can be used for language recognition tasks. How would an algorithm that uses character n-grams to distinguish one language from another work?
+5. What are the limitations or disadvantages of TF-IDF you have seen throughout this chapter? Can you come up with additional ones that weren't mentioned?
+6. How would you use TF-IDF as a base to improve how most search engines today work?
+
+== Summary
+
+* Any web-scale search engine with millisecond response times has the power of a TF-IDF term document matrix hidden under the hood.
+* Zipf's law can help you predict the frequencies of all sorts of things including words, characters, and people.
+* Term frequencies must be weighted by their inverse document frequency to ensure the most important, most meaningful words are given the heft they deserve.
+* Bag-of-words / Bag-of-ngrams and TF-IDF are the most basic algorithms to represent natural language documents with a vector of real numbers.
+* Euclidean distance and similarity between pairs of high dimensional vectors don't adequately represent their similarity for most NLP applications.
+* Cosine distance, the amount of "overlap" between vectors, can be calculated efficiently just by multiplying the elements of normalized vectors together and summing up those products.
+* Cosine distance is the go-to similarity score for most natural language vector representations.

@@ -1,0 +1,61 @@
+Chapter 1:
+  - Why is NLP considered to be a core enabling feature for AGI?
+  - Why do advanced NLP models tend to show significant discriminatory biases?
+  - How is it possible to create a prosocial chatbot using training data from sources that include antisocial examples?
+  - What are 4 different approaches or architectures for building a chatbot?
+  - How is NLP used within a search engine?
+  - Write a regular expression to recognize your name and all the variations on its spelling (including nicknames) that you've seen.
+  - Write a regular expression to try to recognize a sentence boundary (usually a period ("."), question mark "?", or exclamation mark "!")
+Chapter 2:
+  - How does a lemmatizer increase the likelihood that your DuckDuckGo search results contain what you are looking for?
+  - Is there a way to optimally decide the _n_ in the _n_-gram range you use to tokenize your documents?
+  - Does lemmatization, case folding, or stopword removal help or hurt your performance on a model to predict misleading news articles with this Kaggle dataset (https://www.kaggle.com/clmentbisaillon/fake-and-real-news-dataset/download).
+  - How could your find out the best sizes for the word pieces or sentence pieces for your tokenizer?
+  - "Is there a website where you can download the token frequencies for most of the words and n-grams ever published? footnote:[Hint: A company that aspired to "do no evil", but now does, created this massive NLP corpus.]"
+  - What are the risks and possible benefits of pair coding AI assistants built with NLP? What sort of organizations and algorithms do you trust with your mind and your code?
+Chapter 3:
+  - 
+    Q: What is the most memory efficient data structure for storing BOW and TF-IDF vectors?
+  - 
+    Q: Is it possible to store a million by million array of TF-IDF values in a laptop with only 8 GB of RAM? One million times one million is a thousand billion floating point TF-IDF values.
+    A: On a 64-bit laptop that's typically 8,000 GB if you just stored it all in a naive data structure. You could reduct that a bit to 4,000 GB if you reduced the floating point precision from 64-bit to 32-bit. But the real trick is to store the data in a sparse array so that all the values that are the same. Usually 99.99% of a TF-IDF matrix are zeros or some small fixed value. So a sparse array for a TF-IDF matrix can usually take up 10,000 times less space or maybe 3,000 times less space if you take into account the 2 integers required to keep track of the indexes for the values. 
+Chapter 4:
+  - 
+    Q: What is the context, or neighborhood of words, that LSA (PCA on BOW or TF-IDF vectors) pays attention to when creating topics?
+    A: PCA and T-SNE pay attention to the coocurrence of words within the same document, since this is what makes up the TF-IDF and BOW word vectors in the rows of the matrix it is transforming. This is different from what other Deep Learning transformations like Word2Vec and GLoVE do. Word2Vec and GLoVe limit the neighborhood to only those words that occur within 5 words of the _target_ word.
+  -
+    Q: What does PCA optimize as it is composing linear combinations of words into topics? How is this different from what T-SNE does?
+    A: PCA maximizes the variance of the topic vectors in the lower dimensional space. Variance is the average euclidian distance between vectors and the origin. PCA keeps vectors far apart in the low dimensional space that were far apart in the high dimensional space. This is essentially what you would do if you rotated a 3-D object in front of a camera to maximize the amount of area the object occupies in the 2-D picture you take. T-SNE minimizes the distance between pairs of vectors in the low dimensional space that were close to each other in the high dimensional space. 
+Chapter 5:
+  - 
+    Q: What are the advantages and disadvantages of using the `torch.nn.functional` interface to PyTorch rather than the `torch.nn.Module` class?
+    A: The PyTorch `nn.functional` API is easier to understand and debug for many people. But the declarative `torch.nn.Module` allows you to create an unlimitted array of new architectures that utilize the internal model _state_ to produce more complex behavior. 
+  - 
+    Q: What is the simple AI logic "problem" that Rosenblatt's artifical neurons couldn't?
+    A: Rosenblatt's perceptron couldn't handle the XOR logic gate problem and this led to the first AI Winter when most researchers stopped pursuing AI and neural networks.
+  - 
+    Q: What minor change to Rosenblatt's architecture "fixed" perceptrons and ended the first "AI Winter"?
+    A: Adding a second layer of neurons allowed just 3 neurons to solve the XOR logic gate problem. Multi-layer peceptrons eventually evolved into the deep learning architectures we use today to solve AI problems that were previously unsolvable.
+  - 
+    Q: What is the equivalent of a PyTorch `model.forward()` function in SciKit-Learn models?
+    A: The `model.predict()` function is what accomplishes inference or prediction in the same way that `model.forward()` does within PyTorch models.
+  -
+    Q: Imagine you want to solve a binary classification problem to predict one particular disease such as Parkinsons disease and your only input features are the genetic sequence from the patients with 10s of thousands of gene SNIPs for each patient. Your training set has fewer than 10 thousand patients and only a small fraction ever contracted the disease. Would you use a SciKit-Learn LogisticRegression model or an equivalent PyTorch neural network model with a single linear layer from the input to the output? Why? How would you deal with the imbalance problem? What about overfitting?
+    A: Your fastest, simplest most accurate approach would be to use a `LogisticRegression`. You could use the `class_weight='balanced'` argument to deal with the imblance. And you could use a small value of `alpha` such as 0.001 in order to regularize your model and deal with overfitting. If you used a PyTorch neural network this process would be more complicated and you would have to use a batch size of about 128 or larger and a high random dropout percentage to deal with overfitting. You would need to do oversampling or use a loss function with class imbalance compensation.
+
+Chapter 6:
+  - 
+    Q: What is the context, or neighborhood of words, that Word2Vec and GloVE pays attention to when creating semantic embeddings for words?
+    A: Word2Vec and GloVE do. Word2Vec and GloVe limit the neighborhood to only those words that occur within 5 words of the _target_ word.
+  - 
+    Q: Create the same graph data structure as was done in this chapter, but use lemmatization rather than noun phrases as labels for your nodes.
+    A: SEE examples in the [`nessvec` Python package](https://gitlab.com/tangibleai/nessvec/-/tree/main/examples)
+  -
+    Q: Create a graph data structure of another chapter in this book.
+    A: SEE examples in the [`nessvec` Python package](https://gitlab.com/tangibleai/nessvec/-/tree/main/examples)
+  -
+    Q: Create a graph data structure of the full book using sentiment analysis for each chapter.
+    A: SEE examples in the [`nessvec` Python package](https://gitlab.com/tangibleai/nessvec/-/tree/main/examples)
+  -
+    Q: Give examples for how word vectors enable at least two of Hofstadter's eight elements of intelligence
+    A: Word analogies ("similarities and differnces in situations") - for example, "embeddings are to words as character sheets are to _____". Another example is the ability for a chatbot to "respond flexibly" by recognizing the meanings of words such as the word "SUP" even if no one has ever used that word as a greeting before. And if my friend Nick said SUP to your bot it could recognize when he was talking about his "Standup Paddleboard" that he paddles to work... when it's not too cold in Portland. 

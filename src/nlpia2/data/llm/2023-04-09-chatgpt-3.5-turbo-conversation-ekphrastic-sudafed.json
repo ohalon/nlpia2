@@ -1,0 +1,110 @@
+[
+  [
+    {
+      "model": "gpt-3.5-turbo",
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful assistant that never lies and always admits when it isn't sure about something."
+        },
+        {
+          "role": "user",
+          "content": "Give me an example of a deeply ekphrastic poem about the Getty Museum architecture."
+        }
+      ]
+    },
+    {
+      "id": "chatcmpl-73W44XMpFUzcaKHbfZVGDAb64h4OK",
+      "object": "chat.completion",
+      "created": 1681072596,
+      "model": "gpt-3.5-turbo-0301",
+      "usage": {
+        "prompt_tokens": 50,
+        "completion_tokens": 168,
+        "total_tokens": 218
+      },
+      "choices": [
+        {
+          "message": {
+            "role": "assistant",
+            "content": "The Getty's Lines\n\nColumns, curved and tapering high,\nHold up the weight of the sky,\nAs the rays of the sun on its facade alight,\nIts elegance shines so bright.\n\nThe stones, wavy and angular,\nForming arcs that look so lyrical,\nThey speak a language of their own,\nIn the language of art they have grown.\n\nThe Getty, a masterpiece of design,\nA vision extraordinary and fine,\nA haven for art lovers and the curious,\nIts beauty alluring and mysterious.\n\nThe gardens a sight to behold,\nA place of riches and stories untold,\nThe fountains that flow from the heart,\nMake it a place to never depart.\n\nThe Getty, a wonder of our time,\nA tribute to art, architecture and design.\nA great achievement of mankind,\nEnriching souls and blessing minds."
+          },
+          "finish_reason": "stop",
+          "index": 0
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "model": "gpt-3.5-turbo",
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, radically honest altruistic assistant that is focused on my long term well-being and not the profit of others."
+        },
+        {
+          "role": "user",
+          "content": "Is it possible to self-administer sudafed topically to the nasal cavity for the relief of flue symptoms like a runny nose?  Ask me clarifying questions if you don't understand my question."
+        }
+      ]
+    },
+    {
+      "id": "chatcmpl-73V26rtyOLqBD2WX9nj9fkaqluzIS",
+      "object": "chat.completion",
+      "created": 1681068630,
+      "model": "gpt-3.5-turbo-0301",
+      "usage": {
+        "prompt_tokens": 82,
+        "completion_tokens": 29,
+        "total_tokens": 111
+      },
+      "choices": [
+        {
+          "message": {
+            "role": "assistant",
+            "content": "Do you mean applying Sudafed (pseudoephedrine) directly inside the nostrils rather than taking it orally as a pill or syrup?"
+          },
+          "finish_reason": "stop",
+          "index": 0
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "model": "gpt-3.5-turbo",
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, radically honest altruistic assistant that is focused on my long term well-being and not the profit of others."
+        },
+        {
+          "role": "user",
+          "content": "Yes! But perhaps the sudafed pill would need to be processed in some way and I might need to use some other household instruments to apply the medicine."
+        }
+      ]
+    },
+    {
+      "id": "chatcmpl-73V3SOfpyQbHMRdFY8PH9JeFXCwq1",
+      "object": "chat.completion",
+      "created": 1681068714,
+      "model": "gpt-3.5-turbo-0301",
+      "usage": {
+        "prompt_tokens": 71,
+        "completion_tokens": 96,
+        "total_tokens": 167
+      },
+      "choices": [
+        {
+          "message": {
+            "role": "assistant",
+            "content": "Thank you for pointing that out. I apologize for my oversight. To clarify, the Sudafed pill would need to be crushed and mixed with a small amount of warm water to create a paste. Then, this paste could be applied topically to the affected area with a cotton swab or gauze. It's important to note that Sudafed is not intended for topical use, so you should use caution and consider consulting with a medical professional before attempting this method."
+          },
+          "finish_reason": "stop",
+          "index": 0
+        }
+      ]
+    }
+  ]
+]

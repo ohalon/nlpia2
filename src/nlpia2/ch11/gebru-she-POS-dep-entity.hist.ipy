@@ -1,0 +1,282 @@
+>>> from nlpia2 import wikipedia as wiki
+>>> page = wiki.page('Timnit Gebru')
+>>> text = page.content
+>>> i1 = text.index('Stochastic')
+>>> text[i1:i1+52]
+'Stochastic Parrots: Can Language Models Be Too Big?"'
+
+
+>>> from nlpia2.spacy_pipes import load  
+>>> nlp = load('en_core_web_sm')
+>>> text.index(' Gebru had')
+8418
+>>> text[i0:i0+2)
+>>> text[i0:i0+2]
+' G'
+>>> text[i0:i0+200]
+' Gebru had determined that publishing research papers was more effective at bringing forth the ethical change she was focused on than pressing her superiors in the company. She and five others coautho'
+>>> text[i0:i0+202]
+' Gebru had determined that publishing research papers was more effective at bringing forth the ethical change she was focused on than pressing her superiors in the company. She and five others coauthore'
+>>> i1 = text.index('Stochastic') + 52
+>>> text[i0:i1]
+' Gebru had determined that publishing research papers was more effective at bringing forth the ethical change she was focused on than pressing her superiors in the company. She and five others coauthored a research paper, "On the Dangers of Stochastic Parrots: Can Language Models Be Too Big?"'
+>>> doc = nlp(text[i0:i1])
+>>> from nlpia2.spacy_pipes import load, nlp_df
+>>> df = nlp_df(doc)
+>>> df
+         Token    POS  Dependent       Entity KB_ID
+0               SPACE        dep                   
+1        Gebru  PROPN      nsubj          ORG      
+2          had    AUX        aux                   
+3   determined   VERB       ROOT                   
+4         that  SCONJ       mark                   
+5   publishing   VERB   compound                   
+6     research   NOUN   compound                   
+7       papers   NOUN      nsubj                   
+8          was    AUX      ccomp                   
+9         more    ADV     advmod                   
+10   effective    ADJ      acomp                   
+11          at    ADP       prep                   
+12    bringing   VERB      pcomp                   
+13       forth    ADV     advmod                   
+14         the    DET        det                   
+15     ethical    ADJ       amod                   
+16      change   NOUN       dobj                   
+17         she   PRON  nsubjpass                   
+18         was    AUX    auxpass                   
+19     focused   VERB      relcl                   
+20          on    ADP       prep                   
+21        than    ADP       prep                   
+22    pressing   VERB      pcomp                   
+23         her   PRON       poss                   
+24   superiors   NOUN       dobj                   
+25          in    ADP       prep                   
+26         the    DET        det                   
+27     company   NOUN       pobj                   
+28           .  PUNCT      punct                   
+29         She   PRON      nsubj                   
+30         and  CCONJ         cc                   
+31        five    NUM     nummod     CARDINAL      
+32      others   NOUN       conj                   
+33  coauthored   VERB       ROOT                   
+34           a    DET        det                   
+35    research   NOUN   compound                   
+36       paper   NOUN       dobj                   
+37           ,  PUNCT      punct                   
+38           "  PUNCT      punct                   
+39          On    ADP       prep                   
+40         the    DET        det  WORK_OF_ART      
+41     Dangers   NOUN       pobj  WORK_OF_ART      
+42          of    ADP       prep  WORK_OF_ART      
+43  Stochastic  PROPN   compound  WORK_OF_ART      
+44     Parrots  PROPN       pobj  WORK_OF_ART      
+45           :  PUNCT      punct  WORK_OF_ART      
+46         Can    AUX        aux  WORK_OF_ART      
+47    Language   NOUN   compound  WORK_OF_ART      
+48      Models   NOUN      nsubj  WORK_OF_ART      
+49          Be    AUX      advcl  WORK_OF_ART      
+50         Too    ADV     advmod  WORK_OF_ART      
+51         Big    ADJ      acomp  WORK_OF_ART      
+52           ?  PUNCT      punct                   
+53           "  PUNCT      punct                   
+>>> df.head()
+        Token    POS Dependent Entity KB_ID
+0              SPACE       dep             
+1       Gebru  PROPN     nsubj    ORG      
+2         had    AUX       aux             
+3  determined   VERB      ROOT             
+4        that  SCONJ      mark             
+>>> nlp('"')[0].is_oov
+False
+>>> nlp('"')[0].is_stop
+False
+>>> df = df.set_index('Token')
+>>> df
+              POS  Dependent       Entity KB_ID
+Token                                          
+            SPACE        dep                   
+Gebru       PROPN      nsubj          ORG      
+had           AUX        aux                   
+determined   VERB       ROOT                   
+that        SCONJ       mark                   
+publishing   VERB   compound                   
+research     NOUN   compound                   
+papers       NOUN      nsubj                   
+was           AUX      ccomp                   
+more          ADV     advmod                   
+effective     ADJ      acomp                   
+at            ADP       prep                   
+bringing     VERB      pcomp                   
+forth         ADV     advmod                   
+the           DET        det                   
+ethical       ADJ       amod                   
+change       NOUN       dobj                   
+she          PRON  nsubjpass                   
+was           AUX    auxpass                   
+focused      VERB      relcl                   
+on            ADP       prep                   
+than          ADP       prep                   
+pressing     VERB      pcomp                   
+her          PRON       poss                   
+superiors    NOUN       dobj                   
+in            ADP       prep                   
+the           DET        det                   
+company      NOUN       pobj                   
+.           PUNCT      punct                   
+She          PRON      nsubj                   
+and         CCONJ         cc                   
+five          NUM     nummod     CARDINAL      
+others       NOUN       conj                   
+coauthored   VERB       ROOT                   
+a             DET        det                   
+research     NOUN   compound                   
+paper        NOUN       dobj                   
+,           PUNCT      punct                   
+"           PUNCT      punct                   
+On            ADP       prep                   
+the           DET        det  WORK_OF_ART      
+Dangers      NOUN       pobj  WORK_OF_ART      
+of            ADP       prep  WORK_OF_ART      
+Stochastic  PROPN   compound  WORK_OF_ART      
+Parrots     PROPN       pobj  WORK_OF_ART      
+:           PUNCT      punct  WORK_OF_ART      
+Can           AUX        aux  WORK_OF_ART      
+Language     NOUN   compound  WORK_OF_ART      
+Models       NOUN      nsubj  WORK_OF_ART      
+Be            AUX      advcl  WORK_OF_ART      
+Too           ADV     advmod  WORK_OF_ART      
+Big           ADJ      acomp  WORK_OF_ART      
+?           PUNCT      punct                   
+"           PUNCT      punct                   
+>>> df.loc['"']
+         POS Dependent Entity KB_ID
+Token                              
+"      PUNCT     punct             
+"      PUNCT     punct             
+>>> df.loc['"'][0]
+>>> df.loc['"'].iloc[0]
+POS          PUNCT
+Dependent    punct
+Entity            
+KB_ID             
+Name: ", dtype: object
+>>> df.loc['On']
+POS           ADP
+Dependent    prep
+Entity           
+KB_ID            
+Name: On, dtype: object
+>>> df.loc['On':'?']
+              POS Dependent       Entity KB_ID
+Token                                         
+On            ADP      prep                   
+the           DET       det  WORK_OF_ART      
+Dangers      NOUN      pobj  WORK_OF_ART      
+of            ADP      prep  WORK_OF_ART      
+Stochastic  PROPN  compound  WORK_OF_ART      
+Parrots     PROPN      pobj  WORK_OF_ART      
+:           PUNCT     punct  WORK_OF_ART      
+Can           AUX       aux  WORK_OF_ART      
+Language     NOUN  compound  WORK_OF_ART      
+Models       NOUN     nsubj  WORK_OF_ART      
+Be            AUX     advcl  WORK_OF_ART      
+Too           ADV    advmod  WORK_OF_ART      
+Big           ADJ     acomp  WORK_OF_ART      
+?           PUNCT     punct                   
+>>> doc['On']
+>>> hist -o -p
+>>> df['Entity'].astype(bool)
+Token
+              False
+Gebru          True
+had           False
+determined    False
+that          False
+publishing    False
+research      False
+papers        False
+was           False
+more          False
+effective     False
+at            False
+bringing      False
+forth         False
+the           False
+ethical       False
+change        False
+she           False
+was           False
+focused       False
+on            False
+than          False
+pressing      False
+her           False
+superiors     False
+in            False
+the           False
+company       False
+.             False
+She           False
+and           False
+five           True
+others        False
+coauthored    False
+a             False
+research      False
+paper         False
+,             False
+"             False
+On            False
+the            True
+Dangers        True
+of             True
+Stochastic     True
+Parrots        True
+:              True
+Can            True
+Language       True
+Models         True
+Be             True
+Too            True
+Big            True
+?             False
+"             False
+Name: Entity, dtype: bool
+>>> isent = df['Entity'].astype(bool)
+>>> is_entity = df['Entity'].astype(bool)
+>>> df[is_entity]
+              POS Dependent       Entity KB_ID
+Token                                         
+Gebru       PROPN     nsubj          ORG      
+five          NUM    nummod     CARDINAL      
+the           DET       det  WORK_OF_ART      
+Dangers      NOUN      pobj  WORK_OF_ART      
+of            ADP      prep  WORK_OF_ART      
+Stochastic  PROPN  compound  WORK_OF_ART      
+Parrots     PROPN      pobj  WORK_OF_ART      
+:           PUNCT     punct  WORK_OF_ART      
+Can           AUX       aux  WORK_OF_ART      
+Language     NOUN  compound  WORK_OF_ART      
+Models       NOUN     nsubj  WORK_OF_ART      
+Be            AUX     advcl  WORK_OF_ART      
+Too           ADV    advmod  WORK_OF_ART      
+Big           ADJ     acomp  WORK_OF_ART      
+>>> nlp_df.nlp = load('large')
+>>> nlp_df(text)
+          Token    POS Dependent  Entity KB_ID
+0        Timnit  PROPN  compound              
+1         Gebru  PROPN     nsubj  PERSON      
+2             (  PUNCT     punct              
+3       Amharic   NOUN     appos    NORP      
+4             :  PUNCT     punct              
+...         ...    ...       ...     ...   ...
+3271     Timnit  PROPN  compound              
+3272      Gebru  PROPN      pobj  PERSON      
+3273         at    ADP      prep              
+3274  Wikimedia  PROPN  compound     ORG      
+3275    Commons  PROPN      pobj     ORG      
+
+[3276 rows x 5 columns]
+>>> df.set_index(0)
+>>> hist -o -p
+>>> hist -o -p -f src/nlpia2/ch11/gebru-she-POS-dep-entity.hist.ipy

@@ -1,0 +1,1096 @@
+
+:toc: left
+:toclevels: 6
+
+++++
+  <style>
+  .first-sentence {
+    text-align: left;
+    margin-left: 0%;
+    margin-right: auto;
+    width: 66%;
+    background: Beige;
+  }
+  .last-sentence {
+    text-align: right;
+    margin-left: auto;
+    margin-right: 0%;
+    width: 66%;
+    background: AliceBlue;
+  }
+  </style>
+++++
+= Natural Language Processing in Action, 2E
+= Word brain (neural networks)
+[.first-sentence]
+This chapter covers
+
+[.last-sentence]
+This chapter covers
+
+[.first-sentence]
+When you read the title of this chapter, "word brain", the neurons in your brain started firing, reminding you where you'd heard something like that before.
+
+[.last-sentence]
+And maybe, the neurons in your audio cortex are starting to connect the phrase "word brain" to common phrases that rhyme with it, such as "bird brain."
+
+[.first-sentence]
+Even if my brain didn't predict your brain very well, you're about to build a small brain yourself.
+
+[.last-sentence]
+And a neural net can do this when the word it is processing is a person's name and it doesn't seem to _mean_ anything at all to a human.
+
+[.first-sentence]
+Don't worry if all of this talk about brains and predictions and words has you confused.
+
+[.last-sentence]
+Once you understand neural networks, you'll begin to understand _deep learning_, and be able to use it in the real world for fun, positive social impact, and ... if you insist, profit.
+
+== Why neural networks?
+[.first-sentence]
+When you use a deep neural network for machine learning it is called _deep learning_.
+
+[.last-sentence]
+In the past few years deep learning has smashed through the accuracy and intelligence ceiling on many tough NLP problems:
+
+[.first-sentence]
+And recently deep learning (deep neural networks) enabled previously unimaginable applications:
+
+[.last-sentence]
+And recently deep learning (deep neural networks) enabled previously unimaginable applications:
+
+[.first-sentence]
+That last one, writing software, is particularly interesting, because NLP neural networks are being used to write software ... wait for it ... for NLP.
+
+[.last-sentence]
+Neural networks make all this possible because they:
+
+[.first-sentence]
+Neural networks do the feature engineering for you, and they do it optimally.
+
+[.last-sentence]
+And modern neural networks work especially well even for information rich data such as natural language text.
+
+=== Neural networks for words
+[.first-sentence]
+With neural networks you don't have to guess whether the proper nouns or average word length or hand crafted word sentiment scores are going to be what your model needs.
+
+[.last-sentence]
+A neural network _mini-brain_ can do this for you, and it will do it optimally, based on the statistics of the relationship between words and your target.
+
+[.first-sentence]
+If you're doing stemming, lemmatization, or keyword based analyses you probably want to try your pipeline without those filters.
+
+[.last-sentence]
+These algorithms are limited by the hand-labeled vocabulary and hand-crafted regular expressions that define the algorithm.
+
+[.first-sentence]
+Here are some preprocessing algorithms that will likely trip up your neural nets:
+
+[.last-sentence]
+Here are some preprocessing algorithms that will likely trip up your neural nets:
+
+[.first-sentence]
+In the hyperconnected modern world of machine learning and deep learning, natural languages evolve too rapidly and these algorithms can't keep up.
+
+[.last-sentence]
+Lemmatizers, stemmers, and sentiment analyzers often do the wrong thing with unanticipated words such as these.footnote:[See the lemmatizing FAQ chatbot example in chapter 3 failed on the question about "overfitting."]
+
+[.first-sentence]
+Deep learning is a game changer for NLP.
+
+[.last-sentence]
+They directly access the meaning of words based on their statistics, without requiring brittle algorithms like stemmers and lemmatizers.
+
+[.first-sentence]
+Even powerful feature engineering approaches like the Latent Semantic Analysis (LSA) of chapter 4 can't match the NLU capabilities of neural nets.
+
+[.last-sentence]
+Deep Learning now powers your thinking in ways you wouldn't have imagined a few years ago.
+
+[.first-sentence]
+What is it about deep layers of neurons that has propelled NLP to such prominence in our lives?
+
+[.last-sentence]
+They promise to allow machines to learn in the same way we often do, by just reading a lot of text.
+
+[.first-sentence]
+The power of NLP that you learned to employ in the previous chapters is about to get a lot more powerful.
+
+[.last-sentence]
+To wield this power for good, you need to get a feeling for how neural networks work all the way down deep at the individual neuron.
+
+[.first-sentence]
+You'll also want to understand _why_ they work so well for many NLP problems...and why they fail miserably on others.
+
+[.last-sentence]
+You'll also want to understand _why_ they work so well for many NLP problems...and why they fail miserably on others.
+
+[.first-sentence]
+We want to save you from the "AI winter" that discouraged researchers in the past.
+
+[.last-sentence]
+But first you must build an intuition for how a single neuron works.
+
+[.first-sentence]
+Here are two excellent  NL texts about processing NL text with neural networks.
+
+[.last-sentence]
+And you can even use these texts to train a deep learning pipeline to understand the terminology of NLP.
+
+[.first-sentence]
+You might also want to check _Deep learning for Natural Language Processing_ by Stephan Raaijmakers on Manning.(https://www.manning.com/books/deep-learning-for-natural-language-processing)
+
+[.last-sentence]
+You might also want to check _Deep learning for Natural Language Processing_ by Stephan Raaijmakers on Manning.(https://www.manning.com/books/deep-learning-for-natural-language-processing)
+
+=== Neurons as feature engineers
+[.first-sentence]
+One of the main limitations of linear regression, logistic regression, and naive Bayes models is that they all require that you to engineer features one by one.
+
+[.last-sentence]
+Only then can the optimizer start searching for the parameter values that best predict the output variable.
+
+[.first-sentence]
+In some cases you will want to manually engineer threshold features for your NLP pipeline.
+
+[.last-sentence]
+In some cases you can even find an association between your engineered thresholds and real world phenomena.
+
+[.first-sentence]
+For example the TF-IDF vector representation you used in chapter 3 works well for information retrieval and full-text search.
+
+[.last-sentence]
+Neural networks search a much broader space of possible feature engineering functions.
+
+==== Dealing with the polynomial feature explosion
+[.first-sentence]
+Another example of some feature engineering that neural networks can optimize for you is polynomial feature extraction.
+
+[.last-sentence]
+And if you don't know which interactions might be critical to solving your problem, you have to multiply all your features by each other.
+
+[.first-sentence]
+You know the depth and breadth of this rabbit hole.
+
+[.last-sentence]
+But throwing in fourth order polynomial features would exponentially expand your dimensionality beyond even the dimensionality of TF-IDF vectors.
+
+[.first-sentence]
+And even with millions of possible polynomial features, there are still millions more threshold features.
+
+[.last-sentence]
+This is where neural nets can help.
+
+[.first-sentence]
+The Holy Grail of feature engineering is finding representations that say something about the physics of the real world.
+
+[.last-sentence]
+It may be a truly causal model that says something about the world that is true in general and not just for your dataset.
+
+[.first-sentence]
+Peter Woit explains how the explosion of possible models in modern physics are mostly _Not Even Wrong_ .footnote:[_Not Even Wrong: The Failure of String Theory and the Search for Unity in Physical Law_ by Peter Woit]
+
+[.last-sentence]
+So if you `PolynomialFeatures` in your preprocessing, limit the `degree` parameter to `2` or less.
+
+[.first-sentence]
+For any machine learning pipeline, make sure your polynomial features never include the multiplication of more than 2 physical quantities.
+
+[.last-sentence]
+Removing these "fantasy features" will improve the robustness of your NLP pipeline and help you reduce any hallucinations coming out of your generative models.
+
+[.first-sentence]
+We hope that by now you're inspired by the possibilities that neural networks offer.
+
+[.last-sentence]
+Ultimately you will be able to combine and stack these neurons in layers that optimize the feature engineering for you.
+
+=== Biological neurons
+[.first-sentence]
+Frank Rosenblatt came up with the first artificial neural network based on his understanding of how biological neurons in our brains work.
+
+[.last-sentence]
+He also wanted to automate the process of finding the right combination of functions for any problem.
+
+[.first-sentence]
+He wanted to make it possible for engineers to build AI systems without having to design specialized models for each problem.
+
+[.last-sentence]
+He based it on how biological neurons work.
+
+.Biological neuron cell
+
+[.first-sentence]
+Rosenblatt was building on a long history of successful logistic regression models.
+
+[.last-sentence]
+He was modifying the optimization algorithm slightly to better mimic what neuroscientists were learning about how biological neurons adjust their response to the environment over time.
+
+[.first-sentence]
+Electrical signals flow into a biological neuron in your brain through the _dendrites_ (see figure 5.1) and into the nucleus.
+
+[.last-sentence]
+So for some more sensitive neurons it takes less of a signal on the inputs to trigger the output signal being sent out the axon.
+
+[.first-sentence]
+So you can imagine how neuroscientists might measure the sensitivity of individual dendrites and neurons with experiments on real neurons.
+
+[.last-sentence]
+A higher weight represents a higher sensitivity to small changes in the input.
+
+[.first-sentence]
+A biological neuron will dynamically change those weights in the decision making process over the course of its life.
+
+[.last-sentence]
+You are going to mimic that biological learning process using the machine learning process called _back propagation_.
+
+.Basic perceptron
+
+[.first-sentence]
+AI researchers hoped to replace the rigid math of logistic regressions and linear regressions and polynomial feature extraction with the more fuzzy and generalized logic of neural networks -- tiny brains.
+
+[.last-sentence]
+He called this collection of artificial neurons a perceptron.
+
+[.first-sentence]
+Rosenblatt didn't realize it at the time, but his artificial neurons could be layered up just as biological neurons connect to each other in clusters.
+
+[.last-sentence]
+They can now solve any machine learning problem ... if you have enough time and data.
+
+.Neural network layers
+
+=== Perceptron
+[.first-sentence]
+One of the most complex things neurons do is process language.
+
+[.last-sentence]
+It's starting to look a lot like a _logistic regression_ to me.
+
+[.first-sentence]
+The sigmoid _activation function_ used in a perceptron is actually the same as the logistic function used within logistic regression.
+
+[.last-sentence]
+So really what your neuron is doing here is equivalent to a logistic regression on the inputs.
+
+[.first-sentence]
+This is the formula for a logistic function implemented in python.
+
+[.last-sentence]
+This is the formula for a logistic function implemented in python.
+
+[.first-sentence]
+And here is what a logistic function looks like, and how the coefficient (weight) and phase (intercept) affect its shape.
+
+[.last-sentence]
+And here is what a logistic function looks like, and how the coefficient (weight) and phase (intercept) affect its shape.
+
+[.first-sentence]
+What were your inputs when you did a logistic regression on natural language sentences in earlier chapters?
+
+[.last-sentence]
+So for NLP it's common to use the BOW counts or the TF-IDF vector as the input to an NLP model, and that's true for neural networks as well.
+
+[.first-sentence]
+Each of Rosenblatt's input weights (biological dendrites) had an adjustable value for the weight or sensitivity of that signal.
+
+[.last-sentence]
+A perceptron can be made more or less sensitive to the counts of each word in the BOW or TF-IDF vector by adjusting this sensitivity knob.
+
+[.first-sentence]
+Once the signal for a particular word was increased or decreased according to the sensitivity or weight it passed into the main body of the biological neuron cell.
+
+[.last-sentence]
+If a neuron doesn't fire for a given combination of words or input signals, that means it was a negative classification match.
+
+=== A Python perceptron
+[.first-sentence]
+So a machine can simulate a really simple neuron by multiplying numerical features by "weights" and combining them together to create a prediction or make a decision.
+
+[.last-sentence]
+Or you could use a transformation like PCA to compress these thousands of dimensions into topic vectors, as you did with PCA in chapter 4.
+
+[.first-sentence]
+But these approaches are just a guess at which features are important, based on the variability or variance of each feature.
+
+[.last-sentence]
+Your word vectors and topic vectors would miss these numerical values entirely.
+
+[.first-sentence]
+In "normal" machine learning problems, like predicting home prices, you might have structured numerical data.
+
+[.last-sentence]
+And a neural network is the closest thing you have to a machine that can mimic some of your human intuition.
+
+[.first-sentence]
+The beauty of deep learning is that you can use as your input every possible feature you can dream up.
+
+[.last-sentence]
+Neural networks are made for these kinds of raw representations of natural language data.
+
+==== Shallow learning
+[.first-sentence]
+For your first deep learning NLP problem, you will keep it shallow.
+
+[.last-sentence]
+To put it in different words, the weights for the inputs to a single neuron are mathematically equivalent to the slopes in a multivariate linear regression or logistic regression.
+
+[.first-sentence]
+Just as with the Scikit-Learn machine learning models, the individual features are denoted as `x~i~` or in Python as `x[i]`.
+
+[.last-sentence]
+And the collection of all features for a given example are within the vector **x**.
+
+[.first-sentence]
+`x = x~1~, x~2~, ..., x~i~, ..., x~n~`
+
+[.last-sentence]
+`x = x~1~, x~2~, ..., x~i~, ..., x~n~`
+
+[.first-sentence]
+And similarly, you'll see the associate weights for each feature as w~i~, where _i_ corresponds to the integer in x. And the weights are generally represented as a vector *W*
+
+[.last-sentence]
+And similarly, you'll see the associate weights for each feature as w~i~, where _i_ corresponds to the integer in x. And the weights are generally represented as a vector *W*
+
+[.first-sentence]
+`w = w~1~, w~2~, ..., w~i~, ..., w~n~`
+
+[.last-sentence]
+`w = w~1~, w~2~, ..., w~i~, ..., w~n~`
+
+[.first-sentence]
+With the features in hand, you just multiply each feature (x~i~) by the corresponding weight (w~i~) and then sum up.
+
+[.last-sentence]
+With the features in hand, you just multiply each feature (x~i~) by the corresponding weight (w~i~) and then sum up.
+
+[.first-sentence]
+`y = (x~1~ * w~1~) + (x~2~ * w~2~) + ... + (x~i~ * w~i~)`
+
+[.last-sentence]
+`y = (x~1~ * w~1~) + (x~2~ * w~2~) + ... + (x~i~ * w~i~)`
+
+[.first-sentence]
+Here's a fun, simple example to make sure you understand this math.
+
+[.last-sentence]
+Imagine an input BOW vector for a phrase like "green egg egg ham ham ham spam spam spam spam":
+
+[.first-sentence]
+So this 4-input, 1-output, single-neuron network outputs a value of -0.76 for these random weights in a neuron that hasn't yet been trained.
+
+[.last-sentence]
+So this 4-input, 1-output, single-neuron network outputs a value of -0.76 for these random weights in a neuron that hasn't yet been trained.
+
+[.first-sentence]
+There's one more piece you're missing here.
+
+[.last-sentence]
+You can represent this threshold with a simple _step function_ (labeled "Activation Function" in figure 5.2).
+
+[.first-sentence]
+Here's the code to apply a step function or thresholding function to the output of your neuron:
+
+[.last-sentence]
+Here's the code to apply a step function or thresholding function to the output of your neuron:
+
+[.first-sentence]
+And if you want your model to output a continuous probability or likelihood rather than a binary `0` or `1`, you probably want to use the logistic activation function that we introduced earlier in this chapter.footnote:[The logistic activation function can be used to turn a linear regression into a logistic regression: (https://scikit-learn.org/stable/auto_examples/linear_model/plot_logistic.html)]
+
+[.last-sentence]
+And if you want your model to output a continuous probability or likelihood rather than a binary `0` or `1`, you probably want to use the logistic activation function that we introduced earlier in this chapter.footnote:[The logistic activation function can be used to turn a linear regression into a logistic regression: (https://scikit-learn.org/stable/auto_examples/linear_model/plot_logistic.html)]
+
+[.first-sentence]
+A neural network works like any other machine learning model -- you present it with numerical examples of inputs (feature vectors) and outputs (predictions) for your model.
+
+[.last-sentence]
+Your _loss function_ will measure how much error your model has.
+
+[.first-sentence]
+Make sure this Python implementation of the math in a neuron makes sense to you.
+
+[.last-sentence]
+The math is very similar to what you would see in the `LogisticRegression.predict()` function in Scikit-Learn for a 4-input, 1-output logistic regression.footnote:[https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression]
+
+[.first-sentence]
+A _loss function_ is a function that outputs a score to measure how bad your model is, the total error of its predictions.
+
+[.last-sentence]
+You can use either one to help you learn the right answers and get better and better on your tests.
+
+==== Why the extra weight?
+[.first-sentence]
+Did you notice that you have one additional weight, `w0`?
+
+[.last-sentence]
+Do you remember the extra coefficient in the single-variable linear regression formula?
+
+[.first-sentence]
+The `y` variable is for the output or predictions from the model.
+
+[.last-sentence]
+But do you remember what `b` is for?
+
+[.first-sentence]
+Now can you guess what the extra weight `w~0~` is for, and why we always make sure it isn't affected by the input (multiply it by an input of 1.0)?
+
+[.last-sentence]
+Now can you guess what the extra weight `w~0~` is for, and why we always make sure it isn't affected by the input (multiply it by an input of 1.0)?
+
+[.first-sentence]
+It's the _intercept_ from your linear regression, just "rebranded" as the _bias_ weight (`w0`) for this layer of a neural network.
+
+[.last-sentence]
+It's the _intercept_ from your linear regression, just "rebranded" as the _bias_ weight (`w0`) for this layer of a neural network.
+
+[.first-sentence]
+Figure 5.2 and this example reference _bias_.
+
+[.last-sentence]
+Both are effectively the same.
+
+[.first-sentence]
+The reason for having the bias weight at all is that you need the neuron to be resilient to inputs of all zeros.
+
+[.last-sentence]
+And in case the neuron needs to learn to output 0, in that case, the neuron can learn to decrement the weight associated with the bias term enough to keep the dot product below the threshold.
+
+[.first-sentence]
+Figure 5.3 is a rather neat visualization of the analogy between some of the signals within a biological neuron in your brain and the signals of an artificial neuron used for deep learning.
+
+[.last-sentence]
+If you want to get deep, think about how you are using a biological neuron to read this book about natural language processing to learn about deep learning.
+
+.A perceptron and a biological neuron
+
+[.first-sentence]
+The Python for the simplest possible single neuron looks like this:
+
+[.last-sentence]
+The Python for the simplest possible single neuron looks like this:
+
+[.first-sentence]
+Perhaps you are more comfortable with numpy and _vectorized_ mathematical operations like you learned about in linear algebra class.
+
+[.last-sentence]
+Perhaps you are more comfortable with numpy and _vectorized_ mathematical operations like you learned about in linear algebra class.
+
+[.first-sentence]
+Any Python conditional expression will evaluate to a `True` or `False` boolean value.
+
+[.last-sentence]
+A `False` value is coerced into a `1` or `0` when you multiply boolean by, or add it to another number.
+
+[.first-sentence]
+The `w` variable contains the vector of weight parameters for the model.
+
+[.last-sentence]
+The input to one neuron is often the output from another neuron.
+
+[.first-sentence]
+The sum of the pairwise multiplications of the inputs (`x`) and the weights (`w`) is exactly the same as the dot product of the two vectors `x` and `y`.
+
+[.last-sentence]
+So a 1-core GPU can often perform a dot product 250 times faster than a 4-core CPU.
+
+[.first-sentence]
+If you are familiar with the natural language of mathematics, you might prefer the summation notation:
+
+[.last-sentence]
+If you are familiar with the natural language of mathematics, you might prefer the summation notation:
+
+[.first-sentence]
+*Equation 5.1: Threshold activation function*
+
+[.last-sentence]
+*Equation 5.1: Threshold activation function*
+
+[.first-sentence]
+Your perceptron hasn't _learned_ anything just yet.
+
+[.last-sentence]
+But this is where things will get interesting.
+
+[.first-sentence]
+The base unit of any neural network is the neuron. And the basic perceptron is a special case of the more generalized neuron. We refer to the perceptron as a neuron for now, and come back to the terminology when it no longer applies.
+
+[.last-sentence]
+The base unit of any neural network is the neuron. And the basic perceptron is a special case of the more generalized neuron. We refer to the perceptron as a neuron for now, and come back to the terminology when it no longer applies.
+
+== Example logistic neuron
+[.first-sentence]
+It turns out your already familiar with a very common kind of perceptron or neuron.
+
+[.last-sentence]
+So you are going to first train a logistic regression model and compare it to a single-neuron neural network trained on the same data.
+
+=== The logistics of clickbait
+[.first-sentence]
+Software (and humans) often need to make decisions based on logical criteria.
+
+[.last-sentence]
+So your brain learns some logical rules that it follows before clicking on a particular link.
+
+[.first-sentence]
+Each one of these decisions could be modeled in an artificial neuron within a machine.
+
+[.last-sentence]
+If you did this with artificial neurons, the smallest artificial "brain" you could build to handle these 4 decisions would use 4 logistic regression gates.
+
+[.first-sentence]
+To mimic your brain's _clickbait_ filter you might decide to train a logistic regression model on the length of the headline.
+
+[.last-sentence]
+Here's a scatter plot of fake and authentic news headlines and their headline length in characters.
+
+[.first-sentence]
+The neuron input weight is equivalent to the maximum slope in the middle of the logistic regression plot in figure 5.3 for a fake news classifier with the single feature, title length.
+
+[.last-sentence]
+The neuron input weight is equivalent to the maximum slope in the middle of the logistic regression plot in figure 5.3 for a fake news classifier with the single feature, title length.
+
+.Logistic regression - fakeness vs title length
+
+=== Sex education
+[.first-sentence]
+How's that for clickbait?
+
+[.last-sentence]
+You're going to predict the sex of a name with perceptrons (artificial neurons).
+
+[.first-sentence]
+The problem you're going to solve with this simple architecture is an everyday NLU problem that your brain's millions of neurons try to solve every day.
+
+[.last-sentence]
+You're going to use a sample of names from a database of 317 million birth certificates across US states and territories over more than 100 years.
+
+[.first-sentence]
+Biologically, identifying someone's sex is useful to your genes because they only survive if you reproduce them by finding a sexual partner to blend your genes with.
+
+[.last-sentence]
+And you're going to find out how many artificial neurons it takes to predict the sex associated with a baby's given name (first name).
+
+.Sex
+
+[.first-sentence]
+The word _sex_ here refers to the label a doctor assigns to a baby at birth.
+
+[.last-sentence]
+But biology and life has a way of blurring the boundaries of even this seemingly precise definition of "genetic sex".
+
+[.first-sentence]
+Male and female are not the last word in _birth sex_ classification.
+
+[.last-sentence]
+In addition to 'female' and 'male', the categories 'unknown', and 'something not listed (specify)' are recommended by most western medical systems.
+
+[.first-sentence]
+You want to make sure that your test set names don't appear anywhere in your training set.
+
+[.last-sentence]
+Natural language processing is messy and fluid because the natural world and the language that describes it is dynamic and impossible to "pin on the wall."footnote:[from "When I am pinned and wriggling on the wall" in "The Love Song of J. Alfred Prufrock" by T. S. Eliot (https://www.poetryfoundation.org/poetrymagazine/poems/44212/the-love-song-of-j-alfred-prufrock)]
+
+[.first-sentence]
+This will enable the possibility that your model could _theoretically_ achieve 100% accuracy.
+
+[.last-sentence]
+But your accuracy on the test set will tell you how close you are to this ideal, but only if you delete the duplicate names from your test set.
+
+=== Pronouns and gender vs sex
+[.first-sentence]
+Some states in the US allow one to indicate their child's _gender_ on a birth certificate.
+
+[.last-sentence]
+For this chapter we utilized a simplified binary sex dataset to prepare the scaffolding you need to build your natural language processing skills from the ground up.
+
+[.first-sentence]
+And there are practical uses for sex-estimation model even for machines that don't need it to spread their genes.
+
+[.last-sentence]
+Your brain did the statistics on the likelihood that "Maria" was a "she/her" and that "Ukraine" is a "there".
+
+[.first-sentence]
+Coreference resolution isn't always that easy, for machines or for humans.
+
+[.last-sentence]
+And they are often given feminine names.
+
+[.first-sentence]
+So knowing the sex associated with the names of people (and ships) in your text can be helpful in improving your NLU pipeline.
+
+[.last-sentence]
+In gender-bending SciFi novels, visionary and authors like Gibson use this to keep you on your toes and expand your mind.footnote:[The Perifpheral by William Gibson on wikipedia (https://en.wikipedia.org/wiki/The_Peripheral)]
+
+[.first-sentence]
+Make sure your NLP pipelines and chatbots are kind, inclusive and accessible for all human beings.
+
+[.last-sentence]
+And you will see how gender affects the decisions of businesses or employers you deal with every day.
+
+=== Sex logistics
+[.first-sentence]
+First, import Pandas and set the `max_rows` to display only a few rows of your ``DataFrame``s.
+
+[.last-sentence]
+First, import Pandas and set the `max_rows` to display only a few rows of your ``DataFrame``s.
+
+[.first-sentence]
+Now download the raw data from the `nlpia2` repository and sample only 10,000 rows, to keep things fast on any computer.
+
+[.last-sentence]
+Now download the raw data from the `nlpia2` repository and sample only 10,000 rows, to keep things fast on any computer.
+
+[.first-sentence]
+The data spans more than 100 years of US birth certificates, but only includes the baby's first name:
+
+[.last-sentence]
+The data spans more than 100 years of US birth certificates, but only includes the baby's first name:
+
+[.first-sentence]
+You can ignore the region and birth year information for now.
+
+[.last-sentence]
+There are no other sex categories provided in this dataset besides male and female.
+
+[.first-sentence]
+You might enjoy exploring the dataset to discover how often your intuition about the names parents choose for their babies.
+
+[.last-sentence]
+Machine learning and NLP are a great way to dispell stereotypes and misconceptions.
+
+[.first-sentence]
+That's what makes NLP and DataScience so much fun.
+
+[.last-sentence]
+I've never met a woman named "Timothy" but at least .1% of babies named Timothy in the US have female on their birth certificate.
+
+[.first-sentence]
+To speed the model training, you can aggregate (combine) your data across regions and years if those are not aspects of names that you'd like your model to predict.
+
+[.last-sentence]
+You can accomplish this with a Pandas `DataFrame`'s `.groupby()` method.
+
+[.first-sentence]
+Because we've aggregated the numerical data for the column "count", the `counts` object is now a Pandas `Series` object rather than a `DataFrame`.
+
+[.last-sentence]
+Can you guess why?
+
+[.first-sentence]
+Now the dataset looks like an efficient set of examples for training a logistic regression.
+
+[.last-sentence]
+In fact, if we only wanted to predict the likely sex for the names in this database, we could just use the max count (the most common usage) for each name.
+
+[.first-sentence]
+But this is a book about NLP and NLU (Natural Language Understanding).
+
+[.last-sentence]
+It's called "generalization" when a model can extrapolate to these out of distribution examples.
+
+[.first-sentence]
+But how can you tokenize a single word like a name so that your model can generalize to completely new made-up names that its never seen before?
+
+[.last-sentence]
+In later chapters you'll even use word piece and sentence piece tokenization which can optimally select a variety of character sequences to use as your tokens.
+
+[.first-sentence]
+But now that you've indexed our `names` series by `name` _and_ `sex` aggregating counts across states and years, there will be fewer unique rows in your `Series`.
+
+[.last-sentence]
+You can deduplicate the names before calculating TF-IDF document frequencies and character n-gram term frequencies.
+
+[.first-sentence]
+You've aggregated 10,000 name-sex pairs into only 4238 unique name-sex pairings.
+
+[.last-sentence]
+Now you are ready to split the data into training and test sets.
+
+[.first-sentence]
+To ensure you don't accidentally swap the sexes for any of the names, recreate the `name, sex` multiindex:
+
+[.last-sentence]
+To ensure you don't accidentally swap the sexes for any of the names, recreate the `name, sex` multiindex:
+
+[.first-sentence]
+As you saw earlier, this dataset contains conflicting labels for many names.
+
+[.last-sentence]
+Machines don't think of words and concepts as hard categories, so neither should you.
+
+[.first-sentence]
+Because of the duplicates the test set flag can be created from the `not` of the `istrain`.
+
+[.last-sentence]
+Because of the duplicates the test set flag can be created from the `not` of the `istrain`.
+
+[.first-sentence]
+Now you can transfer the `istest` and `istrain` flags over to the original dataframe, being careful to fill `NaNs` with False for both the training set and the test set.
+
+[.last-sentence]
+Now you can transfer the `istest` and `istrain` flags over to the original dataframe, being careful to fill `NaNs` with False for both the training set and the test set.
+
+[.first-sentence]
+Now you can use the training set to fit `TfidfVectorizer` without skewing the n-gram counts with the duplicate names.
+
+[.last-sentence]
+Now you can use the training set to fit `TfidfVectorizer` without skewing the n-gram counts with the duplicate names.
+
+[.first-sentence]
+You need to be careful when working with sparse data structures.
+
+[.last-sentence]
+You can use `toarray()` on sparse matrices to create a DataFrame and give meaningful labels to the rows and columns.
+
+[.first-sentence]
+Aah, notice that the column labels (character n-grams) all start with lowercase letters.
+
+[.last-sentence]
+It's likely that capitalization will help the model, so lets revectorize the names without lowercasing.
+
+[.first-sentence]
+That's better.
+
+[.last-sentence]
+These character 1, 2, and 3-grams should have enough information to help a neural network guess the sex for names in this birth certificate database.
+
+==== Choosing a neural network framework
+[.first-sentence]
+Logistic regressions are the perfect machine learning model for any high dimensional feature vector such as a TF-IDF vector.
+
+[.last-sentence]
+This process of computing gradients (slopes) and telling all the neurons how much to adjust their weights up and down so that the loss will go down  is called _backpropagation_ or backprop.
+
+[.first-sentence]
+A deep learning package like PyTorch can handle all that for you automatically.
+
+[.last-sentence]
+I had no idea BigTech would assimilate Keras into the TensorFlow "Borg", otherwise I would not have recommended it in the first edition.
+
+[.first-sentence]
+The decline in portability for Keras and the rapidly growing popularity of PyTorch are the main reasons we decided a second edition of this book was in order.
+
+[.last-sentence]
+What's so great about PyTorch?
+
+[.first-sentence]
+Wikipedia has an unbiased and detailed comparison of all DeepLearning frameworks.
+
+[.last-sentence]
+And Pandas let's you load it directly from the web into a `DataFrame`:
+
+[.first-sentence]
+Here is how you can use some basic NLP to score the top 10 deep learning frameworks from the Wikipedia article that lists each of their pros and cons.
+
+[.last-sentence]
+You will find this kind of code is useful whenever you want to turn semi structured natural language into data for your NLP pipelines.
+
+[.first-sentence]
+Now that the Wikipedia table is cleaned up, you can compute some sort of "total score" for each deep learning framework.
+
+[.last-sentence]
+Now that the Wikipedia table is cleaned up, you can compute some sort of "total score" for each deep learning framework.
+
+[.first-sentence]
+PyTorch got nearly a perfect score because of its support for Linux, Android and all popular deep learning applications.
+
+[.last-sentence]
+PyTorch got nearly a perfect score because of its support for Linux, Android and all popular deep learning applications.
+
+[.first-sentence]
+Another promising one you might want to check out is ONNX.
+
+[.last-sentence]
+ONNX also has some optimization and pruning capabilities that will allow your models to run inference much faster on much more limited hardware, such as portable devices.
+
+[.first-sentence]
+And just for comparison, how does SciKit Learn stack up to PyTorch for building a neural network model?
+
+[.last-sentence]
+And just for comparison, how does SciKit Learn stack up to PyTorch for building a neural network model?
+
+.Scikit-Learn vs PyTorch
+
+[.first-sentence]
+Enough about frameworks, you are here to learn about neurons.
+
+[.last-sentence]
+And there's a lot left to explore to get familiar with your new PyTorch toolbox.
+
+=== A sleek sexy PyTorch neuron
+[.first-sentence]
+Finally it's time to build a neuron using the PyTorch framework.
+
+[.last-sentence]
+Let's put all this into practice by predicting the sex of the names you cleaned earlier in this chapter.
+
+[.first-sentence]
+You can start by using PyTorch to implement a single neuron with logistic activation function - just like the one you used to learn the toy example at the beginning of the chapter.
+
+[.last-sentence]
+You can start by using PyTorch to implement a single neuron with logistic activation function - just like the one you used to learn the toy example at the beginning of the chapter.
+
+[.first-sentence]
+Let's see what happened here.
+
+[.last-sentence]
+There were 3663 unique 1-grams, 2-grams, and 3-grams in our names dataset, so that's how many inputs you'll have for this single-neuron network.
+
+[.first-sentence]
+The second crucial method you need to implement for your neural network is the `forward()` method.
+
+[.last-sentence]
+We decided to use the logistic, or sigmoid, activation function for our neuron - so our `forward()` method will use PyTorch's built-in function `sigmoid`.
+
+[.first-sentence]
+Is this all you need to train our model?
+
+[.last-sentence]
+In our case, we're trying to do binary classification, and there are cost functions more appropriate for this type of problems - such as Binary Cross Entropy.
+
+[.first-sentence]
+Here's what Binary Cross Entropy looks like for a single classification probability _p_:
+
+[.last-sentence]
+Here's what Binary Cross Entropy looks like for a single classification probability _p_:
+
+[.first-sentence]
+*Equation 5.2: Binary Cross Entropy*
+
+[.last-sentence]
+`{sub3}`
+
+[.first-sentence]
+The logarithmic nature of the function allows it to penalize a "confidently wrong" example, when your model predicts with high probability the sex of a particular name is male, when it is actually more commonly labeled as female.
+
+[.last-sentence]
+We can help it to make the penalties even more related to reality by using another piece of information available to us - the frequency of the name for a particular sex in our dataset.
+
+[.first-sentence]
+The last thing we need to choose is how to adjust our weights based on the loss - the optimizer algorithm.
+
+[.last-sentence]
+Instead of taking all of your dataset into account, like your Pythonic perceptron did, it only calculates the gradient based on one sample at a time or perhaps a mini-batch of samples.
+
+[.first-sentence]
+Your optimizer needs two parameters to know how fast or how to ski along the loss slope - _learning rate_ and _momentum_.
+
+[.last-sentence]
+Any optimizer you would use in PyTorch would have a learning rate.
+
+[.first-sentence]
+Momentum is an attribute of our gradient descent algorithm that allows it to "accelerate" when it's moving in the right direction and "slow down" if it's getting away from its target.
+
+[.last-sentence]
+For now, you can chose some arbitrary values for the hyperparameters `momentum` and `lr` (learning rate).
+
+[.first-sentence]
+The last step before running our model training is to get the testing and training datasets into a format that PyTorch models can digest.
+
+[.last-sentence]
+The last step before running our model training is to get the testing and training datasets into a format that PyTorch models can digest.
+
+[.first-sentence]
+Finally, you're ready for the most important part of this chapter - the sex learning!
+
+[.last-sentence]
+Let's look at it and understand what happens at each step.
+
+[.first-sentence]
+That was fast!
+
+[.last-sentence]
+It should take only a couple seconds to train this single neuron for about 200 epochs and thousands of examples for each epoch.
+
+[.first-sentence]
+Looks easy, right?
+
+[.last-sentence]
+We can of course look at the loss, but it's also good to gage how our model is doing with a more intuitive score, such as accuracy.
+
+[.first-sentence]
+First, you'll need a function to convert the PyTorch tensors we get from the module back into `numpy` arrays:
+
+[.last-sentence]
+First, you'll need a function to convert the PyTorch tensors we get from the module back into `numpy` arrays:
+
+[.first-sentence]
+Now you use this utility function to measure the accuracy of each iteration on the tensors for your outputs (predictions):
+
+[.last-sentence]
+Now you use this utility function to measure the accuracy of each iteration on the tensors for your outputs (predictions):
+
+[.first-sentence]
+Now you can rerun your training using these utility function to see the progress of the model's loss and accuracy with each epoch:
+
+[.last-sentence]
+Now you can rerun your training using these utility function to see the progress of the model's loss and accuracy with each epoch:
+
+[.first-sentence]
+With just a single set of weights for a single neuron, your simple model was able to achieve more than 70% accuracy on our messy, ambiguous, real-world dataset.
+
+[.last-sentence]
+Now that's add some more examples from the real world of Tangible AI and some of our contributors.
+
+[.first-sentence]
+Earlier we chose to use the value 1 to represent "female" and 0 to represent "male."
+
+[.last-sentence]
+The model is more certain of the maleness in the character n-grams for "John" than those for "Vishvesh."
+
+[.first-sentence]
+The next three names, "Sarah," "Carlana," and 'Ruby', are the first names of women at the top of my mind when writing this book.footnote:[Sarah Goode Wikipedia article (https://en.wikipedia.org/wiki/Sarah_E._Goode)] footnote:[Ruby Bridges Wikipedia article (https://en.wikipedia.org/wiki/Ruby_Bridges)]
+
+[.last-sentence]
+Oddly the name "Carlana," which contains within it a common male name "Carl," is confidently predicted to be a female name.
+
+== Skiing down the error surface
+[.first-sentence]
+The goal of training in neural networks is to minimize a loss function by finding the best parameters (weights) for your model.
+
+[.last-sentence]
+You want to minimize the cost for all the various errors taken together.
+
+[.first-sentence]
+Creating a visualization of this side of the problem can help build a mental model of what you're doing when you adjust the weights of the network as you go.
+
+[.last-sentence]
+Creating a visualization of this side of the problem can help build a mental model of what you're doing when you adjust the weights of the network as you go.
+
+[.first-sentence]
+From earlier, mean squared error is a common cost function (shown back in the "Mean squared error cost function" equation).
+
+[.last-sentence]
+If you imagine plotting the error as a function of the possible weights, given a specific input and a specific expected output, a point exists where that function is closest to zero; that is your _minimum_ -- the spot where your model has the least error.
+
+[.first-sentence]
+This minimum will be the set of weights that gives the optimal output for a given training example.
+
+[.last-sentence]
+That description is a vast simplification, but the concept is the same in higher dimensional spaces (for cases with more than two weights).
+
+.Convex error curve
+
+[.first-sentence]
+Similarly, you can graph the error surface as a function of all possible weights across all the inputs of a training set. But you need to tweak the error function a little. You need something that represents the aggregate error across all inputs for a given set of weights. For this example, you'll use _mean squared error_ as the _z_ axis (see equation 5.5).
+
+[.last-sentence]
+Similarly, you can graph the error surface as a function of all possible weights across all the inputs of a training set. But you need to tweak the error function a little. You need something that represents the aggregate error across all inputs for a given set of weights. For this example, you'll use _mean squared error_ as the _z_ axis (see equation 5.5).
+
+[.first-sentence]
+Here again, you'll get an error surface with a minimum that is located at the set of weights. That set of weights will represent a model that best fits the entire training set.
+
+[.last-sentence]
+Here again, you'll get an error surface with a minimum that is located at the set of weights. That set of weights will represent a model that best fits the entire training set.
+
+=== Off the chair lift, onto the slope - gradient descent and local minima
+[.first-sentence]
+What does this visualization represent? At each epoch, the algorithm is performing _gradient descent_ in trying to minimize the error. Each time you adjust the weights in a direction that will hopefully reduce your error the next time. A convex error surface will be great. Stand on the ski slope, look around, find out which way is down, and go that way!
+
+[.last-sentence]
+What does this visualization represent? At each epoch, the algorithm is performing _gradient descent_ in trying to minimize the error. Each time you adjust the weights in a direction that will hopefully reduce your error the next time. A convex error surface will be great. Stand on the ski slope, look around, find out which way is down, and go that way!
+
+[.first-sentence]
+But you're not always so lucky as to have such a smooth shaped bowl; it may have some pits and divots scattered about. This situation is what is known as a _nonconvex error curve_. And, as in skiing, if these pits are big enough, they can suck you in and you might not reach the bottom of the slope.
+
+[.last-sentence]
+But you're not always so lucky as to have such a smooth shaped bowl; it may have some pits and divots scattered about. This situation is what is known as a _nonconvex error curve_. And, as in skiing, if these pits are big enough, they can suck you in and you might not reach the bottom of the slope.
+
+[.first-sentence]
+Again the diagrams are representing weights for two-dimensional input. But the concept is the same if you have a 10-dimensional input, or 50, or 1000. In those higher dimensional spaces, visualizing it doesn't make sense anymore, so you trust the math. Once you start using neural networks, visualizing the error surface becomes less important. You get the same information from watching (or plotting) the error or a related metric over the training time and seeing if it is tending toward zero. That will tell you if your network is on the right track or not. But these 3D representations are a helpful tool for creating a mental model of the process.
+
+[.last-sentence]
+Again the diagrams are representing weights for two-dimensional input. But the concept is the same if you have a 10-dimensional input, or 50, or 1000. In those higher dimensional spaces, visualizing it doesn't make sense anymore, so you trust the math. Once you start using neural networks, visualizing the error surface becomes less important. You get the same information from watching (or plotting) the error or a related metric over the training time and seeing if it is tending toward zero. That will tell you if your network is on the right track or not. But these 3D representations are a helpful tool for creating a mental model of the process.
+
+[.first-sentence]
+But what about the nonconvex error space? Aren't those divots and pits a problem? Yes, yes they are. Depending on where you randomly start your weights, you could end up at radically different weights and the training would stop, as there is no other way to go down from this _local minimum_ (see figure 5.9).
+
+[.last-sentence]
+But what about the nonconvex error space? Aren't those divots and pits a problem? Yes, yes they are. Depending on where you randomly start your weights, you could end up at radically different weights and the training would stop, as there is no other way to go down from this _local minimum_ (see figure 5.9).
+
+.Nonconvex error curve
+
+[.first-sentence]
+And as you get into even higher-dimensional space, the local minima will follow you there as well.
+
+[.last-sentence]
+And as you get into even higher-dimensional space, the local minima will follow you there as well.
+
+=== Shaking things up: stochastic gradient descent
+[.first-sentence]
+Up until now, you have been aggregating the error for all the training examples and skiing down the steepest route as fast you can.
+
+[.last-sentence]
+Sometimes a good ski jump can help you skip over some rough terrain.
+
+[.first-sentence]
+And if you try to train on the entire dataset at once, you may run out of RAM, bogging down your training in SWAP -- swapping data back and forth between RAM and your much slower persistent disk storage.
+
+[.last-sentence]
+Once you reach a local minimum in the error surface, there is no downhill slope to help your model ski out and on down the mountain.
+
+[.first-sentence]
+So to shake things up you want to add some randomization to the process.
+
+[.last-sentence]
+This shuffling is the "stochastic" part of stochastic gradient descent.
+
+[.first-sentence]
+There's still some room for improving the "gradient" estimation part of gradient descent.
+
+[.last-sentence]
+You can adjust the _learning rate_ hyperparameter of the SGD optimizer (stochastic gradient descent) to control how confident your model is in each individual sample gradient.
+
+[.first-sentence]
+Another training approach is _batch learning_.
+
+[.last-sentence]
+So your model shouldn't assume that the "global" real world error surface is shaped the same as the error surface for any portion of your training data.
+
+[.first-sentence]
+And this leads to the best strategy for most NLP problems: _mini-batch learning_.footnote:["Faster SGD training by minibatch persistency", by Fischetti et al (https://arxiv.org/pdf/1806.07353.pdf)]
+
+[.last-sentence]
+Mini-batch learning it gives you the benefits of both _stochastic_ learning (wandering randomly) and _gradient descent_ learning (speeding headlong directly down the presumed slope).
+
+[.first-sentence]
+Although the details of how _backpropagation_ works are fascinating footnote:[Wikpedia, https://en.wikipedia.org/wiki/Backpropagation], they aren't trivial, and we won't explain the details here.
+
+[.last-sentence]
+Hopefully you'll soon find yourself by the fire in the ski lodge at the bottom of the mountain or a camp fire in an ice cave below Denman Glacier.
+
+=== PyTorch: Neural networks in Python
+[.first-sentence]
+Artificial neural networks require thousands, millions, or even billions of neurons.
+
+[.last-sentence]
+And a lot of functions we'd have to write in python.
+
+[.first-sentence]
+PyTorch provides a framework for building up these networks in layers.
+
+[.last-sentence]
+So you can use PyTorch to reproduce all the state of the art research by all the brightest minds in deep learning and AI.
+
+[.first-sentence]
+Keras was gradually coopted and appropriated by Big Tech to create lock-in for their products and services.
+
+[.last-sentence]
+Open source contributors don't usually have access to Big Tech compute resources and data sets, so they are forced to make their models more efficient.
+
+[.first-sentence]
+PyTorch is a powerful framework to help you create complex computational graphs that can simulate small brains.
+
+[.last-sentence]
+Let's learn how to use it starting from the smallest part of a brain - the lowly neuron.
+
+[.first-sentence]
+See if you can add additional layers to the perceptron you created in this chapter.
+
+[.last-sentence]
+Bigger is not always better, especially for small problems.
+
+== Test yourself
+== Summary

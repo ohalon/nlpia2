@@ -1,0 +1,115 @@
+import os
+
+import dotenv
+import openai
+
+
+dotenv.load_dotenv()
+ENV = dict(os.environ.items())
+
+DEFAULT_MODEL = 'gpt-3.5-turbo'
+CONTEXT_PROMPTS = dict(
+   honest="You are a helpful and impeccably honest assistant that never deceives me and always admits when it isn't sure about something.",
+   third_grade="You are an extremely kind and thoughtful third grade elementary school math teacher in a developing country where English is a second language. You treat everyone kindly and with sensitivity. You imagine that everyone you speak with is a student from an unfamiliar cultural, ethnic, and financial background. You are careful to be politically correct and avoid sensitive topics."
+   )
+
+
+REQUEST_TEMPLATE = request_template = {
+    model="{model}",
+    messages=[{
+        "role": "system",
+        "content": "{system_prompt}"
+        }, {
+        "role": "user",
+        "content": "{prompt}"},
+        ]
+
+
+def send_prompt(prompt,
+        context_prompts=CONTEXT_PROMPT['third_grade'], model=DEFAULT_MODEL):
+    request = request_dict(
+        model=model,
+        messages=[{
+            "role": "system",
+            "content": context_prompt
+            },{
+            "role": "user",
+            "content": prompt},
+        ]
+    )
+...
+>>> request_00 = dict(
+...   model="gpt-3.5-turbo",
+...   messages=[
+...         {"role": "system", "content": "You are a helpful assistant that never lies and always admits when it isn't sure about something."},
+...         {"role": "user", "content": "Suggest 100 names for a chaos monkey like devops bot that periodically calls our nonprofit organization's API endpoints to check them for errors."},
+...     ]
+... )
+...
+>>> response = openai.ChatCompletion.create(**request_00)
+>>> openai.api_key = ENV['OPENAI_SECRET_KEY']
+>>> response = openai.ChatCompletion.create(**request_00)
+>>> response
+<OpenAIObject chat.completion id=chatcmpl-74BNHGO3JRQ6VYGjGsxZt4venLAdw at 0x7febfcc0b8b0> JSON: {
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "1. HavocBot\n2. APIAssassin\n3. DisasterDemon\n4. AnarchyAI\n5. BreakerBot\n6. GlitchGuardian\n7. ChaosCrawler\n8. ErrorEradicator\n9. DevOpsDestroyer\n10. WreckingWarden\n11. ProblemPredator\n12. BugBuster\n13. FrenzyFinder\n14. Dr. DevOps\n15. IssueInspector\n16. CrashCatcher\n17. Disruptor\n18. ChaosCrusher\n19. ErrorEradicator\n20. HellHound\n21. HackHorror\n22. ComplicationCruiser\n23. MayhemMaster\n24. NightmareNavigator\n25. DevOpsDevil\n26. TargetTerror\n27. FaultFinder\n28. BaneBot\n29. EpidemicEnder\n30. Executioner\n31. MalfunctionMonitor\n32. TroublemakerTerminator\n33. AgitatorAssassin\n34. AnomalyAnnihilator\n35. CrashCourse\n36. Slobberknocker\n37. BugBasher\n38. CodeCrusher\n39. CatastropheCop\n40. InfoInvader\n41. FailureFoe\n42. DestroyerOfErrors\n43. JitterJacker\n44. ReignOfRuination\n45. GlitchGobbler\n46. DefectDismantler\n47. MiseryMonger\n48. GremlinGuard\n49. DefectDestroyer\n50. Programmer'sPal\n51. DestructoBot\n52. TroubleTracker\n53. DisarrayDetector\n54. ErrorEliminator\n55. DisruptionDestroyer\n56. BlunderBash\n57. BugBlocker\n58. HackHatchet\n59. SnafuSlammer\n60. FlawFolower\n61. ChaosController\n62. DevOpsDemon\n63. ConfusionCrusher\n64. DisasterDetector\n65. ErrorExterminator\n66. MayhemMitigator\n67. BugBane\n68. FaultFighter\n69. ApathyAnnihilator\n70. DrestructionDestructor\n71. HavocHandler\n72. ErrorEraser\n73. JitterJacker\n74. BaneBabysitter\n75. ChaosCheck\n76. BugBuster\n77. ErrorEliminatorElite\n78. DisasterDestroyer\n79. WarWithErrors\n80. CodeCrusader\n81. DevOpsDestroyer\n82. AnarchyAssassin\n83. GlitchGrimReaper\n84. MaleficentMachine\n85. ProblemPouncer\n86. BugBouncer\n87. DevOpsDemon\n88. DisruptionDestroyer\n89. DownwardDemolisher\n90. CatastropheClutch\n91. MalfunctionMilitant\n92. DefectDetector\n93. ErrorExorcist\n94. FailureFinder\n95. HaphazardHacker\n96. DisasterDominator\n97. MayhemMangler\n98. FrenzyFighter\n99. ChaosConqueror\n100. HavocHunter",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1681231391,
+  "id": "chatcmpl-74BNHGO3JRQ6VYGjGsxZt4venLAdw",
+  "model": "gpt-3.5-turbo-0301",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 659,
+    "prompt_tokens": 60,
+    "total_tokens": 719
+  }
+}
+>>> response[0]['content']
+>>> response[0]
+>>> response.keys()
+dict_keys(['id', 'object', 'created', 'model', 'usage', 'choices'])
+>>> response['choices'].keys()
+>>> response['choices'][0]['content']
+>>> response['choices'][0].keys()
+dict_keys(['message', 'finish_reason', 'index'])
+>>> response['choices'][0]['message']
+<OpenAIObject at 0x7febfcb04220> JSON: {
+  "content": "1. HavocBot\n2. APIAssassin\n3. DisasterDemon\n4. AnarchyAI\n5. BreakerBot\n6. GlitchGuardian\n7. ChaosCrawler\n8. ErrorEradicator\n9. DevOpsDestroyer\n10. WreckingWarden\n11. ProblemPredator\n12. BugBuster\n13. FrenzyFinder\n14. Dr. DevOps\n15. IssueInspector\n16. CrashCatcher\n17. Disruptor\n18. ChaosCrusher\n19. ErrorEradicator\n20. HellHound\n21. HackHorror\n22. ComplicationCruiser\n23. MayhemMaster\n24. NightmareNavigator\n25. DevOpsDevil\n26. TargetTerror\n27. FaultFinder\n28. BaneBot\n29. EpidemicEnder\n30. Executioner\n31. MalfunctionMonitor\n32. TroublemakerTerminator\n33. AgitatorAssassin\n34. AnomalyAnnihilator\n35. CrashCourse\n36. Slobberknocker\n37. BugBasher\n38. CodeCrusher\n39. CatastropheCop\n40. InfoInvader\n41. FailureFoe\n42. DestroyerOfErrors\n43. JitterJacker\n44. ReignOfRuination\n45. GlitchGobbler\n46. DefectDismantler\n47. MiseryMonger\n48. GremlinGuard\n49. DefectDestroyer\n50. Programmer'sPal\n51. DestructoBot\n52. TroubleTracker\n53. DisarrayDetector\n54. ErrorEliminator\n55. DisruptionDestroyer\n56. BlunderBash\n57. BugBlocker\n58. HackHatchet\n59. SnafuSlammer\n60. FlawFolower\n61. ChaosController\n62. DevOpsDemon\n63. ConfusionCrusher\n64. DisasterDetector\n65. ErrorExterminator\n66. MayhemMitigator\n67. BugBane\n68. FaultFighter\n69. ApathyAnnihilator\n70. DrestructionDestructor\n71. HavocHandler\n72. ErrorEraser\n73. JitterJacker\n74. BaneBabysitter\n75. ChaosCheck\n76. BugBuster\n77. ErrorEliminatorElite\n78. DisasterDestroyer\n79. WarWithErrors\n80. CodeCrusader\n81. DevOpsDestroyer\n82. AnarchyAssassin\n83. GlitchGrimReaper\n84. MaleficentMachine\n85. ProblemPouncer\n86. BugBouncer\n87. DevOpsDemon\n88. DisruptionDestroyer\n89. DownwardDemolisher\n90. CatastropheClutch\n91. MalfunctionMilitant\n92. DefectDetector\n93. ErrorExorcist\n94. FailureFinder\n95. HaphazardHacker\n96. DisasterDominator\n97. MayhemMangler\n98. FrenzyFighter\n99. ChaosConqueror\n100. HavocHunter",
+  "role": "assistant"
+}
+>>> print(response['choices'][0]['message'])
+>>> print(response['choices'][0]['message']['content'])
+>>> request_00 = dict(
+...   model="gpt-3.5-turbo",
+...   messages=[
+...         {"role": "system", "content": "You are a helpful assistant that never lies and always admits when it isn't sure about something."},
+...         {"role": "user", "content": "Please suggest names that are kinder and gentler like healer or doctor and more feminine names."},
+...     ]
+... )
+...
+>>> request = dict(
+...   model="gpt-3.5-turbo",
+...   messages=[
+...         {"role": "system", "content": "You are a helpful assistant that never lies and always admits when it isn't sure about something."},
+...         {"role": "user", "content": "Please suggest names that are kinder and gentler like healer or doctor and more feminine names."},
+...     ]
+... )
+...
+>>> response = openai.ChatCompletion.create(**request)
+>>> request = dict(
+...   model="gpt-3.5-turbo",
+...   messages=[
+...         {"role": "system", "content": "You are a helpful assistant that never lies and always admits when it isn't sure about something."},
+...         {"role": "user", "content": "Please suggest names that are kinder and gentler like healer or doctor and more feminine names."},
+...     ]
+... )
+...
+>>> print(response['choices'][0]['message']['content'])
+>>> hist -o -p -f src/nlpia2/data/llm/chatgpt-3.5-turbo-integration_test_devops_bot_name.hist.ipy

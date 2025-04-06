@@ -1,0 +1,10 @@
+digraph "vector-NLG-text-graphviz" {
+	rankdir=LR
+	node [shape=box]
+	"NLG (rules, templates or decoder)"
+	node [shape=plaintext]
+	"Vector
+(numbers, tensor, embedding, encoding)" -> "NLG (rules, templates or decoder)"
+	"NLG (rules, templates or decoder)" -> "Text
+(natural language)"
+}

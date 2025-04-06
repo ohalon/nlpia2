@@ -1,0 +1,204 @@
+= Playful Python and regular expressions
+:appendix: B
+:chapter: B
+:part: BM
+:imagesdir: .
+:xrefstyle: short
+:figure-caption: Figure {chapter}.
+:listing-caption: Listing {chapter}.
+:table-caption: Table {chapter}.
+:stem: latexmath
+
+To get the most out of this book, you'll want to get comfortable with Python.
+You'll want to be so comfortable that you get playful.
+When things don't work, you'll need to be able to play around and explore to find a way to make Python do what you want.
+
+And even when your code works, playing around may help you uncover cool new ways of doing things or hidden monsters lurking in your code.
+Hidden errors and edge cases are very common in natural language processing because there are so many different ways to say things in a language like English.
+
+To get playful, just experiment with Python code, like children do.
+If you copy and paste code, change it.
+Try to break it and then fix it.
+Pull it apart into as many separate expressions as you can.
+Create modules out of bits of your code with functions or classes.
+Then pull it back together into as few lines of code as you can.
+
+Try random things with the data structure, model or function you just created.
+Try to run commands that you think should be included in a module or class.
+Use the Tab key on your keyboard often.
+When you press the Tab key, your editor or shell should try to finish your thought by completing the variable, class, function, method, attribute, or path name you started to type.
+
+Use all the `help` that Python and your shell provides.
+Like `man` in a Linux shell, `help()` is your built-in friend in Python.
+Try typing `help` or `help(object)` in a Python console.
+It should work even when the IPython `?` and `??` fail.
+Try `object?` and `object??` in a Jupyter Console or Notebook if you have never done that before.
+
+The rest of this Python primer introduces the data structures and functions we use throughout this book so you can start playing with them:
+
+* `str` and `bytes`
+* `ord` and `chr`
+* `.format()`
+* `dict` and `OrderedDict`
+* `list`, `np.array`, `pd.Series`
+* `pd.DataFrame`
+
+We also explain some of the patterns and built-in Python functions we sometimes use here and in the `nlpia` package:
+
+* List comprehensions: `[x for x in range(10)]`
+* Generators: `(x for x in range(1000000000))`
+* Regular expressions: `re.match(r'[A-Za-z ]+', 'Hello World')`
+* File openers: `open('path/to/file.txt')`
+
+== Working with strings
+Natural language processing is all about processing strings.
+And strings have a lot of quirks in Python 3 that may take you by surprise, especially if you have a lot of Python 2 experience.
+So you'll want to play around with strings and all the ways you can interact with them so you are comfortable interacting with natural language strings.
+
+=== String types (`str` and `bytes`)
+
+Strings (`str`) are sequences of Unicode characters.
+If you use a non-ASCII character in a `str`, it may contain multiple bytes for some of the characters.
+Non-ASCII characters pop up a lot if you are copying and pasting from the Internet into your Python console or program.
+And some of them are hard to spot, like those curly asymmetrical quote characters and apostrophes.
+
+When you open a file with the python `open` command, it will be read as a `str` by default.
+If you open a binary file, like a pretrained Word2vec model `'.txt'` file, without specifying `mode='b'` it will not load correctly.
+Even though the `gensim.KeyevVectors` model type may be text, not binary, the file must be opened in binary mode so that Unicode characters aren't garbled as gensim loads the model.
+Likewise for a CSV file or any other text file saved with Python 2.
+
+Bytes (`bytes`) are arrays of 8-bit values, usually used to hold ASCII characters or Extended ASCII characters (with integer `ord` values greater than 128).footnote:[There is no single official Extended ASCII character set, so don't ever use them for NLP unless you want to confuse your machine trying to learn a general language model.]
+Bytes are also sometimes used to store RAW images, WAV audio files, or other binary data "blobs".
+
+=== Templates in Python (`.format()`)
+
+Python comes with a versatile string templating system that allows you to populate a string with the values of variables.
+This allows you to create dynamic responses with knowledge from a database or the context of a running python program (`locals()`).
+
+== Mapping in Python (`dict` and `OrderedDict`)
+
+Hash table (or mapping) data structures are built into Python in `dict` objects.
+But a `dict` doesn't enforce a consistent key order, so the `collections` module, in the standard Python library, contains an `OrderedDict` that allows you to store key-value pairs in a consistent order that you can control (based on when you insert a new key).
+
+== Regular expressions
+
+Regular expressions are little computer programs with their own programming language.
+Each regular expression string like `r'[a-z]+'` can be compiled into a small program designed to be run on other strings to find matches.
+We provide a quick reference and some examples here, but you'll probably want to dig deeper in some online tutorials, if you're serious about NLP.
+As usual, the best way to learn is to play around at the command line.
+The nlpia package has a lot of natural language text documents and some useful regular expression examples for you to play with.
+
+A regular expression defines a sequence of conditional expressions (`if` in Python) that each work on a single character.
+The sequence of conditionals forms a tree that eventually concludes in a single answer to the question "is the input string a 'match' or not".
+Because each regular expression can only match a finite number of strings and has a finite number of conditional branches, it defines a finite state machine (FSM).footnote:[This is only true for strict regular expression syntaxes that don't "look-ahead" and "look-behind".]
+
+The `re` package is the default regex compiler/interpreter in Python, but the new official package is `regex` and can be easily installed with the `pip install regex`.
+It's more powerful, with better support for Unicode characters and fuzzy matching (pretty awesome for NLP).
+You don't need those extra features for the examples here, so you can use either one.
+You only need to learn a few regular expression symbols to solve the problems in this book:
+
+* `|` -- The "OR" symbol
+* `()` -- Grouping with parentheses, just like in Python expressions
+* `[]` -- Character classes
+* `\s`, `\b`, `\d`, `\w` -- Shortcuts to common character classes
+* \*, `?`, `+` -- Some common shortcuts to character class occurrence count limits
+* `{7,10}` -- When \*, `?`, and `+` aren't enough, you can specify exact count ranges with curly braces.
+
+=== `|` -- "OR"
+
+The `|` symbol is used to separate strings that can alternatively match the input string to produce an overall match for the regular expression.
+So the regular expression `'Hobson|Cole|Hannes'` would match any of the given names (first names) of this book's authors.
+Patterns are processed left to right, and "short circuit" when a match is made, like most other programming languages.
+So the order of the patterns between the OR symbols (`|`) doesn't affect the match, in this case, since all the patterns (author names) have unique character sequences in the first two characters.
+Here's a shuffling of the author's names so you see for yourself:
+
+.Regex OR symbol
+[source,python]
+----
+>>> import re
+>>> re.findall(r'Hannes|Hobson|Cole', 'Hobson Lane, Cole Howard, and Hannes Max Hapke')
+['Hobson', 'Cole', 'Hannes']  # <1>
+----
+<1> `.findall()` searches for all the non-overlapping regex matches within the input string, so it returns them in a list
+
+To exercise your Python playfulness, see if you can cause the regular expression to short circuit on the first pattern, when a human looking at all three patterns might choose a "better" match:
+
+[source,python]
+----
+>>> re.findall(r'H|Hobson|Cole', 'Hobson Lane, Cole Howard, and Hannes Max Hapke')
+['H', 'Cole', 'H', 'H', 'H']
+----
+
+=== `()` --  Groups
+
+You can use parentheses to group several symbol patterns into a single expression.
+Each grouped expression is evaluated as a whole.
+So `r'(kitt|dogg)ie'` matches either "kitty" or "doggy". Without the parentheses, `r'kitt|doggy'` would match "kitt" or "doggy" (notice no "kitty").
+
+Groups have another purpose.
+They can be used to capture (extract) part of the input text.
+Each group is assigned a location in the list of `groups()` that you can retrieve according to their index, left to right.
+The `.group()` method returns the default overall group for the entire expression.
+You can use the previous groups to capture a "stem" (the part without the y) of the kitty/doggy regex like this:
+
+.Regex grouping parentheses
+[source,python]
+----
+>>> import re
+>>> match = re.match(r'(kitt|dogg)y', "doggy")
+>>> match.group()
+'doggy'
+>>> match.group(0)
+'dogg'
+>>> match.groups()
+('dogg',)
+>>> match = re.match(r'((kitt|dogg)(y))', "doggy")  # <1>
+>>> match.groups()
+('doggy', 'dogg', 'y')
+>>> match.group(2)
+'y'
+----
+<1> If you want to capture each part in its own group
+
+If you want/need to give names to your groups for information extraction into a structured datatype (dict), you need to use the `P` symbol at the start of your group, like `(P?<animal_stemm>dogg|kitt)y`.footnote:[Named regular expression group: What does "P" stand for? (https://stackoverflow.com/questions/10059673)].
+
+=== `[]` -- Character classes
+
+Character classes are equivalent to an OR symbol (`|`) between a set of characters.
+So `[abcd]` is equivalent to `(a|b|c|d)`, and `[abc123]` is equivalent to `(a|b|c|d|1|2|3)`.
+
+And if some of the characters in a character class are consecutive characters in the alphabet of characters (ASCII or Unicode), they can be abbreviated using a hyphen between them.
+So `[a-d]` is equivalent to `[abcd]` or `(a|b|c|d)`, and `[a-c1-3]` is an abbreviation for `[abc123]` and `(a|b|c|d|1|2|3)`.
+
+==== Character class shortcuts
+
+* `\s` -- `[ \t\n\r]` -- Whitespace characters
+* `\b` -- A non-letter non-digit next to a letter or digit
+* `\d` -- `[0-9]` -- A digit
+* `\w` -- `[a-zA-Z0-9_]` -- A "word" or variable name character
+
+== Style
+
+Try to comply with PEP8 (http://python.org/dev/peps/pep-0008), even if you don't plan on sharing your code with others.
+You're future self will appreciate being able to efficiently read and debug your code.
+Adding a linter (http://sublimelinter.com) or automatic style corrector (http://packagecontrol.io/packages/Anaconda) to your editor or IDE is the easiest way to get with the PEP8 program.
+
+One additional style convention that can help with natural language processing is how you decide betwren the two possible quote characters (`'` and `"`).
+Whatever you do, try to be consistent.
+One that can help make your code more readable by professionals is to always use the single-quote (`'`) when defining a string intended for a machine, like regular expressions, tags, and labels.
+Then you can use double quotes ('"') for natural language corpora intended for human consumption.
+
+What about raw strings ( `r''` and `r""`)?
+All regular expressions should be single-quoted raw strings like `r'match[ ]this'`, even if they don't contain backslashes.
+Docstrings should be triple-quoted raw strings, like `r""" This function does NLP """`.
+That way if you ever do add backslashes to your doctests or regular expressions, they will do what you expect.footnote:[This stack overflow question explains why (https://stackoverflow.com/q/8834916/623735).]
+
+== Mastery
+
+Find an interactive coding challenge website to hone your python skills before you jump into a production project. You can do one or two of these a week while reading this book.
+
+1. CodingBat (http://codingbat.com) -- Fun challenges in an interactive web-based python interpreter
+2. Donne Martin's Coding Challenges (http://github.com/donnemartin/interactive-coding-challenge) -- An open source repository of Jupyter Notebooks and Anki flashcards to help you learn algorithms and data 2
+3. DataCamp (http://datacamp.com/community/tutorials) -- Pandas and Python tutorials at DataCamp
+
+

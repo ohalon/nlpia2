@@ -1,0 +1,304 @@
+= Natural Language Processing in Action 2E
+:chapter: H
+:sectnumoffset: 0
+:sectnums:
+:figure-caption: Figure {chapter}.
+:listing-caption: Listing {chapter}.
+:table-caption: Table {chapter}.
+:leveloffset: 1  
+:xrefstyle: short
+//:icons!:
+:stem: latexmath
+:source-highlighter: coderay
+:bibliography-database: dl4nlp.bib
+:bibliography-style: ieee
+:index::[]
+
+= Appendix H. Glossary
+ 
+We’ve collected some definitions of common natural language processing and machine language acronyms and terminology here. .footnote:[Bill Wilson at the university of New South Wales in Australia has a more complete NLP dictionary (www.cse.unsw.edu.au/~billw/nlpdict.html).]
+ 
+You can find some of the parsers and regular expressions we used to help generate this list in the `nlpia` Python package at https://gitlab.com/tangibleai/nlpia2[gitlab.com/tangibleai/nlpia2] .footnote:[`nlpia.translators` (https://gitlab.com/tangibleai/nlpia2/blob/master/src/nlpia/translators.py) and `nlpia.book_parser`(https://gitlab.com/tangibleai/nlpia2/blob/master/src/nlpia/book_parser.py)] This listing shows how we used `nlpia` to draft this glossary:
+
+[source]
+----
+>>> from nlpia.book_parser import write_glossary
+>>> from nlpia.constants import DATA_PATH
+>>> print(write_glossary(
+...     os.path.join(DATA_PATH, 'book')))      <1>
+
+
+== Acronyms
+ 
+[acronyms,template="glossary",id="terms"]
+*AGI*:: Artificial general intelligence --
+*AI*:: Artificial intelligence --
+*AIML*:: Artificial Intelligence Markup Language --
+*ANN*:: Approximate nearest neighbors --
+...
+----
+ 
+<1> YMMV because we can’t provide the entire manuscript in your data folder.
+ 
+We didn’t complete the definition generator, but that might be possible with a good LSTM language model (see chapter 10). We leave that to you.
+ 
+== Acronyms
+ 
+*AGI*—Artificial general intelligence
+ 
+Machine intelligence capable of solving a variety of problems that human brains can solve
+ 
+*AI*—Artificial intelligence
+ 
+Machine behavior that is impressive enough to be called intelligent by scientists or corporate marketers
+ 
+*AIML*—Artificial Intelligence Markup Language
+ 
+A pattern matching and templated response specification language in
+ 
+XML that was invented during the building of A.L.I.C.E., one of the first conversational chatbots
+ 
+*ANN*—Approximate nearest neighbors
+ 
+Finding the _M_ closest vectors to a single vector in a set of _N_ high-dimensional vectors is an _O_(_N_) problem, because you have to calculate your distance metric between every other vector and the target vector. This makes clustering an intractable _O_(_N_^2^).
+ 
+*ANN*—Artificial neural network
+ 
+*API*—Application programmer interface
+ 
+A user interface for your customers that are developers, usually a command line tool, source code library, or web interface that they can interact with programmatically
+ 
+*AWS*—Amazon Web Services
+ 
+Amazon invented the concept of cloud services when they exposed their internal infrastructure to the world.
+ 
+*BOW*—Bag of words
+ 
+A data structure (usually a vector) that retains the counts (frequencies) of words but not their order
+ 
+*CEC*—Constant error carousel
+ 
+A neuron that outputs its input delayed by one time step. Used within an LSTM or GRU memory unit. This is the memory register for an LSTM unit and can only be reset to a new value by the forgetting gate interrupting this “carousel.”
+ 
+*CNN*—Convolutional neural network
+ 
+A neural network that is trained to learn _filters_, also known as _kernels_, for feature extraction in supervised learning
+ 
+*CUDA*—Compute Unified Device Architecture
+ 
+An Nvidia open source software library optimized for running general computations/-algorithms on a GPU
+ 
+*DAG*—Directed acyclic graph
+ 
+A network topology without any cycles, connections that loop back on themselves
+ 
+*DFA*—Deterministic finite automaton
+ 
+A finite state machine that doesn’t make random choices. The `re` package in Python compiles regular expressions to create a DFA, but the `regex` can compile fuzzy regular expressions into NDFA (nondeterministic FA).
+ 
+*FSM*—Finite-state machine
+ 
+Kyle Gorman and Wikipedia can explain this better than I (https://en.wikipedia.org/wiki/Finite-state_machine).
+ 
+*FST*—Finite-state transducer
+ 
+Like regular expressions, but they can output a new character to replace each character they matched. Kyle Gorman explains them well (https://www.openfst.org).
+ 
+*GIS*—Geographic information system
+ 
+A database for storing, manipulating, and displaying geographic information, usually involv-ing latitude, longitude, and altitude coordinates and traces.
+ 
+*GPU*—Graphical processing unit
+ 
+The graphics card in a gaming rig, a cryptocurrency mining server, or a machine learning server
+ 
+*GRU*—Gated recurrent unit
+ 
+A variation of long short-term memory networks with shared parameters to cut computation time
+
+*HitLRL* or *HLRL*—Human in the Loop Reinforcement Learning
+
+HitLRL is an active learning approach to model training used for conversational LLMs such as InstructGPT and large game playing deep learning models such as AlphaGo. Conversational LLMs such as InstructGPT use reinforcement learning augmented with human curators in order to keep up with the evolution of language and concepts. The human labelers are identifying whether generated text is within the ethical and quality guidelines for the model. But unlike conventional RL, these labels are used to train a quality scoring supervisor model that is then used to flag future bot responses for labeling.
+
+*HNSW*—A graph data structure that enables efficient search (and robust approximate nearest neighbor search using Hierarchical Navigable Small World graphs (https://arxiv.org/vc/arxiv/papers/1603/1603.09320v1.pdf) by Yu A. Malkov and D. A. Yashunin)
+ 
+*HPC*—High performance computing
+ 
+The study of systems that maximize throughput, usually by parallelizing computation with separate `map` and `reduce` computation stages
+ 
+*IDE*—Integrated development environment
+ 
+A desktop application for software development, such as PyCharm, Eclipse, Atom, or Sublime Text 3
+ 
+*IR*—Information retrieval
+ 
+The study of document and web search engine algorithms. This is what brought NLP to the forefront of important computer science disciplines in the 90s.
+ 
+*ITU*—India Technical University
+ 
+A top-ranking technical university. The Georgia Tech of India.
+ 
+*i18n*—Internationalization
+ 
+Preparing application for use in more than one country (locale)
+ 
+*LDA*—Linear discriminant analysis
+ 
+A classification algorithm with linear boundaries between classes (see chapter 4)
+
+*LLM*—Large language model
+
+If you scale up a transformer-based language model to _web scale_, using millions of dollars in compute resources to train it on a *large* portion of the natural language text on the Internet, that's a *Large* Language Model.
+ 
+*LSA*—Latent semantic analysis
+ 
+Truncated SVD applied to TF-IDF or bag-of-words vectors to create topic vectors in a vector space language model (see chapter 4)
+ 
+*LSH*—Locality sensitive hash
+ 
+A hash that works as an efficient but approximate mapping/clustering index on dense, continuous, high-dimensional vectors (see chapter 13). Think of them as ZIP Codes that work for more than just 2D (latitude and longitude).
+ 
+*LSI*—Latent semantic indexing
+ 
+An old-school way of describing latent semantic analysis (see LSA), but it’s a misnomer, since LSA vector-space models don’t lend themselves to being easily indexed.
+ 
+*LSTM*—Long short-term memory
+ 
+An enhanced form of a recurrent neural network that maintains a memory of state that itself is trained via backpropagation (see chapter 9)
+ 
+*MIH*—Multi-index hashing
+ 
+A hashing and indexing approach for high-dimensional dense vectors
+ 
+*ML*—Machine learning
+ 
+Programming a machine with data rather than hand-coded algorithms
+ 
+*MSE*—Mean squared error
+ 
+The sum of the square of the difference between the desired output of a machine learning model and the actual output of the model
+ 
+*NELL*—Never Ending Language Learning
+ 
+A Carnegie Mellon knowledge extraction project that has been running continuously for years, scraping web pages and extracting general knowledge about the world (mostly “IS-A” categorical relationships between terms)
+ 
+*NLG*—Natural language generation
+ 
+Composing text automatically, algorithmically; one of the most challenging tasks of natural language processing (NLP)
+ 
+*NLP*—Natural language processing
+ 
+You probably know what this is by now. If not, see the introduction in chapter 1.
+ 
+*NLU*—Natural language understanding
+ 
+Often used in recent papers to refer to natural language processing with neural networks
+ 
+*NMF*—Nonnegative matrix factorization
+ 
+A matrix factorization similar to SVD, but constrains all elements in the matrix factors to be greater than or equal to zero
+ 
+*NSF*—National Science Foundation
+ 
+A US government agency tasked with funding scientific research
+ 
+*NYC*—New York City
+ 
+The US city that never sleeps
+ 
+*OSS*—Open source software
+ 
+*pip*—Pip installs pip
+ 
+The official Python package manager that downloads and installs packages automatically from the “Cheese Shop” (`pypi.python.org`)
+ 
+*PR*—Pull request
+ 
+The right way to request that someone merge your code into theirs. GitHub has some buttons and wizards to make this easy. This is how you can build your reputation as a conscientious contributor to open source.
+ 
+*PCA*—Principal component analysis
+ 
+Truncated SVD on any numerical data, typically images or audio files
+ 
+*QDA*—Quadratic discriminant analysis
+ 
+Similar to LDA, but allows for quadratic (curved) boundaries between classes
+ 
+*ReLU*—Rectified linear unit
+ 
+A linear neural net activation function that forces the output of a neuron to be nonzero. Equivalent to `y = np.max(x, 0)`. The most popular and efficient activation function for image processing and NLP, because it allows back propagation to work efficiently on extremely deep networks without “vanishing the gradients.”
+ 
+*REPL*—Read–evaluate–print loop
+ 
+The typical workflow of a developer of any scripting language that doesn’t need to be compiled. The `ipython`, `jupyter console`, and `jupyter notebook` REPLs are particularly powerful, with their `help`, `?`, `??`, and `%` magic commands, plus auto-complete, and Ctrl-R history search. .footnote:[Python’s REPLs even allow you to execute any shell command (including pip) installed on your OS (such as `!git commit -am 'fix 123'`). This lets your fingers stay on the keyboard and away from the mouse, minimizing cognitive load from context switches.]
+ 
+*RMSE*—Root mean square error
+ 
+The square root of the mean squared error. A common regression error metric. It can also be used for binary and ordinal classification problems. It provides an intuitive estimate of the 1-sigma uncertainty in a model’s predictions.
+ 
+*RNN*—Recurrent neural network
+ 
+A neural network architecture that feeds the outputs of one layer into the input of an earlier layer. RNNs are often “unfolded” into equivalent feed forward neural networks for diagramming and analysis.
+ 
+*SMO*—Sequential minimal optimization
+ 
+A support vector machine training approach and algorithm
+ 
+*SVD*—Singular value decomposition
+ 
+A matrix factorization that produces a diagonal matrix of eigenvalues and two orthogonal matrices containing eigenvectors. It’s the math behind LSA and PCA (see chapter 4).
+ 
+*SVM*—Support vector machine
+ 
+A machine learning algorithm usually used for classification
+ 
+*TF-IDF*—Term frequency * inverse document frequency
+ 
+A normalization of word counts that improves information retrieval results (see chapter 3)
+ 
+*UI*—User interface
+ 
+The “affordances” you offer your user through your software, often the graphical web pages or mobile application screens that your user must interact with to use your product or -service
+ 
+*UX*—User experience
+ 
+The nature of a customer’s interaction with your product or company, from purchase all the way through to their last contact with you. This includes your website or API UI on your website and all the other interactions with your company.
+ 
+*VSM*—Vector space model
+ 
+A vector representation of the objects in your problem, such as words or documents in an NLP problem (see chapter 4 and chapter 6)
+ 
+*YMMV*—Your mileage may vary
+ 
+You may not get the same results that we did.
+ 
+== Terms
+ 
+*Affordance*—A way for your user to interact with your product that you intentionally make possible. Ideally that interaction should come naturally to the user, be easily discoverable, and self-documenting.
+ 
+*Artificial neural network*—A computational graph for machine learning or simulation of a biological neural network (brain)
+ 
+*Cell*—The memory or state part of an LSTM unit that records a single scalar value and outputs it continuously .footnote:[See the web page titled “Long short-term memory” (https://en.wikipedia.org/wiki/Long_short-term_memory).]
+ 
+*Dark patterns*—Software patterns (usually for a user interface) that are intended to increase revenue but often fail due to “blowback” because they manipulate your customers into using your product in ways that they don’t intend
+ 
+*Feed-forward network*—A “one-way” neural network that passes all its inputs through to its outputs in a consistent direction, forming a computation directed acyclic graph (DAG) or tree
+ 
+*Morpheme*—A part of a token or word that contains meaning in and of itself. The morphemes that make up a token are collectively called the token’s _morphology_. The morphology of a token can be found using algorithms in packages like SpaCy that process the token with its context (words around it). .footnote:[See the web page titled “Linguistic Features : spaCy Usage Documentation” (https://spacy.io/usage/linguistic-features#rule-based-morphology).]
+ 
+*Net**, network**, or neural net*—Artificial neural network
+ 
+*Neuron*—A unit in a neural net whose function (such as `y = tanh(w.dot(x))`) takes multiple inputs and outputs a single scalar value. This value is usually the weights for that neuron (*w*or _w_~_i_~) multiplied by all the input signals (*x* or _x_~_i_~) and summed with a bias weight (_w_0) before applying an activation function like _tanh_. A neuron always outputs a scalar value, which is sent to the inputs of any additional hidden or output neurons in the network. If a neuron implements a much more complicated activation function than that, like the enhancements that were made to recurrent neurons to create an LSTM, it is usually called a _unit_, for example, an _LSTM unit_.
+ 
+*Nessvector*—An informal term for topic vectors or semantic vectors that capture concepts or qualities, such as femaleness or blueness, into the dimensions of a vector
+ 
+*Predicate*—In English grammar, the predicate is the main verb of a sentence that’s associated with the subject. Every complete sentence must have a predicate, just like it must also have a subject.
+ 
+*Skip-grams*—Pairs of tokens used as training examples for a word vector embedding, where any number of intervening words are ignored (see chapter 6).
+ 
+*Softmax*—Normalized exponential function used to squash the real-valued vector output by a neural network so that its values range between 0 and 1 like probabilities.
+ 
+*Subject*—The main noun of a sentence—every complete sentence must have a subject (and a predicate) even if the subject is implied, like in the sentence “Run!” where the implied subject is “you.”
+ 
+*Unit*—Neuron or small collection of neurons that perform some more complicated nonlinear function to compute the output. For example, an LSTM unit has a memory cell that records state, an input gate (neuron) that decides what value to remember, a forget gate (neuron) that decides how long to remember that value, and an output gate neuron that accomplishes the activation function of the unit (usually a sigmoid or _tanh()_). A unit is a drop-in replacement for a neuron in a neural net that takes a vector input and outputs a scalar value; it just has more complicated behavior.
+

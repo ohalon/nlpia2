@@ -1,0 +1,8 @@
+# >>> from parsimonious.grammar import Grammar
+# >>> grammar = Grammar(Path(__file__).with_suffix('.ppeg').read())
+# grammar.parse('hello ((world !)) bye.')
+# >>> grammar.parse('ch3.adoc')
+bold_text  = text bold_open text bold_close text
+text       = ~"[- A-Z 0-9 :\";',!@#$%^&*()_+-={}<>?,./]*"i
+bold_open  = "(("
+bold_close = "))"

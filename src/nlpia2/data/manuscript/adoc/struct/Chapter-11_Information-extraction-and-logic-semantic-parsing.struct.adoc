@@ -1,0 +1,1186 @@
+
+:toc: left
+:toclevels: 6
+
+++++
+  <style>
+  .first-sentence {
+    text-align: left;
+    margin-left: 0%;
+    margin-right: auto;
+    width: 66%;
+    background: Beige;
+  }
+  .last-sentence {
+    text-align: right;
+    margin-left: auto;
+    margin-right: 0%;
+    width: 66%;
+    background: AliceBlue;
+  }
+  </style>
+++++
+= Information extraction and knowledge graphs
+[.first-sentence]
+This chapter covers
+
+[.last-sentence]
+[.first-sentence]
+In the previous chapter (Chapter 10) you learned how to use transformers to generate smart _sounding_ words.
+
+[.last-sentence]
+This is the _missing link_ in the NLP chain that you need to create true AI.
+
+[.first-sentence]
+So you will soon see how to use token tagging from Chapter 2 to extract facts from text.
+
+[.last-sentence]
+Your AI can use knowledge graphs to fill the _common sense knowledge_ gap in large language models and perhaps live up to a little bit of the hype around LLMs and AI.
+
+[.first-sentence]
+A _knowledge base_ is a database management system that stores knowledge efficiently and gives you query language similar to SQL which you can use ask questions about the knowledge in the data base.
+
+[.last-sentence]
+[.first-sentence]
+Once you have a knowledge base, you can use it to programmatically generate logical statements that make sense because they logically follow from the knowledge you stored in your knowledge base.
+
+[.last-sentence]
+But you're not going to use deep learning for logical inference this time, you're going to use the tried and true approach called "symbolic reasoning."
+
+[.first-sentence]
+Your chatbots and AI agents will now have a way to correctly reason about the world in an explainable way that agrees with the knowledge you've given it.
+
+[.last-sentence]
+Besides helping ground in factual knowledge, you will now be able to have your AI explain its reasoning in a valid way, instead of just making things up.
+
+== Named entities and the connections between them
+=== A knowledge extraction language models
+[.first-sentence]
+In order to extract knowledge from text you will need to combine several algorithms from your NLP toolbox.
+
+[.last-sentence]
+[.first-sentence]
+The small language model built into SpaCy is all you need to extract knowledge from text.
+
+[.last-sentence]
+If you examine the output at each stage of the process you can understand it better and sometimes catch bugs before they corrupt your knowledge base.
+
+[.first-sentence]
+The first step in extracting knowledge about some__thing__ is to find the _things_ in your text.
+
+[.last-sentence]
+So this will usually be the first algorithm in your pipeline, the SpaCy `nlp` tokenizer and tagger:
+
+[.first-sentence]
+SpaCy keeps track of the named entities in the `ents` attribute of a Doc object.
+
+[.last-sentence]
+Unfortunately it only finds 3 names entities, and skips a word in Gebru's paper title.
+
+[.first-sentence]
+So you need to identify all the nouns in your
+
+[.last-sentence]
+[.first-sentence]
+You'd like your machine to extract pieces of information and facts from text so it can know a little bit about what a user is saying.
+
+[.last-sentence]
+Easier said that done.
+
+[.first-sentence]
+To trigger correct actions with natural language you need something an NLU pipeline or parser that is little less fuzzy than a transformer or large language model.
+
+[.last-sentence]
+Once you have a _dependency tree_ of the hierarchy of grammatical relationships between words you have a way to process the logical meaning of a sentence.
+
+[.first-sentence]
+And the chatbot should know that it can expand or _resolve_ that word by replacing it with that person's username or other identifying information.
+
+[.last-sentence]
+Likewise you need your chatbot to recognize that Monday is one of the days of the week (another kind of named entity called an "event") and be able to find it on the calendar.
+
+[.first-sentence]
+For the chatbot to respond properly to that simple request, you also need it to extract the relation between the named entity "me" and the command "remind."
+
+[.last-sentence]
+And you need to teach the chatbot that reminders happen in the future, so it should find the soonest upcoming Monday to create the reminder.
+
+[.first-sentence]
+A typical sentence may contain several named entities of various types, such as geographic entities, organizations, people, political entities, times (including dates), artifacts, events, and natural phenomena.
+
+[.last-sentence]
+And a sentence can contain several relations, too -- facts about the relationship between the named entities in the sentence.
+
+=== A knowledge base
+[.first-sentence]
+Besides just extracting information from the text of a user statement, you can also use information extraction to help your chatbot train itself!
+
+[.last-sentence]
+That knowledge base can later be queried to help your chatbot make informed decisions or inferences about the world.
+
+[.first-sentence]
+Chatbots can also store knowledge about the current user "session" or conversation.
+
+[.last-sentence]
+Commercial chatbot APIs, such as IBM's Watson or Amazon's Lex, typically store context separate from the global knowledge base of facts that it uses to support conversations with all the other users.
+
+[.first-sentence]
+Context can include facts about the user, the chatroom or channel, or the weather and news for that moment in time.
+
+[.last-sentence]
+An example of self-knowledge is the history of all the things the chatbot has already said to someone, such as the questions it has already asked of the user. That way it won't repeat itself.
+
+[.first-sentence]
+So that's the goal for this chapter, teaching your bot to understand what it reads.
+
+[.last-sentence]
+Then your bot can use that knowledge to make decisions and say smart stuff about the world.
+
+[.first-sentence]
+In addition to the simple task of recognizing numbers and dates in text, you'd like your bot to be able to extract more general information about the world.
+
+[.last-sentence]
+For example, you'd like it to be able to learn from natural language documents such as this sentence from Wikipedia:
+
+[.first-sentence]
+_In 1983, Stanislav Petrov, a lieutenant colonel of the Soviet Air Defense Forces, saved the world from nuclear war._
+
+[.last-sentence]
+[.first-sentence]
+If you were to take notes in a history class after reading or hearing something like that, you'd probably paraphrase things and create connections in your brain between concepts or words.
+
+[.last-sentence]
+This could be stored in a data structure something like this:
+
+[.first-sentence]
+This is an example of two named entity nodes ('Stanislav Petrov' and 'lieutenant colonel') and a relation or connection ('is a') between them in a knowledge graph or knowledge base.
+
+[.last-sentence]
+Historically these RDF triplets were stored in XML files, but they can be stored in any file format or database that can hold a graph of triplets in the form of `(subject, relation, object)`.
+
+[.first-sentence]
+A collection of these triplets is a knowledge graph.
+
+[.last-sentence]
+Figure 11.1 is a graphic representation of the knowledge graph you'd like to extract from a sentence like that.
+
+.Stanislav knowledge graph
+
+[.first-sentence]
+The red edge and node in this knowledge graph represents a fact that could not be directly extracted from the statement about Stanislav.
+
+[.last-sentence]
+It can also be called querying a knowledge base, analogous to querying a relational database.
+
+[.first-sentence]
+For this particular inference or query about Stanislov's military ranks, your knowledge graph would have to already contain facts about militaries and military ranks.
+
+[.last-sentence]
+You might even say that questions about occupational rank would be "above the pay grade" of a bot that only knew how to classify documents according to randomly allocated topics.footnote:[See chapter 4 if you've forgotten about how random topic allocation can be.]
+
+[.first-sentence]
+It may not be obvious how big a deal this is, but it is a _BIG_ deal.
+
+[.last-sentence]
+We take common sense knowledge for granted in our everyday conversations.
+
+[.first-sentence]
+Humans start acquiring much of their common sense knowledge even before they acquire language skill.
+
+[.last-sentence]
+And some of that knowledge is instinct, hard-coded into our DNA.footnote:[There are hard-coded common-sense knowledge bases out there for you to build on. Google Scholar is your friend in this knowledge graph search.]
+
+[.first-sentence]
+All kinds of factual relationships exist between things and people, such as "kind-of", "is-used-for", "has-a", "is-famous-for", "was-born", and "has-profession."
+
+[.last-sentence]
+NELL, the Carnegie Mellon Never Ending Language Learning bot is focused almost entirely on the task of extracting information about the `'kind-of'` relationship.
+
+[.first-sentence]
+Most knowledge bases normalize the strings that define these relationships, so that "kind of" and "type of" would be assigned a normalized string or ID to represent that particular relation.
+
+[.last-sentence]
+Synonyms for "Stanislav Petrov", like "S. Petrov" and "Lt Col Petrov", would also be assigned to that same ID, if the NLP pipeline suspected they referred to the same person.
+
+[.first-sentence]
+A knowledge base can be used to build a practical type of chatbot called a _question answering system_ (QA system).
+
+[.last-sentence]
+We talk more about question answering chatbots in the next chapter.
+
+=== A large knowledge graph
+[.first-sentence]
+If you've ever heard of a "mind map" they can give a pretty good mental model of what knowledge graphs are: connections between concepts in your mind.
+
+[.last-sentence]
+This is one small portion of the latest NELL knoweldge graph, the first 150 entities out of about three million:
+
+.First few entities in the NELL knowledge graph
+
+[.first-sentence]
+The NLPiA2 Python package has several utilities for making the NELL knowledge graph a bit easier to wrap your head around.
+
+[.last-sentence]
+Later in the chapter you'll see the details about how these work so you can prettify whatever knowledge graph you are working with.
+
+[.first-sentence]
+The entity names are very precise and well defined within a hierarchy, like paths for a file or name-spaced variable names in Python.
+
+[.last-sentence]
+To simplify things further, you can eliminate the namespacing hierarchy and focus on just the last name in the hierarchy.
+
+[.first-sentence]
+The `nlpia2.nell` module simplifies the names of things even further.
+
+[.last-sentence]
+Otherwise the names of entities can fill up the width of the plot and crowd each other out.
+
+[.first-sentence]
+NELL scrapes text from Twitter, so the spelling and wording of facts can be quite varied.
+
+[.last-sentence]
+However, in NELL, just as in Word2vec token identifiers, proper names are joined with underscore ("\_") characters.
+
+[.first-sentence]
+Entity and relation names are like variable names in Python.
+
+[.last-sentence]
+They give you one piece of information about an entity (object) in the world.
+
+[.first-sentence]
+As a minimum a knowledge triple consists of an entity, relation and value.
+
+[.last-sentence]
+The "value" is the object of the relationship and is a named entity just as the subject ("entity") of the triple is.
+
+[.first-sentence]
+Because NELL crowdsources the curation of the knowledge base, you also have a probability or confidence value that you can use to make inference on conflicting pieces of information.
+
+[.last-sentence]
+The last column provides the source of the data a list of all the texts that created the fact.
+
+[.first-sentence]
+NELL contains facts about more than 800 unique relations and more than 2 million entities.
+
+[.last-sentence]
+There's even a "latitudelongitude" relation that you could use to verify any facts related to the location of things.
+
+== Extracting the structure of text
+[.first-sentence]
+In the previous section, you learned how to recognize and tag named entities in text.
+
+[.last-sentence]
+This will help your bots become a bit smarter about how they interpret sentences and act on them.
+
+[.first-sentence]
+But wait, you're probably wondering why sentence diagrams are so important.
+
+[.last-sentence]
+We need to create that understanding in bots so they can be used to do the same things you do without thinking:
+
+[.first-sentence]
+Basically, dependency parsing will help your NLP pipelines for all those applications mentioned in Chapter 1... better.
+
+[.last-sentence]
+Jakub Konrád and his teammates at CTU Prague won the $1M SocialBot prize in 2021 with this approach.footnote:["Alquist 4.0: Towards Social Intelligence Using Generative Models and Dialogue Personalization" (https://arxiv.org/pdf/2109.07968.pdf)]
+
+[.first-sentence]
+Dependency parsing, as the name suggests, relies on "dependencies" between the words in a sentence to extract information.
+
+[.last-sentence]
+There are 37 "dependent" relations that a word could possibly have, and these relations are adapted from the *Universal Stanford Dependencies system*.
+
+[.first-sentence]
+This technique can be really useful in rule-based information extraction, especially in chatbots.
+
+[.last-sentence]
+Similarly, it can also infer that it needs to do this on Monday.
+
+[.first-sentence]
+This way, all the chatbot needs to do to pinpoint the exact information it is looking for is to examine the dependencies between the words.
+
+[.last-sentence]
+This kind of a rule-based algorithm is surprisingly powerful for general tasks in chatbots and other word-processing apps.
+
+=== Why is it important?
+[.first-sentence]
+Like in the example we discussed before, dependency parsing can play a really useful role in any application that tries to extract organized information from text.
+
+[.last-sentence]
+Sometimes, the dependency relations can be converted into semantic tags/labels between the words, and this task is called *Semantic Role labelling*.
+
+=== Why neural networks are much better at it?
+=== Current state of the art methods and the available open source platforms
+[.first-sentence]
+Dependency parsing: spaCy and Huggingface transformers have been the most popular libraries for Dependency parsing, though Allen AI's parser is also catching up with their performance.
+
+[.last-sentence]
+We will experiment with a few of them below:
+
+[.first-sentence]
+You can see above that every token's relation, syntactic head, syntactic children, and the meaning of the relation are printed out.
+
+[.last-sentence]
+You can also use it to extract relation triplets by identifying the tokens with "nsubj", "ROOT", and "dobj" dependencies.
+
+[.first-sentence]
+Constituency parsing: Berkeley Neural Parser and Stanza have been the go-to options for the extraction of constituency relations in text.
+
+[.last-sentence]
+Let us explore them below:
+
+[.first-sentence]
+1) Berkeley Neural Parser:
+
+[.last-sentence]
+.Download the necessary packages
+
+[.first-sentence]
+After downloading the packages, we can test it out with a sample sentence.
+
+[.last-sentence]
+But we will be adding benepar to spaCy's pipeline first.
+
+[.first-sentence]
+In the example above, we generated a parse string for the test sentence. The parse string includes various phrases and the POS tags of the tokens in the sentence. Some common tags you may notice in our parse string are NP ("Noun Phrase"), VP ("Verb Phrase"), S ("Sentence"), and PP ("Prepositional Phrase").
+
+[.last-sentence]
+You can use this module to identify all the phrases in the sentence and use them in sentence simplification and/or summarization.
+
+== Relation extraction
+[.first-sentence]
+Relation extraction is the process of identifying connections between named entities in any text.
+
+[.last-sentence]
+This is suitable for processing large and generally unknown texts like Wikipedia articles and news entries.
+
+=== Current datasets and benchmarks
+[.first-sentence]
+*1) TACRED*
+
+[.last-sentence]
+[.first-sentence]
+The TAC Relation Extraction Dataset is a large scale dataset built with newswire and web text corpus.
+
+[.last-sentence]
+Over the past few years, efforts to address TACRED's limitations such as data quality and ambiguity in relation classes has given rise to datasets like Re-TACRED and DocRED.
+
+[.first-sentence]
+*2) DocRED*
+
+[.last-sentence]
+[.first-sentence]
+The Document Relation Extraction Dataset is the largest human-annotated dataset for document level relation extraction, where the model is required to go over multiple sentences in order to extract the relations between entities.
+
+[.last-sentence]
+Compiled using Wikidata and Wikipedia, this dataset is considered the de-facto benchmark for relation extraction methods along with TACRED due to its generalizability and size.
+
+[.first-sentence]
+*3) SemEval Task-8 dataset*
+
+[.last-sentence]
+[.first-sentence]
+The SemEval Task-8 dataset is a triplet extraction dataset with over 10,000 entries, each having one of 9 semantic relations between its entities.
+
+[.last-sentence]
+Though a much simpler dataset than TACRED and having only a few relation labels, this dataset is known for the quality of its sentence data and labels which is a big issue when it comes to TACRED, DocRED, and Re-TACRED.
+
+=== Why is it important?
+[.first-sentence]
+Relation extraction finds widespread application in finance and military, due to its significance in Information Extraction and Knowledge graph completion.
+
+[.last-sentence]
+Traditionally considered a triplet extraction task, relation extraction methods are now venturing beyond duplet and triplet relations and are finding extensive usage in medical industry in the form of drug combo extraction and hormone chain identification.
+
+=== Current state of the art methods and the available open source platforms
+[.first-sentence]
+Over the past few years, experiments with Deep Neural Networks have given strong results on triplet extraction and subsequently most of the research on the topic now follow neural methods.
+
+[.last-sentence]
+In this section, we will be discussing two recent neural relation extraction methods which have reported state of the art results on TACRED and DocRED.
+
+[.first-sentence]
+*1) LUKE:*
+
+[.last-sentence]
+[.first-sentence]
+TODO add description and code
+
+[.last-sentence]
+[.first-sentence]
+*2) Typed entity markers*
+
+[.last-sentence]
+[.first-sentence]
+The concept of Typed entity markers was developed as an improvement over LUKE and other neural relation extraction frameworks.
+
+[.last-sentence]
+Consider the example below:
+
+[.first-sentence]
+Sentence:"John Smith works at Tangible AI"
+
+[.last-sentence]
+[.first-sentence]
+Entities and their tags: John Smith (PERSON), Tangible AI (ORGANIZATION)
+
+[.last-sentence]
+[.first-sentence]
+Sentence with typed entities: "^/PER/John Smith^ works at ^/ORG/Tangible AI^"
+
+[.last-sentence]
+[.first-sentence]
+Following the example above, the sentence with typed entities is fed into the classification model with relations as its labels.
+
+[.last-sentence]
+As you may have guessed, NER is a necessary step before this process, for which we will be using spaCy as shown below:
+
+== Coreference resolution
+[.first-sentence]
+Imagine you're running NER on a text, and you obtain the list of entities that the model has recognized.
+
+[.last-sentence]
+This is where *Coreference resolution* comes in handy because it identifies all the mentions of a noun in a sentence, helping us keep a track of all the pronouns and avoid multiple metions.
+
+=== Current datasets and benchmarks
+[.first-sentence]
+*1) Ontonotes 5.0:*
+
+[.last-sentence]
+Available in three languages(English, Chinese, and Arabic), this dataset is the de facto benchmark for identifying coreferences in the industry.
+
+[.first-sentence]
+*2) Winograd schema challenge:*
+
+[.last-sentence]
+This task is called the Winograd schema challenge, also framed as "Commonsense reasoning" or "Commonsense inference" problem.
+
+=== Why is it important?
+[.first-sentence]
+Duplicate mentions is a big problem not only in *NER*, but *Relation extraction*, *Information extraction*, *Semantic parsing*, and many other tasks.
+
+[.last-sentence]
+Resolving all the pronouns saves the time and effort to extract the information associated with them.
+
+[.first-sentence]
+Moreover, it also helps us identify which entity or term is being talked about the most in a text, helping us assign importance to certain words over others.
+
+[.last-sentence]
+This technique has been experimented in *Topic modelling* and in constructing *knowledge graphs*.
+
+=== Current state of the art methods and the available open source platforms
+[.first-sentence]
+1) spaCy and NeuralCoref
+
+[.last-sentence]
+[.first-sentence]
+NeuralCoref 4.0 is currently the fastest entity resolver available open-source.
+
+[.last-sentence]
+It can be used as an extension to spaCy, as shown below:
+
+[.first-sentence]
+On running the code above, you'll get a list of indices in an array.
+
+[.last-sentence]
+These are the indices of the words which the model identifies to be mentionings of the same noun phrases.
+
+[.first-sentence]
+2) AllenNLP's Entity resolver
+
+[.last-sentence]
+[.first-sentence]
+AllenNLP also provides a highly effective open source pipeline for Coreference resolution, though it is known to be much slower compared to NeuralCoref has a high memory requirement.
+
+[.last-sentence]
+Let us see how it works:
+
+== Information extraction
+[.first-sentence]
+So you've learned that "information extraction" is converting unstructured text into structured information stored in a knowledge base or knowledge graph.
+
+[.last-sentence]
+Information extraction is part of an area of research called natural language understanding (NLU), though that term is often used synonymously with natural language processing (NLP).
+
+[.first-sentence]
+Information extraction and NLU is a different kind of learning than you may think of when researching data science.
+
+[.last-sentence]
+Nonetheless, machine learning techniques are often used to train the information extractor.
+
+== Regular patterns
+[.first-sentence]
+You need a pattern-matching algorithm that can identify sequences of characters or words that match the pattern so you can "extract" them from a longer string of text.
+
+[.last-sentence]
+Say you wanted to find some common greeting words, such as "Hi", "Hello", and "Yo", at the beginning of a statement. You might do it something like this:
+
+.Pattern hardcoded in Python
+
+[.first-sentence]
+And here's how it would work:
+
+[.last-sentence]
+.Brittle pattern-matching example
+
+[.first-sentence]
+You can probably see how tedious programming a pattern matching algorithm this way would be.
+
+[.last-sentence]
+And it's tricky to specify all the "delimiters", such as punctuation, white space, or the beginnings and ends of strings (NULL characters) that are on either sides of words you're looking for.
+
+[.first-sentence]
+You could probably come up with a way to allow you to specify different words or strings you want to look for without hard-coding them into Python expressions like this.
+
+[.last-sentence]
+But that's a lot of work.
+
+[.first-sentence]
+Fortunately that work has already been done!
+
+[.last-sentence]
+So let's use them to define your patterns instead of deeply nested Python `if` statements.
+
+=== Regular expressions
+[.first-sentence]
+Regular expressions are a strings written in a special computer language that you can use to specify algorithms.
+
+[.last-sentence]
+This NLP application is an extension of their original use for compiling and interpreting formal languages (computer languages).
+
+[.first-sentence]
+Regular expressions define a _finite state machine_ or FSM -- a tree of "if-then" decisions about a sequence of symbols, such as the `find_greeting()` function in listing 11.1.
+
+[.last-sentence]
+They can also be called _formal grammars_ to distinguish them from natural language grammar rules you learned in elementary school.
+
+[.first-sentence]
+In computer science and mathematics, the word "grammar" refers to the set of rules that determine whether or a sequence of symbols is a valid member of a language, often called a computer language or formal language.
+
+[.last-sentence]
+You probably want to review appendix B if you aren't familiar with basic regular expression syntax and symbols such as `r'.\*'` and `r'a-z'`.
+
+=== Information extraction as ML feature extraction
+[.first-sentence]
+So you're back where you started in chapter 1, where we first mentioned regular expressions.
+
+[.last-sentence]
+Because your statistical or data-driven approach to NLP has limits.
+
+[.first-sentence]
+You want your machine learning pipeline to be able to do some basic things, such as answer logical questions, or perform actions such as scheduling meetings based on NLP instructions.
+
+[.last-sentence]
+And it can work for a broad range of problems.
+
+[.first-sentence]
+Pattern matching (and regular expressions) continue to be the state-of-the art approach for information extraction (more commonly called _information retrieval_).
+
+[.last-sentence]
+And these patterns and features are still employed in even the most advanced natural language machine learning pipelines such as Google's Assistant, Siri, Amazon Alexa, and other state-of-the-art "bots."
+
+[.first-sentence]
+Information extraction is used to find statements and information that you might want your chatbot to have "on the tip of its tongue."
+
+[.last-sentence]
+Or you can think of it as the set of all possible things you could say that would be recognized as valid statements by an English language speaker.
+
+[.first-sentence]
+And that brings us to another feature of formal grammars and finite state machines that will come in handy for NLP.
+
+[.last-sentence]
+Any formal grammar can be used by a machine in two ways:
+
+[.first-sentence]
+Not only can you use patterns (regular expressions) for extracting information from natural language, but you can also use them in a chatbot that wants to "say" things that match that pattern!
+
+[.last-sentence]
+We show you how to do this with a package called `rstr` footnote:[See the web page titled "leapfrogdevelopment / rstr — Bitbucket" (https://bitbucket.org/leapfrogdevelopment/rstr/).] for some of your information extraction patterns here.
+
+[.first-sentence]
+This formal grammar and finite state machine approach to pattern matching has some other awesome features.
+
+[.last-sentence]
+It will never get caught in a perpetual loop... as long as you don't use some of the advanced features of regular expression engines that allow you to "cheat" and incorporate loops into your FSM.
+
+[.first-sentence]
+So you'll stick to regular expressions that don't require these "look-back" or "look-ahead" cheats.
+
+[.last-sentence]
+There are no "go backs" or "do overs" for train passengers, or for strict regular expressions.
+
+== Information worth extracting
+[.first-sentence]
+Some keystone bits of quantitative information are worth the effort of "hand-crafted" regular expressions:
+
+[.last-sentence]
+[.first-sentence]
+Other important pieces of natural language information require more complex patterns than are easily captured with regular expressions:
+
+[.last-sentence]
+=== Extracting GPS locations
+[.first-sentence]
+GPS locations are typical of the kinds of numerical data you'll want to extract from text using regular expressions.
+
+[.last-sentence]
+Though URLs are not technically natural language, they are often part of unstructured text data, and you'd like to extract this bit of information, so your chatbot can know about places as well as things.
+
+[.first-sentence]
+Let's use your decimal number pattern from previous examples, but let's be more restrictive and make sure the value is within the valid range for latitude (\+/- 90 deg) and longitude (+/- 180 deg).
+
+[.last-sentence]
+And if you sail from Greenwich England 180 deg east (+180 deg longitude), you'll reach the date line, where you're also 180 deg west (-180 deg) from Greenwich.
+
+.Regular expression for GPS coordinates
+
+[.first-sentence]
+Numerical data is pretty easy to extract, especially if the numbers are part of a machine-readable string.
+
+[.last-sentence]
+URLs and other machine-readable strings put numbers such as latitude and longitude in a predictable order, format, and units to make things easy for us.
+
+[.first-sentence]
+This pattern will still accept some out-of-this-world latitude and longitude values, but it gets the job done for most of the URLs you'll copy from mapping web apps such as OpenStreetMap.
+
+[.last-sentence]
+[.first-sentence]
+But what about dates?
+
+[.last-sentence]
+What if you want your date extractor to work in Europe and the US, where the order of day/month is often reversed?
+
+=== Extracting dates
+[.first-sentence]
+Dates are a lot harder to extract than GPS coordinates.
+
+[.last-sentence]
+But this assumption can be wrong.
+
+[.first-sentence]
+So most date and time extractors try to work with both kinds of day/month orderings and just check to make sure it's a valid date.
+
+[.last-sentence]
+Even if you were an US English speaker and you were in Brussels around Christmas, you'd probably recognize "25/12/17" as a holiday, because there are only 12 months in the year.
+
+[.first-sentence]
+This "duck-typing" approach that works in computer programming can work for natural language, too.
+
+[.last-sentence]
+You'll try your extractor or your generator, and then you'll run a validator on it to see if it makes sense.
+
+[.first-sentence]
+For chatbots this is a particularly powerful approach, allowing you to combine the best of multiple natural language generators.
+
+[.last-sentence]
+We'll talk more about this in chapter 12.
+
+.Regular expression for US dates
+
+[.first-sentence]
+A list comprehension can be used to provide a little structure to that extracted data, by converting the month, day, and year into integers and labeling that numerical information with a meaningful name.
+
+[.last-sentence]
+.Structuring extracted dates
+
+[.first-sentence]
+Even for these simple dates, it's not possible to design a regex that can resolve all the ambiguities in the second date, "12/12."
+
+[.last-sentence]
+For examle "12/12" could mean:
+
+[.first-sentence]
+Because month/day come before the year in US dates and in our regex, '12/12' is presumed to be December 12th of an unknown year.
+
+[.last-sentence]
+You can fill in any missing numerical fields with the most recently read year using the "context" from the structured data in memory:
+
+.Basic context maintenance
+
+[.first-sentence]
+This is a basic but reasonably robust way to extract date information from natural language text.
+
+[.last-sentence]
+And if you added some extractors for times, well, then you'd be quite the hero.
+
+[.first-sentence]
+There are opportunities for some hand-crafted logic to deal with edge cases and natural language names for months and even days.
+
+[.last-sentence]
+That could be
+
+[.first-sentence]
+Some natural language ambiguities can't be resolved, even by a human brain.
+
+[.last-sentence]
+But let's just make sure your date extractor can handle European day/month order by reversing month and day in your regex.
+
+.Regular expression for European dates
+
+[.first-sentence]
+That regular expression correctly extracts Turing's birth and wake dates from a Wikipedia excerpt.
+
+[.last-sentence]
+For your regex to work on more natural language dates, such as those found in Wikipedia articles, you need to add words such as "June" (and all its abbreviations) to your date-extracting regular expression.
+
+[.first-sentence]
+You don't need any special symbols to indicate words (characters that go together in sequence).
+
+[.last-sentence]
+You'll add these two alternative date "spellings" to your regular expression with a "big" OR (`|`) between them as a fork in your tree of decisions in the regular expression.
+
+[.first-sentence]
+Let's use some named groups to help you recognize years such as "'84" as 1984 and "08" as 2008.
+
+[.last-sentence]
+And let's try to be a little more precise about the 4-digit years you want to match, only matching years in the future up to 2399 and in the past back to year 0.footnote:[See the web page titled "Year zero - Wikipedia" (https://en.wikipedia.org/wiki/Year_zero).]
+
+.Recognizing years
+
+[.first-sentence]
+Wow!
+
+[.last-sentence]
+Monetary values and IP addresses are examples where a more complex regular expression, with named groups, might come in handy.
+
+[.first-sentence]
+Let's finish up your regular expression for extracting dates by adding patterns for the month names such as "June" or "Jun" in Turing's birthday on Wikipedia dates.
+
+[.last-sentence]
+.Recognizing month words with regular expressions
+
+[.first-sentence]
+Can you see how you might combine these regular expressions into a larger one that can handle both EU and US date formats?
+
+[.last-sentence]
+And you need to include patterns for some optional separators between the day, month, and year.
+
+[.first-sentence]
+Here's one way to do all that.
+
+[.last-sentence]
+.Combining information extraction regular expressions
+
+[.first-sentence]
+Finally, you need to validate these dates by seeing if they can be turned into valid Python `datetime` objects.
+
+[.last-sentence]
+.Validating dates
+
+[.first-sentence]
+Your date extractor appears to work OK, at least for a few simple, unambiguous dates.
+
+[.last-sentence]
+And if you think you can do it better than these packages, send them a pull request!
+
+[.first-sentence]
+If you just want a state of the art date extractor, statistical (machine learning) approaches will get you there faster.
+
+[.last-sentence]
+The Stanford Core NLP SUTime library (https://nlp.stanford.edu/software/sutime.html) and `dateutil.parser.parse` by Google are the state of the art.
+
+== Extracting relationships (relations)
+[.first-sentence]
+So far you've looked only at extracting tricky noun instances such as dates and GPS latitude and longitude values.
+
+[.last-sentence]
+You'd like it to be able to relate those dates and GPS coordinates to the entities it reads about.
+
+[.first-sentence]
+What knowledge could your brain extract from this sentence from Wikipedia:
+
+[.last-sentence]
+[.first-sentence]
+_On March 15, 1554, Desoto wrote in his journal that the Pascagoula people ranged as far north as the confluence of the Leaf and Chickasawhay rivers at 30.4, -88.5._
+
+[.last-sentence]
+[.first-sentence]
+Extracting the dates and the GPS coordinates might enable you to associate that date and location with Desoto, the Pascagoula people, and two rivers whose names you can't pronounce.
+
+[.last-sentence]
+And you'd like the dates and locations to be associated with the right "things": Desoto, and the intersection of two rivers, respectively.
+
+[.first-sentence]
+This is what most people think of when they hear the term natural language understanding.
+
+[.last-sentence]
+And the nodes of your knowledge graph are the nouns or objects found in your corpus.
+
+[.first-sentence]
+The pattern you're going to use to extract these relationships (or relations) is a pattern such as SUBJECT - VERB - OBJECT.
+
+[.last-sentence]
+To recognize these patterns, you'll need your NLP pipeline to know the parts of speech (POS) for each word in a sentence.
+
+=== POS tagging
+[.first-sentence]
+POS tagging can be accomplished with language models that contain dictionaries of words with all their possible parts of speech.
+
+[.last-sentence]
+You'll use spaCy here because it is faster and more accurate.
+
+.POS tagging with spaCy
+
+[.first-sentence]
+So to build your knowledge graph, you just need to figure out which objects (noun phrases) should be paired up.
+
+[.last-sentence]
+March 15, 1554 can be converted to a `datetime.date` object with a normalized representation.
+
+[.first-sentence]
+spaCy-parsed sentences also contain the dependency tree in a nested dictionary.
+
+[.last-sentence]
+This visualization can help you find ways to use the tree to create tag patterns for relation extraction.
+
+.Visualize a dependency tree
+
+[.first-sentence]
+The dependency tree for this short sentence shows that the noun phrase "the Pascagoula" is the object of the relationship "met" for the subject "Desoto" (see figure 11.2).
+
+[.last-sentence]
+And both nouns are tagged as proper nouns.
+
+.The Pascagoula people
+
+[.first-sentence]
+To create POS and word property patterns for a `spacy.matcher.Matcher`, listing all the token tags in a table is helpful.
+
+[.last-sentence]
+Here are some helper functions to make that easier:
+
+.Helper functions for spaCy tagged strings
+
+[.first-sentence]
+Now you can see the sequence of POS or TAG features that will make a good pattern.
+
+[.last-sentence]
+You could specify each of those patterns individually, or try to capture them all with some * or ? operators on "any word" patterns between your proper nouns:
+
+[.first-sentence]
+Patterns in spaCy are much more powerful and flexible than the preceding pseudocode, so you have to be more verbose to explain exactly the word features you'd like to match.
+
+[.last-sentence]
+In a spaCy pattern specification you use a dictionary to capture all the tags that you want to match for each token or word.
+
+.Example spaCy POS pattern
+
+[.first-sentence]
+You can then extract the tagged tokens you need from your parsed sentence.
+
+[.last-sentence]
+.Creating a POS pattern matcher with spaCy
+
+[.first-sentence]
+So you extracted a match from the original sentence from which you created the pattern, but what about similar sentences from Wikipedia?
+
+[.last-sentence]
+.Using a POS pattern matcher
+
+[.first-sentence]
+You need to add a second pattern to allow for the verb to occur after the subject and object nouns.
+
+[.last-sentence]
+.Combining multiple patterns for a more robust pattern matcher
+
+[.first-sentence]
+So now you have your entities and a relationship.
+
+[.last-sentence]
+Then you could use these new verbs to add relationships for new proper nouns on either side.
+
+[.first-sentence]
+But you can see how you're drifting away from the original meaning of your seed relationship patterns.
+
+[.last-sentence]
+You can use this vector to prevent the connector verb and the proper nouns on either side from drifting too far away from the original meaning of your seed pattern.footnote:[This is the subject of active research: https://nlp.stanford.edu/pubs/structuredVS.pdf.]
+
+=== Entity name normalization
+[.first-sentence]
+The normalized representation of an entity is usually a string, even for numerical information such as dates.
+
+[.last-sentence]
+A normalized representation for entities enables your knowledge base to connect all the different things that happened in the world on that same date to that same node (entity) in your graph.
+
+[.first-sentence]
+You'd do the same for other named entities.
+
+[.last-sentence]
+Normalization of named entities ensures that spelling and naming variations don't pollute your vocabulary of entity names with confounding, redundant names.
+
+[.first-sentence]
+For example "Desoto" might be expressed in a particular document in at least five different ways:
+
+[.last-sentence]
+[.first-sentence]
+Similarly your normalization algorithm can choose any of these forms.
+
+[.last-sentence]
+Even more importantly, the normalization should be applied consistently -- both when you write new facts to the knowledge base or when you read or query the knowledge base.
+
+[.first-sentence]
+If you decide to change the normalization approach after the database has been populated, the data for existing entities in the knowledge should be "migrated", or altered, to adhere to the new normalization scheme.
+
+[.last-sentence]
+After all, schemaless databases are interface wrappers for relational databases under the hood.
+
+[.first-sentence]
+Your normalized entities also need "is-a" relationships to connect them to entity categories that define types or categories of entities.
+
+[.last-sentence]
+Like names of people or POS tags, dates and other discrete numerical objects need to be normalized if you want to incorporate them into your knowledge base.
+
+[.first-sentence]
+What about _relations_ between entities -- do they need to be stored in some normalized way?
+
+[.last-sentence]
+=== Relation normalization and extraction
+[.first-sentence]
+Now you need to a way to normalize the relationships, to identify the kind of relationship between entities.
+
+[.last-sentence]
+And you need to write an algorithm to choose the right label for your relationship.
+
+[.first-sentence]
+And these relationships can have a hierarchical name, such as "occurred-on/approximately" and "occurred-on/exactly", to allow you to find specific relationships or categories of relationships.
+
+[.last-sentence]
+You can adjust these confidence values each time a fact extracted from a new text corroborates or contradicts an existing fact in the database.
+
+[.first-sentence]
+Now you need a way to match patterns that can find these relationships.
+
+[.last-sentence]
+=== Word patterns
+[.first-sentence]
+Word patterns are just like regular expressions, but for words instead of characters.
+
+[.last-sentence]
+A POS pattern can be used to find similar sentences where the subject and object words might change or even the relationship words.
+
+[.first-sentence]
+You can use the spaCy package two different ways to match these patterns in latexmath:[O(1)] (constant time) no matter how many patterns you want to match:
+
+[.last-sentence]
+[.first-sentence]
+To ensure that the new relations found in new sentences are truly analogous to the original seed (example) relationships, you often need to constrain the subject, relation, and object word meanings to be similar to those in the seed sentences.
+
+[.last-sentence]
+They help minimize semantic drift.
+
+[.first-sentence]
+Using semantic vector representations for words and phrases has made automatic information extraction accurate enough to build large knowledge bases automatically.
+
+[.last-sentence]
+Now you're going to see how they accomplished that.
+
+=== Separating facts with sentence segmentation
+[.first-sentence]
+We've skipped one form of information extraction or tool used in information extraction.
+
+[.last-sentence]
+But in the real world you may need to create these chunks yourself.
+
+[.first-sentence]
+Document "chunking" is useful for creating semi-structured data about documents that can make it easier to search, filter, and sort documents for information retrieval.
+
+[.last-sentence]
+The resulting segments can be phrases, sentences, quotes, paragraphs, or even entire sections of a long document.
+
+[.first-sentence]
+Sentences are the most common chunk for most information extraction problems.
+
+[.last-sentence]
+And sentences are often self-contained packets of meaning that don't rely too much on preceding text to convey most of their information.
+
+[.first-sentence]
+Fortunately most languages, including English, have the concept of a sentence, a single statement with a subject and verb that says something about the world.
+
+[.last-sentence]
+For the chatbot pipeline, your goal is to segment documents into sentences, or statements.
+
+[.first-sentence]
+In addition to facilitating information extraction, you can flag some of those statements and sentences as being part of a dialog or being suitable for replies in a dialog.
+
+[.last-sentence]
+And these books give your chatbot access to a much broader set of training documents to build its common sense knowledge about the world.
+
+[.first-sentence]
+Sentence segmentation is the first step in your information extraction pipeline.
+
+[.last-sentence]
+And many of those thoughts are about real things in the real world.
+
+[.first-sentence]
+One of the simplest pieces of "information" you can extract from a document are sequences of words that contain a logically cohesive statement.
+
+[.last-sentence]
+[.first-sentence]
+The most important segments in a natural language document, after words, are sentences.
+
+[.last-sentence]
+And all languages have a widely shared process for generating them (a set of grammar "rules" or habits).
+
+[.first-sentence]
+But segmenting text, identifying sentence boundaries is a bit trickier than you might think.
+
+[.last-sentence]
+In English, for example, no single punctuation mark or sequence of characters always marks the end of a sentence.
+
+=== Why won&#8217;t <code>split('.!?')</code> work?
+[.first-sentence]
+Even a human reader might have trouble finding an appropriate sentence boundary within each of the following quotes.
+
+[.last-sentence]
+And if they did find multiple sentences from each, they would be wrong for four out of five of these difficult examples:
+
+[.first-sentence]
+_I went to G.T.You?_
+
+[.last-sentence]
+[.first-sentence]
+_She yelled "It's right here!" but I kept looking for a sentence boundary anyway._
+
+[.last-sentence]
+[.first-sentence]
+_I stared dumbfounded on as things like "How did I get here?", "Where am I?", "Am I alive?" flittered across the screen._
+
+[.last-sentence]
+[.first-sentence]
+_The author wrote "'I don't think it's conscious.' Turing said."_
+
+[.last-sentence]
+[.first-sentence]
+Even a human reader would have trouble finding an appropriate sentence boundary within each of these quotes and nested quotes and stories within a story.
+
+[.last-sentence]
+[.first-sentence]
+More sentence segmentation "edge cases" such as this are available at tm-town.com footnote:[See the web page titled "Natural Language Processing : TM-Town" (https://www.tm-town.com/natural-language-processing#golden_rules).] and within the nlpia.data module.
+
+[.last-sentence]
+[.first-sentence]
+Technical text is particularly difficult to segment into sentences because engineers, scientists, and mathematicians tend to use periods and exclamation points to signify a lot of things besides the end of a sentence.
+
+[.last-sentence]
+When we tried to find the sentence boundaries in this book, we had to manually correct several of the extracted sentences.
+
+[.first-sentence]
+If only we wrote English like telegrams, with a "STOP" or unique punctuation mark at the end of each sentence.
+
+[.last-sentence]
+If so, it's probably based on one of the two approaches to NLP you've used throughout this book:
+
+[.first-sentence]
+We use the sentence segmentation problem to revisit these two approaches by showing you how to use regular expressions as well as perceptrons to find sentence boundaries.
+
+[.last-sentence]
+This was so we could use this book as a training and test set for your segmenters.
+
+=== Sentence segmentation with regular expressions
+[.first-sentence]
+Regular expressions are just a shorthand way of expressing the tree of "`if...then`" rules (regular grammar rules) for finding character patterns in strings of characters.
+
+[.last-sentence]
+Our regex or FSM has only one purpose: Identify sentence boundaries.
+
+[.first-sentence]
+If you do a web search for sentence segmenters,footnote:[See the web page titled "Python sentence segment at DuckDuckGo" (https://duckduckgo.com/?q=Python+sentence+segment&t=canonical&ia=qa).] you're likely to be pointed to various regular expressions intended to capture the most common sentence boundaries.
+
+[.last-sentence]
+Here are some of them, combined and enhanced to give you a fast, general-purpose sentence segmenter.
+
+[.first-sentence]
+The following regex would work with a few "normal" sentences.
+
+[.last-sentence]
+[.first-sentence]
+Unfortunately, this `re.split` approach gobbles up the sentence-terminating token, and only retains it if it is the last character in a document or string.
+
+[.last-sentence]
+But it does do a good job of ignoring the trickery of periods within doubly-nested quotes:
+
+[.first-sentence]
+It also ignores periods in quotes that terminate an actual sentence.
+
+[.last-sentence]
+This can be a good thing or a bad thing, depending on your information extraction steps that follow your sentence segmenter.
+
+[.first-sentence]
+What about abbreviated text, such as SMS messages and tweets?
+
+[.last-sentence]
+Alone, the following regex could only deal with periods in SMS messages that have letters on either side, and it would safely skip over numerical values:
+
+[.first-sentence]
+Even combining these two regexes isn't enough to get more than a few right in the difficult test cases from `nlpia.data`.
+
+[.last-sentence]
+[.first-sentence]
+You'd have to add a lot more "look-ahead" and "look-back" to improve the accuracy of a regex sentence segmenter.
+
+[.last-sentence]
+Several packages contain such a model you can use to improve your sentence segmenter:
+
+[.first-sentence]
+You use the spaCy sentence segmenter (built into the parser) for most of your mission-critical applications.
+
+[.last-sentence]
+DetectorMorse, by Kyle Gorman, is another good choice if you want state-of-the-art performance in a pure Python implementation that you can refine with your own training set.
+
+=== Turning sentences into knowledge
+=== AI ethics vs AI safety
+[.first-sentence]
+In previous chapter you've learned a lot about the harm that AI and natural language processing are causing.
+
+[.last-sentence]
+And algorithms that minimize or mitigate much of these harms are often referred to as ethical AI.
+
+[.first-sentence]
+And you may have also heard about the _AI control problem_ or _AI safety_ and may be confused about how it is different from AI ethics.
+
+[.last-sentence]
+The CEOs of many of the largest AI companies have publicly announced their concern about this problem:
+
+[.first-sentence]
+Mitigating the risk of extinction from AI should be a global priority alongside other societal-scale risks such as pandemics and nuclear war.
+
+[.last-sentence]
+[.first-sentence]
+This single sentence is so important to AI companies' businesses that more than a 100 senior managers at AI companies signed this open letter.
+
+[.last-sentence]
+Open AI, Microsoft, and Anthropic signed this letter, but Apple, Tesla, Facebook, Alphabet (Google), Amazon and many other AI goliaths did not.
+
+[.first-sentence]
+And there's an ongoing public debate about the urgency and priority of _AI safety_ vs _AI ethics_.
+
+[.last-sentence]
+When technology is used to create and maintain monopolies those monopolies extinguish competition from small businesses, government programs, nonprofits, and individuals supporting the disadvantaged.footnote:[from _Chokepoint Capitalism_ by Cory Efram Doctorow]
+
+[.first-sentence]
+So which one of these pressing topics are you concerned with?
+
+[.last-sentence]
+And if you can find algorithms that help explain how an ML algorithm is making its harmful predictions and decisions you can use that understanding to prevent that harm.
+
+[.first-sentence]
+Another area to think about is the efficiency and simplicity of your AI algorithms and NLP pipelines.
+
+[.last-sentence]
+Using occam's razor to smartly prune your neural networks will make those networks more generally intelligent, with fewer biases and mistakes.footnote:["Simon Says: Evaluating and Mitigating Bias in Pruned Neural Networks with Knowledge Distillation" 2021 by Cody Blakeney (https://arxiv.org/pdf/2106.07849.pdf)]
+
+== In the real world
+[.first-sentence]
+Information extraction and question answering systems are used for:
+
+[.last-sentence]
+[.first-sentence]
+Information extraction can be used to extract things such as:
+
+[.last-sentence]
+[.first-sentence]
+Whether information is being parsed from a large corpus or from user input on the fly, being able to extract specific details and store them for later use is critical to the performance of a chatbot.
+
+[.last-sentence]
+With that knowledge safely shelved in a search-able structure, your chatbot will be equipped with the tools to hold its own in a conversation in a given domain.
+
+=== Summary

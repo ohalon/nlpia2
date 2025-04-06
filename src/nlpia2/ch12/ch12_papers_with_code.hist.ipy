@@ -1,0 +1,317 @@
+>>> %run tts.py
+>>> who
+>>> Voice()
+>>> Voice?
+>>> Voice(id='hi', gender='male', language='en', locale='us)
+>>> Voice(id='hi', gender='male', language='en', locale='us')
+>>> Voice(id='hi', gender='male', language='en', locale='us', name='hi')
+Voice(id='hi', name='hi', gender='male', language='en', locale='us', tag=None, multispeaker=False, speakers=None)
+>>> v = _
+>>> more README.md
+>>> import pandas as pd
+>>> pd.read_html('https://paperswithcode.com/sota/text-to-speech-synthesis-on-ljspeech')
+>>> import json
+>>> evaluations = json.load(open('/home/hobs/Downloads/response_1693607084357.json'))
+>>> tasks = json.load(open('/home/hobs/Downloads/response_1693607225131.json'))
+>>> pip install paperswithcode-client
+>>> import paperswithcode
+>>> client = paperswithcode.client()
+>>> tables = paperswithcode.client.EvaluationTables()
+>>> tables = paperswithcode.client.EvaluationTables?
+>>> tables = paperswithcode.client.EvaluationTables(count=20000)
+>>> tables = paperswithcode.client.EvaluationTables?
+>>> tables = paperswithcode.client.EvaluationTables(type='json', count=20000)
+>>> tables = paperswithcode.client.EvaluationTables('json', count=20000)
+>>> tables = paperswithcode.client.EvaluationTables('json')
+>>> tables = paperswithcode.client.EvaluationTables(20000)
+>>> tables = paperswithcode.client.EvaluationTables()
+>>> tables = paperswithcode.client.EvaluationTables??
+>>> from paperswithcode import PapersWithCodeClient
+>>> client = PapersWithCodeClient()
+>>> tasks = client.task_list()
+>>> len(tasks)
+>>> tasks.count
+4359
+>>> tasks.schema_json()
+'{"title": "Tasks", "description": "Object representing a paginated page of tasks.\\n\\nAttributes:\\n    count (int): Number of elements matching the query.\\n    next_page (int, optional): Number of the next page.\\n    previous_page (int, optional): Number of the previous page.\\n    results (List[Task]): List of tasks on this page.", "type": "object", "properties": {"count": {"title": "Count", "type": "integer"}, "next_page": {"title": "Next Page", "type": "integer"}, "previous_page": {"title": "Previous Page", "type": "integer"}, "results": {"title": "Results", "type": "array", "items": {"$ref": "#/definitions/Task"}}}, "required": ["count", "results"], "definitions": {"Task": {"title": "Task", "description": "Task object.\\n\\nAttributes:\\n    id (str): Task ID.\\n    name (str): Task name.\\n    description (str): Task description.", "type": "object", "properties": {"id": {"title": "Id", "type": "string"}, "name": {"title": "Name", "type": "string"}, "description": {"title": "Description", "type": "string"}}, "required": ["id", "name", "description"]}}}'
+>>> [t for t in tasks]
+[('count', 4359),
+ ('next_page', 2),
+ ('previous_page', None),
+ ('results',
+  [Task(id='task', name='', description=''),
+   Task(id='2d-classification', name='2D Classification', description=''),
+   Task(id='2d-cyclist-detection', name='2D Cyclist Detection', description=''),
+   Task(id='2d-human-pose-estimation', name='2D Human Pose Estimation', description='What is Human Pose Estimation?\r\nHuman pose estimation is the process of estimating the configuration of the body (pose) from a single, typically monocular, image. Background. Human pose estimation is one of the key problems in computer vision that has been studied for well over 15 years.  The reason for its importance is the\r\nabundance of applications that can benefit from such a technology. For example,\r\nhuman pose estimation allows for higher-level reasoning in the context of human-computer interaction and activity recognition; it is also one of the basic building blocks for marker-less motion capture (MoCap) technology. MoCap technology is useful for applications ranging from character animation to clinical analysis of gait pathologies.'),
+   Task(id='2d-object-detection', name='2D Object Detection', description=''),
+   Task(id='2d-pose-estimation', name='2D Pose Estimation', description=''),
+   Task(id='2d-semantic-segmentation', name='2D Semantic Segmentation', description=''),
+   Task(id='2d-semantic-segmentation-task-1-8-classes', name='2D Semantic Segmentation task 1 (8 classes)', description=''),
+   Task(id='2d-semantic-segmentation-task-2-17-classes', name='2D Semantic Segmentation task 2 (17 classes)', description=''),
+   Task(id='2d-semantic-segmentation-task-3-25-classes', name='2D Semantic Segmentation task 3 (25 classes)', description=''),
+   Task(id='3d', name='3D', description=''),
+   Task(id='3d-absolute-human-pose-estimation', name='3D Absolute Human Pose Estimation', description='This task aims to solve absolute (camera-centric not root-relative) 3D human pose estimation. \r\n\r\n<span style="color:grey; opacity: 0.6">( Image credit: [RootNet](https://github.com/mks0601/3DMPPE_ROOTNET_RELEASE) )</span>'),
+   Task(id='3d-human-action-recognition', name='3D Action Recognition', description='Image: [Rahmani et al](https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Rahmani_3D_Action_Recognition_CVPR_2016_paper.pdf)'),
+   Task(id='3d-anomaly-detection', name='3D Anomaly Detection', description='3D-only Anomaly Detection'),
+   Task(id='3d-anomaly-detection-and-segmentation', name='3D Anomaly Detection and Segmentation', description='3D-Only Anomaly Detection and Segmentation'),
+   Task(id='3d-anomaly-segmentation', name='3D Anomaly Segmentation', description='Anomaly Segmentation using 3D information only'),
+   Task(id='3d-assembly', name='3D Assembly', description=''),
+   Task(id='3d-aware-image-synthesis', name='3D-Aware Image Synthesis', description=''),
+   Task(id='3d-bin-packing', name='3D Bin Packing', description='As a classic NP-hard problem, the bin packing problem (1D-BPP) seeks for an assignment of a collection of items with various weights to bins. The optimal assignment houses all the items with the fewest bins such that the total weight of items in a bin is below the bin’s capacity. In its 3D version (3D-BPP), an item has a 3D “weight” corresponding\r\nto its length, width and height.'),
+   Task(id='3d-building-mesh-labeling', name='3D Building Mesh Labeling', description=''),
+   Task(id='3d-canonical-hand-pose-estimation', name='3D Canonical Hand Pose Estimation', description='Image: [Lin et al](https://arxiv.org/pdf/2006.01320v1.pdf)'),
+   Task(id='3d-canonicalization', name='3D Canonicalization', description='3D Canonicalization is the process of estimating a transformation-invariant  feature for classification and part segmentation tasks.'),
+   Task(id='3d-car-instance-understanding', name='3D Car Instance Understanding', description='3D Car Instance Understanding is the task of estimating properties (e.g.translation, rotation and shape) of a moving or parked vehicle on the road.\r\n\r\n<span style="color:grey; opacity: 0.6">( Image credit: [Occlusion-Net](http://openaccess.thecvf.com/content_CVPR_2019/papers/Reddy_Occlusion-Net_2D3D_Occluded_Keypoint_Localization_Using_Graph_Networks_CVPR_2019_paper.pdf) )</span>'),
+   Task(id='3d-character-animation-from-a-single-photo', name='3D Character Animation From A Single Photo', description='Image: [Weng et al](https://arxiv.org/pdf/1812.02246v1.pdf)'),
+   Task(id='3d-classification', name='3D Classification', description=''),
+   Task(id='3d-dense-captioning', name='3D dense captioning', description='Dense captioning in 3D point clouds is an emerging vision-and-language task involving object-level 3D scene understanding. Apart from coarse semantic class prediction and bounding box regression as in traditional 3D object detection, 3D dense captioning aims at producing a further and finer instance-level label of natural language description on visual appearance and spatial relations for each scene object of interest.'),
+   Task(id='3d-dense-shape-correspondence', name='3D Dense Shape Correspondence', description='Finding a meaningful correspondence between two or more shapes is one of the most fundamental shape analysis tasks. The problem can be generally stated as: given input shapes S1,S2,...,SN, find a meaningful relation (or mapping) between their elements. Under different contexts, the problem has also been referred to as registration, alignment, or simply, matching. Shape correspondence is a key algorithmic component in tasks such as 3D scan alignment and space-time reconstruction, as well as an indispensable prerequisite in diverse applications including attribute transfer, shape interpolation, and statistical modeling.'),
+   Task(id='3d-depth-estimation', name='3D Depth Estimation', description='Image: [monodepth2](https://github.com/nianticlabs/monodepth2)'),
+   Task(id='3d-face-alignment', name='3D Face Alignment', description=''),
+   Task(id='3d-face-animation', name='3D Face Animation', description='Image: [Cudeiro et al](https://arxiv.org/pdf/1905.03079v1.pdf)'),
+   Task(id='3d-face-modeling', name='3D Face Modelling', description=''),
+   Task(id='3d-face-reconstruction', name='3D Face Reconstruction', description='**3D Face Reconstruction** is a computer vision task that involves creating a 3D model of a human face from a 2D image or a set of images. The goal of 3D face reconstruction is to reconstruct a digital 3D representation of a person\'s face, which can be used for various applications such as animation, virtual reality, and biometric identification.\r\n\r\n<span style="color:grey; opacity: 0.6">( Image credit: [3DDFA_V2](https://github.com/cleardusk/3DDFA_V2) )</span>'),
+   Task(id='3d-facial-expression-recognition', name='3D Facial Expression Recognition', description='3D facial expression recognition is the task of modelling facial expressions in 3D from an image or video.\r\n\r\n<span style="color:grey; opacity: 0.6">( Image credit: [Expression-Net](https://github.com/fengju514/Expression-Net) )</span>'),
+   Task(id='3d-facial-landmark-localization', name='3D Facial Landmark Localization', description='Image: [Zhang et al](https://arxiv.org/pdf/1801.09242v1.pdf)'),
+   Task(id='3d-feature-matching', name='3D Feature Matching', description='Image: [Choy et al](https://paperswithcode.com/paper/fully-convolutional-geometric-features)'),
+   Task(id='3d-geometry-perception', name='3D Geometry Perception', description='Image: [Zhao et al](https://arxiv.org/pdf/1812.10775v2.pdf)'),
+   Task(id='3d-geometry-prediction', name='3D Geometry Prediction', description=''),
+   Task(id='3d-hand-pose-estimation', name='3D Hand Pose Estimation', description='Image: [Zimmerman et l](https://arxiv.xsrg/pdf/1705.01389v3.pdf)'),
+   Task(id='3d-holography', name='3D Holography', description='The images that are presented here are multiplanar images that were reconstructed using a holographic display. For more details, please see: https://complightlab.com/publications/realistic_defocus_cgh/'),
+   Task(id='3d-human-dynamics', name='3D Human Dynamics', description='Image: [Zhang et al](https://openaccess.thecvf.com/content_ICCV_2019/papers/Zhang_Predicting_3D_Human_Dynamics_From_Video_ICCV_2019_paper.pdf)'),
+   Task(id='3d-human-pose-and-shape-estimation', name='3D human pose and shape estimation', description='Estimate 3D human pose and shape (e.g. SMPL) from images'),
+   Task(id='3d-human-pose-estimation', name='3D Human Pose Estimation', description='**3D Human Pose Estimation** is a computer vision task that involves estimating the 3D positions and orientations of body joints and bones from 2D images or videos. The goal is to reconstruct the 3D pose of a person in real-time, which can be used in a variety of applications, such as virtual reality, human-computer interaction, and motion analysis.'),
+   Task(id='3d-human-pose-estimation-in-limited-data', name='3D Human Pose Estimation in Limited Data', description=''),
+   Task(id='3d-human-pose-estimation-in-limited-date', name='3D Human Pose Estimation in Limited Date', description=''),
+   Task(id='3d-human-pose-tracking', name='3D Human Pose Tracking', description=''),
+   Task(id='3d-human-reconstruction', name='3D Human Reconstruction', description=''),
+   Task(id='3d-human-shape-estimation', name='3D Human Shape Estimation', description=''),
+   Task(id='3d-inpainting', name='3D Inpainting', description='**3D Inpainting** is the removal of unwanted objects\r\nfrom a 3D scene, such that the replaced region is visually\r\nplausible and consistent with its context.'),
+   Task(id='3d-instance-segmentation-1', name='3D Instance Segmentation', description='Image: [OccuSeg](https://arxiv.org/pdf/2003.06537v3.pdf)'),
+   Task(id='3d-interacting-hand-pose-estimation', name='3D Interacting Hand Pose Estimation', description='')])]
+>>> tasks.to_string()
+'count=4359 next_page=2 previous_page=None results=[Task(id=\'task\', name=\'\', description=\'\'), Task(id=\'2d-classification\', name=\'2D Classification\', description=\'\'), Task(id=\'2d-cyclist-detection\', name=\'2D Cyclist Detection\', description=\'\'), Task(id=\'2d-human-pose-estimation\', name=\'2D Human Pose Estimation\', description=\'What is Human Pose Estimation?\\r\\nHuman pose estimation is the process of estimating the configuration of the body (pose) from a single, typically monocular, image. Background. Human pose estimation is one of the key problems in computer vision that has been studied for well over 15 years.  The reason for its importance is the\\r\\nabundance of applications that can benefit from such a technology. For example,\\r\\nhuman pose estimation allows for higher-level reasoning in the context of human-computer interaction and activity recognition; it is also one of the basic building blocks for marker-less motion capture (MoCap) technology. MoCap technology is useful for applications ranging from character animation to clinical analysis of gait pathologies.\'), Task(id=\'2d-object-detection\', name=\'2D Object Detection\', description=\'\'), Task(id=\'2d-pose-estimation\', name=\'2D Pose Estimation\', description=\'\'), Task(id=\'2d-semantic-segmentation\', name=\'2D Semantic Segmentation\', description=\'\'), Task(id=\'2d-semantic-segmentation-task-1-8-classes\', name=\'2D Semantic Segmentation task 1 (8 classes)\', description=\'\'), Task(id=\'2d-semantic-segmentation-task-2-17-classes\', name=\'2D Semantic Segmentation task 2 (17 classes)\', description=\'\'), Task(id=\'2d-semantic-segmentation-task-3-25-classes\', name=\'2D Semantic Segmentation task 3 (25 classes)\', description=\'\'), Task(id=\'3d\', name=\'3D\', description=\'\'), Task(id=\'3d-absolute-human-pose-estimation\', name=\'3D Absolute Human Pose Estimation\', description=\'This task aims to solve absolute (camera-centric not root-relative) 3D human pose estimation. \\r\\n\\r\\n<span style="color:grey; opacity: 0.6">( Image credit: [RootNet](https://github.com/mks0601/3DMPPE_ROOTNET_RELEASE) )</span>\'), Task(id=\'3d-human-action-recognition\', name=\'3D Action Recognition\', description=\'Image: [Rahmani et al](https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Rahmani_3D_Action_Recognition_CVPR_2016_paper.pdf)\'), Task(id=\'3d-anomaly-detection\', name=\'3D Anomaly Detection\', description=\'3D-only Anomaly Detection\'), Task(id=\'3d-anomaly-detection-and-segmentation\', name=\'3D Anomaly Detection and Segmentation\', description=\'3D-Only Anomaly Detection and Segmentation\'), Task(id=\'3d-anomaly-segmentation\', name=\'3D Anomaly Segmentation\', description=\'Anomaly Segmentation using 3D information only\'), Task(id=\'3d-assembly\', name=\'3D Assembly\', description=\'\'), Task(id=\'3d-aware-image-synthesis\', name=\'3D-Aware Image Synthesis\', description=\'\'), Task(id=\'3d-bin-packing\', name=\'3D Bin Packing\', description=\'As a classic NP-hard problem, the bin packing problem (1D-BPP) seeks for an assignment of a collection of items with various weights to bins. The optimal assignment houses all the items with the fewest bins such that the total weight of items in a bin is below the bin’s capacity. In its 3D version (3D-BPP), an item has a 3D “weight” corresponding\\r\\nto its length, width and height.\'), Task(id=\'3d-building-mesh-labeling\', name=\'3D Building Mesh Labeling\', description=\'\'), Task(id=\'3d-canonical-hand-pose-estimation\', name=\'3D Canonical Hand Pose Estimation\', description=\'Image: [Lin et al](https://arxiv.org/pdf/2006.01320v1.pdf)\'), Task(id=\'3d-canonicalization\', name=\'3D Canonicalization\', description=\'3D Canonicalization is the process of estimating a transformation-invariant  feature for classification and part segmentation tasks.\'), Task(id=\'3d-car-instance-understanding\', name=\'3D Car Instance Understanding\', description=\'3D Car Instance Understanding is the task of estimating properties (e.g.translation, rotation and shape) of a moving or parked vehicle on the road.\\r\\n\\r\\n<span style="color:grey; opacity: 0.6">( Image credit: [Occlusion-Net](http://openaccess.thecvf.com/content_CVPR_2019/papers/Reddy_Occlusion-Net_2D3D_Occluded_Keypoint_Localization_Using_Graph_Networks_CVPR_2019_paper.pdf) )</span>\'), Task(id=\'3d-character-animation-from-a-single-photo\', name=\'3D Character Animation From A Single Photo\', description=\'Image: [Weng et al](https://arxiv.org/pdf/1812.02246v1.pdf)\'), Task(id=\'3d-classification\', name=\'3D Classification\', description=\'\'), Task(id=\'3d-dense-captioning\', name=\'3D dense captioning\', description=\'Dense captioning in 3D point clouds is an emerging vision-and-language task involving object-level 3D scene understanding. Apart from coarse semantic class prediction and bounding box regression as in traditional 3D object detection, 3D dense captioning aims at producing a further and finer instance-level label of natural language description on visual appearance and spatial relations for each scene object of interest.\'), Task(id=\'3d-dense-shape-correspondence\', name=\'3D Dense Shape Correspondence\', description=\'Finding a meaningful correspondence between two or more shapes is one of the most fundamental shape analysis tasks. The problem can be generally stated as: given input shapes S1,S2,...,SN, find a meaningful relation (or mapping) between their elements. Under different contexts, the problem has also been referred to as registration, alignment, or simply, matching. Shape correspondence is a key algorithmic component in tasks such as 3D scan alignment and space-time reconstruction, as well as an indispensable prerequisite in diverse applications including attribute transfer, shape interpolation, and statistical modeling.\'), Task(id=\'3d-depth-estimation\', name=\'3D Depth Estimation\', description=\'Image: [monodepth2](https://github.com/nianticlabs/monodepth2)\'), Task(id=\'3d-face-alignment\', name=\'3D Face Alignment\', description=\'\'), Task(id=\'3d-face-animation\', name=\'3D Face Animation\', description=\'Image: [Cudeiro et al](https://arxiv.org/pdf/1905.03079v1.pdf)\'), Task(id=\'3d-face-modeling\', name=\'3D Face Modelling\', description=\'\'), Task(id=\'3d-face-reconstruction\', name=\'3D Face Reconstruction\', description=\'**3D Face Reconstruction** is a computer vision task that involves creating a 3D model of a human face from a 2D image or a set of images. The goal of 3D face reconstruction is to reconstruct a digital 3D representation of a person\\\'s face, which can be used for various applications such as animation, virtual reality, and biometric identification.\\r\\n\\r\\n<span style="color:grey; opacity: 0.6">( Image credit: [3DDFA_V2](https://github.com/cleardusk/3DDFA_V2) )</span>\'), Task(id=\'3d-facial-expression-recognition\', name=\'3D Facial Expression Recognition\', description=\'3D facial expression recognition is the task of modelling facial expressions in 3D from an image or video.\\r\\n\\r\\n<span style="color:grey; opacity: 0.6">( Image credit: [Expression-Net](https://github.com/fengju514/Expression-Net) )</span>\'), Task(id=\'3d-facial-landmark-localization\', name=\'3D Facial Landmark Localization\', description=\'Image: [Zhang et al](https://arxiv.org/pdf/1801.09242v1.pdf)\'), Task(id=\'3d-feature-matching\', name=\'3D Feature Matching\', description=\'Image: [Choy et al](https://paperswithcode.com/paper/fully-convolutional-geometric-features)\'), Task(id=\'3d-geometry-perception\', name=\'3D Geometry Perception\', description=\'Image: [Zhao et al](https://arxiv.org/pdf/1812.10775v2.pdf)\'), Task(id=\'3d-geometry-prediction\', name=\'3D Geometry Prediction\', description=\'\'), Task(id=\'3d-hand-pose-estimation\', name=\'3D Hand Pose Estimation\', description=\'Image: [Zimmerman et l](https://arxiv.xsrg/pdf/1705.01389v3.pdf)\'), Task(id=\'3d-holography\', name=\'3D Holography\', description=\'The images that are presented here are multiplanar images that were reconstructed using a holographic display. For more details, please see: https://complightlab.com/publications/realistic_defocus_cgh/\'), Task(id=\'3d-human-dynamics\', name=\'3D Human Dynamics\', description=\'Image: [Zhang et al](https://openaccess.thecvf.com/content_ICCV_2019/papers/Zhang_Predicting_3D_Human_Dynamics_From_Video_ICCV_2019_paper.pdf)\'), Task(id=\'3d-human-pose-and-shape-estimation\', name=\'3D human pose and shape estimation\', description=\'Estimate 3D human pose and shape (e.g. SMPL) from images\'), Task(id=\'3d-human-pose-estimation\', name=\'3D Human Pose Estimation\', description=\'**3D Human Pose Estimation** is a computer vision task that involves estimating the 3D positions and orientations of body joints and bones from 2D images or videos. The goal is to reconstruct the 3D pose of a person in real-time, which can be used in a variety of applications, such as virtual reality, human-computer interaction, and motion analysis.\'), Task(id=\'3d-human-pose-estimation-in-limited-data\', name=\'3D Human Pose Estimation in Limited Data\', description=\'\'), Task(id=\'3d-human-pose-estimation-in-limited-date\', name=\'3D Human Pose Estimation in Limited Date\', description=\'\'), Task(id=\'3d-human-pose-tracking\', name=\'3D Human Pose Tracking\', description=\'\'), Task(id=\'3d-human-reconstruction\', name=\'3D Human Reconstruction\', description=\'\'), Task(id=\'3d-human-shape-estimation\', name=\'3D Human Shape Estimation\', description=\'\'), Task(id=\'3d-inpainting\', name=\'3D Inpainting\', description=\'**3D Inpainting** is the removal of unwanted objects\\r\\nfrom a 3D scene, such that the replaced region is visually\\r\\nplausible and consistent with its context.\'), Task(id=\'3d-instance-segmentation-1\', name=\'3D Instance Segmentation\', description=\'Image: [OccuSeg](https://arxiv.org/pdf/2003.06537v3.pdf)\'), Task(id=\'3d-interacting-hand-pose-estimation\', name=\'3D Interacting Hand Pose Estimation\', description=\'\')]'
+>>> tasks.json()
+'{"count": 4359, "next_page": 2, "previous_page": null, "results": [{"id": "task", "name": "", "description": ""}, {"id": "2d-classification", "name": "2D Classification", "description": ""}, {"id": "2d-cyclist-detection", "name": "2D Cyclist Detection", "description": ""}, {"id": "2d-human-pose-estimation", "name": "2D Human Pose Estimation", "description": "What is Human Pose Estimation?\\r\\nHuman pose estimation is the process of estimating the configuration of the body (pose) from a single, typically monocular, image. Background. Human pose estimation is one of the key problems in computer vision that has been studied for well over 15 years.  The reason for its importance is the\\r\\nabundance of applications that can benefit from such a technology. For example,\\r\\nhuman pose estimation allows for higher-level reasoning in the context of human-computer interaction and activity recognition; it is also one of the basic building blocks for marker-less motion capture (MoCap) technology. MoCap technology is useful for applications ranging from character animation to clinical analysis of gait pathologies."}, {"id": "2d-object-detection", "name": "2D Object Detection", "description": ""}, {"id": "2d-pose-estimation", "name": "2D Pose Estimation", "description": ""}, {"id": "2d-semantic-segmentation", "name": "2D Semantic Segmentation", "description": ""}, {"id": "2d-semantic-segmentation-task-1-8-classes", "name": "2D Semantic Segmentation task 1 (8 classes)", "description": ""}, {"id": "2d-semantic-segmentation-task-2-17-classes", "name": "2D Semantic Segmentation task 2 (17 classes)", "description": ""}, {"id": "2d-semantic-segmentation-task-3-25-classes", "name": "2D Semantic Segmentation task 3 (25 classes)", "description": ""}, {"id": "3d", "name": "3D", "description": ""}, {"id": "3d-absolute-human-pose-estimation", "name": "3D Absolute Human Pose Estimation", "description": "This task aims to solve absolute (camera-centric not root-relative) 3D human pose estimation. \\r\\n\\r\\n<span style=\\"color:grey; opacity: 0.6\\">( Image credit: [RootNet](https://github.com/mks0601/3DMPPE_ROOTNET_RELEASE) )</span>"}, {"id": "3d-human-action-recognition", "name": "3D Action Recognition", "description": "Image: [Rahmani et al](https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Rahmani_3D_Action_Recognition_CVPR_2016_paper.pdf)"}, {"id": "3d-anomaly-detection", "name": "3D Anomaly Detection", "description": "3D-only Anomaly Detection"}, {"id": "3d-anomaly-detection-and-segmentation", "name": "3D Anomaly Detection and Segmentation", "description": "3D-Only Anomaly Detection and Segmentation"}, {"id": "3d-anomaly-segmentation", "name": "3D Anomaly Segmentation", "description": "Anomaly Segmentation using 3D information only"}, {"id": "3d-assembly", "name": "3D Assembly", "description": ""}, {"id": "3d-aware-image-synthesis", "name": "3D-Aware Image Synthesis", "description": ""}, {"id": "3d-bin-packing", "name": "3D Bin Packing", "description": "As a classic NP-hard problem, the bin packing problem (1D-BPP) seeks for an assignment of a collection of items with various weights to bins. The optimal assignment houses all the items with the fewest bins such that the total weight of items in a bin is below the bin\\u2019s capacity. In its 3D version (3D-BPP), an item has a 3D \\u201cweight\\u201d corresponding\\r\\nto its length, width and height."}, {"id": "3d-building-mesh-labeling", "name": "3D Building Mesh Labeling", "description": ""}, {"id": "3d-canonical-hand-pose-estimation", "name": "3D Canonical Hand Pose Estimation", "description": "Image: [Lin et al](https://arxiv.org/pdf/2006.01320v1.pdf)"}, {"id": "3d-canonicalization", "name": "3D Canonicalization", "description": "3D Canonicalization is the process of estimating a transformation-invariant  feature for classification and part segmentation tasks."}, {"id": "3d-car-instance-understanding", "name": "3D Car Instance Understanding", "description": "3D Car Instance Understanding is the task of estimating properties (e.g.translation, rotation and shape) of a moving or parked vehicle on the road.\\r\\n\\r\\n<span style=\\"color:grey; opacity: 0.6\\">( Image credit: [Occlusion-Net](http://openaccess.thecvf.com/content_CVPR_2019/papers/Reddy_Occlusion-Net_2D3D_Occluded_Keypoint_Localization_Using_Graph_Networks_CVPR_2019_paper.pdf) )</span>"}, {"id": "3d-character-animation-from-a-single-photo", "name": "3D Character Animation From A Single Photo", "description": "Image: [Weng et al](https://arxiv.org/pdf/1812.02246v1.pdf)"}, {"id": "3d-classification", "name": "3D Classification", "description": ""}, {"id": "3d-dense-captioning", "name": "3D dense captioning", "description": "Dense captioning in 3D point clouds is an emerging vision-and-language task involving object-level 3D scene understanding. Apart from coarse semantic class prediction and bounding box regression as in traditional 3D object detection, 3D dense captioning aims at producing a further and finer instance-level label of natural language description on visual appearance and spatial relations for each scene object of interest."}, {"id": "3d-dense-shape-correspondence", "name": "3D Dense Shape Correspondence", "description": "Finding a meaningful correspondence between two or more shapes is one of the most fundamental shape analysis tasks. The problem can be generally stated as: given input shapes S1,S2,...,SN, find a meaningful relation (or mapping) between their elements. Under different contexts, the problem has also been referred to as registration, alignment, or simply, matching. Shape correspondence is a key algorithmic component in tasks such as 3D scan alignment and space-time reconstruction, as well as an indispensable prerequisite in diverse applications including attribute transfer, shape interpolation, and statistical modeling."}, {"id": "3d-depth-estimation", "name": "3D Depth Estimation", "description": "Image: [monodepth2](https://github.com/nianticlabs/monodepth2)"}, {"id": "3d-face-alignment", "name": "3D Face Alignment", "description": ""}, {"id": "3d-face-animation", "name": "3D Face Animation", "description": "Image: [Cudeiro et al](https://arxiv.org/pdf/1905.03079v1.pdf)"}, {"id": "3d-face-modeling", "name": "3D Face Modelling", "description": ""}, {"id": "3d-face-reconstruction", "name": "3D Face Reconstruction", "description": "**3D Face Reconstruction** is a computer vision task that involves creating a 3D model of a human face from a 2D image or a set of images. The goal of 3D face reconstruction is to reconstruct a digital 3D representation of a person\'s face, which can be used for various applications such as animation, virtual reality, and biometric identification.\\r\\n\\r\\n<span style=\\"color:grey; opacity: 0.6\\">( Image credit: [3DDFA_V2](https://github.com/cleardusk/3DDFA_V2) )</span>"}, {"id": "3d-facial-expression-recognition", "name": "3D Facial Expression Recognition", "description": "3D facial expression recognition is the task of modelling facial expressions in 3D from an image or video.\\r\\n\\r\\n<span style=\\"color:grey; opacity: 0.6\\">( Image credit: [Expression-Net](https://github.com/fengju514/Expression-Net) )</span>"}, {"id": "3d-facial-landmark-localization", "name": "3D Facial Landmark Localization", "description": "Image: [Zhang et al](https://arxiv.org/pdf/1801.09242v1.pdf)"}, {"id": "3d-feature-matching", "name": "3D Feature Matching", "description": "Image: [Choy et al](https://paperswithcode.com/paper/fully-convolutional-geometric-features)"}, {"id": "3d-geometry-perception", "name": "3D Geometry Perception", "description": "Image: [Zhao et al](https://arxiv.org/pdf/1812.10775v2.pdf)"}, {"id": "3d-geometry-prediction", "name": "3D Geometry Prediction", "description": ""}, {"id": "3d-hand-pose-estimation", "name": "3D Hand Pose Estimation", "description": "Image: [Zimmerman et l](https://arxiv.xsrg/pdf/1705.01389v3.pdf)"}, {"id": "3d-holography", "name": "3D Holography", "description": "The images that are presented here are multiplanar images that were reconstructed using a holographic display. For more details, please see: https://complightlab.com/publications/realistic_defocus_cgh/"}, {"id": "3d-human-dynamics", "name": "3D Human Dynamics", "description": "Image: [Zhang et al](https://openaccess.thecvf.com/content_ICCV_2019/papers/Zhang_Predicting_3D_Human_Dynamics_From_Video_ICCV_2019_paper.pdf)"}, {"id": "3d-human-pose-and-shape-estimation", "name": "3D human pose and shape estimation", "description": "Estimate 3D human pose and shape (e.g. SMPL) from images"}, {"id": "3d-human-pose-estimation", "name": "3D Human Pose Estimation", "description": "**3D Human Pose Estimation** is a computer vision task that involves estimating the 3D positions and orientations of body joints and bones from 2D images or videos. The goal is to reconstruct the 3D pose of a person in real-time, which can be used in a variety of applications, such as virtual reality, human-computer interaction, and motion analysis."}, {"id": "3d-human-pose-estimation-in-limited-data", "name": "3D Human Pose Estimation in Limited Data", "description": ""}, {"id": "3d-human-pose-estimation-in-limited-date", "name": "3D Human Pose Estimation in Limited Date", "description": ""}, {"id": "3d-human-pose-tracking", "name": "3D Human Pose Tracking", "description": ""}, {"id": "3d-human-reconstruction", "name": "3D Human Reconstruction", "description": ""}, {"id": "3d-human-shape-estimation", "name": "3D Human Shape Estimation", "description": ""}, {"id": "3d-inpainting", "name": "3D Inpainting", "description": "**3D Inpainting** is the removal of unwanted objects\\r\\nfrom a 3D scene, such that the replaced region is visually\\r\\nplausible and consistent with its context."}, {"id": "3d-instance-segmentation-1", "name": "3D Instance Segmentation", "description": "Image: [OccuSeg](https://arxiv.org/pdf/2003.06537v3.pdf)"}, {"id": "3d-interacting-hand-pose-estimation", "name": "3D Interacting Hand Pose Estimation", "description": ""}]}'
+>>> tasksjs = json.loads(tasks.json())
+>>> tasksjs.keys()
+dict_keys(['count', 'next_page', 'previous_page', 'results'])
+>>> tasksjs['results'].keys()
+>>> tasksjs['results'][0]
+{'id': 'task', 'name': '', 'description': ''}
+>>> dftasks = pd.DataFrame(tasksjs['results'])
+>>> tasks = client.evaluation_list()
+>>> evaluations = client.evaluation_list()
+>>> dfev = pd.DataFrame(json.loads(evaluations.json())['results'])
+>>> dfev
+                                                 id                                           task                      dataset description mirror_url
+0                image-to-text-retrieval-on-aic-icc                        image-to-text-retrieval                      aic-icc                   None
+1                        image-retrieval-on-aic-icc                                image-retrieval                      aic-icc                   None
+2                       image-captioning-on-aic-icc                               image-captioning                      aic-icc                   None
+3            video-saliency-detection-on-hollywood2                       video-saliency-detection                   hollywood2                   None
+4                  video-saliency-detection-on-diem                       video-saliency-detection                         diem                   None
+5                  domain-labelling-on-babeldomains                               domain-labelling                 babeldomains                   None
+6                        pose-prediction-on-sun-mem                                pose-prediction                      sun-mem                   None
+7                  entity-linking-on-kilt-wned-cweb                                 entity-linking               kilt-wned-cweb                   None
+8                        slot-filling-on-kilt-t-rex                                   slot-filling                   kilt-t-rex                   None
+9                 slot-filling-on-kilt-zero-shot-re                                   slot-filling            kilt-zero-shot-re                   None
+10       video-instance-segmentation-on-youtube-vis                    video-instance-segmentation                  youtube-vis                   None
+11     video-instance-segmentation-on-youtube-vis-1                    video-instance-segmentation       youtube-vis-validation                   None
+12            human-object-interaction-detection-on             human-object-interaction-detection               ambiguious-hoi                   None
+13                                  eeg-on-hs-ssvep                                            eeg                     hs-ssvep                   None
+14     extracting-covid-19-events-from-twitter-on-w        extracting-covid-19-events-from-twitter     w-nut-2020-shared-task-3                   None
+15         skeleton-based-action-recognition-on-tcg              skeleton-based-action-recognition                  tcg-dataset                   None
+16              stock-market-prediction-on-stocknet                        stock-market-prediction                     stocknet                   None
+17             text-classification-on-hate-speech18                            text-classification                hate-speech18                   None
+18            semantic-segmentation-on-manipaluavid                          semantic-segmentation                 manipaluavid                   None
+19                speech-denoising-on-lrs3-vggsound                               speech-denoising                lrs3-vggsound                   None
+20                        anomaly-detection-on-dior                              anomaly-detection                         dior                   None
+21                 entity-alignment-on-dbp15k-fr-en                               entity-alignment                 dbp15k-fr-en                   None
+22                 entity-alignment-on-dbp15k-ja-en                               entity-alignment                 dbp15k-ja-en                   None
+23                variational-inference-on-cifar100                          variational-inference                     cifar100                   None
+24                 image-classification-on-cifar100                           image-classification                     cifar100                   None
+25        out-of-distribution-detection-on-cifar100                  out-of-distribution-detection                     cifar100                   None
+26                novel-class-discovery-on-cifar100                          novel-class-discovery                     cifar100                   None
+27    non-exemplar-based-class-incremental-learning  non-exemplar-based-class-incremental-learning                     cifar100                   None
+28                   bayesian-inference-on-cifar100                             bayesian-inference                     cifar100                   None
+29          learning-with-coarse-labels-on-cifar100                    learning-with-coarse-labels                     cifar100                   None
+30           class-incremental-learning-on-cifar100                     class-incremental-learning                     cifar100                   None
+31          text-to-image-generation-on-multi-modal                       text-to-image-generation        multi-modal-celeba-hq                   None
+32       spoken-language-identification-on-kalaka-3                 spoken-language-identification                     kalaka-3                   None
+33          spoken-language-identification-on-lre07                 spoken-language-identification                        lre07                   None
+34                                deblurring-on-dvd                                     deblurring                          dvd                   None
+35            question-answering-on-efficientqa-dev                             question-answering              efficientqa-dev                   None
+36           question-answering-on-efficientqa-test                             question-answering             efficientqa-test                   None
+37    cross-document-language-modeling-on-multinews               cross-document-language-modeling                multinews-val                   None
+38  cross-document-language-modeling-on-multinews-1               cross-document-language-modeling               multinews-test                   None
+39      event-cross-document-coreference-resolution    event-cross-document-coreference-resolution                     ecb-test                   None
+40     entity-cross-document-coreference-resolution   entity-cross-document-coreference-resolution                     ecb-test                   None
+41              coreference-resolution-on-stm-coref                         coreference-resolution                    stm-coref                   None
+42           extended-summarization-on-longsumm-val                         extended-summarization                 longsumm-val                   None
+43      semi-supervised-semantic-segmentation-on-10          semi-supervised-semantic-segmentation  pascal-voc-2012-1464-labels                   None
+44                spoken-language-identification-on                 spoken-language-identification                 voxlingua107                   None
+45        image-to-text-retrieval-on-ruc-cas-wenlan                        image-to-text-retrieval               ruc-cas-wenlan                   None
+46                image-retrieval-on-ruc-cas-wenlan                                image-retrieval               ruc-cas-wenlan                   None
+47             domain-generalization-on-nico-animal                          domain-generalization                  nico-animal                   None
+48         image-captioning-on-nocaps-val-in-domain                               image-captioning         nocaps-val-in-domain                   None
+49       image-captioning-on-nocaps-val-near-domain                               image-captioning       nocaps-val-near-domain                   None
+>>> dftasks
+                                            id                                          name                                        description
+0                                         task                                                                                                 
+1                            2d-classification                             2D Classification                                                   
+2                         2d-cyclist-detection                          2D Cyclist Detection                                                   
+3                     2d-human-pose-estimation                      2D Human Pose Estimation  What is Human Pose Estimation?\r\nHuman pose e...
+4                          2d-object-detection                           2D Object Detection                                                   
+5                           2d-pose-estimation                            2D Pose Estimation                                                   
+6                     2d-semantic-segmentation                      2D Semantic Segmentation                                                   
+7    2d-semantic-segmentation-task-1-8-classes   2D Semantic Segmentation task 1 (8 classes)                                                   
+8   2d-semantic-segmentation-task-2-17-classes  2D Semantic Segmentation task 2 (17 classes)                                                   
+9   2d-semantic-segmentation-task-3-25-classes  2D Semantic Segmentation task 3 (25 classes)                                                   
+10                                          3d                                            3D                                                   
+11           3d-absolute-human-pose-estimation             3D Absolute Human Pose Estimation  This task aims to solve absolute (camera-centr...
+12                 3d-human-action-recognition                         3D Action Recognition  Image: [Rahmani et al](https://www.cv-foundati...
+13                        3d-anomaly-detection                          3D Anomaly Detection                          3D-only Anomaly Detection
+14       3d-anomaly-detection-and-segmentation         3D Anomaly Detection and Segmentation         3D-Only Anomaly Detection and Segmentation
+15                     3d-anomaly-segmentation                       3D Anomaly Segmentation     Anomaly Segmentation using 3D information only
+16                                 3d-assembly                                   3D Assembly                                                   
+17                    3d-aware-image-synthesis                      3D-Aware Image Synthesis                                                   
+18                              3d-bin-packing                                3D Bin Packing  As a classic NP-hard problem, the bin packing ...
+19                   3d-building-mesh-labeling                     3D Building Mesh Labeling                                                   
+20           3d-canonical-hand-pose-estimation             3D Canonical Hand Pose Estimation  Image: [Lin et al](https://arxiv.org/pdf/2006....
+21                         3d-canonicalization                           3D Canonicalization  3D Canonicalization is the process of estimati...
+22               3d-car-instance-understanding                 3D Car Instance Understanding  3D Car Instance Understanding is the task of e...
+23  3d-character-animation-from-a-single-photo    3D Character Animation From A Single Photo  Image: [Weng et al](https://arxiv.org/pdf/1812...
+24                           3d-classification                             3D Classification                                                   
+25                         3d-dense-captioning                           3D dense captioning  Dense captioning in 3D point clouds is an emer...
+26               3d-dense-shape-correspondence                 3D Dense Shape Correspondence  Finding a meaningful correspondence between tw...
+27                         3d-depth-estimation                           3D Depth Estimation  Image: [monodepth2](https://github.com/niantic...
+28                           3d-face-alignment                             3D Face Alignment                                                   
+29                           3d-face-animation                             3D Face Animation  Image: [Cudeiro et al](https://arxiv.org/pdf/1...
+30                            3d-face-modeling                             3D Face Modelling                                                   
+31                      3d-face-reconstruction                        3D Face Reconstruction  **3D Face Reconstruction** is a computer visio...
+32            3d-facial-expression-recognition              3D Facial Expression Recognition  3D facial expression recognition is the task o...
+33             3d-facial-landmark-localization               3D Facial Landmark Localization  Image: [Zhang et al](https://arxiv.org/pdf/180...
+34                         3d-feature-matching                           3D Feature Matching  Image: [Choy et al](https://paperswithcode.com...
+35                      3d-geometry-perception                        3D Geometry Perception  Image: [Zhao et al](https://arxiv.org/pdf/1812...
+36                      3d-geometry-prediction                        3D Geometry Prediction                                                   
+37                     3d-hand-pose-estimation                       3D Hand Pose Estimation  Image: [Zimmerman et l](https://arxiv.xsrg/pdf...
+38                               3d-holography                                 3D Holography  The images that are presented here are multipl...
+39                           3d-human-dynamics                             3D Human Dynamics  Image: [Zhang et al](https://openaccess.thecvf...
+40          3d-human-pose-and-shape-estimation            3D human pose and shape estimation  Estimate 3D human pose and shape (e.g. SMPL) f...
+41                    3d-human-pose-estimation                      3D Human Pose Estimation  **3D Human Pose Estimation** is a computer vis...
+42    3d-human-pose-estimation-in-limited-data      3D Human Pose Estimation in Limited Data                                                   
+43    3d-human-pose-estimation-in-limited-date      3D Human Pose Estimation in Limited Date                                                   
+44                      3d-human-pose-tracking                        3D Human Pose Tracking                                                   
+45                     3d-human-reconstruction                       3D Human Reconstruction                                                   
+46                   3d-human-shape-estimation                     3D Human Shape Estimation                                                   
+47                               3d-inpainting                                 3D Inpainting  **3D Inpainting** is the removal of unwanted o...
+48                  3d-instance-segmentation-1                      3D Instance Segmentation  Image: [OccuSeg](https://arxiv.org/pdf/2003.06...
+49         3d-interacting-hand-pose-estimation           3D Interacting Hand Pose Estimation                                                   
+>>> evaluations = client.evaluation_list(20000)
+>>> evaluations = client.evaluation_list(count=20000)
+>>> tasks = json.load(open('/home/hobs/Downloads/response_1693607225131.json'))
+>>> evaluations = json.load(open('/home/hobs/Downloads/response_1693607084357.json'))
+>>> len(evaluations['results'])
+500
+>>> len(tasks['results'])
+500
+>>> evaluations1 = client.evaluation_list(1)
+>>> len(evaluations1['results'])
+>>> len(evaluations1.results)
+50
+>>> evaluations1 = client.evaluation_list(count=1000)
+>>> evaluations2 = client.evaluation_list(2)
+>>> evaluations = []
+... while p:
+...     p = 1
+...     print(p)
+...     resp = client.evaluation_list(p)
+...     if len(resp.results or []) and resp.next_page:
+...         p = resp.next_page
+...         evaluations += list(resp.results)
+...     else:
+...         break
+...
+>>> evaluations = []
+... p = 1
+... while True:
+...     print(p)
+...     resp = client.evaluation_list(p)
+...     if len(resp.results or []) and resp.next_page:
+...         p = resp.next_page
+...         evaluations += list(resp.results)
+...     else:
+...         break
+...
+>>> len(evaluations)
+11600
+>>> dfev = pd.DataFrame(evaluations)
+>>> dfev
+                                                       0                                                  1  ...                3                   4
+0               (id, image-to-text-retrieval-on-aic-icc)                    (task, image-to-text-retrieval)  ...  (description, )  (mirror_url, None)
+1                       (id, image-retrieval-on-aic-icc)                            (task, image-retrieval)  ...  (description, )  (mirror_url, None)
+2                      (id, image-captioning-on-aic-icc)                           (task, image-captioning)  ...  (description, )  (mirror_url, None)
+3           (id, video-saliency-detection-on-hollywood2)                   (task, video-saliency-detection)  ...  (description, )  (mirror_url, None)
+4                 (id, video-saliency-detection-on-diem)                   (task, video-saliency-detection)  ...  (description, )  (mirror_url, None)
+...                                                  ...                                                ...  ...              ...                 ...
+11595        (id, composed-video-retrieval-covr-on-covr)              (task, composed-video-retrieval-covr)  ...  (description, )  (mirror_url, None)
+11596  (id, conversational-sentiment-quadruple-extrac...  (task, conversational-sentiment-quadruple-extr...  ...  (description, )  (mirror_url, None)
+11597    (id, semantic-segmentation-on-llrgbd-synthetic)                      (task, semantic-segmentation)  ...  (description, )  (mirror_url, None)
+11598  (id, semi-supervised-semantic-segmentation-on-40)      (task, semi-supervised-semantic-segmentation)  ...  (description, )  (mirror_url, None)
+11599                       (id, topic-models-on-agnews)                               (task, topic-models)  ...  (description, )  (mirror_url, None)
+
+[11600 rows x 5 columns]
+>>> evaluations[0]
+EvaluationTable(id='image-to-text-retrieval-on-aic-icc', task='image-to-text-retrieval', dataset='aic-icc', description='', mirror_url=None)
+>>> evaluations[0].to_string()
+"id='image-to-text-retrieval-on-aic-icc' task='image-to-text-retrieval' dataset='aic-icc' description='' mirror_url=None"
+>>> evaluations[0].json()
+'{"id": "image-to-text-retrieval-on-aic-icc", "task": "image-to-text-retrieval", "dataset": "aic-icc", "description": "", "mirror_url": null}'
+>>> evaluations[0].dict()
+{'id': 'image-to-text-retrieval-on-aic-icc',
+ 'task': 'image-to-text-retrieval',
+ 'dataset': 'aic-icc',
+ 'description': '',
+ 'mirror_url': None}
+>>> dfev = pd.DataFrame([e.dict() for e in evaluations])
+>>> dfev
+                                                    id                                           task                                 dataset description mirror_url
+0                   image-to-text-retrieval-on-aic-icc                        image-to-text-retrieval                                 aic-icc                   None
+1                           image-retrieval-on-aic-icc                                image-retrieval                                 aic-icc                   None
+2                          image-captioning-on-aic-icc                               image-captioning                                 aic-icc                   None
+3               video-saliency-detection-on-hollywood2                       video-saliency-detection                              hollywood2                   None
+4                     video-saliency-detection-on-diem                       video-saliency-detection                                    diem                   None
+...                                                ...                                            ...                                     ...         ...        ...
+11595            composed-video-retrieval-covr-on-covr                  composed-video-retrieval-covr                                    covr                   None
+11596  conversational-sentiment-quadruple-extraction-1  conversational-sentiment-quadruple-extraction                               diaasq-zh                   None
+11597        semantic-segmentation-on-llrgbd-synthetic                          semantic-segmentation                        llrgbd-synthetic                   None
+11598      semi-supervised-semantic-segmentation-on-40          semi-supervised-semantic-segmentation  cityscapes-with-extra-no-coarse-labels                   None
+11599                           topic-models-on-agnews                                   topic-models                                  agnews                   None
+
+[11600 rows x 5 columns]
+>>> dfev.to_csv('~/code/tangibleai/community/nlpia2/src/nlpia2/data/pwc/evaluations.csv', index='id')
+>>> mkdir ~/code/tangibleai/community/nlpia2/src/nlpia2/data/pwc
+>>> dfev.to_csv('~/code/tangibleai/community/nlpia2/src/nlpia2/data/pwc/evaluations.csv', index='id')
+>>> more ~/code/tangibleai/community/nlpia2/src/nlpia2/data/pwc/evaluations.csv
+>>> dfev.to_csv('~/code/tangibleai/community/nlpia2/src/nlpia2/data/pwc/evaluations.csv', index=0)
+>>> more ~/code/tangibleai/community/nlpia2/src/nlpia2/data/pwc/evaluations.csv
+>>> dfev2 = pd.read_csv('~/code/tangibleai/community/nlpia2/src/nlpia2/data/pwc/evaluations.csv', index_col=0)
+>>> dfev2
+                                                                                          task                                 dataset description mirror_url
+id                                                                                                                                                           
+image-to-text-retrieval-on-aic-icc                                     image-to-text-retrieval                                 aic-icc         NaN        NaN
+image-retrieval-on-aic-icc                                                     image-retrieval                                 aic-icc         NaN        NaN
+image-captioning-on-aic-icc                                                   image-captioning                                 aic-icc         NaN        NaN
+video-saliency-detection-on-hollywood2                                video-saliency-detection                              hollywood2         NaN        NaN
+video-saliency-detection-on-diem                                      video-saliency-detection                                    diem         NaN        NaN
+...                                                                                        ...                                     ...         ...        ...
+composed-video-retrieval-covr-on-covr                            composed-video-retrieval-covr                                    covr         NaN        NaN
+conversational-sentiment-quadruple-extraction-1  conversational-sentiment-quadruple-extraction                               diaasq-zh         NaN        NaN
+semantic-segmentation-on-llrgbd-synthetic                                semantic-segmentation                        llrgbd-synthetic         NaN        NaN
+semi-supervised-semantic-segmentation-on-40              semi-supervised-semantic-segmentation  cityscapes-with-extra-no-coarse-labels         NaN        NaN
+topic-models-on-agnews                                                            topic-models                                  agnews         NaN        NaN
+
+[11600 rows x 4 columns]
+>>> hist
+>>> hist -o -p -f code/tangibleai/community/nlpia2/src/nlpia2/ch12/ch12_papers_with_code.hist.ipy
+>>> hist -o -p -f ~/code/tangibleai/community/nlpia2/src/nlpia2/ch12/ch12_papers_with_code.hist.ipy

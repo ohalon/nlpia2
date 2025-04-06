@@ -1,0 +1,113 @@
+
+:toc: left
+:toclevels: 6
+
+++++
+  <style>
+  .first-sentence {
+    text-align: left;
+    margin-left: 0%;
+    margin-right: auto;
+    width: 66%;
+    background: Beige;
+  }
+  .last-sentence {
+    text-align: right;
+    margin-left: auto;
+    margin-right: 0%;
+    width: 66%;
+    background: AliceBlue;
+  }
+  </style>
+++++
+= Preface
+[.first-sentence]
+A lot has changed in the world of NLP since the first edition.
+
+[.last-sentence]
+In fact, these algorithms have so thoroughly captivated and *captured* business executives and engineers alike, that many feel we've ignored glaring warning signs about the misuse of NLP and AI.
+
+[.first-sentence]
+The unchecked growth in the power of algorithms to transform society is apparent to those able to escape the information bubble that these algorithms capture us in.
+
+[.last-sentence]
+The breakup of the EU, the insurrection in the US, and the global addiction to "Like" buttons are all being fueled by Natural Language Processing algorithms.
+
+[.first-sentence]
+On a smaller scale Hannes, Cole, and I have used what we've learned in writing this book to help startups and social-impact businesses utilize the power of NLP for good.
+
+[.last-sentence]
+Most AI researchers and the general public are seemingly ignorant of algorithms chipping away at their access to truthful information and profound ideas.
+
+[.first-sentence]
+So the Second Edition is a more strident "call to arms" for budding engineers, not yet captured by algorithms.
+
+[.last-sentence]
+You can pass along those powerful habits and instincts to the NLP algorithms that you build.
+
+[.first-sentence]
+The second pillar of our hope is your skill.
+
+[.last-sentence]
+Hopefully many of you will even achieve dramatic commercial success building on this idea and this toolbox of NLP skill.
+
+[.first-sentence]
+And we have a new lead author, bringing a fresh perspective and a wealth of experience in the impact of prosocial algorithms.
+
+[.last-sentence]
+In the rest of this book, she and I will show you how NLP can be used to help nonprofits and social-impact businesses in ways that I'd never considered before that fateful encounter.
+
+[.first-sentence]
+From toxic comment filtering to emotional support and companionship, chatbots and NLP may just save society from itself.
+
+[.last-sentence]
+And we're both showing businesses and nonprofits (and you) how to harness these tools for good.
+
+[.first-sentence]
+Bots are now generating natural language text for more and more industries such as entertainment, advertisement, financial news, and sports reporting, all without a human lifting a finger.
+
+[.last-sentence]
+Authorship attribution will become harder and harder as natural language processing that can dissect natural language style and generate text in that style.footnote:[NLP has been used successfully to help quantify the style of 16th century authors like Shakespeare (https://pdfs.semanticscholar.org/3973/ff27eb173412ce532c8684b950f4cd9b0dc8.pdf).]
+
+[.first-sentence]
+NLP influences society in other less straightforward ways.
+
+[.last-sentence]
+Perhaps then you can influence your own culture for yourself and your friends with your own natural language search tools.
+
+[.first-sentence]
+The development of NLP systems has built to a crescendo of information flow and computation through and among human brains.
+
+[.last-sentence]
+In some cases these search results included social posts and articles curated or written by bots, which in turn inspired many of the NLP explanations and applications in the following pages.
+
+[.first-sentence]
+What is driving NLP advances?
+
+[.last-sentence]
+What is driving NLP advances?
+
+[.first-sentence]
+It's all of the above and much more.
+
+[.last-sentence]
+You can enter the question "Why is natural language processing so important right now?" into any search engine,footnote:[Duck Duck Go query about NLP (https://duckduckgo.com/?q=Why+is+natural+language+processing+so+important+right+now:)] and find the Wikipedia article full of good reasons.footnote:[See the Wikipedia article "Natural language processing" (https://en.wikipedia.org/wiki/Natural_language_processingWikipedia/NLP).]
+
+[.first-sentence]
+There are also some deeper reasons.
+
+[.last-sentence]
+This allows us to extend our intelligence across time and geography, connecting our brains to form a collective intelligence.
+
+[.first-sentence]
+One of the ideas in Steven Pinker's _The Stuff of Thought_ is that we actually think in natural language.footnote:[Steven Pinker, https://en.wikipedia.org/wiki/The_Stuff_of_Thought]
+
+[.last-sentence]
+And natural language certainly is the communication medium of culture and the collective consciousness.
+
+[.first-sentence]
+So if it's good enough for human brains, and we'd like to emulate or simulate human thought in a machine, then natural language processing is likely to be critical.
+
+[.last-sentence]
+After all, you're going to use these structures, and connection networks make it possible for an inanimate system to digest, store, retrieve, and generate natural language in ways that sometimes appear human.
+

@@ -1,0 +1,81 @@
+>>> >>> from nessvec.util import load_glove
+... >>> w2v = load_glove()
+... >>> seattle = w2v['seattle']
+... >>> seattle
+...
+array([-2.7303e-01,  8.5872e-01,  1.3546e-01,  8.3849e-01, -2.2363e-02,
+       -4.1724e-01, -2.1974e+00,  2.7838e-01, -3.5161e-01,  3.9205e-01,
+       -3.4437e-01, -3.2687e-01, -4.3923e-01,  6.5528e-01, -2.3978e-04,
+       -8.0586e-01, -5.6114e-01, -1.9440e-02, -1.0856e+00,  4.4888e-01,
+       -1.7763e-01,  1.1756e-01, -5.8001e-01,  1.3595e-01, -4.5596e-01,
+       -9.4512e-01,  3.4022e-01, -1.3418e-01,  6.6036e-01, -1.1015e+00,
+        1.7347e+00,  2.9407e-01,  3.4572e-01, -6.2959e-01,  2.7845e-02,
+       -6.5935e-01,  4.0791e-04,  9.3474e-02,  1.0007e+00,  6.1746e-01,
+       -6.4467e-01, -2.6920e-01, -2.6631e-02,  1.0327e-01, -1.6960e-01,
+        1.0302e+00, -5.4987e-01,  6.0371e-02, -5.4905e-01,  1.0027e+00])
+>>> import annoy
+>>> annoy.AnnoyIndex?
+>>> help(annoy.AnnoyIndex)
+>>> from annoy import AnnoyIndex
+... import random
+...
+>>> AnnoyIndex(len(w2v['Seattle']))
+>>> history
+>>> AnnoyIndex(len(w2v['seattle']))
+<annoy.Annoy at 0x7fa2501fc470>
+>>> aidx = AnnoyIndex(len(w2v['seattle']), 'angular')
+>>> [aidx.add_item(v) for v in w2v.values()]
+>>> i2w = list(w2v.keys())
+>>> w2i = dict(zip(i2w, range(len(i2w))))
+>>> w2i['seattle']
+2556
+>>> i2w[2556]
+'seattle'
+>>> for i, v in tqdm(enumerate(w2v.values())):
+...     aidx.add_item(i, v)
+...
+>>> from tqdm import tqdm
+>>> for i, v in tqdm(enumerate(w2v.values())):
+...     aidx.add_item(i, v)
+...
+>>> aidx.build(10)
+True
+>>> aidx.save(f'w2v{len(w2v["seattle"])}.ann')
+True
+>>> ls -al
+>>> aidx.get_nns_by_item(w2i['seattle'], 10)
+[2556, 1998, 1147, 2691, 2201, 3608, 3326, 3680, 4825, 4940]
+>>> [i2w[i] for i in aidx.get_nns_by_item(w2i['seattle'], 10)]
+['seattle',
+ 'houston',
+ 'chicago',
+ 'dallas',
+ 'philadelphia',
+ 'phoenix',
+ 'cleveland',
+ 'baltimore',
+ 'cincinnati',
+ 'oakland']
+>>> [i2w[i] for i in aidx.get_nns_by_item(w2i['portland'], 20)]
+['portland',
+ 'philadelphia',
+ 'milwaukee',
+ 'baltimore',
+ 'phoenix',
+ 'cleveland',
+ 'detroit',
+ 'denver',
+ 'toronto',
+ 'dallas',
+ 'chicago',
+ 'seattle',
+ 'houston',
+ 'columbus',
+ 'pittsburgh',
+ 'cincinnati',
+ 'sacramento',
+ 'oakland',
+ 'minneapolis',
+ 'calgary']
+>>> history -f fast_finding_of_neighbors.py
+>>> history -p -o -f fast_finding_of_neighbors.ipy

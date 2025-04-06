@@ -1,0 +1,257 @@
+= Vectors and matrices (linear algebra fundamentals)
+:appendix: C
+:chapter: C
+:part: BM
+:imagesdir: .
+:xrefstyle: short
+:figure-caption: Figure {chapter}.
+:listing-caption: Listing {chapter}.
+:table-caption: Table {chapter}.
+:stem: latexmath
+
+Vectors and numbers are the language of machine thought. Bits are the most fundamental "number" that machine computation is based on, a little like letters (characters) are the most fundamental, irreducible part of words, the language of thought for humans. All mathematical operations can be reduced to a few logical operations on sequences of bits. Sequences of characters are processed by human brains when we read in an analogous way. So if we want to teach machines about our words, the first challenge is to come up with vectors to represent characters, words, sentences, and "intermediate concepts" that the machine will need to work with to produce seemingly intelligent behavior.
+
+== Vectors
+
+A vector is just an ordered sequence of numbers or other vectors without any "skips".
+In `sklearn` and `numpy`, a vector is a dense `array`, and it works a lot like a Python list of numbers.
+The main reason we use numpy arrays rather than Python lists is because they are much faster to work with (100x) and use much less memory (1/4).
+Plus you can specify vectorized operations like multiplying the entire array by a value without iterating through it with a for loop.
+This is *very* important when working with a lot of text that contains a lot of information to be represented in these vectors and numbers.
+
+.Create a vector
+[source,python]
+----
+>>> import numpy as np
+>>> np.array(range(4))
+array([0, 1, 2, 3])
+>>> np.arange(4)
+array([0, 1, 2, 3])
+>>> x = np.arange(0.5, 4, 1)
+>>> x
+array([ 0.5,  1.5,  2.5,  3.5])
+>>> x[1] = 2
+>>> x
+array([ 0.5,  1.5,  2.5,  3.5])
+>>> x.shape
+(4,)
+>>> x.T.shape
+(4,)
+----
+
+An `array` has some properties that `list` doesn't -- such as `.shape` and `.T`.
+The `.shape` attribute contains the length or size of each dimension (the number of objects it holds). We use lowercase letters when we name variables for holding arrays and vectors (or even just numbers), just like formal mathematical symbols.
+In linear algebra, physics, and engineering texts, these letters are often bolded, and sometimes embellished with an arrow above them (especially by professors on chalkboards and whiteboards).
+
+If you've ever heard of a matrix, you've probably heard that it can be thought of as an array of row vectors, like this:
+
+[source,python]
+----
+>>> np.array([range(4), range(4)])
+>>> array([[0, 1, 2, 3],
+           [0, 1, 2, 3]])
+>>> X = np.array([range(4), range(4)])
+>>> X.shape
+(2, 4)
+>>> X.T.shape
+(4, 2)
+----
+
+The `T` attribute returns the _transpose_ of the matrix. The transpose of a matrix is the matrix flipped along an imaginary diagonal from the top-left corner to the bottom-right.
+So the following matrix called `A`
+
+[source,python]
+----
+>>> A = np.array([[1, 2, 3], [4, 5, 6]])
+>>> A
+array([[1, 2, 3],
+       [4, 5, 6]])
+----
+
+has a _transpose_ of
+
+[source,python]
+----
+>>> A.T
+array([[1, 4],
+       [2, 5],
+       [3, 6]])
+----
+
+So if `A` started out as a collection of row vectors, `A.T` turns those row vectors into column vectors.
+
+=== Distances
+
+The distance between two vectors can be measured a lot of different ways.
+The difference between two vectors is a vector itself:
+
+.Vector difference
+[source,python]
+----
+>>> A
+array([[1, 2, 3],
+       [4, 5, 6]])
+>>> A[0]
+array([1, 2, 3])
+>>> A[1]
+array([4, 5, 6])
+>>> np.diff(A, axis=0)
+array([[3, 3, 3]]
+>>> A[1] - A[0]
+array([3, 3, 3])
+>>> A.diff()
+----
+
+That `[3, 3, 3]` vector gives you exactly the distance along each dimension in your two vectors.
+So if these vectors represented blocks and floors in Manhattan for two people, the difference would be the exact directions you'd need to get there.
+If you were on the third floor of an apartment on the corner of "1st Street" and "2nd Ave", your "coordinates" in street, avenue, floor coordinates would be `[1, 2, 3]`, just like in the example.
+And if your Python mentor was on the sixth floor of an apartment on the corner of "4th Street" and "5th Ave", her "coordinates" would be `[4, 5, 6]`.
+So the difference between those vectors (`[3, 3, 3]`) would mean that you'd have to walk three blocks north, three blocks east, and three floors up to reach her apartment.
+Actually, vectors and math don't care about pesky details like gravity.
+So the algebra assumes you could skate on your Back-to-the-Future hoverboard right out your window and scoot along three floors above the traffic to get to your linear algebra mentor's apartment.
+
+If you told your mentor that her apartment was `[3, 3, 3]` away from yours, she'd laugh at your geeky precision.
+Less-geeky people simplify those three numbers into a single number, a scalar, when they talk about distances.
+So if you said her place is six blocks away, she'd understand exactly what you meant, you just ignored the irrelevant floor dimension, since that's a snap on your hoverboard (or the elevator).
+In addition to ignoring some dimensions, you used a clever distance metric sometimes called the _Manhattan distance_.
+We show you how to calculate it for 300-D word vectors just as easily as 2D apartment location vectors.
+
+==== Euclidean distance
+
+_Euclidean distance_ is the distance you are talking about for 2D vectors when you say "as the crow flies."
+It's the straight line distance between the two points defined by your vectors (the "tips" or "heads" of those vectors).
+
+Euclidean distance is also called L2 norm, because it is the length of the vector difference between to vectors.
+The "L" in L2 stands for length.
+The "2" in L2 represents the exponent (squaring) of the dimensions of the difference vector before these values ares summed (and before the square root of the sum).
+
+Euclidean distance is also called the RSS distance, which stands for the root sum square distance or difference, which means:
+
+[source,python]
+----
+euclidean_distance = np.sqrt(((vector1 - vector2) ** 2).sum())
+----
+
+Let's look at Euclidean distance between some vectors from an NLP example in Patrick Winston's AI lecture series.footnote:[Patrick Winston. 6.034 Artificial Intelligence. Fall 2010. Massachusetts Institute of Technology: MIT OpenCourseWare (https://ocw.mit.edu). License: Creative Commons BY-NC-SA. "Lecture 10" (https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-034-artificial-intelligence-fall-2010/lecture-videos/lecture-10-introduction-to-learning-nearest-neighbors/).]
+
+Let's say we have 2D term frequency (bag-of-word) vectors that count the occurrences of the words "hack" and "computer" in articles from two publications, _Wired Magazine_ and _Town and Country_.
+And we want to be able to query that set of articles while researching something to find some articles about a particular topic.
+The query string has both the words "hacking" and "computers" in it.
+Our query string word vector is `[1, 1]` for the words "hack" and "computer" because our query tokenized and stemmed the words that way (see chapter 2).
+
+.Measuring Euclidean distance
+image::../images/ch03/cosine_distance_justification.png[alt="2D Vectors and Euclidean distance", width=80%, link="../images/ch03/cosine_distance_justification.png"]
+
+Now which articles would you say are closest to our query in Euclidean distance?
+Euclidean distance is the length of the green lines in figure C.1.
+They look pretty similar don't they.
+How would you "fix" this problem so that your search engine returns some useful articles for this query?
+
+You could compute the *ratio* of the word counts relative to the total number of words in a document and use these ratios to calculate your Euclidean distance.
+But you learned in chapter 3 about a better way to compute this ratio: TF-IDF.
+The Euclidean distance between TF-IDF vectors tends to be a good measure of the distance (inverse similarity) of documents.
+
+If you want to bound the Euclidean distance, you can normalize all your vectors to have unit length (each have a length of 1).
+This will ensure that all distances between your vectors will be between 0 and 2.
+
+==== Cosine distance
+
+Another adjustment to our distance calculation makes our distance value even more useful.
+_Cosine distance_ is the inverse of the _cosine similarity_ (`cosine_distance = 1 - cosine_similarity`).
+Cosine similarity is the cosine of the angle between two vectors.
+So in this example, the angle between the TF vector for a query string and the vector for _Wired Magazine_ articles would be much smaller than the angle between the query and the _Town and Country_ articles.
+This is what we want.
+Because a query about "hacking computers" should give us _Wired Magazine_ articles and *NOT* articles about upper-crust recreational activities like horse riding ("hacking")footnote:[See the equestrian use of the word "hack" in the Wikipedia article "Hack (horse)" (https://en.wikipedia.org/wiki/Hack_%28horse%29).], duck hunting, dinner parties, and rustic interior design.
+
+This is efficiently computed as the dot product of two normalized vectors, vectors whose values have all been divided by the length of the vector.
+
+.Cosine distance
+[source,python]
+----
+>>> import numpy as np
+>>> vector_query = np.array([1, 1])
+>>> vector_tc = np.array([1, 0])
+>>> vector_wired = np.array([5, 6])
+>>> normalized_query = vector_query / np.linalg.norm(vector_query)
+>>> normalized_tc = vector_tc / np.linalg.norm(vector_tc)
+>>> normalized_wired = vector_wired / np.linalg.norm(vector_wired)
+
+>>> normalized_query
+array([ 0.70710678,  0.70710678])
+>>> normalized_tc
+array([ 1.,  0.])
+>>> normalized_wired
+array([ 0.6401844 ,  0.76822128])
+----
+
+The _cosine similarity_ between our query TF vector and these other two TF vectors (cosine of the angle between them) is
+
+[source,python]
+----
+>>> np.dot(normalized_query, normalized_tc)  # cosine similarity
+0.70710678118654746
+>>> np.dot(normalized_query, normalized_wired)  # cosine similarity
+0.99589320646770374
+----
+
+The cosine _distance_ between our query and these two TF vectors is one minus the cosine similarity.
+
+[source,python]
+----
+>>> 1 - np.dot(normalized_query, normalized_tc)  # cosine distance
+0.29289321881345254
+>>> 1 - np.dot(normalized_query, normalized_wired)  # cosine distance
+0.0041067935322962601
+----
+
+This is why cosine similarity is used for TF vectors in NLP:
+
+* It's easy to compute (just multiplication and addition).
+* It has a convenient range (-1 to +1).
+* Its inverse (cosine distance) is easy to compute (1 - cosine_similarity).
+* Its inverse (cosine distance) is bounded (0 to +2).
+
+However cosine distance has one disadvantage over Euclidean distance, it isn't a real _distance metric_ because the triangle inequality doesn't hold.footnote:[See the Wikipedia article "Cosine similarity" that links to the rules for true distance metrics (http://en.wikipedia.org/wiki/Cosine_similarity).]
+That means that if the word vector for "red" has a cosine distance of 0.5 from "car" and 0.3 from "apple", "apple" might be much further away than 0.8 from car.
+The triangle inequality is mainly important when you want to use cosine distances to try to prove something about some vectors.
+That's rarely the case in real world NLP.
+
+==== Manhattan distance
+
+Manhattan distance is also called taxicab distance or L1 norm.
+It's called the taxicab distance because the distance represents how far a taxicab would have to drive to get from one vector to another, if the vectors were 2D vectors with coordinates aligned with a street grid.footnote:[See the Wikipedia article "Taxicab geometry" (https://en.wikipedia.org/wiki/Taxicab_geometry).]
+This distance is also called the L1 norm.
+
+Manhattan distance is super simple to calculate: Just sum up the absolute distance in all the dimensions.
+Using our made-up magazine vectors from earlier, the Manhattan distance would be:
+
+.Manhattan distance example
+[source,python]
+----
+>>> vector_tc = np.array([1, 0])
+>>> vector_wired = np.array([5, 6])
+>>> np.abs(vector_tc - vector_wired).sum()
+10
+----
+
+If your vectors were normalized before calculating Manhattan distance, you'd get a much different distance:
+
+.Normalized Manhattan distance example
+[source,python]
+----
+>>> normalized_tc = vector_tc / np.linalg.norm(vector_tc)
+>>> normalized_wired = vector_wired / np.linalg.norm(vector_wired)
+>>> np.abs(normalized_tc - normalized_wired).sum()
+1.128...
+----
+
+You might hope this distance metric would stay bounded within some range like 0 to 2, but it won't.
+Like Euclidean distance, Manhattan distance is a real metric, so it obeys the triangle inequality and can be used in mathematical proofs that rely on a true distance metric.
+But unlike Euclidean distance on normalized vectors, you can't rely on Manhattan distance between normalized vectors to stay bounded in some nice range like 0 to 2.
+The maximum length possible will grow with the number of dimensions, even if you've normalized your vectors to all have a length of one.
+For normalized 2D vectors, the maximum Manhattan distance between any two vectors is 2.82 (sqrt(8)).
+For 3D vectors it's 3.46 (sqrt(12)).
+Can you guess or compute what it is for 4D vector?
+
+
+

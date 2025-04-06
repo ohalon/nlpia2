@@ -1,0 +1,20 @@
+I first met Hannes in 2006 when we started different post graduate degrees in the same department. His commitment to having a positive world impact in his personal time as well as through his machine learning research was quickly noticed. Throughout his career, this commitment has guided each project he has touched. It was by following this internal compass that he connected with Hobson and Cole, who share a similar passion for projects with a positive impact on society.
+
+When approached to write this foreword, it was this passion for the application of _Machine Learning_ (ML) for good that persuaded me. My personal journey in Machine Learning research was similarly guided by a desire to have a positive impact on the world. My path led me to develop algorithms for multi-resolution modeling of species distributions within vulnerable ecosystems in order to optimize conservation and survey goals. I have since been determined to continue working in areas where I can improve lives and experiences through the application of machine learning.
+
+[quote,Voltaire?]
+With great power comes great responsibility.
+
+Whether you attribute these words to Voltaire or Uncle Ben, they hold as true today as ever, though perhaps in this age we could say, “With great access to data comes great responsibility.” We trust companies with our data in the hope that it is used to improve our lives. We allow our emails to be scanned to help us compose more grammatically correct emails. Snippets of our daily lives on social media are studied and used to inject advertisements into our feeds. Our phones and homes listen and respond to our words, sometimes when we are not even talking to them. Even our news preferences are monitored so that our interests, opinions, and beliefs are indulged and sometimes manipulated. What is at the heart of all these powerful technologies?
+
+The answer is _Natural Language Processing_. In this book you will learn both the theory and practical skills needed to go beyond merely understanding the inner workings of these systems. You will learn how to create your own algorithms and models that can understand and “speak” our language. Fundamental computer science concepts are seamlessly translated into a solid foundation for the natural language processing approaches and practices explained in the book. This takes the reader on a clear and well-narrated tour through the core methodologies of natural language processing. The authors begin with tried and true methods, such as TF-IDF and latent semantic analysis, before taking a shallow but deep (yes, I made a pun) dive into neural networks for NLP.
+
+Language is the foundation upon which we build our shared sense of humanity. We communicate not just facts, but ideas and emotions. Through language we acquire knowledge outside of our realm of experience, and build understanding by sharing those experiences. With this book you have the opportunity to develop a solid understanding, not just of the mechanics of NLP, but also the opportunity to generate impactful systems that may one day understand humankind through our language. The technology of NLP has great potential for misuse, but also great potential for good. Through sharing their knowledge the authors hope to nudge us towards a brighter future.
+
+****
+*Dr. Arwen Griffioen*
+
+Senior Data Scientist - Research
+
+Zendesk
+****

@@ -1,0 +1,22 @@
+= Math with words (TF-IDF vectors)
+:chapter: 3
+:part: 1
+:imagesdir: .
+:xrefstyle: short
+:figure-caption: Figure {chapter}.
+:listing-caption: Listing {chapter}.
+:table-caption: Table {chapter}.
+:stem: latexmath
+
+This chapter covers
+
+* Counting words, _n_-grams and _term frequencies_ to analyze meaning
+* Predicting word occurrence probabilities with _Zipf's Law_
+* Representing natural language texts as vectors
+* Finding relevant documents in a collection of text using _document frequencies_
+* Estimating the similarity of pairs of documents with _cosine similarity_
+
+Having collected and counted words (tokens), and bucketed them into stems or lemmas, it's time to do something interesting with them.
+Detecting words is useful for simple tasks, like getting statistics about word usage or doing keyword search. But you would like to know which words are more important to a particular document and across the corpus as a whole.
+
+

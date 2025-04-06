@@ -1,0 +1,65 @@
+= Natural Language Processing in Action
+
+== Front Matter
+
+=== Acknowledgments
+// Hobson
+=== Forward
+// Hobson
+=== Preface
+// Hobson
+
+== Part 1: Wordy machines
+// Hobson
+
+=== Chapter 01 -- Machines that read and write (NLP overview)
+// Hobson
+=== Chapter 02 -- Tokens of thought (natural language words)
+// Hobson and Sylvia Lee
+=== Chapter 03 -- Math with words (TF-IDF vectors)
+// Maria and Hobson
+=== Chapter 04 -- Finding meaning in word counts (semantic analysis)
+// Maria
+
+== Part 2: Deeper learning (neural networks)
+// Hobson
+
+=== Chapter 05 -- Word brain (neural networks)
+// Hobson, Maria
+=== Chapter 06 -- Reasoning with word embeddings (word vectors)
+// Hobson, Jon Sundin, John May
+=== Chapter 07 -- Finding kernels of knowledge in text with Convolutional Neural Networks (CNNs)
+// Hobson, Maria
+=== Chapter 08 -- Reduce, reuse, recycle your words (RNNs and LSTMs)
+// Hobson 
+
+== Part 3: Semi-intelligent machines (state of the art NLP)
+// Hobson
+
+=== Chapter 09 -- Stackable deep learning (attention mechanism and transformers)
+// Hobson, Geoffrey Marshall, and Aditi Maheshwari
+=== Chapter 10 -- Real world NLP (scaling, generative models, huggingface, LLMs?)
+// Hobson, Maria
+=== Chapter 11 -- Information extraction (semantic parsing)
+// Hobson, Vish
+=== Chapter 12 -- Conversing with machines (chatbots)
+// Maria and Greg Thompson
+
+== Appendices
+
+=== Appendix A -- Your NLP Tools
+// Hobson
+=== Appendix B -- Playful Python and Regular Expressions
+// Hobson
+=== Appendix C -- Vectors and Matrices (Basic Linear Algebra)
+// Hobson
+=== Appendix D -- Machine Learning
+// Hobson
+=== Appendix E -- Locality Sensitive Hashing
+// Hobson
+
+=== Resources
+// Hobson
+=== Glossary
+// Hobson
+

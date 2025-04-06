@@ -1,0 +1,20 @@
+= Wordy machines
+:chapter: FM
+:part: 1
+
+Part 1 kicks off your natural language processing (NLP) adventure with an introduction to some real-world applications.
+
+In chapter 1, you'll quickly begin to think of ways you can use machines that process words in your own life.
+And hopefully you'll get a sense for the magic, the power of machines that can glean information from the words in a natural language document. 
+Words are the foundation of any language, whether it's the keywords in a programming language or the natural language words you learned as a child.
+
+In chapter 2, we give you the tools you need to teach machines to extract words from documents.
+There's more to it than you might guess, and we show you all the tricks.
+You'll learn how to automatically group natural language words together into groups of words with similar meaning without having to hand-craft synonym lists.
+
+In chapter 3, we count those words and assemble them into vectors that represent the meaning of a document.
+You can use these vectors to represent the meaning of an entire document, whether it's a 280-character tweet or a 500-page novel.
+
+In chapter 4, you'll discover some time-tested math tricks to compress your vectors down to much more useful topic vectors.
+
+By the end of part 1, you'll have the tools you need for many interesting NLP applications -- from semantic search to chatbots.

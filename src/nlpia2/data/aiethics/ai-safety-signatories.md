@@ -1,0 +1,471 @@
+# Center for AI Safety signatories
+
+Around 200 CEOs and researchers signed the Center for AI Safety open letter.
+It only had one sentence:
+
+"""
+Mitigating the risk of extinction from AI should be a global priority alongside other societal-scale risks such as pandemics and nuclear war.
+"""
+
+[safe.ai](https://www.safe.ai/statement-on-ai-risk)
+
+## AI Safety Signatories 
+
+```yaml
+-
+  - Geoffrey Hinton
+  - Emeritus Professor of Computer Science, University of Toronto
+-
+  - Yoshua Bengio
+  - Professor of Computer Science, U. Montreal / Mila 
+-
+  - Demis Hassabis
+  - CEO, Google DeepMind
+-
+  - Sam Altman
+  - CEO, OpenAI 
+-
+  - Dario Amodei
+  - CEO, Anthropic
+-
+  - Dawn Song
+  - Professor of Computer Science, UC Berkeley 
+-
+  - Ted Lieu
+  - Congressman, US House of Representatives
+-
+  - Bill Gates
+  - Gates Ventures
+-
+  - Ya-Qin Zhang
+  -   - Professor and Dean, AIR, Tsinghua University 
+-
+  - Ilya Sutskever
+  - Co-Founder and Chief Scientist, OpenAI
+-
+  - Shane Legg
+  - Chief AGI Scientist and Co-Founder, Google DeepMind 
+-
+  - Martin Hellman
+  - Professor Emeritus of Electrical Engineering, Stanford
+-
+  - James Manyika
+  - SVP, Research, Technology & Society, Google-Alphabet 
+-
+  - Yi Zeng
+  - Professor and Director of Brain-inspired Cognitive AI Lab, Institute of Automation, Chinese Academy of Sciences
+-
+  - Xianyuan Zhan
+  - Assistant Professor, Tsinghua University 
+-
+  - Albert Efimov
+  - Chief of Research, Russian Association of Artificial Intelligence
+-
+  - Wang Graylin
+  - China President, HTC 
+-
+  - Jianyi Zhang
+  - Professor, Beijing Electronic Science and Technology Institute
+-
+  - Anca Dragan
+  - Associate Professor of Computer Science, UC Berkeley 
+-
+  - Bill McKibben
+  - Schumann Distinguished Scholar, Middlebury College
+-
+  - Alan Robock
+  - Distinguished Professor of Climate Science, Rutgers University 
+-
+  - Angela Kane
+  - Vice President, International Institute for Peace, Vienna; former UN High Representative for Disarmament Affairs
+-
+  - Audrey Tang
+  - Minister of Digital Affairs and Chair of National Institute of Cyber Security 
+-
+  - Daniela Amodei
+  - President, Anthropic
+-
+  - David Silver
+  - Professor of Computer Science, Google DeepMind and UCL 
+-
+  - Lila Ibrahim
+  - COO, Google DeepMind
+-
+  - Stuart Russell
+  - Professor of Computer Science, UC Berkeley 
+-
+  - Rogers Croak
+  - VP Center for Responsible AI and Human Centered Technology, Google
+-
+  - Andrew Barto
+  - Professor Emeritus, University of Massachusetts 
+-
+  - Mira Murati
+  - CTO, OpenAI
+-
+  - Fernández Fisac
+  - Assistant Professor of Electrical and Computer Engineering, Princeton University 
+-
+  - Diyi Yang
+  - Assistant Professor, Stanford University
+-
+  - Gillian Hadfield
+  - Professor, CIFAR AI Chair, University of Toronto, Vector Institute for AI 
+-
+  - Laurence Tribe
+  - University Professor Emeritus, Harvard University
+-
+  - Pattie Maes
+  - Professor, Massachusetts Institute of Technology - Media Lab 
+-
+  - Kevin Scott
+  - CTO, Microsoft
+-
+  - Eric Horvitz
+  - Chief Scientific Officer, Microsoft 
+-
+  - Peter Norvig
+  - Education Fellow, Stanford University
+-
+  - Atoosa Kasirzadeh
+  - Assistant Professor, University of Edinburgh, Alan Turing Institute 
+-
+  - Erik Brynjolfsson
+  - Professor and Senior Fellow, Stanford Institute for Human-Centered AI
+-
+  - Mustafa Suleyman
+  - CEO, Inflection AI 
+-
+  - Emad Mostaque
+  - CEO, Stability AI
+-
+  - Ian Goodfellow
+  - Principal Scientist, Google DeepMind 
+-
+  - John Schulman
+  - Co-Founder, OpenAI
+-
+  - Wojciech Zaremba
+  - Co-Founder, OpenAI 
+-
+  - Kersti Kaljulaid
+  - Former President of the Republic of Estonia
+-
+  - Russell Schweickart
+  - Apollo 9 Astronaut, Association of Space Explorers, B612 Foundation 
+-
+  - Andy Weber
+  - Former U.S. Assistant Secretary of Defense for Nuclear, Chemical and Biological Defense Programs, Council on Strategic Risks
+-
+  - David Haussler
+  - Professor and Director of the Genomics Institute, UC Santa Cruz 
+-
+  - Stephen Luby
+  - Professor of Medicine (Infectious Diseases), Stanford University
+-
+  - Ju Li
+  - Professor of Nuclear Science and Engineering and Professor of Materials Science and Engineering, Massachusetts Institute of Technology 
+-
+  - David Chalmers
+  - Professor of Philosophy, New York University
+-
+  - Daniel Dennett
+  - Emeritus Professor of Philosophy, Tufts University 
+-
+  - Peter Railton
+  - Professor of Philosophy at University of Michigan, Ann Arbor
+-
+  - Sheila McIlraith
+  - Professor of Computer Science, University of Toronto 
+-
+  - Victoria Krakovna
+  - Research Scientist, Google DeepMind
+-
+  - Mary Phuong
+  - Research Scientist, Google DeepMind 
+-
+  - Lex Fridman
+  - Research Scientist, MIT
+-
+  - Sharon Li
+  - Assistant Professor of Computer Science, University of Wisconsin Madison 
+-
+  - Phillip Isola
+  - Associate Professor of Electrical Engineering and Computer Science, MIT
+-
+  - David Krueger
+  - Assistant Professor of Computer Science, University of Cambridge 
+-
+  - Jacob Steinhardt
+  - Assistant Professor of Computer Science, UC Berkeley
+-
+  - Martin Rees
+  - Professor of Physics, Cambridge University 
+-
+  - de Freitas
+  - Director, Science Board, Google DeepMind
+-
+  - He He
+  - Assistant Professor of Computer Science and Data Science, New York University 
+-
+  - David McAllester
+  - Professor of Computer Science, TTIC
+-
+  - Vincent Conitzer
+  - Professor of Computer Science, Carnegie Mellon University and University of Oxford 
+-
+  - Bart Selman
+  - Professor of Computer Science, Cornell University
+-
+  - Philip Torr
+  - Professor of Engineering Science, University of Oxford 
+-
+  - Michael Wellman
+  - Professor and Chair of Computer Science & Engineering, University of Michigan
+-
+  - Jinwoo Shin
+  - KAIST Endowed Chair Professor, Korea Advanced Institute of Science and Technology 
+-
+  - Dae-Shik Kim
+  - Professor of Electrical Engineering, Korea Advanced Institute of Science and Technology (KAIST)
+-
+  - Edith Elkind
+  - Professor of Computing Science, University of Oxford 
+-
+  - Frank Hutter
+  - Professor of Machine Learning, Head of ELLIS Unit, University of Freiburg
+-
+  - Jaan Tallinn
+  - Co-Founder of Skype
+-
+  - Adam D'Angelo
+  - CEO, Quora, and board member, OpenAI
+-
+  - Simon Last
+  - Cofounder & CTO, Notion
+-
+  - Dustin Moskovitz
+  - Co-founder & CEO, Asana
+-
+  - Scott Aaronson
+  - Schlumberger Chair of Computer Science, University of Texas at Austin
+-
+  - Max Tegmark
+  - Professor, MIT, Center for AI and Fundamental Interactions
+-
+  - Bruce Schneier
+  - Lecturer, Harvard Kennedy School
+-
+  - Martha Minow
+  - Professor, Harvard Law School
+-
+  - Gabriella Blum
+  - Professor of Human Rights and Humanitarian Law, Harvard Law
+-
+  - Kevin Esvelt
+  - Associate Professor of Biology, MIT
+-
+  - Edward Wittenstein
+  - Executive Director, International Security Studies, Yale Jackson School of Global Affairs, Yale University
+-
+  - Karina Vold
+  - Assistant Professor, University of Toronto
+-
+  - Victor Veitch
+  - Assistant Professor of Data Science and Statistics, University of Chicago
+-
+  - Dylan Hadfield-Menell
+  - Assistant Professor of Computer Science, MIT
+-
+  - Samuel R. Bowman
+  - Associate Professor of Computer Science, NYU and Anthropic
+-
+  - Mengye Ren
+  - Assistant Professor of Computer Science, New York University
+-
+  - Shiri Dori-Hacohen
+  - Assistant Professor of Computer Science, University of Connecticut
+-
+  - Miles Brundage
+  - Head of Policy Research, OpenAI
+-
+  - Allan Dafoe
+  - AGI Strategy and Governance Team Lead, Google DeepMind
+-
+  - Helen King
+  - Senior Director of Responsibility & Strategic Advisor to Research, Google DeepMind
+-
+  - Jade Leung
+  - Governance Lead, OpenAI
+-
+  - Jess Whittlestone
+  - Head of AI Policy, Centre for Long-Term Resilience
+-
+  - Sarah Kreps
+  - John L. Wetherill Professor and Director of the Tech Policy Institute, Cornell University
+-
+  - Jared Kaplan
+  - Co-Founder, Anthropic
+-
+  - Chris Olah
+  - Co-Founder, Anthropic
+-
+  - Andrew Revkin
+  - Director, Initiative on Communication & Sustainability, Columbia University - Climate School
+-
+  - Carl Robichaud
+  - Program Officer (Nuclear Weapons), Longview Philanthropy
+-
+  - Leonid Chindelevitch
+  - Lecturer in Infectious Disease Epidemiology, Imperial College London
+-
+  - Nicholas Dirks
+  - President, The New York Academy of Sciences
+-
+  - Marc Warner
+  - CEO, Faculty
+-
+  - Rob Pike
+  - Distinguished Engineer (retired), Co-Creator of Golang, Google
+-
+  - Clare Lyle
+  - Research Scientist, Google DeepMind
+-
+  - Ryota Kanai
+  - CEO, Araya, Inc.
+-
+  - Tim G. J. Rudner
+  - Assistant Professor and Faculty Fellow, New York University
+-
+  - Noah Fiedel
+  - Director, Research & Engineering, Google DeepMind
+-
+  - Jakob Foerster
+  - Associate Professor of Engineering Science, University of Oxford
+-
+  - Michael Osborne
+  - Professor of Machine Learning, University of Oxford
+-
+  - Marina Jirotka
+  - Professor of Human Centred Computing, University of Oxford
+-
+  - Nancy Chang
+  - Research Scientist, Google
+-
+  - Roger Grosse
+  - Associate Professor of Computer Science, University of Toronto and Anthropic
+-
+  - David Duvenaud
+  - Associate Professor of Computer Science, University of Toronto
+-
+  - Daniel M. Roy
+  - Associate Professor and Canada CIFAR AI Chair, University of Toronto; Vector Institute
+-
+  - Chris J. Maddison
+  - Assistant Professor of Computer Science, University of Toronto
+-
+  - Tegan Maharaj
+  - Assistant Professor of the Faculty of Information, University of Toronto
+-
+  - Florian Shkurti
+  - Assistant Professor of Computer Science, University of Toronto
+-
+  - Jeff Clune
+  - Associate Professor of Computer Science and Canada CIFAR AI Chair, The University of British Columbia and the Vector Institute
+-
+  - Eva Vivalt
+  - Assistant Professor of Economics, University of Toronto, and Director, Global Priorities Institute, University of Oxford
+-
+  - Jacob Tsimerman
+  - Professor of Mathematics, University of Toronto
+-
+  - Emanuel Adler
+  - Professor Emeritus, University of Toronto
+-
+  - Danit Gal
+  - Technology Advisor at the UN; Associate Fellow, Leverhulme Centre for the Future of Intelligence, University of Cambridge
+-
+  - Jean-Claude Latombe
+  - Professor (Emeritus) of Computer Science, Stanford University
+-
+  - Scott Niekum
+  - Associate Professor of Computer Science, University of Massachusetts Amherst
+-
+  - Lionel Levine
+  - Associate Professor of Mathematics, Cornell University
+-
+  - Thryn Shapira
+  - AI Ethics Lead, Google Photos
+-
+  - Brian Ziebart
+  - Associate Professor of Computer Science, University of Illinois Chicago
+-
+  - Aza Raskin
+  - Cofounder, Center for Humane Technology, The Earth Species Project
+-
+  - Tristan Harris
+  - Executive Director, Center for Humane Technology
+-
+  - Anthony Aguirre
+  - Executive Director, Future of Life Institute
+-
+  - Sam Harris
+  - Author, neuroscientist, Making Sense / Waking Up
+-
+  - Grimes
+  - Musician / Artist
+-
+  - Chris Anderson
+  - Dreamer-in-Chief, TED
+-
+  - Rif A. Saurous
+  - Research Director, Google
+-
+  - Jose Hernandez-Orallo
+  - Professor of Computer Science, Technical University of Valencia
+-
+  - Paul S. Rosenbloom
+  - Professor Emeritus, University of Southern California
+-
+  - Timothy Lillicrap
+  - Research Director, Google DeepMind
+-
+  - Samuel Albanie
+  - Assistant Professor of Engineering, University of Cambridge
+-
+  - Jascha Sohl-Dickstein
+  - Principal Scientist, Google DeepMind
+-
+  - Been Kim
+  - Research Scientist, Google DeepMind
+-
+  - Mehran Sahami
+  - Professor and Chair of Computer Science, Stanford University
+-
+  - Cihang Xie
+  - Assistant Professor of Computer Science and Engineering, UC Santa Cruz
+-
+  - Philip S. Thomas
+  - Associate Professor, University of Massachusetts
+-
+  - Pierre Baldi
+  - Professor, University of California, Irvine
+-
+  - Elad Hazan
+  - Professor of Computer Science, Princeton University and Google DeepMind
+-
+  - Katherine Lee
+  - Research Scientist, Google DeepMind
+-
+  - Felix Juefei Xu
+  - Research Scientist, Meta AI
+-
+  - Shai Shalev-Shwartz
+  - Professor, The Hebrew University of Jerusalem
+-
+  - Foutse Khomh
+  - Professor and Canada CIFAR AI Chair, Polytechnique Montreal
+-
+  - Dan Hendrycks
+  - Executive Director, Center for AI Safety
+```

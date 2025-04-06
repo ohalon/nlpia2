@@ -1,0 +1,2028 @@
+= Stackable deep learning (Transformers)
+:chapter: 9
+:part: 3
+:secnums:
+:imagesdir: .
+:xrefstyle: short
+:figure-caption: Figure {chapter}.
+:listing-caption: Listing {chapter}.
+:table-caption: Table {chapter}.
+:stem: latexmath
+
+This chapter covers
+
+* Understanding what makes transformers so powerful
+* Seeing how transformers enable limitless "stacking" options for NLP
+* Encoding text to create meaningful vector representations
+* Decoding semantic vectors to generate text
+* Finetuning transformers (BERT, GPT) for your application
+* Applying transformers to extractive and abstraction summarization of long documents
+* Generating grammatically correct and interesting text with transformers
+* Estimating the information capacity of a transformer network required for a particular problem
+
+_Transformers_ are changing the world.
+The increased intelligence that transformers bring to AI is transforming culture, society, and the economy.
+For the first time, transformers are making us question the long-term economic value of human intelligence and creativity.
+And the ripple effects of transformers go deeper than just the economy.
+Transformers are changing not only how we work and play, but even how we think, communicate, and create.
+Within less than a year, transformer-enabled AI known as Large Language Models (LLMs) created whole new job categories such as _prompt engineering_ and real-time content curation and fact-checking (grounding).
+Tech companies are racing to recruit engineers that can design effective LLM prompts and incorporate LLMs into their workflows.
+Transformers are automating and accelerating productivity for information economy jobs that previously required a level of creativity and abstraction out of reach for machines.
+
+As transformers automate more and more information economy tasks, workers are reconsidering whether their jobs are as essential to their employers as they thought.
+For example, influential CyberSecurity experts are bragging about augmenting their thinking, planning, and creativity with the help of dozens of ChatGPT suggestions every day.footnote:[For months following ChatGPT's public release, Dan Miessler spent almost half of his "Unsupervised Learning" podcasts discussing transformer-based tools such as InstructGPT, ChatGPT, Bard and Bing (https://danielmiessler.com/)]
+Microsoft News and the MSN.com website laid off its journalists in 2020, replacing them with transformer models capable of curating and summarizing news articles automatically.
+This race to the bottom (of the content quality ladder) probably won't end well for media companies or their advertisers and employees.
+
+In this chapter, you will learn how to use transformers to _improve_ the accuracy and thoughtfulness of natural language text.
+Even if your employer tries to program away your job, you will know how to program transformers to create new opportunities for yourself.
+Program or be programmed.
+Automate or be automated.
+
+And transformers are your best choice not only for natural language generation, but also for natural language understanding.
+Any system that relies on a vector representation of meaning can benefit from transformers.
+
+* At one point Replika used GPT-3 to generate more than 20% of its replies
+* Qary uses BERT to generate open domain question answers
+* Google uses models based on BERT to improve search results and query a knowledge graph
+* `nboost` uses transformers to create a semantic search proxy for ElasticSearch
+* aidungeon.io uses GPT-3 to generate an endless variety of rooms
+* Most vector databases for semantic search rely on transformers.footnote:[PineCone.io, Milvus.io, Vespa.ai, Vald.vdaas.org use transformers]
+
+Even if you only want to get good at _prompt engineering_, your understanding of transformers will help you design prompts for LLMs that avoid the holes in LLM capabilities.
+And LLMs are so full of holes that engineers and statisticians often use the _swiss cheese model_ when thinking about how LLMs fail. footnote:["Swiss cheese model" on Wikipedia (https://en.wikipedia.org/wiki/Swiss_cheese_model)]
+The conversational interface of LLMs makes it easy to learn how to cajole the snarky conversational AI systems into doing valuable work.
+People that understand how LLMs work and can fine tune them for their own applications, those people will have their hands at the helm of a powerful machine.
+Imagine how sought-after you'd be if you could build a "TutorGPT" that can help students solve arithmetic and math word problems.
+Shabnam Aggarwal at Rising Academies in Kigali is doing just that with her Rori.AI WhatsApp math tutor bot for middle school students.footnote:[Sebastian Larson, an actual middle schooler, won our competition to develop Rori's `mathtext` NLP algorithm (https://gitlab.com/tangibleai/community/team/-/tree/main/exercises/2-mathtext)] footnote:[All of Rori.AI's NLP code is open source and available on Huggingface (https://huggingface.co/spaces/TangibleAI/mathtext-fastapi).]
+And Vishvesh Bhat did this for college math students as a passion project.footnote:[Vish built an transformer-based teaching assistant called Clevrly (clevrly.io)] footnote:[Some of Vish's fine tuned transformers are available on Huggingface (https://huggingface.co/clevrly)]
+
+=== Recursion vs recurrence
+
+Transformers are the latest big leap forward in auto-regressive NLP models.
+Auto-regressive models predict one discrete output value at a time, usually a token or word in natural language text.
+An autoregressor recycles the output to reuse it as an input for predicting the next output so auto-regressive neural networks are _recursive_.
+The word "recursive" is a general term for any recycling of outputs back into the input, a process that can continue indefinitely until an algorithm or computation "terminates."
+A recursive function in computer science will keep calling itself until it achieves the desired result.
+
+But transformers are recursive in a bigger and more general way than _Recurrent_ Neural Networks.
+Transformers are called _recursive_ NNs rather than _recurrent_ NNs because _recursive_ is a more general term for any system that recycles the input.footnote:[Stats Stack Exchange answer (https://stats.stackexchange.com/a/422898/15974)]
+The term _recurrent_ is used exclusively to describe RNNs such as LSTMs and GRUs where the individual neurons recycle their outputs into the same neuron's input for each step through the sequence tokens.
+
+Transformers are a _recursive_ algorithm but do not contain _recurrent_ neurons.
+As you learned in Chapter 8, recurrent neural networks recycle their output within each individual neuron or RNN _unit_.
+But transformers wait until the very last layer to output a token embedding that can be recycled back into the input. 
+The entire transformer network, both the encoder and the decoder, must be run to predict each token so that token can be used to help it predict the next one.
+In the computer science world, you can see that a transformer is one big recursive function calling a series of nonrecursive functions inside.
+The whole transformer is run _recursively_ to generate one token at a time.
+
+image::../images/ch09/transformer_recursion.drawio.png[alt="Block diagram of five stacked encoder layers feeding into five decoder layers. The last decoder layer output tokens are recycled recursively back into the input question 'What is BERT?' and appended to the end of the question one by one so that the  5th input sequence is 'What is BERT? BERT' and the 6th is 'What is BERT? BERT is'",width=100%,align="center",link="../images/ch09/transformer-recursion.drawio.png"]
+
+Because there is no recurrence within the inner guts of the transformer it doesn't need to be "unrolled."
+This gives transformers a huge advantage over RNNs.
+The individual neurons and layers in a transformer can be run in parallel all at once.
+For an RNN, you had to run the functions for the neurons and layers one at a time in sequence.
+_Unrolling_ all these recurrent function calls takes a lot of computing power and it must be performed in order.
+You can't skip around or run them in parallel.
+They must be run sequentially all the way through the entire text.
+A transformer breaks the problem into a much smaller problem, predicting a single token at a time.
+This way all the neurons of a transformer can be run in parallel on a GPU or multi-core CPU to dramatically speed up the time it takes to make a prediction.
+
+They use the last predicted output as the input to predict the next output.
+But transformers are _recursive_ not _recurrent_.
+Recurrent neural networks (RNNs) include variational autoencoders, RNNs, LSTMs, and GRUs.
+When researchers combine five NLP ideas to create the transformer architecture, they discovered a total capability that was much greater than the sum of its parts. 
+Let's looks at these ideas in detail.
+
+=== Attention is NOT all you need
+// SUM: Attention, BPE, positional encoding, stackability and scalability all combine to create the power of a transformer, but the attention mechanism created a powerful synergy between these algorithms.
+
+* _Byte pair encoding (BPE)_:: Tokenizing words based on character sequence statistics rather than spaces and punctuation
+* _Attention_:: Connecting important word patterns together across long stretches of text using a connection matrix (attention)
+* _Positional encoding_:: Keeping track of where each token or pattern is located within the token sequence
+
+Byte pair encoding (BPE) is an often overlooked enhancement of transformers.
+BPE was originally invented to encode text in a compressed binary (byte sequence) format.
+But BPE really came into its own when it was used as a tokenizer in NLP pipelines such as search engines.
+Internet search engines often contain millions of unique words in their vocabulary.
+Imagine all the important names a search engine is expected to understand and index.
+BPE can efficiently reduce your vocabulary by several orders of magnitude.
+The typical transformer BPE vocabulary size is only 5000 tokens.
+And when you're storing a long embedding vector for each of your tokens, this is a big deal.
+A BPE vocabulary trained on the entire Internet can easily fit in the RAM of a typical laptop or GPU.
+
+Attention gets most of the credit for the success of transformers because it made the other parts possible.
+The attention mechanism is a much simpler approach than the complicated math (and computational complexity) of CNNs and RNNs.
+The attention mechanism removes the recurrence of the encoder and decoder networks.
+So a transformer has neither the _vanishing gradients_ nor the _exploding gradients_ problem of an RNN.
+Transformers are limited in the length of text they can process because the attention mechanism relies on a fixed-length sequence of embeddings for both the inputs and outputs of each layer.
+The attention mechanism is essentially a single CNN kernel that spans the entire sequence of tokens.
+Instead of rolling across the text with convolution or recurrence, the attention matrix is simply multiplied once by the entire sequence of token embeddings.
+
+The loss of recurrence in a transformer creates a new challenge because the transformer operates on the entire sequence all at once.
+A transformer is _reading_ the entire token sequence all at once.
+And it outputs the tokens all at once as well, making bi-directional transformers an obvious approach.
+Transformers do not care about the normal causal order of tokens while it is reading or writing text.
+To give transformers information about the causal sequence of tokens, positional encoding was added.
+And it doesn't even require additional dimensions within the vector embedding, positional encoding is spread out over the entire embedding sequence by multiplying them by the sine and cosine functions.
+Positional encoding enables nuanced adjustment to a transformer's understanding of tokens depending on their location in a text.
+With positional encoding, the word "sincerely" at the beginning of an email has a different meaning than it does at the end of an email.
+
+Limiting the token sequence length had a cascading effect of efficiency improvements that give transformers an unexpectedly powerful advantage over other architectures: _scalability_.
+BPE plus _attention_ plus positional encoding combine together to create unprecedented scalability.
+These three innovations and simplifications of neural networks combined to create a network that is both much more stackable and much more parallelizable.
+
+* _Stackability_:: The inputs and outputs of a transformer layer have the exact same structure so they can be stacked to increase capacity
+* _Parallelizability_:: The cookie cutter transformer layers all rely heavily on large matrix multiplications rather than complex recurrence and logical switching gates
+
+This stackability of transformer layers combined with the parallelizablity of the matrix multiplication required for the attention mechanism creates unprecedented scalability.
+And when researchers tried out their large-capacity transformers on the largest datasets they could find (essentially the entire Internet), they were taken aback.
+The extremely large transformers trained on extremely large datasets were able to solve NLP problems previously thought to be out of reach.
+Smart people are beginning to think that world-transforming conversational machine intelligence (AGI) may only be years away, if it isn't already upon us.
+
+=== Much attention about everything
+// SUM: Unlike other deep learning NLP architectures that use recurrence or convolution, the transformer architecture uses stacked blocks of attention layers which are just linear fully-connected feedforward layers.
+
+You might think that all this talk about the power of attention is much ado about nothing.
+Surely transformers are more than just a simple matrix multiplication across every token in the input text.
+Transformers combine many other less well-known innovations such as BPE, self-supervised training, and positional encoding.
+The attention matrix was the connector between all these ideas that helped them work together effectively.
+And the attention matrix enables a transformer to accurately model the connections between _all_ the words in a long body of text, all at once.
+
+As with CNNs and RNNs (LSTMs & GRUs), each layer of a transformer gives you a deeper and deeper representation of the _meaning_ or _thought_ of the input text.
+But unlike CNNs and RNNs, the transformer layer outputs an encoding that is the exact same size and shape as the previous layers.
+Likewise for the decoder, a transformer layer outputs a fixed-size sequence of embeddings representing the semantics (meaning) of the output token sequence.
+The outputs of one transformer layer can be directly input into the next transformer layer making the layers even more _stackable_ than CNN's.
+And the attention matrix within each layer spans the entire length of the input text, so each transformer layer has the same internal structure and math.
+You can stack as many transformer encoder and decoder layers as you like creating as deep a neural network as you need for the information content of your data.
+
+Every transformer layer outputs a consistent _encoding_ with the same size and shape.
+Encodings are just embeddings but for token sequences instead of individual tokens.
+In fact, many NLP beginners use the terms "encoding" and embedding" interchangeably, but after this chapter, you will understand the difference.
+The word "embedding", used as a noun, is 3 times more popular than "encoding", but as more people catch up with you in learning about transformers that will change.footnote:[N-Gram Viewer query "embedding_NOUN" / "encoding_NOUN" (https://books.google.com/ngrams/graph?content=embedding_NOUN+%2F+encoding_NOUN&year_start=2010&year_end=2019&corpus=en-2019&smoothing=3)]
+If you don't need to make it clear which ones you are talking about you can use "semantic vector", a term you learned in Chapter 6.
+ 
+Like all vectors, encodings maintain a consistent structure so that they represent the meaning of your token sequence (text) in the same way.
+And transformers are designed to accept these encoding vectors as part of their input to maintain a "memory" of the previous layers' understanding of the text.
+This allows you to stack transformer layers with as many layers as you like if you have enough training data to utilize all that capacity.
+This "scalability" allows transformers to break through the diminishing returns ceiling of RNNs. 
+
+And because the attention mechanism is just a connection matrix, it can be implemented as a matrix multiplication with a PyTorch `Linear` layer.
+Matrix multiplications are parallelized when you run your PyTorch network on a GPU or multicore CPU.
+This means that much larger transformers can be parallelized and these much larger models can be trained much faster.
+_Stackability_ plus _Parallelizablity_ equals _Scalability_.
+
+Transformer layers are designed to have inputs and outputs with the same size and shape so that the transformer layers can be stacked like Lego bricks that all have the same shape.
+The transformer innovation that catches most researchers' attention is the _attention mechanism_.
+Start there if you want to understand what makes transformers so exciting to NLP and AI researchers.
+Unlike other deep learning NLP architectures that use recurrence or convolution, the transformer architecture uses stacked blocks of attention layers which are essentially fully-connected feedforward layers with the same.
+
+In Chapter 8, you used RNNs to build encoders and decoders to transform text sequences.
+In encoder-decoder (_transcoder_ or _transduction_) networks,footnote:["Gentle Introduction to Transduction in Machine Learning" blog post on _Machine Learning Mastery_ by Jason Brownlee 2017 (https://machinelearningmastery.com/transduction-in-machine-learning/)] the encoder processes each element in the input sequence to distill the sentence into a fixed-length thought vector (or _context vector_).
+That thought vector can then be passed on to the decoder where it is used to generate a new sequence of tokens.
+
+The encoder-decoder architecture has a big limitation -- it can't handle longer texts.
+If a concept or thought is expressed in multiple sentences or a long complex sentence, then the encoded thought vector fails to accurately encapsulate _all_ of that thought.
+The _attention mechanism_ presented by Bahdanau et al footnote:[Neural Machine Translation by Jointly Learning to Align and Translate: https://arxiv.org/abs/1409.0473] to solve this issue is shown to improve sequence-to-sequence performance, particularly on long sentences, however it does not alleviate the time sequencing complexity of recurrent models.
+
+The introduction of the _transformer_ architecture in "Attention Is All You Need" footnote:["Attention Is All You Need" by Vaswani, Ashish et al. 2017 at Google Brain and Google Research (https://arxiv.org/abs/1706.03762)] propelled language models forward and into the public eye.
+The transformer architecture introduced several synergistic features that worked together to achieve as yet impossible performance:
+
+The most widely recognized innovation in the transformer architecture is _self-attention_.
+Similar to the memory and forgetting gates in a GRU or LSTM, the attention mechanism creates connections between concepts and word patterns within a lengthy input string.
+
+In the next few sections, you'll walk through the fundamental concepts behind the transformer and take a look at the architecture of the model.
+Then you will use the base PyTorch implementation of the Transformer module to implement a language translation model, as this was the reference task in "Attention Is All You Need", to see how it is both powerful and elegant in design.
+
+==== Self-attention
+
+When we were writing the first edition of this book, Hannes and Cole (the first edition coauthors) were already focused on the attention mechanism.
+It's now been 6 years and attention is still the most researched topic in deep learning.
+The attention mechanism enabled a leap forward in capability for problems where LSTMs struggled:
+
+
+* _Conversation_ -- Generate plausible responses to conversational prompts, queries, or utterances.
+* _Abstractive summarization or paraphrasing_:: Generate a new shorter wording of a long text summarization of sentences, paragraphs, and even several pages of text.
+* _Open domain question answering_:: Answering a general question about anything the transformer has ever read.
+* _Reading comprehension question answering_:: Answering questions about a short body of text (usually less than a page).
+* _Encoding_:: A single vector or sequence of embedding vectors that represent the meaning of body of text in a vector space -- sometimes called _task-independent sentence embedding_.
+* _Translation and code generation_ -- Generating plausible software expressions and programs based on plain English descriptions of the program's purpose.
+
+Self-attention is the most straightforward and common way to implement attention.
+It takes the input sequence of embedding vectors and puts them through linear projections.
+A linear projection is merely a dot product or matrix multiplication.
+This dot product creates key, value and query vectors.
+The query vector is used along with the key vector to create a context vector for the words' embedding vectors and their relation to the query.
+This context vector is then used to get a weighted sum of values.
+In practice, all these operations are done on sets of queries, keys, and values packed together in matrices, _Q_, _K_, and _V_, respectively.
+
+There are two ways to implement the linear algebra of an attention algorithm: _additive attention_ or _dot-product attention_.
+The one that was most effective in transformers is a scaled version of dot-production attention.
+For dot-product attention, the scalar products between the query vectors _Q_ and the key vectors _K_, are scaled down based on how many dimensions there are in the model.
+This makes the dot product more numerically stable for large dimensional embeddings and longer text sequences.
+Here's how you compute the self-attention outputs for the query, key, and value matrices _Q_, _K_, and _V_.
+
+.Equation 12.1 Self-attention outputs
+[latexmath]
+++++
+Attention(Q, K, V ) = softmax(\frac{QK^{T}}{\sqrt{d_{k}}})V
+++++
+
+The high dimensional dot products create small gradients in the softmax due to the law of large numbers.
+To counteract this effect, the product of the query and key matrices is scaled by latexmath:[\frac{1}{\sqrt{d_{k}}}].
+The softmax normalizes the resulting vectors so that they are all positive and sum to 1.
+This "scoring" matrix is then multiplied with the values matrix to get the weighted values matrix in figure <<figure-scaled-dot-product-attention>>.footnote:["Scaled dot product attention from scratch" by Jason Brownlee (https://machinelearningmastery.com/how-to-implement-scaled-dot-product-attention-from-scratch-in-tensorflow-and-keras/)] footnote:["Attention is all you Need" by Ashish Vaswani et al 2017 (https://arxiv.org/abs/1706.03762)]
+
+[[figure-scaled-dot-product-attention]]
+.Scaled dot product attention
+image::../images/ch09/transformer_attention.png[alt="Attention",width=100%,align="center",link="../images/ch09/scaled-dot-product-attention.drawio.png"]
+
+Unlike, RNNs where there is recurrence and shared weights, in self-attention all of the vectors used in the query, key, and value matrices come from the input sequences' embedding vectors.
+The entire mechanism can be implemented with highly optimized matrix multiplication operations.
+And the _Q_ _K_ product forms a square matrix that can be understood as the connection between words in the input sequence.
+A toy example is shown in figure <<figure-attention-matrix-illustration>>.
+
+[[figure-attention-matrix-illustration]]
+.Encoder attention matrix as connections between words
+image::../images/ch09/attention_heatmap.png[alt="Heatmap of an illustrative self-attention matrix or self-attention edge list for the phrase 'What is BERT.' showing attention between the words BERT and What as well as the question mark and 'What'.", width=100%, align="center", link="../images/ch09/attention_heatmap.png"]
+
+==== Multi-Head Self-Attention
+Multi-head self-attention is an expansion of the self-attention approach to creating multiple attention heads that each attend to different aspects of the words in a text.
+So if a token has multiple meanings that are all relevant to the interpretation of the input text, they can each be accounted for in the separate attention heads.
+You can think of each attention head as another dimension of the encoding vector for a body of text, similar to the additional dimensions of an embedding vector for an individual token (see Chapter 6).
+The query, key, and value matrices are multiplied _n_ (_n_heads_, the number of attention heads) times by each different latexmath:[d_q] , latexmath:[d_k], and latexmath:[d_v] dimension, to compute the total attention function output.
+The _n_heads_ value is a hyperparameter of the transformer architecture that is typically small, comparable to the number of transformer layers in a transformer model.
+The latexmath:[d_v]-dimensional outputs are concatenated and again projected with a latexmath:[W^o] matrix as shown in the next equation.
+
+.Equation 12.2 Multi-Head self-attention
+[latexmath]
+++++
+MultiHeadAttention(Q, K, V ) = Concat(head_1, ..., head_n) W^o\\
+                  where\ head_i = Attention(QW_i^Q, KW_i^K, VW_i^V)
+++++
+
+The multiple heads allow the model to focus on different positions, not just ones centered on a single word.
+This effectively creates several different vector subspaces where the transformer can encode a particular generalization for a subset of the word patterns in your text.
+In the original transformers paper, the model uses _n_=8 attention heads such that latexmath:[d_k = d_v = \frac{d_{model}}{n} = 64].
+The reduced dimensionality in the multi-head setup is to ensure the computation and concatenation cost is nearly equivalent to the size of a full-dimensional single-attention head.
+
+If you look closely you'll see that the attention matrices (attention heads) created by the product of _Q_ and _K_ all have the same shape, and they are all square (same number of rows as columns).
+This means that the attention matrix merely rotates the input sequence of embeddings into a new sequence of embeddings, without affecting the shape or magnitude of the embeddings. 
+And this makes it possible to explain a bit about what the attention matrix is doing for a particular example input text.
+
+
+.Multi-Head Self-Attention
+image::../images/ch09/multi-head-attention.drawio.png[alt="Multi-Head Self-Attention",width=80%,align="center",link="../images/ch09/transformer_multihead_attention.png"]
+
+It turns out, the multi-head attention mechanism is just a fully connected linear layer under the hood.
+After all is said and done, the deepest of the deep learning models turned to be nothing more than a clever stacking of what is essentially linear and logistic regressions.
+This is why it was so surprising that transformers were so successful.
+And this is why it was so important for you to understand the basics of linear and logistic regression described in earlier chapters.
+
+== Filling the attention gaps
+// SUM: A little more detail about positional encoding and a quick look at BERT and bidirectional transformers.
+
+
+The attention mechanism compensates for some problems with RNNs and CNNs of previous chapters but creates some additional challenges.
+Encoder-decoders based on RNNs don't work very well for longer passages of text where related word patterns are far apart.
+Even long sentences are a challenge for RNNs doing translation.footnote:[http://www.adeveloperdiary.com/data-science/deep-learning/nlp/machine-translation-using-attention-with-pytorch/]
+And the attention mechanism compensates for this by allowing a language model to pick up important concepts at the beginning of a text and connect them to text that is towards the end.
+The attention mechanism gives the transformer a way to reach back to any word it has ever seen.
+Unfortunately, adding the attention mechanism forces you to remove all recurrence from the transformer.
+
+CNNs are another way to connect concepts that are far apart in the input text.
+A CNN can do this by creating a hierarchy of convolution layers that progressively "necks down" the encoding of the information within the text it is processing.
+And this hierarchical structure means that a CNN has information about the large-scale position of patterns within a long text document.
+Unfortunately, the outputs and the inputs of a convolution layer usually have different shapes.
+So CNNs are not stackable, making them tricky to scale up for greater capacity and larger training datasets.
+So to give a transformer the uniform data structure it needs for stackability, transformers use byte pair encoding and positional encoding to spread the semantic and position information uniformly across the encoding tensor.
+
+=== Positional encoding
+Word order in the input text matters, so you need a way to bake in some positional information into the sequence of embeddings that is passed along between layers in a transformer.
+A positional encoding is simply a function that adds information about the relative or absolute position of a word in a sequence to the input embeddings.
+The encodings have the same dimension, latexmath:[d_{model}], as the input embeddings so they can be summed with the embedding vectors.
+The paper discusses learned and fixed encodings and proposes a sinusoidal function of sin and cosine with different frequencies, defined as:
+
+.Equation 12.3 Positional encoding function
+[latexmath]
+++++
+PE_{(pos, 2i)} = sin(\frac{pos}{10000^{\frac{2i}{d_{model}}}})\\
+PE_{(pos, 2i+1)} = cos(\frac{pos}{10000^{\frac{2i}{d_{model}}}})
+++++
+
+This mapping function was chosen because for any offset _k_, latexmath:[PE_{(pos+k)}] can be represented as a linear function of latexmath:[PE_{pos}].
+In short, the model should be able to learn to attend to relative positions easily.
+
+Let's look at how this can be coded in Pytorch.
+The official Pytorch Sequence-to-Sequence Modeling with `nn.Transformer` tutorial footnote:[Pytorch Sequence-to-Sequence Modeling With nn.Transformer Tutorial: https://simpletransformers.ai/docs/multi-label-classification/] provides an implementation of a PositionEncoding nn.Module based on the previous function:
+
+.Pytorch PositionalEncoding
+[source,python]
+----
+>>> import math
+>>> import torch
+>>> from torch import nn
+...
+>>> class PositionalEncoding(nn.Module):
+...     def __init__(self, d_model=512, dropout=0.1, max_len=5000):
+...         super().__init__()
+...         self.dropout = nn.Dropout(p=dropout)  # <1>
+...         self.d_model = d_model  # <2>
+...         self.max_len = max_len  # <3>
+...         pe = torch.zeros(max_len, d_model)  # <4>
+...         position = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)
+...         div_term = torch.exp(torch.arange(0, d_model, 2).float() *
+...                              (-math.log(10000.0) / d_model))
+...         pe[:, 0::2] = torch.sin(position * div_term)  # <5>
+...         pe[:, 1::2] = torch.cos(position * div_term)
+...         pe = pe.unsqueeze(0).transpose(0, 1)
+...         self.register_buffer('pe', pe)
+...
+...     def forward(self, x):
+...         x = x + self.pe[:x.size(0), :]  # <6>
+...         return self.dropout(x)
+----
+<1> 10% is the recommended dropout rate for positional encoding in AIAYN
+<2> `d_model` 
+<2> Token position (index) is the first dimension (row) of the `pe` (position encoding) matrix, the embedding dimension is the column
+<3> The `pe` (positional encoding) term is proportional to the sine or cosine of a token's position
+<4> The `pe` matrix is an additive bias to the embedding vectors
+
+You will use this module in the translation transformer you build.
+However, first, we need to fill in the remaining details of the model to complete your understanding of the architecture.
+
+
+
+=== Connecting all the pieces
+Now that you've seen the hows and whys of BPE, embeddings, positional encoding, and multi-head self-attention, you understand all the elements of a transformer layer.
+You just need a lower dimensional linear layer at the output to collect all those attention weights together to create the output sequence of embeddings.
+And the linear layer output needs to be scaled (normalized) so that the layers all have the same scale.
+These linear and normalization layers are stacked on top of the attention layers to create reusable stackable transformer blocks as shown in figure <<figure-transformer-architecture>>.
+
+[[figure-transformer-architecture]]
+.Transformer architecture
+image::../images/ch09/transformer_original.png[alt="Original Transfomer from 'Attention Is All You Need'",width=100%,align="center",link="../images/ch09/transformer_original.png"]
+
+In the original transformer, both the encoder and decoder are comprised of _N_ = 6 stacked identical encoder and decoder layers, respectively.
+
+==== Encoder
+The encoder is composed of multiple encoder layers.
+Each encoder layer has two sub-layers: a multi-head attention layer and a position-wise fully connected feedforward network.
+A residual connection is made around each sub-layer.
+And each encoder layer has its output normalized so that all the values of the encodings passed between layers range between zero and one.
+The outputs of all sub-layers in a transformer layer (PyTorch module) that are passed between layers all have dimension latexmath:[d_{model}].
+And the input embedding sequences to the encoder are summed with the positional encodings before being input into the encoder.
+
+==== Decoder
+The decoder is nearly identical to the encoder in the model but has three sublayers instead of one.
+The new sublayer is a fully connected layer similar to the multi-head self-attention matrix but contains only zeros and ones.
+This creates a _masking_ of the output sequences that are to the right of the current target token (in a left-to-right language like English).
+This ensures that predictions for position _i_ can depend only on previous outputs, for positions less than _i_.
+In other words, during training, the attention matrix is not allowed to "peek ahead" at the subsequent tokens that it is supposed to be generating in order to minimize the loss function.
+This prevents _leakage_ or "cheating" during training, forcing the transformer to attend only to the tokens it has already seen or generated.
+Masks are not required within the decoders for an RNN, because each token is only revealed to the network one at a time.
+But transformer attention matrices have access to the entire sequence all at once during training.
+
+[[figure-encoder-decoder-connections]]
+.Connections between encoder and decoder layers
+image::../images/ch09/encoder_decoder.drawio.png[alt="The last top layer of the encoder stack is connected to each decoder layer directly and the output of each decoder layer passes on to the next decoder as well", width=100%, align="center", link="../images/ch09/encoder_decoder.drawio.png"]
+
+=== Transformer Translation Example
+// SUM: Translate between German and English by building a transformer from scratch.
+
+Transformers are suited for many tasks.
+The "Attention Is All You Need" paper showed off a transformer that achieved better translation accuracy than any preceding approach.
+Using `torchtext`, you will prepare the Multi30k dataset for training a Transformer for German-English translation using the `torch.nn.Transformer` module.
+In this section, you will customize the decoder half of the `Transformer` class to output the self-attention weights for each sublayer.
+You use the matrix of self-attention weights to explain how the words in the input German text were combined together to create the embeddings used to produce the English text in the output.
+After training the model you will use it for inference on a test set to see for yourself how well it translates German text into English.
+
+==== Preparing the Data
+
+
+You can use the Hugging Face datasets package to simplify bookkeeping and ensure your text is fed into the Transformer in a predictable format compatible with PyTorch.
+This is one of the trickiest parts of any deep learning project, ensuring that the structure and API for your dataset matches what your PyTorch training loop expects.
+Translation datasets are particularly tricky unless you use Hugging Face:
+
+[[listing-hugging-face-translation-datasets]]
+.Load a translation dataset in Hugging Face format
+[source,python]
+----
+>>> from datasets import load_dataset  # <1>
+>>> opus = load_dataset('opus_books', 'de-en')
+>>> opus
+DatasetDict({
+    train: Dataset({
+        features: ['id', 'translation'],
+        num_rows: 51467
+    })
+})
+----
+
+Not all Hugging Face datasets have predefined test and validation splits of the data.
+But you can always create your own splits using the `train_test_split` method as in listing <<listing-translation-dataset-split>>.
+
+[[listing-translation-dataset-split]]
+.Load a translation dataset in Hugging Face format
+[source,python]
+----
+>>> sents = opus['train'].train_test_split(test_size=.1)
+>>> sents
+DatasetDict({
+    train: Dataset({
+        features: ['id', 'translation'],
+        num_rows: 48893
+    })
+    test: Dataset({
+        features: ['id', 'translation'],
+        num_rows: 2574
+    })
+})
+----
+
+It's always a good idea to examine some examples in your dataset before you start a long training run.
+This can help you make sure the data is what you expect.
+The `opus_books` doesn't contain many books.
+So it's not a very diverse (representative) sample of German.
+It has been segmented into only 50,000 aligned sentence pairs.
+Imagine having to learn German by having only a few translated books to read.
+
+[source,python]
+----
+>>> next(iter(sents['test']))  # <1>
+{'id': '9206',
+ 'translation': {'de': 'Es war wenigstens zu viel in der Luft.',
+  'en': 'There was certainly too much of it in the air.'}}
+----
+<1> Use built-in `iter` function to convert a Hugging Face _iterable_ into a python _iterator_
+
+If you would like to use a custom dataset of your own creation, it's always a good idea to comply with an open standard like the Hugging Face datasets package shown in listing <<listing-hugging-face-translation-datasets>> gives you a "best practice" approach to structuring your datasets.
+Notice that a translation dataset in Hugging Face contains an array of paired sentences with the language code in a dictionary.
+The `dict` keys of a translation example are the two-letter language code (from ISO 639-2)footnote:[List of ISO 639 language codes on Wikipedia (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)].
+The `dict` values of an example text are the sentences in each of the two languages in the dataset.
+
+[TIP]
+====
+You'll avoid insidious, sometimes undetectable bugs if you resist the urge to invent your own data structure and instead use widely recognized open standards.
+====
+
+If you have access to a GPU, you probably want to use it for training transformers.
+Transformers are made for GPUs with their matrix multiplication operations for all the most computationally intensive parts of the algorithm.
+CPUs are adequate for most pre-trained Transformer models (except LLMs), but GPUs can save you a lot of time for training or fine-tuning a transformer.
+For example, GPT2 required 3 days to train with a relatively small (40 MB) training dataset on a 16-core CPU.
+It trained in 2 hours for the same dataset on a 2560-core GPU (40x speedup, 160x more cores). 
+Listing <<listing-torch-gpu>> will enable your GPU if one is available.
+
+[[listing-torch-gpu]]
+.Enable any available GPU
+[source,python]
+----
+>>> DEVICE = torch.device(
+...     'cuda' if torch.cuda.is_available()
+...     else 'cpu')
+---- 
+
+To keep things simple you can tokenize your source and target language texts separately with specialized tokenizers for each.
+If you use the Hugging Face tokenizers they will keep track of all of the special tokens that you'll need for a transformer to work on almost any machine learning task:
+
+*start-of-sequence token*::typically `"<SOS>"` or `"<s>"`
+*end-of-sequence token*::typically `"<EOS>"` or `"</s>"`
+*out-of-vocabulary (unknown) token*::typically `"<OOV>"`, `"<unk>"`
+*mask token*::typically `"<mask>"` 
+*padding token*::typically `"<pad>"` 
+
+The _start-of-sequence token_ is used to trigger the decoder to generate a token that is suitable for the first token in a sequence.
+And many generative problems will require you to have an _end-of-sequence token_, so that the decoder knows when it can stop recursively generating more tokens.
+Some datasets use the same token for both the _start-of-sequence_ and the _end-of-sequence_ marker.
+They do not need to be unique because your decoder will always "know" when it is starting a new generation loop.
+The padding token is used to fill in the sequence at the end for examples shorter than the maximum sequence length.
+The mask token is used to intentionally hide a known token for training task-independent encoders such as BERT.
+This is similar to what you did in Chapter 6 for training word embeddings using skip grams.
+
+You can choose any tokens for these marker (special) tokens, but you want to make sure that they are not words used within the vocabulary of your dataset.
+So if you are writing a book about natural language processing and you don't want your tokenizer to trip up on the example SOS and EOS tokens, you may need to get a little more creative to generate tokens not found in your text.
+
+Create a separate Hugging Face tokenizer for each language to speed up your tokenization and training and avoid having tokens leak from your source language text examples into your generated target language texts.
+You can use any language pair you like, but the original AIAYN paper demo examples usually translate from English (source) to German (target).
+ 
+[source,python]
+----
+>>> SRC = 'en'  # <1>
+>>> TGT = 'de'  # <2>
+>>> SOS, EOS = '<s>', '</s>'
+>>> PAD, UNK, MASK = '<pad>', '<unk>', '<mask>'
+>>> SPECIAL_TOKS = [SOS, PAD, EOS, UNK, MASK]
+>>> VOCAB_SIZE = 10_000
+...
+>>> from tokenizers import ByteLevelBPETokenizer  # <3>
+>>> tokenize_src = ByteLevelBPETokenizer()
+>>> tokenize_src.train_from_iterator(
+...     [x[SRC] for x in sents['train']['translation']],
+...     vocab_size=10000, min_frequency=2,
+...     special_tokens=SPECIAL_TOKS)
+>>> PAD_IDX = tokenize_src.token_to_id(PAD)
+...
+>>> tokenize_tgt = ByteLevelBPETokenizer()
+>>> tokenize_tgt.train_from_iterator(
+...     [x[TGT] for x in sents['train']['translation']],
+...     vocab_size=10000, min_frequency=2,
+...     special_tokens=SPECIAL_TOKS)
+>>> assert PAD_IDX == tokenize_tgt.token_to_id(PAD)
+----
+<1> The source (`SRC`) language is English ('en')
+<2> The target (`TGT`) language is German or Deutsch ('de')
+<3> A `ByteLevel` tokenizer is less efficient than a character (code-point) level tokenizer but more robust (no OOV tokens)
+
+The `ByteLevel` part of your BPE tokenizer ensures that your tokenizer will never miss a beat (or byte) as it is tokenizing your text.
+A byte-level BPE tokenizer can always construct any character by combining one of the 256 possible single-byte tokens available in its vocabulary.
+This means it can process any language that uses the Unicode character set.
+A byte-level tokenizer will just fall back to representing the individual bytes of a Unicode character if it hasn't seen it before or hasn't included it in its token vocabulary.
+A byte-level tokenizer will need an average of 70% more tokens (almost double the vocabulary size) to represent a new text containing characters or tokens that it hasn't been trained on.
+
+Character-level BPE tokenizers have their disadvantages too.
+A character-level tokenizer must hold each one of the multibyte Unicode characters in its vocabulary to avoid having any meaningless OOV (out-of-vocabulary) tokens.
+This can create a huge vocabulary for a multilingual transformer expected to handle most of the 161 languages covered by Unicode characters.
+There are 149,186 characters with Unicode code points for both historical (Egyptian hieroglyphs for example) and modern written languages.
+That's about 10 times the memory to store all the embeddings and tokens in your transformer's tokenizer.
+In the real world, it is usually practical to ignore historical languages and some rare modern languages when optimizing your transformer BPE tokenizer for memory and balancing that with your transformer's accuracy for your problem. 
+
+[IMPORTANT]
+====
+The BPE tokenizer is one of the five key "superpowers" of transformers that makes them so effective.
+And a `ByteLevel` BPE tokenizer isn't quite as effective at representing the meaning of words even though it will never have OOV tokens.
+So in a production application, you may want to train your pipeline on both a character-level BPE tokenizer as well as a byte-level tokenizer.
+That way you can compare the results and choose the approach that gives you the best performance (accuracy and speed) for _your_ application.  
+====
+
+You can use your English tokenizer to build a preprocessing function that _flattens_ the `Dataset` structure and returns a list of lists of token IDs (without padding).
+
+[source,python]
+----
+def preprocess(examples):
+    src = [x[source_lang] for x in examples["translation"]]
+    src_toks = [tokenize_src(x) for x in src] 
+    # tgt = [x[target_lang] for x in examples["translation"]]
+    # tgt_toks = [tokenize_tgt(x) for x in tgt] 
+    return src_toks
+----
+
+==== TranslationTransformer Model
+
+At this point, you have tokenized the sentences in the Multi30k data and converted them to tensors consisting of indexes into the vocabularies for the source and target languages, German and English, respectively.
+The dataset has been split into separate training, validation and test sets, which you have wrapped with iterators for batch training.
+Now that the data is prepared you turn your focus to setting up the model.
+Pytorch provides an implementation of the model presented in "Attention Is All You Need", `torch.nn.Transformer`.
+You will notice the constructor takes several parameters, familiar amongst them are `d_model=512`, `nhead=8`, `num_encoder_layers=6`, and `num_decoder_layers=6`.
+The default values are set to the parameters employed in the paper.
+Along with several other parameters for the feedforward dimension, dropout, and activation, the model also provides support for a `custom_encoder` and `custom_decoder`.
+To make things interesting, create a custom decoder that additionally outputs a list of attention weights from the multi-head self-attention layer in each sublayer of the decoder.
+It might sound complicated, but it's actually fairly straightforward if you simply subclass `torch.nn.TransformerDecoderLayer` and `torch.nn.TransformerDecoder` and augment the _forward()_ methods to return the auxiliary outputs - the attention weights.
+
+
+.Extend torch.nn.TransformerDecoderLayer to additionally return multi-head self-attention weights
+[source,python]
+----
+>>> from torch import Tensor
+>>> from typing import Optional, Any
+
+>>> class CustomDecoderLayer(nn.TransformerDecoderLayer):
+...     def forward(self, tgt: Tensor, memory: Tensor,
+...             tgt_mask: Optional[Tensor] = None,
+...             memory_mask: Optional[Tensor] = None,
+...             tgt_key_padding_mask: Optional[Tensor] = None
+...             ) -> Tensor:
+...         """Like decode but returns multi-head attention weights."""
+...         tgt2 = self.self_attn(
+...             tgt, tgt, tgt, attn_mask=tgt_mask,
+...             key_padding_mask=tgt_key_padding_mask)[0]
+...         tgt = tgt + self.dropout1(tgt2)
+...         tgt = self.norm1(tgt)
+...         tgt2, attention_weights = self.multihead_attn(
+...             tgt, memory, memory,  # <1>
+...             attn_mask=memory_mask,
+...             key_padding_mask=mem_key_padding_mask,
+...             need_weights=True)
+...         tgt = tgt + self.dropout2(tgt2)
+...         tgt = self.norm2(tgt)
+...         tgt2 = self.linear2(
+...             self.dropout(self.activation(self.linear1(tgt))))
+...         tgt = tgt + self.dropout3(tgt2)
+...         tgt = self.norm3(tgt)
+...         return tgt, attention_weights  # <2>
+----
+<1> Save the weights from the mulithead_attn layer
+<2> In addition to target outputs, return attention weights
+
+.Extend torch.nn.TransformerDecoder to additionally return list of multi-head self-attention weights
+[source,python]
+----
+>>> class CustomDecoder(nn.TransformerDecoder):
+...     def __init__(self, decoder_layer, num_layers, norm=None):
+...         super().__init__(
+...             decoder_layer, num_layers, norm)
+...
+...     def forward(self,
+...             tgt: Tensor, memory: Tensor,
+...             tgt_mask: Optional[Tensor] = None,
+...             memory_mask: Optional[Tensor] = None,
+...             tgt_key_padding_mask: Optional[Tensor] = None
+...             ) -> Tensor:
+...         """Like TransformerDecoder but cache multi-head attention"""
+...         self.attention_weights = []  # <1>
+...         output = tgt
+...         for mod in self.layers:
+...             output, attention = mod(
+...                 output, memory, tgt_mask=tgt_mask,
+...                 memory_mask=memory_mask,
+...                 tgt_key_padding_mask=tgt_key_padding_mask)
+...             self.attention_weights.append(attention) # <2>
+...
+...         if self.norm is not None:
+...             output = self.norm(output)
+...
+...         return output
+----
+<1> Reset the list of weights on each _forward()_ call.
+<2> Save the attention weights from this decoder layer
+
+The only change to `.forward()` from the parent's version is to cache weights in the list member variable, `attention_weights`.
+
+To recap, you have extended the `torch.nn.TransformerDecoder` and its sublayer component, `torch.nn.TransformerDecoderLayer`, mainly for exploratory purposes.
+That is, you save the multi-head self-attention weights from the different decoder layers in the Transformer model you are about to configure and train.
+The _forward()_ methods in each of these classes copy the one in the parent nearly verbatim, with the exception of the changes called out to save the attention weights.
+
+The `torch.nn.Transformer` is a somewhat bare-bones version of the sequence-to-sequence model containing the main secret sauce, the multi-head self-attention in both the encoder and decoder.
+If one looks at the source code for the module footnote:[Pytorch nn.Transformer source:https://github.com/pytorch/pytorch/blob/master/torch/nn/modules/transformer.py], the model does not assume the use of embedding layers or positional encodings.
+Now you will create your _TranslationTransformer_ model that uses the custom decoder components, by extending `torch.nn.Transformer` module.
+Begin with defining the constructor, which takes parameters `src_vocab_size` for a source embedding size, and `tgt_vocab_size` for the target, and uses them to initialize a basic `torch.nn.Embedding` for each.
+Notice a `PositionalEncoding` member, `pos_enc`, is created in the constructor for adding the word location information.
+
+////
+nn.Transformer.forward(
+    src: torch.Tensor,
+    tgt: torch.Tensor,
+    src_mask: Optional[torch.Tensor] = None,
+    tgt_mask: Optional[torch.Tensor] = None,
+    memory_mask: Optional[torch.Tensor] = None,
+    src_key_padding_mask: Optional[torch.Tensor] = None,
+    tgt_key_padding_mask: Optional[torch.Tensor] = None,
+    memory_key_padding_mask: Optional[torch.Tensor] = None,
+    )
+////
+
+.Extend nn.Transformer for translation with a CustomDecoder
+[source,python]
+----
+>>> from einops import rearrange  # <1>
+...
+>>> class TranslationTransformer(nn.Transformer):  # <2>
+...     def __init__(self,
+...             device=DEVICE,
+...             src_vocab_size: int = VOCAB_SIZE,
+...             src_pad_idx: int = PAD_IDX,
+...             tgt_vocab_size: int = VOCAB_SIZE,
+...             tgt_pad_idx: int = PAD_IDX,
+...             max_sequence_length: int = 100,
+...             d_model: int = 512,
+...             nhead: int = 8,
+...             num_encoder_layers: int = 6,
+...             num_decoder_layers: int = 6,
+...             dim_feedforward: int = 2048,
+...             dropout: float = 0.1,
+...             activation: str = "relu"
+...         ):
+...
+...         decoder_layer = CustomDecoderLayer(
+...             d_model, nhead, dim_feedforward,  # <3>
+...             dropout, activation)
+...         decoder_norm = nn.LayerNorm(d_model)
+...         decoder = CustomDecoder(
+...             decoder_layer, num_decoder_layers,
+...             decoder_norm)  # <4>
+...
+...         super().__init__(
+...             d_model=d_model, nhead=nhead,
+...             num_encoder_layers=num_encoder_layers,
+...             num_decoder_layers=num_decoder_layers,
+...             dim_feedforward=dim_feedforward,
+...             dropout=dropout, custom_decoder=decoder)
+...
+...         self.src_pad_idx = src_pad_idx
+...         self.tgt_pad_idx = tgt_pad_idx
+...         self.device = device
+...
+...         self.src_emb = nn.Embedding(
+...             src_vocab_size, d_model)  # <5>
+...         self.tgt_emb = nn.Embedding(tgt_vocab_size, d_model)
+...
+...         self.pos_enc = PositionalEncoding(
+...             d_model, dropout, max_sequence_length)  # <6>
+...         self.linear = nn.Linear(
+...             d_model, tgt_vocab_size)  # <7>
+----
+<1> einops makes it easier to reshape tensors with notation familiar to mathematicians
+<2> TranslationTransformer extends torch.nn.Transformer
+<3> Create an instance of your CustomDecoderLayer for use in CustomDecoder
+<4> Create an instance of your CustomDecoder which collects the attention weights from the CustomerDecoderLayer's, for use in the Transformer
+<5> Define individual embedding layers for the input and target sequences
+<6> PositionalEncoding for the source and target sequences
+<7> Final linear layer for target word probabilities
+
+Note the import of `rearrange` from the `einops` footnote:[einops:https://github.com/arogozhnikov/einops] package.
+Mathematicians like it for tensor reshaping and shuffling because it uses a syntax common in graduate level applied math courses.
+To see why you need to `rearrange()` your tensors refer to the `torch.nn.Transformer` documentation footnote:[Pytorch torch.nn.Transformer documentation:https://pytorch.org/docs/stable/generated/torch.nn.Transformer.html].
+If you get any one of the dimensions of any of the tensors wrong it will mess up the entire pipeline, sometimes invisibly.
+
+.torch.nn.Transformer "shape" and dimension descriptions
+[source,text]
+----
+S: source sequence length
+T: target sequence length
+N: batch size
+E: embedding dimension number (the feature number)
+
+src: (S, N, E)
+
+tgt: (T, N, E)
+src_mask: (S, S)
+tgt_mask: (T, T)
+memory_mask: (T, S)
+src_key_padding_mask: (N, S)
+tgt_key_padding_mask: (N, T)
+memory_key_padding_mask: (N, S)
+
+output: (T, N, E)
+----
+
+The datasets you created using `torchtext` are batch-first.
+So, borrowing the nomenclature in the Transformer documentation, your source and target tensors have shape _(N, S)_ and _(N, T)_, respectively.
+To feed them to the `torch.nn.Transformer` (i.e. call its `forward()` method), the source and target must be reshaped.
+Also, you want to apply the embeddings plus the positional encoding to the source and target sequences.
+Additionally, a _padding key mask_ is needed for each and a _memory key mask_ is required for the target.
+Note, you can manage the embeddings and positional encodings outside the class, in the training and inference sections of the pipeline.
+However, since the model is specifically set up for translation, you make a stylistic/design choice to encapsulate the source and target sequence preparation within the class.
+To this end, you define `prepare_src()` and `prepare_tgt()` methods for preparing the sequences and generating the required masks.
+
+.TranslationTransformer prepare_src()
+[source,python]
+----
+>>>     def _make_key_padding_mask(self, t, pad_idx):
+...         mask = (t == pad_idx).to(self.device)
+...         return mask
+...
+...     def prepare_src(self, src, src_pad_idx):
+...         src_key_padding_mask = self._make_key_padding_mask(
+...             src, src_pad_idx)
+...         src = rearrange(src, 'N S -> S N')
+...         src = self.pos_enc(self.src_emb(src)
+...             * math.sqrt(self.d_model))
+...         return src, src_key_padding_mask
+----
+
+The `make_key_padding_mask()` method returns a tensor set to 1's in the position of the padding token in the given tensor, and zero otherwise.
+The `prepare_src()` method generates the padding mask and then rearranges the `src` to the shape that the model expects.
+It then applies the positional encoding to the source embedding multiplied by the square root of the model's dimension.
+This is taken directly from "Attention Is All You Need".
+The method returns the `src` with positional encoding applied, and the key padding mask for it.
+
+The `prepare_tgt()` method used for the target sequence is nearly identical to `prepare_src()`.
+It returns the `tgt` adjusted for positional encodings, and a target key padding mask.
+However, it also returns a "subsequent" mask, `tgt_mask`, which is a triangular matrix for which columns (ones) in a row that are permitted to be observed.
+To generate the subsequent mask you use `Transformer.generate_square_subsequent_mask()` method defined in the base class as shown in the following listing.
+
+.TranslationTransformer prepare_tgt()
+[source,python]
+----
+>>>     def prepare_tgt(self, tgt, tgt_pad_idx):
+...         tgt_key_padding_mask = self._make_key_padding_mask(
+...             tgt, tgt_pad_idx)
+...         tgt = rearrange(tgt, 'N T -> T N')
+...         tgt_mask = self.generate_square_subsequent_mask(
+...             tgt.shape[0]).to(self.device)
+...         tgt = self.pos_enc(self.tgt_emb(tgt)
+...             * math.sqrt(self.d_model))
+...         return tgt, tgt_key_padding_mask, tgt_mask
+----
+
+You put `prepare_src()` and `prepare_tgt()` to use in the model's `forward()` method.
+After preparing the inputs, it simply invokes the parent's `forward()` and feeds the outputs through a Linear reduction layer after transforming from (T, N, E) back to batch first (N, T, E).
+We do this for consistency in our training and inference.
+
+.TranslationTransformer forward()
+[source,python]
+----
+>>>     def forward(self, src, tgt):
+...         src, src_key_padding_mask = self.prepare_src(
+...             src, self.src_pad_idx)
+...         tgt, tgt_key_padding_mask, tgt_mask = self.prepare_tgt(
+...             tgt, self.tgt_pad_idx)
+...         memory_key_padding_mask = src_key_padding_mask.clone()
+...         output = super().forward(
+...             src, tgt, tgt_mask=tgt_mask,
+...             src_key_padding_mask=src_key_padding_mask,
+...             tgt_key_padding_mask=tgt_key_padding_mask,
+...             memory_key_padding_mask=memory_key_padding_mask)
+...         output = rearrange(output, 'T N E -> N T E')
+...         return self.linear(output)
+----
+
+Also, define an `init_weights()` method that can be called to initialize the weights of all submodules of the Transformer.
+Xavier initialization is commonly used for Transformers, so use it here.
+The Pytorch `nn.Module` documentation footnote:[Pytorch nn.Module documentation:https://pytorch.org/docs/stable/generated/torch.nn.Module.html] describes the `apply(fn)` method that recursively applies `fn` to every submodule of the caller.
+
+.TranslationTransformer init_weights()
+[source,python]
+----
+>>>     def init_weights(self):
+...         def _init_weights(m):
+...             if hasattr(m, 'weight') and m.weight.dim() > 1:
+...                 nn.init.xavier_uniform_(m.weight.data)
+...         self.apply(_init_weights);  # <1>
+----
+<1> Call the model's `apply()` method. The semi-colon (";") at the end of the line suppresses output from `apply()` in IPython and Jupyter notebooks, and is not required.
+
+The individual components of the model have been defined and the complete model is shown in the next listing.
+
+.TranslationTransformer complete model definition
+[source,python]
+----
+>>> class TranslationTransformer(nn.Transformer):
+...     def __init__(self,
+...             device=DEVICE,
+...             src_vocab_size: int = 10000,
+...             src_pad_idx: int = PAD_IDX,
+...             tgt_vocab_size: int  = 10000,
+...             tgt_pad_idx: int = PAD_IDX,
+...             max_sequence_length: int = 100,
+...             d_model: int = 512,
+...             nhead: int = 8,
+...             num_encoder_layers: int = 6,
+...             num_decoder_layers: int = 6,
+...             dim_feedforward: int = 2048,
+...             dropout: float = 0.1,
+...             activation: str = "relu"
+...             ):
+...         decoder_layer = CustomDecoderLayer(
+...             d_model, nhead, dim_feedforward,
+...             dropout, activation)
+...         decoder_norm = nn.LayerNorm(d_model)
+...         decoder = CustomDecoder(
+...             decoder_layer, num_decoder_layers, decoder_norm)
+...
+...         super().__init__(
+...             d_model=d_model, nhead=nhead,
+...             num_encoder_layers=num_encoder_layers,
+...             num_decoder_layers=num_decoder_layers,
+...             dim_feedforward=dim_feedforward,
+...             dropout=dropout, custom_decoder=decoder)
+...
+...         self.src_pad_idx = src_pad_idx
+...         self.tgt_pad_idx = tgt_pad_idx
+...         self.device = device
+...         self.src_emb = nn.Embedding(src_vocab_size, d_model)
+...         self.tgt_emb = nn.Embedding(tgt_vocab_size, d_model)
+...         self.pos_enc = PositionalEncoding(
+...             d_model, dropout, max_sequence_length)
+...         self.linear = nn.Linear(d_model, tgt_vocab_size)
+...
+...     def init_weights(self):
+...         def _init_weights(m):
+...             if hasattr(m, 'weight') and m.weight.dim() > 1:
+...                 nn.init.xavier_uniform_(m.weight.data)
+...         self.apply(_init_weights);
+...
+...     def _make_key_padding_mask(self, t, pad_idx=PAD_IDX):
+...         mask = (t == pad_idx).to(self.device)
+...         return mask
+...
+...     def prepare_src(self, src, src_pad_idx):
+...         src_key_padding_mask = self._make_key_padding_mask(
+...             src, src_pad_idx)
+...         src = rearrange(src, 'N S -> S N')
+...         src = self.pos_enc(self.src_emb(src)
+...             * math.sqrt(self.d_model))
+...         return src, src_key_padding_mask
+...
+...     def prepare_tgt(self, tgt, tgt_pad_idx):
+...         tgt_key_padding_mask = self._make_key_padding_mask(
+...             tgt, tgt_pad_idx)
+...         tgt = rearrange(tgt, 'N T -> T N')
+...         tgt_mask = self.generate_square_subsequent_mask(
+...             tgt.shape[0]).to(self.device)      # <1>
+...         tgt = self.pos_enc(self.tgt_emb(tgt)
+...             * math.sqrt(self.d_model))
+...         return tgt, tgt_key_padding_mask, tgt_mask
+...
+...     def forward(self, src, tgt):
+...         src, src_key_padding_mask = self.prepare_src(
+...             src, self.src_pad_idx)
+...         tgt, tgt_key_padding_mask, tgt_mask = self.prepare_tgt(
+...             tgt, self.tgt_pad_idx)
+...         memory_key_padding_mask = src_key_padding_mask.clone()
+...         output = super().forward(
+...             src, tgt, tgt_mask=tgt_mask,
+...             src_key_padding_mask=src_key_padding_mask,
+...             tgt_key_padding_mask=tgt_key_padding_mask,
+...             memory_key_padding_mask = memory_key_padding_mask,
+...             )
+...         output = rearrange(output, 'T N E -> N T E')
+...         return self.linear(output)
+----
+<1> mask out all attention to future (subsequent) tokens for the decoder to prevent leakage during training 
+
+Finally, you have a complete transformer all your own!
+And you should be able to use it for translating between virtually any pair of languages, even character-rich languages such as traditional Chinese and Japanese.
+And you have explicit access to all the hyperparameters that you might need to tune your model for your problem.
+For example, you can increase the vocabulary size for the target or source languages to efficiently handle _character-rich_ languages such as traditional Chinese and Japanese.
+
+[NOTE]
+====
+Traditional Chinese and Japanese (kanji) are called _character-rich_ because they have a much larger number of unique characters that European languages.
+Chinese and Japanese languages use logograph characters.
+Logo graph characters look a bit like small pictographs or abstract hieroglyphic drawings.
+For example, the kanji character "日" can mean day and it looks a little like the day block you might see on a calendar.
+Japanese logographic characters are roughly equivalent to word pieces somewhere between morphemes and words in the English language.
+This means that you will have many more unique characters in logographic languages than in European languages.
+For instance, traditional Japanese uses about 3500 unique kanji characters.footnote:[Japanese StackExchange answer with counts of Japanese characters (https://japanese.stackexchange.com/a/65653/56506)]
+English has roughly 7000 unique syllables within the most common 20,000 words.
+====
+
+You can even change the number of layers in the encoder and decoder sides of the transformer, depending on the source (encoder) or target (decoder) language.
+You can even create a translation transformer that simplifies text for explaining complex concepts to five-year-olds, or adults on Mastodon server focused on ELI5 ("explain it like I'm 5") conversations.
+If you reduce the number of layers in the decoder this will create a "capacity" bottleneck that can force your decoder to simplify or compress the concepts coming out of the encoder.
+Similarly, the number of attention heads in the encoder or decoder layers can be adjusted to increase or decrease the capacity (complexity) of your transformer. 
+
+==== Training the TranslationTransformer
+
+Now let's create an instance of the model for our translation task and initialize the weights in preparation for training.
+For the model's dimensions you use the defaults, which correlate to the sizes of the original "Attention Is All You Need" transformer.
+Know that since the encoder and decoder building blocks comprise duplicate, stackable layers, you can configure the model with any number of these layers.
+
+.Instantiate a TranslationTransformer
+[source,python]
+----
+>>> model = TranslationTransformer(
+...     device=DEVICE,
+...     src_vocab_size=tokenize_src.get_vocab_size(),
+...     src_pad_idx=tokenize_src.token_to_id('<pad>'),
+...     tgt_vocab_size=tokenize_tgt.get_vocab_size(),
+...     tgt_pad_idx=tokenize_tgt.token_to_id('<pad>')
+...     ).to(DEVICE)
+>>> model.init_weights()
+>>> model  # <1>
+----
+<1> display the string representation of your model see what you've created
+
+PyTorch creates a nice `\_\_str\_\_` representation of your model.
+It displays all the layers and their inner structure including the shapes of the inputs and outputs.
+You may even be able to see the parallels between the layers of your models and the diagrams of tranformers that you see in this chapter or online.
+From the first half of the text representation for your transformer, you can see that all of the encoder layers have exactly the same structure.
+The inputs and outputs of each `TransformerEncoderLayer` have the same shape, so this ensures that you can stack them without reshaping linear layers between them.
+Transformer layers are like the floors of a skyscraper or a child's stack of wooden blocks.
+Each level has exactly the same 3D shape.
+
+[source,text]
+----
+TranslationTransformer(
+  (encoder): TransformerEncoder(
+    (layers): ModuleList(
+      (0-5): 6 x TransformerEncoderLayer(
+        (self_attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(
+            in_features=512, out_features=512, bias=True)
+        )
+        (linear1): Linear(
+          in_features=512, out_features=2048, bias=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+        (linear2): Linear(
+          in_features=2048, out_features=512, bias=True)
+        (norm1): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (dropout1): Dropout(p=0.1, inplace=False)
+        (dropout2): Dropout(p=0.1, inplace=False)
+      )
+    )
+    (norm): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+  )
+...
+----
+
+Notice that you set the sizes of your source and target vocabularies in the constructor.
+Also, you pass the indices for the source and target padding tokens for the model to use in preparing the source, targets, and associated masking sequences.
+Now that you have the model defined, take a moment to do a quick sanity check to make sure there are no obvious coding errors before you set up the training and inference pipeline.
+You can create "batches" of random integer tensors for the sources and targets and pass them to the model, as demonstrated in the following listing.
+
+.Quick model sanity check with random tensors
+[source,python]
+----
+>>> src = torch.randint(1, 100, (10, 5)).to(DEVICE)  # <1>
+>>> tgt = torch.randint(1, 100, (10, 7)).to(DEVICE)
+...
+>>> with torch.no_grad():
+...     output = model(src, tgt)  # <2>
+...
+>>> print(output.shape)
+torch.Size([10, 7, 5893])
+----
+<1> _torch.randint(low, high, size)_ where size is tuple for shape of the tensor
+<2> A `forward` pass of the model with `src` and `tgt`.
+
+We created two tensors, `src` and `tgt`, each with random integers between 1 and 100 distributed uniformly.
+Your model accepts tensors having batch-first shape, so we made sure that the batch sizes (10 in this case) were identical - otherwise we would have received a runtime error on the forward pass, that looks like this:
+
+[source,text]
+----
+RuntimeError: the batch number of src and tgt must be equal
+----
+
+It may be obvious, the source and target sequence lengths do not have to match, which is confirmed by the successful call to _model(src, tgt)_.
+
+[TIP]
+====
+When setting up a new sequence-to-sequence model for training, you may want to initially use smaller tunables in your setup.
+This includes limiting max sequence lengths, reducing batch sizes, and specifying a smaller number of training loops or epochs.
+This will make it easier to debug issues in your model and/or pipeline to get your program executing end-to-end more quickly.
+Be careful not to draw any conclusions on the capabilities/accuracy of your model at this "bootstrapping" stage; the goal is simply to get the pipeline to run.
+====
+
+Now that you feel confident the model is ready for action, the next step is to define the optimizer and criterion for training.
+"Attention Is All You Need" used Adam optimizer with a warmup period in which the learning rate is increased followed by a decreasing rate for the duration of training.
+You will use a static rate, 1e-4, which is smaller than the default rate 1e-2 for Adam.
+This should provide for stable training as long as you are patient to run enough epochs.
+You can play with learning rate scheduling as an exercise if you are interested.
+Other Transformer based models you will look at later in this chapter use a static learning rate.
+As is common for this type of task, you use `torch.nn.CrossEntropyLoss` for the criterion.
+
+.Optimizer and Criterion
+[source,python]
+----
+>>> LEARNING_RATE = 0.0001
+>>> optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
+>>> criterion = nn.CrossEntropyLoss(ignore_index=TRG_PAD_IDX)  # <1>
+----
+<1> Ignore padding in the input gradient calculation
+
+Ben Trevett contributed much of the code for the Pytorch Transformer Beginner tutorial.
+He, along with colleagues, has written an outstanding and informative Jupyter notebook series for their Pytorch Seq2Seq tutorial footnote:[Trevett,Ben - PyTorch Seq2Seq: https://github.com/bentrevett/pytorch-seq2seq] covering sequence-to-sequence models.
+Their Attention Is All You Need footnote:[Trevett,Ben - Attention Is All You Need Jupyter notebook: https://github.com/bentrevett/pytorch-seq2seq/blob/master/6%20-%20Attention%20is%20All%20You%20Need.ipynb] notebook provides a from-scratch implementation of a basic transformer model.
+To avoid re-inventing the wheel, the training and evaluation driver code in the next sections is borrowed from Ben's notebook, with minor changes.
+
+The `train()` function implements a training loop similar to others you have seen.
+Remember to put the model into `train` mode before the batch iteration.
+Also, note that the last token in the target, which is the EOS token, is stripped from `trg` before passing it as input to the model.
+We want the model to predict the end of a string.
+The function returns the average loss per iteration.
+
+.Model training function
+[source,python]
+----
+>>> def train(model, iterator, optimizer, criterion, clip):
+...
+...     model.train()  # <1>
+...     epoch_loss = 0
+...
+...     for i, batch in enumerate(iterator):
+...         src = batch.src
+...         trg = batch.trg
+...         optimizer.zero_grad()
+...         output = model(src, trg[:,:-1])  # <2>
+...         output_dim = output.shape[-1]
+...         output = output.contiguous().view(-1, output_dim)
+...         trg = trg[:,1:].contiguous().view(-1)
+...         loss = criterion(output, trg)
+...         loss.backward()
+...         torch.nn.utils.clip_grad_norm_(model.parameters(), clip)
+...         optimizer.step()
+...         epoch_loss += loss.item()
+...
+...     return epoch_loss / len(iterator)
+----
+<1> Make sure the model is in training mode
+<2> The last token in `trg` is the EOS token. Slice it off so that it's not an input to the model.
+
+The `evaluate()` function is similar to `train()`.
+You set the model to `eval` mode and use the `with torch.no_grad()` paradigm as usual for straight inference.
+
+.Model evaluation function
+[source,python]
+----
+>>> def evaluate(model, iterator, criterion):
+...     model.eval()  # <1>
+...     epoch_loss = 0
+...
+...     with torch.no_grad():  # <2>
+...         for i, batch in enumerate(iterator):
+...             src = batch.src
+...             trg = batch.trg
+...             output = model(src, trg[:,:-1])
+...             output_dim = output.shape[-1]
+...             output = output.contiguous().view(-1, output_dim)
+...             trg = trg[:,1:].contiguous().view(-1)
+...             loss = criterion(output, trg)
+...             epoch_loss += loss.item()
+...     return epoch_loss / len(iterator)
+----
+<1> Set the model to eval mode
+<2> Disable gradient calculation for inference
+
+Next a straightforward utility function `epoch_time()`, used for calculating the time elapsed during training, is defined as follows.
+
+.Utility function for elapsed time
+[source,python]
+----
+>>> def epoch_time(start_time, end_time):
+...     elapsed_time = end_time - start_time
+...     elapsed_mins = int(elapsed_time / 60)
+...     elapsed_secs = int(elapsed_time - (elapsed_mins * 60))
+...     return elapsed_mins, elapsed_secs
+----
+
+Now, let's proceed to setup the training.
+You set the number of epochs to 15, to give the model enough opportunities to train with the previously selected learning rate of 1e-4.
+You can experiment with different combinations of learning rates and epoch numbers.
+In a future example, you will use an early stopping mechanism to avoid over-fitting and unnecessary training time.
+Here you declare a filename for `BEST_MODEL_FILE` and after each epoch, if the validation loss is an improvement over the previous best loss, the model is saved and the best loss is updated as shown.
+
+.Run the TranslationTransformer model training and save the *best* model to file
+[source,python]
+----
+>>> N_EPOCHS = 15
+>>> CLIP = 1
+>>> BEST_MODEL_FILE = 'best_model.pytorch'
+>>> best_valid_loss = float('inf')
+>>> for epoch in range(N_EPOCHS):
+...     start_time = time.time()
+...     train_loss = train(
+...         model, train_iterator, optimizer, criterion, CLIP)
+...     valid_loss = evaluate(model, valid_iterator, criterion)
+...     end_time = time.time()
+...     epoch_mins, epoch_secs = epoch_time(start_time, end_time)
+...
+...     if valid_loss < best_valid_loss:
+...         best_valid_loss = valid_loss
+...         torch.save(model.state_dict(), BEST_MODEL_FILE)
+...     print(f'Epoch: {epoch+1:02} | Time: {epoch_mins}m {epoch_secs}s')
+...     train_ppl = f'{math.exp(train_loss):7.3f}'
+...     print(f'\tTrain Loss: {train_loss:.3f} | Train PPL: {train_ppl}')
+...     valid_ppl = f'{math.exp(valid_loss):7.3f}'
+...     print(f'\t Val. Loss: {valid_loss:.3f} |  Val. PPL: {valid_ppl}')
+----
+
+[source,text]
+----
+Epoch: 01 | Time: 0m 55s
+	Train Loss: 4.835 | Train PPL: 125.848
+	 Val. Loss: 3.769 |  Val. PPL:  43.332
+Epoch: 02 | Time: 0m 56s
+	Train Loss: 3.617 | Train PPL:  37.242
+	 Val. Loss: 3.214 |  Val. PPL:  24.874
+Epoch: 03 | Time: 0m 56s
+	Train Loss: 3.197 | Train PPL:  24.448
+	 Val. Loss: 2.872 |  Val. PPL:  17.679
+
+...
+Epoch: 13 | Time: 0m 57s
+	Train Loss: 1.242 | Train PPL:   3.463
+	 Val. Loss: 1.570 |  Val. PPL:   4.805
+Epoch: 14 | Time: 0m 57s
+	Train Loss: 1.164 | Train PPL:   3.204
+	 Val. Loss: 1.560 |  Val. PPL:   4.759
+Epoch: 15 | Time: 0m 57s
+	Train Loss: 1.094 | Train PPL:   2.985
+	 Val. Loss: 1.545 |  Val. PPL:   4.689
+----
+
+Notice that we could have probably run a few more epochs given that validation loss was still decreasing prior to exiting the loop.
+Let's see how the model performs on a test set by loading the _best_ model and running the `evaluate()` function on the test set.
+
+////
+KM: We can't use bold below. You might consider italics or all caps to emphasize best, if need be. 
+HL: DONE
+////
+
+.Load _best_ model from file and perform evaluation on test data set
+[source,python]
+----
+>>> model.load_state_dict(torch.load(BEST_MODEL_FILE))
+>>> test_loss = evaluate(model, test_iterator, criterion)
+>>> print(f'| Test Loss: {test_loss:.3f} | Test PPL: {math.exp(test_loss):7.3f} |')
+| Test Loss: 1.590 | Test PPL:   4.902 |
+----
+
+Your translation transformer achieves a log loss of about 1.6 on the test set.
+For a translation model trained on such a small dataset, this is not too bad.
+Log loss of 1.59 corresponds to a 20% probability (`exp(-1.59)`) of generating the correct token and the exact position it was provided in the test set.
+Because there are many different correct English translations for a given German text, this is a reasonable accuracy for a model that can be trained on a commodity laptop. 
+
+////
+KM: Do we have output at this point? If so, show that. Also, give us a transitional sentence or two after the listing about what you just completed and what the next sub-section is going to be doing. 
+HL: Done
+////
+
+==== TranslationTransformer Inference
+You are now convinced your model is ready to become your personal German-to-English interpreter.
+Performing translation requires only slightly more work to set up, which you do in the `translate_sentence()` function in the next listing.
+In brief, start by tokenizing the source _sentence_ if it has not been tokenized already and end-capping it with the _<sos>_ and _<eos>_ tokens.
+Next, you call the `prepare_src()` method of the model to transform the _src_ sequence and generate the source key padding mask as was done in training and evaluation.
+Then run the prepared `src` and `src_key_padding_mask` through the model's encoder and save its output (in `enc_src`).
+Now, here is the fun part, where the target sentence (the translation) is generated.
+Start by initializing a list, `trg_indexes`, to the SOS token.
+In a loop - while the generated sequence has not reached a maximum length - convert the current prediction, _trg_indexes_, to a tensor.
+Use the model's _prepare_tgt()_ method to prepare the target sequence, creating the target key padding mask, and the target sentence mask.
+Run the current decoder output, the encoder output, and the two masks through the decoder.
+Get the latest predicted token from the decoder output and append it to _trg_indexes_.
+Break out of the loop if the prediction was an _<eos>_ token (or if maximum sentence length is reached).
+The function returns the target indexes converted to tokens (words) and the attention weights from the decoder in the model.
+
+.Define _translate_sentence()_ for performing inference
+[source,python]
+----
+>>> def translate_sentence(sentence, src_field, trg_field,
+...         model, device=DEVICE, max_len=50):
+...     model.eval()
+...     if isinstance(sentence, str):
+...         nlp = spacy.load('de')
+...         tokens = [token.text.lower() for token in nlp(sentence)]
+...     else:
+...         tokens = [token.lower() for token in sentence]
+...     tokens = ([src_field.init_token] + tokens
+...         + [src_field.eos_token])  # <1>
+...     src_indexes = [src_field.vocab.stoi[token] for token in tokens]
+...     src = torch.LongTensor(src_indexes).unsqueeze(0).to(device)
+...     src, src_key_padding_mask = model.prepare_src(src, SRC_PAD_IDX)
+...     with torch.no_grad():
+...         enc_src = model.encoder(src,
+...             src_key_padding_mask=src_key_padding_mask)
+...     trg_indexes = [
+...         trg_field.vocab.stoi[trg_field.init_token]]  # <2>
+...
+...     for i in range(max_len):
+...         tgt = torch.LongTensor(trg_indexes).unsqueeze(0).to(device)
+...         tgt, tgt_key_padding_mask, tgt_mask = model.prepare_tgt(
+...             tgt, TRG_PAD_IDX)
+...         with torch.no_grad():
+...             output = model.decoder(
+...                 tgt, enc_src, tgt_mask=tgt_mask,
+...                 tgt_key_padding_mask=tgt_key_padding_mask)
+...             output = rearrange(output, 'T N E -> N T E')
+...             output = model.linear(output)
+...
+...         pred_token = output.argmax(2)[:,-1].item()  # <3>
+...         trg_indexes.append(pred_token)
+...
+...         if pred_token == trg_field.vocab.stoi[
+...                 trg_field.eos_token]:  # <4>
+...             break
+...
+...     trg_tokens = [trg_field.vocab.itos[i] for i in trg_indexes]
+...     translation = trg_tokens[1:]
+...
+...     return translation, model.decoder.attention_weights
+----
+<1> Prepare the source string by encapsulating in _<sos>_ and _<eos>_ tokens.
+<2> Start _trg_indexes_ (predictions) with index of _<sos>_ token.
+<3> Each time through the loop retrieve the latest predicted token.
+<4> Break out of the inference loop on _<eos>_ token.
+
+////
+KM: Do we have output at this point? If so, show that. Also, give us a transitional sentence or two after the listing about what you just completed and what the next sub-section is going to be doing. 
+////
+Your `translate_sentence()` wraps up your big transformer into a handy package you can use to translate whatever German sentence you run across.
+
+
+==== TranslationTransformer Inference Example 1
+
+Now you can use your `translate_sentence()` function on an example text.
+Since you probably do not know German, you can use a random example from the test data.
+Try it for the sentence "Eine Mutter und ihr kleiner Sohn genießen einen schönen Tag im Freien."
+In the OPUS dataset the character case was folded so that the text you feed into your transformer should be "eine mutter und ihr kleiner sohn genießen einen schönen tag im freien."
+And the correct translation that you're looking for is: "A mother and her little [or young] son are enjoying a beautiful day outdoors."
+
+////
+KM: What is the example of data? It might be helpful to spell that out for the reader. 
+HL: Done
+////
+
+.Load sample at _test_data_ index 10
+[source,python]
+----
+>>> example_idx = 10
+>>> src = vars(test_data.examples[example_idx])['src']
+>>> trg = vars(test_data.examples[example_idx])['trg']
+>>> src
+['eine', 'mutter', 'und', 'ihr', 'kleiner', 'sohn', 'genießen', 
+ 'einen', 'schönen', 'tag', 'im', 'freien', '.']
+>>> trg
+['a', 'mother', 'and', 'her', 'young', 'song', 'enjoying',
+ 'a', 'beautiful', 'day', 'outside', '.']
+----
+
+It looks like the OPUS dataset is not perfect - the target (translated) token sequence is missing the verb "are" between "song" and "enjoying".
+And, the German word "kleiner" can be translated as little or young, but OPUS dataset example only provides one possible "correct" translation.
+And what about that "young song," that seems odd.
+Perhaps that's a typo in the OPUS test dataset.
+
+Now you can run the `src` token sequence through your translator to see how it deals with that ambiguity.
+
+.Translate the test data sample
+[source,python]
+----
+>>> translation, attention = translate_sentence(src, SRC, TRG, model, device)
+>>> print(f'translation = {translation}')
+translation = ['a', 'mother', 'and', 'her', 'little', 'son', 'enjoying', 'a', 'beautiful', 'day', 'outside', '.', '<eos>']
+----
+
+Interestingly, it appears there is a typo in the translation of the German word for "son" ("sohn") in the OPUS dataset.
+The dataset incorrectly translates "sohn" in German to "song" in English.
+Based on context, it appears the model did well to infer that a mother is (probably) with her young (little) "son".
+The model gives us the adjective "little" instead of "young", which is acceptable, given that the direct translation of the German word "kleiner" is "smaller".
+
+Let's focus our attention on, um, _attention_.
+In your model, you defined a _CustomDecoder_ that saves the average attention weights for each decoder layer on each forward pass.
+You have the _attention_ weights from the translation.
+Now write a function to visualize self-attention for each decoder layer using `matplotlib`.
+
+.Function to visualize self-attention weights for decoder layers of the TranslationTransformer
+[source,python]
+----
+>>> import matplotlib.pyplot as plt
+>>> import matplotlib.ticker as ticker
+...
+>>> def display_attention(sentence, translation, attention_weights):
+...     n_attention = len(attention_weights)
+...
+...     n_cols = 2
+...     n_rows = n_attention // n_cols + n_attention % n_cols
+...
+...     fig = plt.figure(figsize=(15,25))
+...
+...     for i in range(n_attention):
+...
+...         attention = attention_weights[i].squeeze(0)
+...         attention = attention.cpu().detach().numpy()
+...         cax = ax.matshow(attention, cmap='gist_yarg')
+...
+...         ax = fig.add_subplot(n_rows, n_cols, i+1)
+...         ax.tick_params(labelsize=12)
+...         ax.set_xticklabels([''] + ['<sos>'] + 
+...             [t.lower() for t in sentence]+['<eos>'],
+...             rotation=45)
+...         ax.set_yticklabels(['']+translation)
+...         ax.xaxis.set_major_locator(ticker.MultipleLocator(1))
+...         ax.yaxis.set_major_locator(ticker.MultipleLocator(1))
+...
+...     plt.show()
+...     plt.close()
+----
+
+The function plots the attention values at each index in the sequence with the original sentence on the x-axis and the translation along the y-axis.
+We use the _gist_yarg_ color map since it's a gray-scale scheme that is printer-friendly.
+Now you display the attention for the "mother and son enjoying the beautiful day" sentence.
+
+.Visualize the self-attention weights for the test example translation
+[source,python]
+----
+>>> display_attention(src, translation, attention_weights)
+----
+
+Looking at the plots for the initial two decoder layers we can see that an area of concentration is starting to develop along the diagonal.
+
+.Test Translation Example: Decoder Self-Attention Layers 1 and 2
+image::../images/ch09/translation_attention_1_2.png[alt="TranlationTransformer Attention Layers 1 and 2",width=100%,align="center",link="../images/ch12/translation_attention_1_2.png"]
+
+In the subsequent layers, three and four, the focus is appearing to become more refined.
+
+.Test Translation Example: Decoder Self-Attention Layers 3 and 4
+image::../images/ch09/translation_attention_3_4.png[alt="TranlationTransformer Attention Layers 3 and 4",width=100%,align="center",link="../images/ch12/translation_attention_3_4.png"]
+
+In the final two layers, we see the attention is strongly weighted where direct word-to-word translation is done, along the diagonal, which is what you likely would expect.
+Notice the shaded clusters of article-noun and adjective-noun pairings.
+For example, "son" is clearly weighted on the word "sohn", yet there is also attention given to "kleiner".
+
+.Test Translation Example: Decoder Self-Attention Layers 5 and 6
+image::../images/ch09/translation_attention_5_6.png[alt="TranlationTransformer Attention Layers 5 and 6",width=100%,align="center",link="../images/ch12/translation_attention_5_6.png"]
+
+You selected this example arbitrarily from the test set to get a sense of the translation capability of the model.
+The attention plots appear to show that the model is picking up on relations in the sentence, but the word importance is still strongly positional in nature.
+By that, we mean the German word at the current position in the original sentence is generally translated to the English version of the word at the same or similar position in the target output.
+
+==== TranslationTransformer Inference Example 2
+Have a look at another example, this time from the validation set, where the ordering of clauses in the input sequence and the output sequence are different, and see how the attention plays out.
+Load and print the data for the validation sample at index 25 in the next listing.
+
+.Load sample at _valid_data_ index 25
+[source,python]
+----
+>>> example_idx = 25
+...
+>>> src = vars(valid_data.examples[example_idx])['src']
+>>> trg = vars(valid_data.examples[example_idx])['trg']
+...
+>>> print(f'src = {src}')
+>>> print(f'trg = {trg}')
+src = ['zwei', 'hunde', 'spielen', 'im', 'hohen', 'gras', 'mit', 'einem', 'orangen', 'spielzeug', '.']
+trg = ['two', 'dogs', 'play', 'with', 'an', 'orange', 'toy', 'in', 'tall', 'grass', '.']
+----
+
+Even if your German comprehension is not great, it seems fairly obvious that the _orange toy_ ("orangen spielzeug") is at the end of the source sentence, and the _in the tall grass_ is in the middle.
+In the English sentence, however, "in tall grass" completes the sentence, while "with an orange toy" is the direct recipient of the "play" action, in the middle part of the sentence.
+Translate the sentence with your model.
+
+.Translate the validation data sample
+[source,python]
+----
+>>> translation, attention = translate_sentence(src, SRC, TRG, model, device)
+>>> print(f'translation = {translation}')
+translation = ['two', 'dogs', 'are', 'playing', 'with', 'an', 'orange', 'toy', 'in', 'the', 'tall', 'grass', '.', '<eos>']
+----
+
+This is a pretty exciting result for a model that took about 15 minutes to train (depending on your computing power).
+Again, plot the attention weights by calling the _display_attention()_ function with the _src_, _translation_ and _attention_.
+
+.Visualize the self-attention weights for the validation example translation
+[source,python]
+----
+>>> display_attention(src, translation, attention)
+----
+
+Here we show the plots for the last two layers (5 and 6).
+
+.Validation Translation Example: Decoder Self-Attention Layers 5 and 6
+image::../images/ch09/translation_attention_validation_5_6.png[alt="TranlationTransformer Validation Self-Attention Layers 5 and 6",width=100%,align="center",link="../images/ch12/translation_attention_validation_5_6.png"]
+
+This sample excellently depicts how the attention weights can break from the position-in-sequence mold and actually attend to words later or earlier in the sentence.
+It truly shows the uniqueness and power of the multi-head self-attention mechanism.
+
+To wrap up the section, you will calculate the BLEU (bilingual evaluation understudy) score for the model.
+The `torchtext` package supplies a function, _bleu_score_,  for doing the calculation.
+You use the following function, again from Mr. Trevett's notebook, to do inference on a dataset and return the score.
+
+[source,python]
+----
+>>> from torchtext.data.metrics import bleu_score
+...
+>>> def calculate_bleu(data, src_field, trg_field, model, device, max_len = 50):
+...     trgs = []
+...     pred_trgs = []
+...     for datum in data:
+...         src = vars(datum)['src']
+...         trg = vars(datum)['trg']
+...         pred_trg, _ = translate_sentence(
+...             src, src_field, trg_field, model, device, max_len)
+...         # strip <eos> token
+...         pred_trg = pred_trg[:-1]
+...         pred_trgs.append(pred_trg)
+...         trgs.append([trg])
+...
+...     return bleu_score(pred_trgs, trgs)
+----
+
+Calculate the score for your test data.
+
+[source,python]
+----
+>>> bleu_score = calculate_bleu(test_data, SRC, TRG, model, device)
+>>> print(f'BLEU score = {bleu_score*100:.2f}')
+BLEU score = 37.68
+----
+
+To compare to Ben Trevett's tutorial code, a convolutional sequence-to-sequence model footnote:[Trevett,Ben - Convolutional Sequence to Sequence Learning:https://github.com/bentrevett/pytorch-seq2seq/blob/master/5%20-%20Convolutional%20Sequence%20to%20Sequence%20Learning.ipynb] achieves a 33.3 BLEU and the smaller-scale Transformer scores about 35.
+Your model uses the same dimensions of the original "Attention Is All You Need" Transformer, hence it is no surprise that it performs well.
+
+
+== Bidirectional backpropagation and "BERT"
+// SUM: BERT significantly improved the accuracy and efficiency of language models by backpropagating through time in both directions, reading the text backwards and forwards simultaneously, with equal care and weighting of the patterns it detected.
+Sometimes you want to predict something in the middle of a sequence -- perhaps a masked-out word.
+Transformers can handle that as well.
+And the model doesn't need to be limited to reading your text from left to right in a "causal" way.
+It can read the text from right to left on the other side of the mask as well.
+When generating text, the unknown word your model is trained to predict is at the end of the text.
+But transformers can also predict an interior word, for example, if you are trying to unredact the secret blacked-out parts of the Mueller Report.
+
+When you want to predict an unknown word _within_ your example text you can take advantage of the words before and _after_ the masked word.
+A human reader or an NLP pipeline can start wherever they like.
+And for NLP you always have a particular piece of text, with finite length, that you want to process.
+So you could start at the end of the text or the beginning... or _both_!
+This was the insight that BERT used to create task-independent embeddings of any body of text.
+It was trained on the general task of predicting masked-out words, similar to how you learned to train word embeddings using skip-grams in Chapter 6.
+And, just as in word embedding training, BERT created a lot of useful training data from unlabeled text simply by masking out individual words and training a bidirectional transformer model to restore the masked word.
+
+
+In 2018, researchers at Google AI unveiled a new language model they call BERT, for "Bi-directional Encoder Representations from Transformers" footnote:[BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding: https://arxiv.org/abs/1810.04805 (Devlin, Jacob et al. 2018)].
+The "B" in "BERT" is for "bidirectional."
+It isn't named for a Sesame Street character it means "Bidirectional Encoder Representations from Transformers" - basically just a bidirectional transformer.
+Bidirectional transformers were a huge leap forward for machine-kind.
+In the next chapter, chapter 9, you'll learn about the three tricks that helped Transformers (souped-up RNNs) reach the top of the leaderboard for many of the hardest NLP problems.
+Giving RNNs the ability to read in both directions simultaneously was one of these innovative tricks that helped machines surpass humans at reading comprehension tasks.
+
+////
+KM: I'm confused about this section. You define and discuss BERT earlier in the chapter. It is unnecessary here. 
+HL: I've consolidated the two secitons together into one section here, but I think you're right that it is confusing and needs to be reduced further.
+////
+
+The BERT model, which comes in two flavors (configurations) - BERT~BASE~ and BERT~LARGE~ - is comprised of a stack of encoder transformers with feedforward and attention layers.
+Different from transformer models that preceded it, like OpenAI GPT, BERT uses masked language modeling (MLM) objective to train a deep bi-directional transformer.
+MLM involves randomly masking tokens in the input sequence and then attempting to predict the actual tokens from context.
+More powerful than typical left-to-right language model training, the MLM objective allows BERT to better generalize language representations by joining the left and right context of a token in all layers.
+The BERT models were pre-trained in a semi-unsupervised fashion on the English Wikipedia sans tables and charts (2500M words), and the BooksCorpus (800M words and upon which GPT was also trained).
+With simply some tweaks to inputs and the output layer, the models can be fine tuned to achieve state-of-the-art results on specific sentence-level and token-level tasks.
+
+=== Tokenization and Pre-training
+The input sequences to BERT can ambiguously represent a single sentence or a pair of sentences.
+BERT uses WordPiece embeddings with the first token of each sequence always set as a special _[CLS]_ token.
+Sentences are distinguished by a trailing separator token, _[SEP]_.
+Tokens in a sequence are further distinguished by a separate segment embedding with either sentence A or B assigned to each token.
+Additionally, a positional embedding is added to the sequence, such that each position the input representation of a token is formed by summation of the corresponding token, segment, and positional embeddings as shown in the figure below (from the published paper):
+
+image::../images/ch09/bert_inputs.png[alt="BERT input representation",width=100%,align="center",link="../images/ch09/bert_inputs.png"]
+
+During pre-training a percentage of input tokens are masked randomly (with a _[MASK]_ token) and the model the model predicts the actual token IDs for those masked tokens.
+In practice, 15% of the WordPiece tokens were selected to be masked for training, however, a downside of this is that during fine-tuning there is no _[MASK]_ token.
+To work around this, the authors came up with a formula to replace the selected tokens for masking (the 15%) with the _[MASK]_ token 80% of the time.
+For the other 20%, they replace the token with a random token 10% of the time and keep the original token 10% of the time.
+In addition to this MLM objective pre-training, secondary training is done for Next Sentence Prediction (NSP).
+Many downstream tasks, such as Question Answering (QA), depend upon understanding the relationship between two sentences, and cannot be solved with language modeling alone.
+For the NSP wave of training, the authors generated a simple binarized NSP task by selecting pairs of sentences A and B for each sample and labeling them as _IsNext_ and _NotNext_.
+Fifty percent of the samples for the pre-training had selections where sentence B followed sentence A in the corpus, and for the other half sentence B was chosen at random.
+This plain solution shows that sometimes one need not overthink a problem.
+
+=== Fine-tuning
+For most BERT tasks, you will want to load the BERT~BASE~ or BERT~LARGE~ model with all its parameters initialized from the pre-training and fine tune the model for your specific task.
+The fine-tuning should typically be straightforward; one simply plugs in the task-specific inputs and outputs and then commences training all parameters end-to-end.
+Compared to the initial pre-training, the fine-tuning of the model is much less expensive.
+BERT is shown to be more than capable on a multitude of tasks.
+For example, at the time of its publication, BERT outperformed the current state-of-the-art OpenAI GPT model on the General Language Understanding Evaluation (GLUE) benchmark.
+And BERT bested the top-performing systems (ensembles) on the Stanford Question Answering Dataset (SQuAD v1.1), where the task is to select the text span from a given Wikipedia passage that provides the answer to a given question.
+Unsurprisingly, BERT was also best at a variation of this task, SQuAD v2.0, where it is allowed that a short answer for the problem question in the text might not exist.
+
+=== Implementation
+Borrowing from the discussion on the original transformer earlier in the chapter, for the BERT configurations, _L_ denotes the number of transformer layers.
+The hidden size is _H_ and the number of self-attention heads is _A_.
+BERT~BASE~ has dimensions _L_=12, _H_=768, and _A_=12, for a total of 110M parameters.
+BERT~LARGE~ has _L_=24, _H_=1024, and _A_=16 for 340M total parameters!
+The large model outperforms the base model on all tasks, however depending on hardware resources available to you, you may find working with the base model more than adequate.
+There are are _cased_ and _uncased_ versions of the pre-trained models for both, the base and large configurations.
+The _uncased_ version had the text converted to all lowercase before pre-training WordPiece tokenization, while there were no changes made to the input text for the _cased_ model.
+
+The original BERT implementation was open-sourced as part of the TensorFlow _tensor2tensor_ library footnote:[tensor2tensor library:https://github.com/tensorflow/tensor2tensor].
+A _Google Colab_ notebook footnote:[BERT Fine-tuning With Cloud TPUS:https://colab.research.google.com/github/tensorflow/tpu/blob/master/tools/colab/bert_finetuning_with_cloud_tpus.ipynb] demonstrating how to fine tune BERT for sentence-pair classification tasks was published by the TensorFlow Hub authors circa the time the BERT academic paper was released.
+Running the notebook requires registering for access to Google Cloud Platform Compute Engine and acquiring a Google Cloud Storage bucket.
+At the time of this writing, it appears Google continues to offer monetary credits for first-time users, but generally, you will have to pay for access to computing power once you have exhausted the initial trial offer credits.
+
+[NOTE]
+====
+As you go deeper into NLP models, especially with the use of models having deep stacks of transformers, you may find that your current computer hardware is insufficient for computationally expensive tasks of training and/or fine-tuning large models.
+You will want to evaluate the costs of building out a personal computer to meet your workloads and weigh that against pay-per-use cloud and virtual computing offerings for AI.
+We reference basic hardware requirements and compute options in this text, however, discussion of the "right" PC setup or providing an exhaustive list of competitive computing options are outside the scope of this book.
+In addition to the Google Compute Engine, just mentioned, the appendix has instructions for setting up Amazon Web Services (AWS) GPU.
+====
+
+Accepted op-for-op Pytorch versions of BERT models were implemented as _pytorch-pre-trained-bert_ footnote:[pytorch-pre-trained-bert:https://pypi.org/project/pytorch-pre-trained-bert] and then later incorporated in the indispensable HuggingFace _transformers_ library footnote:[HuggingFace transformers:https://huggingface.co/transformers/].
+You would do well to spend some time reading the "Getting Started" documentation and the summaries of the transformer models and associated tasks on the site.
+To install the transformers library, simply use `pip install transformers`.
+Once installed, import the BertModel from transformers using the `BertModel.from_pre-trained()` API to load one by name.
+You can print a summary for the loaded "bert-base-uncased" model in the listing that follows, to get an idea of the architecture.
+
+.Pytorch summary of BERT architecture
+[source,python]
+----
+>>> from transformers import BertModel
+>>> model = BertModel.from_pre-trained('bert-base-uncased')
+>>> print(model)
+----
+
+[source,text]
+----
+BertModel(
+  (embeddings): BertEmbeddings(
+    (word_embeddings): Embedding(30522, 768, padding_idx=0)
+    (position_embeddings): Embedding(512, 768)
+    (token_type_embeddings): Embedding(2, 768)
+    (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+    (dropout): Dropout(p=0.1, inplace=False)
+  )
+  (encoder): BertEncoder(
+    (layer): ModuleList(
+      (0): BertLayer(
+        (attention): BertAttention(
+          (self): BertSelfAttention(
+            (query): Linear(in_features=768, out_features=768, bias=True)
+            (key): Linear(in_features=768, out_features=768, bias=True)
+            (value): Linear(in_features=768, out_features=768, bias=True)
+            (dropout): Dropout(p=0.1, inplace=False)
+          )
+          (output): BertSelfOutput(
+            (dense): Linear(in_features=768, out_features=768, bias=True)
+            (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+            (dropout): Dropout(p=0.1, inplace=False)
+          )
+        )
+        (intermediate): BertIntermediate(
+          (dense): Linear(in_features=768, out_features=3072, bias=True)
+        )
+        (output): BertOutput(
+          (dense): Linear(in_features=3072, out_features=768, bias=True)
+          (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+
+      ... # <1>
+
+      (11): BertLayer(
+        (attention): BertAttention(...)
+        (intermediate): BertIntermediate(
+          (dense): Linear(in_features=768, out_features=3072, bias=True)
+        )
+        (output): BertOutput(
+          (dense): Linear(in_features=3072, out_features=768, bias=True)
+          (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+  ) ) ) )
+  (pooler): BertPooler(
+    (dense): Linear(in_features=768, out_features=768, bias=True)
+    (activation): Tanh() ) )
+----
+<1> layers 2-9 omitted for brevity
+
+After import a BERT model you can display its string representation to get a summary of its structure.
+This is a good place to start if you are considering designing your own custom bidirectional transformer.
+But in most cases, you can use BERT directly to create encodings of English text that accurately represent the meaning of most text.
+An pretrained BERT model is all you may need for applications such as chatbot intent labeling (classification or tagging), sentiment analysis, social media moderation, semantic search, and FAQ question answering.
+And if you're considering storing embeddings in a vector database for semantic search, vanilla BERT encodings are your best bet.
+
+In the next section, you'll see an example of how to use a pretrained BERT model to identify toxic social media messages.
+And then you will see how to fine tune a BERT model for your application by training it for additional epochs on your dataset.
+You will see that fine tuning BERT can significantly improve your toxic comment classification accuracy without overfitting.
+
+////
+KM: Do we have output at this point? If so, show that. Also, give us a transitional sentence or two after the listing about what you just completed and what the next sub-section is going to be doing. 
+HL: Done. The output is shown above and I've added some transition sentences.
+////
+
+=== Fine-tuning a pre-trained BERT model for text classification
+In 2018, the Conversation AI footnote:[Conversation AI: (https://conversationai.github.io/)] team (a joint venture between Jigsaw and Google) hosted a Kaggle competition to develop a model to detect various types of toxicity in a online social media posts.
+At the time, LSTM's and Convolutional Neural Networks were the state of the art.
+Bi-directional LSTMs with attention achieved the best scores in this competition.
+The promise of BERT is that it can simultaneously learn word context from words both left and right of the current word being processed by the transformer.
+This makes it especially useful for creating multipurpose encoding or embedding vectors for use in classification problems like detecting toxic social media comments.
+And because BERT is pre-trained on a large corpus, you don't need a huge dataset or supercomputer to be able to fine tune a model that achieves good performance using the power of _transfer learning_.
+
+In this section, you will use the library to quickly fine tune a pre-trained BERT model for classifying toxic social media posts.
+After that, you will make some adjustments to improve the model in your quest to combat bad behavior and rid the world of online trolls.
+
+==== A toxic dataset
+
+You can download the "Toxic Comment Classification Challenge" dataset (`archive.zip`) from kaggle.com. footnote:[Jigsaw toxic comment classification challenge on Kaggle (https://www.kaggle.com/datasets/julian3833/jigsaw-toxic-comment-classification-challenge)]
+You can put the data in your `$HOME/.nlpia2-data/` directory with all the other large datasets from the book, if you like.
+When you unzip the `archive.zip` file you'll see it contains the training set (`train.csv`) and test set (`test.csv`) as separate CSV files.
+In the real world you would probably combine the training and test sets to create your own sample of validation and test examples.
+But to make your results comparable to what you see on the competition website you will first only work with the training set.
+
+Begin by loading the training data using pandas and take a look at the first few entries as shown in the next listing.
+Normally you would wan to take a look at examples from the dataset to get a feel for the data and see how it is formatted.
+It's usually helpful to try to do the same task that you are asking the model to do, to see if it's a reasonable problem for NLP.
+Here are the first five examples in the training set.
+Fortunately the dataset is sorted to contain the nontoxic posts first, so you won't have to read any toxic comments until the very end of this section.
+If you have a grandmother named "Terri" you can close your eyes at the last line of code in the last code block of in this section `;-)`.
+
+.Load the toxic comments dataset
+[source,python]
+----
+>>> import pandas as pd
+>>> df = pd.read_csv('data/train.csv')  # <1>
+>>> df.head()
+                   comment_text toxic severe obscene threat insult hate
+Explanation\nWhy the edits made     0      0       0      0      0    0
+D'aww! He matches this backgrou     0      0       0      0      0    0
+Hey man, I'm really not trying      0      0       0      0      0    0
+"\nMore\nI can't make any real      0      0       0      0      0    0
+You, sir, are my hero. Any chan     0      0       0      0      0    0
+>>> df.shape
+(159571, 8)
+----
+<1> We extracted the downloaded toxic comment .csv files to a `data` dir.
+
+Whew, luckily none of the first five comments are obscene, so they're fit to print in this book.
+
+[TIP]
+.Spend time with the data
+====
+Typically at this point you would explore and analyze the data, focusing on the qualities of the text samples and the accuracy of the labels and perhaps ask yourself questions about the data.
+How long are the comments in general?
+Does sentence length or comment length have any relation to toxicity?
+Consider focusing on some of the _severe_toxic_ comments.
+What sets them apart from the merely _toxic_ ones?
+What is the class distribution?
+Do you need to potentially account for a class imbalance in your training techniques?
+====
+
+You want to get to the training, so let's split the data set into training and validation (evaluation) sets.
+With almost 160,000 samples available for model tuning, we elect to use an 80-20 train-test split.
+
+.Split data into training and validation sets
+[source,python]
+----
+>>> from sklearn.model_selection import train_test_split
+>>> random_state=42
+>>> labels = ['toxic', 'severe', 'obscene', 'threat', 'insult', 'hate']
+>>> X = df[['comment_text']]
+>>> y = df[labels]
+>>> X_train, X_test, y_train, y_test = train_test_split(
+...     X, y, test_size=0.2,
+...     random_state=random_state)  # <1>
+----
+<1> Set a consistent `random_state` so we can guarantee the same split each time you run this code
+
+Now you have your data in a Pandas DataFrame with descriptive column names you can use to interpret the test results for your model.
+
+There's one last ETL task for you to deal with, you need a wrapper function to ensure the batches of examples passed to your transformer have the right shape and content.
+You are going to use the `simpletransformers` library which provides wrappers for for various Hugging Face models designed for classification tasks including multilabel classification, not to be confused with multiclass or multioutput classification models. footnote:[SciKit Learn documentation on multiclass and multioutput models(https://scikit-learn.org/stable/modules/multiclass.html#multilabel-classification)]
+The Scikit-Learn package also contains a `MultiOutputClassifier` wrapper that you can use to create multiple estimators (models), one for each possible target label you want to assign to your texts.
+
+
+[IMPORTANT]
+====
+A multilabel classifier is a model that outputs multiple different predicted discrete classification labels ('toxic', 'severe', and 'obscene') for each input.
+This allows your text to be given multiple different labels.
+Like a fictional family in Tolstoy's _Anna_Karenina_, a toxic comment can be toxic in many different ways, all at the same time.
+You can think of a multilabel classifier as applying hashtags or emojis to a text.
+To prevent confusion you can call your models "taggers" or "tagging models" so others don't misunderstand you. 
+====
+
+Since each comment can be assigned multiple labels (zero or more) the `MultiLabelClassificationModel` is your best bet for this kind of problem.
+According to the documentation,footnote:[Simpletransformers Multi-Label Classification documentation (https://simpletransformers.ai/docs/multi-label-classification/)] the `MultiLabelClassificationModel` model expects training samples in the format of `["text", [label1, label2, label3, ...]]`.
+This keeps the outer shape of the dataset the same no matter how many different kinds of toxicity you want to keep track of.
+The Hugging Face `transformers` models can handle any number of possible labels (tags) with this data structure, but you need to be consistent within your pipeline, using the same number of possible labels for each example.
+You need a _multihot_ vector of zeros and ones with a constant number of dimensions so your model knows where to put the predictions for each kind of toxicity.
+The next listing shows how you can arrange the batches of data within a wrapper function that you run during training and evaluation of you model.
+
+.Create datasets for model
+[source,python]
+----
+>>> def get_dataset(X, y):
+...     data = [[X.iloc[i][0], y.iloc[i].values.tolist()] for i in range(X.shape[0])]
+...     return pd.DataFrame(data, columns=['text', 'labels'])
+...
+>>> train_df = get_dataset(X_train, y_train)
+>>> eval_df = get_dataset(X_test, y_test)
+>>> train_df.shape, eval_df.shape
+((127656, 2), (31915, 2))
+
+>>> train_df.head()  # <1>
+                                                text              labels
+0  Grandma Terri Should Burn in Trash \nGrandma T...  [1, 0, 0, 0, 0, 0]
+1  , 9 May 2009 (UTC)\nIt would be easiest if you...  [0, 0, 0, 0, 0, 0]
+2  "\n\nThe Objectivity of this Discussion is dou...  [0, 0, 0, 0, 0, 0]
+3              Shelly Shock\nShelly Shock is. . .( )  [0, 0, 0, 0, 0, 0]
+4  I do not care. Refer to Ong Teng Cheong talk p...  [0, 0, 0, 0, 0, 0]
+----
+<1> Check that the DataFrame matches the format to feed to the model. (Oh, and we see our first toxic comment - poor Grandma Terri.)
+
+You can now see that this dataset has a pretty low bar for toxicity if mothers and grandmothers are the target of bullies' insults.
+This means this dataset may be helpful even if you have extremely sensitive or young users that you are trying to protect.
+If you are trying to protect modern adults or digital natives that are used to experiencing cruelty online, you can augment this dataset with more extreme examples from other sources.
+
+==== Detect toxic comments with `simpletransformers`
+
+You now have a function for passing batches of labeled texts to the model and printing some messages to monitor your progress.
+So it's time to choose a BERT model to download.
+You need to set up just a few basic parameters and then you will be ready to load a pre-trained BERT for multi-label classification and kick off the fine-tuning (training).
+
+.Setup training parameters
+[source,python]
+----
+>>> import logging
+>>> logging.basicConfig(level=logging.INFO)  # <1>
+
+>>> model_type = 'bert'  # <2>
+>>> model_name = 'bert-base-cased'
+>>> output_dir = f'{model_type}-example1-outputs'
+
+>>> model_args = {
+...     'output_dir': output_dir, # where to save results
+...     'overwrite_output_dir': True, # allow re-run without having to manually clear output_dir
+...     'manual_seed': random_state, # <3>
+...     'no_cache': True,
+... }
+----
+<1> Basic logging for model output during training.
+<2> `model_type`, `model_name` will be used to load the base-cased BERT in the next code segment.
+<3> For reproducible results recycle the same seed you used for `train_test_split()`
+
+In the listing below you load the pre-trained `bert-base-cased` model configured to output the number of labels in our toxic comment data (6 total) and initialized for training with your `model_args` dictionary.footnote:[See "Configuring a Simple Transformers Model" section of the following webpage for full list of options and their defaults: https://simpletransformers.ai/docs/usage/]
+
+.Load pre-trained model and fine tune
+[source,python]
+----
+>>> from sklearn.metrics import roc_auc_score
+>>> from simpletransformers.classification import MultiLabelClassificationModel
+>>> model = MultiLabelClassificationModel(
+...     model_type, model_name, num_labels=len(labels),
+...     args=model_args)
+You should probably TRAIN this model on a downstream task to be able to use it
+for predictions and inference
+>>> model.train_model(train_df=train_df)  # <1>
+----
+<1> This is the "downstream task" fine tuning suggested by the warning message above
+
+The `train_model()` is doing the heavy lifting for you.
+It loads the pre-trained `BertTokenizer` for the pre-trained _bert-base-cased_ model you selected and uses it to tokenize the `train_df['text']` to inputs for training the model.
+The function combines these inputs with the `train_df[labels]` to generate a `TensorDataset` which it wraps with a PyTorch `DataLoader`, that is then iterated over in batches to comprise the training loop.
+
+In other words, with just a few lines of code and one pass through your data (one epoch) you've fine tuned a 12-layer transformer with 110 million parameters!
+The next question is: did it help or hurt the model's translation ability?
+Let's run inference on your evaluation set and check the results.
+
+.Evaluation
+[source,python]
+----
+>>> result, model_outputs, wrong_predictions = model.eval_model(eval_df,
+...     acc=roc_auc_score)  # <1>
+>>> result
+{'LRAP': 0.9955934600588362,
+ 'acc': 0.9812396881786198,
+ 'eval_loss': 0.04415484298031397}
+----
+<1> The Jigsaw Toxic Comment Challenge used ROC AUC for the accuracy metric
+
+The ROC (Receiver Operating Characteristic curve) AUC (Area Under the Curve) metric balances all the different ways a classifier can be wrong by computing the integral (area) under the precision vs recall plot (curve) for a classifier.
+This ensures that models that are confidently wrong are penalized more than models that are closer to the truth with their predicted probability values.
+And the `roc_auc_score` within this `simpletransformers` package will give you the micro average of all the examples and all the different labels it could have chosen for each text.
+
+The ROC AUC micro average score is essentially the sum of all the `predict_proba` error values, or how far the predicted probability values are from the 0 or 1 values that each example was given by a human labeler.
+It's always a good idea to have that mental model in mind when your are measuring model accuracy.
+Accuracy is just how close to what your human labelers thought the correct answer was, not some absolute truth about the meaning or intent or effects of the words that are being labeled.
+Toxicity is a very subjective quality.
+
+A `roc_auc_score` of 0.981 is not too bad out of the gate.
+While it's not going to win you any accolades footnote:[Final leader board from the Kaggle Toxic Comment Classification Challenge:  https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge/leaderboard], it does provide encouraging feedback that your training simulation and inference is setup correctly.
+
+The implementations for `eval_model()` and `train_model()` are found in the base class for both `MultiLabelClassificationModel` and `ClassificationModel`.
+The evaluation code will look familiar to you, as it uses the `with torch.no_grad()` context manager for doing inference, as one would expect.
+Taking the time to look at the method implementations is suggested.
+Particularly, `train_model()` is helpful for viewing exactly how the configuration options you select in the next section are employed during training and evaluation.
+
+==== A better BERT
+
+Now that you have a first cut at a model you can do some more fine tuning to help your BERT-based model do better.
+And "better" in this case simply means having a higher AUC score.
+Just like in the real world, you'll need to decide what better is in your particular case.
+So don't forget to pay attention to how the model's predictions are affecting the user experience for the people or businesses using your model.
+If you can find a better metric that more directly measures what "better" means for your users you should use that in place of the AUC score for your application you should substitute it in this code. 
+
+Building upon the training code you executed in the previous example, you'll work on improving your model's accuracy.
+Cleaning the text a bit with some preprocessing is fairly straightforward.
+The book's example source code comes with a utility `TextPreprocessor` class we authored to replace common misspellings, expand contractions and perform other miscellaneous cleaning such as removing extra white-space characters.
+Go ahead and rename the `comment_text` column to `original_text` in the loaded _train.csv_ dataframe.
+Apply the preprocessor to the original text and store the refined text back in a `comment_text` column.
+
+.Preprocessing the comment text
+[source,python]
+----
+>>> from preprocessing.preprocessing import TextPreprocessor
+>>> tp = TextPreprocessor()
+loaded ./inc/preprocessing/json/contractions.json
+loaded ./inc/preprocessing/json/misc_replacements.json
+loaded ./inc/preprocessing/json/misspellings.json
+>>> df = df.rename(columns={'comment_text':'original_text'})
+>>> df['comment_text'] = df['original_text'].apply(
+...     lambda x: tp.preprocess(x))  # <1>
+>>> pd.set_option('display.max_colwidth', 45)
+>>> df[['original_text', 'comment_text']].head()
+                    original_text                       comment_text
+0  Explanation\nWhy the edits ...  Explanation Why the edits made...
+1  D'aww! He matches this back...  D'aww! He matches this backgro...
+2  Hey man, I'm really not try...  Hey man, i am really not tryin...
+3  "\nMore\nI can't make any r...  " More I cannot make any real ...
+4  You, sir, are my hero. Any ...  You, sir, are my hero. Any cha...
+----
+<1> The 'original_text' is unchanged so you can compare it to the newly processed 'comment_text'.
+
+With the text cleaned, turn your focus to tuning the model initialization and training parameters.
+In your first training run, you accepted the default input sequence length (128) as an explicit value for `max_sequence_length` was not provided to the model.
+The BERT-base model can handle sequences of a maximum length of 512.
+As you increase `max_sequence_length` you may need to decrease `train_batch_size` and `eval_batch_size` to fit tensors into GPU memory, depending on the hardware available to you.
+You can do some exploration on the lengths of the comment text to find an optimal max length.
+Be mindful that at some point you'll get diminishing returns, where longer training and evaluation times incurred by using larger sequences do not yield a significant improvement in model accuracy.
+For this example pick a `max_sequence_length` of 300, which is between the default of 128 and the model's capacity.
+Also explicitly select `train_batch_size` and `eval_batch_size` to fit into GPU memory.
+
+[WARNING]
+====
+You'll quickly realize your batch sizes are set too large if a GPU memory exception is displayed shortly after training or evaluation commences.
+And you don't necessarily want to maximize the batch size based on this warning.
+The warning may only appear late in your training runs and ruin a long running training session.
+And larger isn't always better for the `batch_size` parameter.
+Sometimes smaller batch sizes will help your training be a bit more stochastic (random) in its gradient descent.
+Being more random can sometimes help your model jump over ridges and saddle points in your the high dimensional nonconvex error surface it is trying to navigate.
+====
+
+Recall that in your first fine-tuning run, the model trained for exactly one epoch.
+Your hunch that the model could have trained longer to achieve better results is likely correct.
+You want to find the sweet spot for the amount of training to do before the model overfits on the training samples.
+Configure options to enable evaluation during training so you can also set up the parameters for early stopping.
+The evaluation scores during training are used to inform early stopping. So set `evaluation_during_training=True` to enable it, and set `use_early_stopping=True` also.
+As the model learns to generalize, we expect oscillations in performance between evaluation steps, so you don't want to stop training just because the accuracy declined from the previous value in the latest evaluation step.
+Configure the _patience_ for early stopping, which is the number of consecutive evaluations without improvement (defined to be greater than some delta) at which to terminate the training.
+You're going to set `early_stopping_patience=4` because you're somewhat patient but you have your limits. Use `early_stopping_delta=0` because no amount of improvement is too small.
+
+Saving these transformers models to disk repeatedly during training (e.g. after each evaluation phase or after each epoch) takes time and disk space.
+For this example, you're looking to keep the _best_ model generated during training, so specify `best_model_dir` to save your best-performing model.
+It's convenient to save it to a location under the `output_dir` so all your training results are organized as you run more experiments on your own.
+
+.Setup parameters for evaluation during training and early stopping
+[source,python]
+----
+>>> model_type = 'bert'
+>>> model_name = 'bert-base-cased'
+>>> output_dir = f'{model_type}-example2-outputs'  # <1>
+>>> best_model_dir = f'{output_dir}/best_model'
+>>> model_args = {
+...     'output_dir': output_dir,
+...     'overwrite_output_dir': True,
+...     'manual_seed': random_state,
+...     'no_cache': True,
+...     'best_model_dir': best_model_dir,
+...     'max_seq_length': 300,
+...     'train_batch_size': 24,
+...     'eval_batch_size': 24,
+...     'gradient_accumulation_steps': 1,
+...     'learning_rate': 5e-5,
+...     'evaluate_during_training': True,
+...     'evaluate_during_training_steps': 1000,
+...     'save_eval_checkpoints': False,
+...     "save_model_every_epoch": False,
+...     'save_steps': -1,  # saving model unnecessarily takes time during training
+...     'reprocess_input_data': True,
+...     'num_train_epochs': 5,  # <2>
+...     'use_early_stopping': True,
+...     'early_stopping_patience': 4,  # <3>
+...     'early_stopping_delta': 0,
+... }
+----
+<1> The `output_dir` path is changed from "example1" to "example2" to keep the models separate
+<2> `num_train_epochs` is the _maximum_ number of epochs, the training may stop sooner ("early stopping") if the error (loss) stops improving
+<3> The number of epochs of no validation accuracy improvement to wait before stopping the training
+
+Train the model by calling `model.train_model()`, as you did previously.
+One change is that you are now going to `evaluate_during_training` so you need to include an `eval_df` (your validation data set).
+This allows your training routine to estimate how well your model will perform in the real world while it is still training the model.
+If the validation accuracy starts to degrade for several (`early_stoping_patience`) epochs in a row, your model will stop the training so it doesn't continue to get worse. 
+
+.Load pre-trained model and fine tune with early stopping
+[source,python]
+----
+>>> model = MultiLabelClassificationModel(
+...     model_type, model_name, num_labels=len(labels),
+...     args=model_args)
+>>> model.train_model(
+...     train_df=train_df, eval_df=eval_df, acc=roc_auc_score,
+...     show_running_loss=False, verbose=False)
+----
+
+Your _best_ model was saved during training in the `best_model_dir`.
+It should go without saying that this is the model you want to use for inference.
+The evaluation code segment is updated to load the model by passing `best_model_dir` for the `model_name` parameter in the model class' constructor.
+
+.Evaluation with the best model
+[source,python]
+----
+>>> best_model = MultiLabelClassificationModel(
+...     model_type, best_model_dir,
+...     num_labels=len(labels), args=model_args)
+>>> result, model_outputs, wrong_predictions = best_model.eval_model(
+...     eval_df, acc=roc_auc_score)
+>>> result
+{'LRAP': 0.996060542761153,
+ 'acc': 0.9893854727083252,
+ 'eval_loss': 0.040633044850540305}
+----
+
+Now that's looking better.
+A 0.989 accuracy puts us in contention with the top challenge solutions of early 2018.
+And perhaps you think that 98.9% accuracy may be a little too good to be true.
+You'd be right.
+Someone fluent in German would need to dig into several of the translations to find all the translation errors your model is making.
+And the false negatives -- test examples incorrectly marked as correct -- would be even harder to find.
+
+If you're like me, you probably don't have a fluent German translator lying around.
+So here's a quick example of a more English-focused translation application that you may be able to appreciate more, grammar checking and correcting.
+And even if you are still an English learner, you can appreciate the benefit of having a personalized tool to help you write.
+A personalized grammar checker may be your personal killer app that helps you develop strong communication skills and advance your NLP career.
+
+== Test Yourself
+
+1. How is the input and output dimensionality of a transformer layer different from any other deep learning layer like CNN, RNN, or LSTM layers?
+2. How could you expand the information capacity of a transformer network like BERT or GPT-2?
+3. What is a rule of thumb for estimating the information capacity required to get high accuracy on a particular labeled dataset?
+4. What is a good measure of the relative information capacity of 2 deep learning networks?
+5. What are some techniques for reducing the amount of labeled data required to train a transformer for a problem like summarization?
+6. How do you measure the accuracy or loss of a summarizer or translator where there can be more than one right answer?
+
+== Summary
+
+* By keeping the inputs and outputs of each layer consistent, transformers gained their key superpower -- infinite stackabilty
+* Transformers combine three key innovations to achieve world-changing NLP power: BPE tokenization, multi-head attention, and positional encoding.
+* The GPT transformer architecture is the best choice for most text generation tasks such as translation and conversational chatbots
+* Despite being more than 5 years old (when this book was released) the BERT transformer model is still the right choice for most NLU problems.
+* If you chose a pretrained model that is efficient, you can fine-tune it to achieve competitive results for many difficult Kaggle problems, using only affordable hardware such as a laptop or free online GPU resources 

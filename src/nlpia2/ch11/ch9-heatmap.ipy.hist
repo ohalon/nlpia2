@@ -1,0 +1,81 @@
+# from nlpia2.text_processing.extractors import *
+# df = update_nlpia_lines()
+# >>> import spacy
+# >>> nlp = spacy.load("en_core_web_md")
+
+```python
+>>> import pandas as pd
+>>> url = 'https://gitlab.com/tangibleai/nlpia2/-/raw/main/'
+>>> url += 'src/nlpia2/data/nlpia_lines.csv'
+>>> df = pd.read_csv(url, index_col=0)
+>>> df9 = df[df.chapter == 9].copy()
+>>> df9.shape
+(2075, 23)
+```
+
+```
+>>> df9[['text', 'is_title', 'num_sents']]
+                                text  is_title  num_sents
+18441  = Stackable deep learning ...      True          0
+18442                    :chapter: 9     False          1
+...                              ...       ...        ...
+20514  * Despite being more than ...     False          1
+20515  * If you chose a pretraine...     False          0
+[2075 rows x 3 columns]
+```
+
+[source,python]
+----
+>>> texts = df9.text[df3.is_body | df3.is_body]
+>>> texts.shape
+(689,)
+----
+
+
+[source,python]
+----
+>>> from sentence_transformers import SentenceTransformer
+>>> minibert = SentenceTransformer('all-MiniLM-L12-v2')
+>>> vecs = minibert.encode(list(texts))
+>>> vecs.shape
+(689, 384)
+----
+
+[source,python]
+----
+>>> from numpy.linalg import norm
+>>> dfe = pd.DataFrame([list(v / norm(v)) for v in vecs])
+>>> cos_sim = dfe.values.dot(dfe.values.T)
+>>> cos_sim.shape
+(672, 672)
+----
+
+[source,python]
+----
+heatmap
+sns.heatmap(heatmap)
+plt.show()
+sns.heatmap?
+sns.heatmap(heatmap)
+plt.xticks(rotation=-70)
+plt.show()
+sns.heatmap(heatmap)
+plt.xticks(rotation=-30)
+plt.show()
+plt.xticks(rotation=-60)
+plt.show()
+plt.xticks(rotation=-60)
+sns.heatmap(heatmap)
+plt.xticks(rotation=-60)
+plt.show()
+sns.heatmap(heatmap)
+plt.xticks(rotation=70)
+plt.show()
+plt.xticks(rotation=70, ha='right')
+sns.heatmap(heatmap)
+plt.xticks(rotation=70, ha='right')
+plt.show()
+sns.heatmap(heatmap)
+plt.xticks(rotation=-35, ha='left')
+plt.show()
+

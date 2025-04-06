@@ -1,0 +1,13 @@
+digraph "text-NLU-vector-graphviz" {
+	rankdir=LR
+	node [shape=box]
+	"NLU
+(rules, patterns, encoder)"
+	node [shape=plaintext]
+	"Text
+(natural language)" -> "NLU
+(rules, patterns, encoder)"
+	"NLU
+(rules, patterns, encoder)" -> "Vector
+(numbers, tensor, embedding, encoding)"
+}

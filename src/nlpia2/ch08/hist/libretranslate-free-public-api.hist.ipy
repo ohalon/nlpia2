@@ -1,0 +1,30 @@
+>>> url = "https://libretranslate.com"
+>>> import requests
+>>> payload = dict(
+...     q="Sorry, I do not know how to speak Portuguese.", source="en", target="pt"
+... )
+...
+>>> requests.post(url, payload)
+<Response [405]>
+>>> resp = _
+>>> resp
+<Response [405]>
+>>> resp.content
+b'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n'
+>>> url = "https://libretranslate.com/translate/"
+>>> resp = requests.post(url, payload)
+>>> resp
+<Response [404]>
+>>> resp.content
+b'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n<title>404 Not Found</title>\n<h1>Not Found</h1>\n<p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.</p>\n'
+>>> url = "https://libretranslate.com/translate"
+>>> resp = requests.post(url, payload)
+>>> resp
+<Response [403]>
+>>> resp.content
+b'{"error":"Please contact the server operator to obtain an API key"}\n'
+>>> url = "https://libretranslate.de/translate"
+>>> resp = requests.post(url, payload)
+>>> resp.content
+b'{"translatedText":"Desculpe, n\\u00e3o sei como falar portugu\\u00eas."}\n'
+>>> hist -o -p -f libretranslate-free-public-api.hist.ipy

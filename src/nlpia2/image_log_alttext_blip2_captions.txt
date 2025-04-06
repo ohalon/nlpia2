@@ -1,0 +1,1507 @@
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/equation-screenshot-tfidf-chapter-3or4.png
+SUCCESS!!!! a graph with the number of points and the number of points
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/appendix-e/Matmul-Part3.png
+SUCCESS!!!! a diagram showing the number of digits in a binary number
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/appendix-e/Matmul-Part1.png
+SUCCESS!!!! visualizing matrix multiplication
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/appendix-e/Matmul-Part2.png
+SUCCESS!!!! a diagram showing the different types of numbers
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/appendix-c/matmul-3.png
+SUCCESS!!!! a diagram showing the number of different numbers that can be represented by a single number
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/appendix-c/Matmul-Part1.png
+SUCCESS!!!! a black background with a white clock on it
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/appendix-c/FFNN.png
+SUCCESS!!!! a diagram showing the single layer of feed forward neural network
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/appendix-c/matmul-1.png
+SUCCESS!!!! a diagram showing how to use the multiplication table
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/appendix-c/Matmul.png
+SUCCESS!!!! visualizing factor multiplication
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/appendix-c/matmul-2.png
+SUCCESS!!!! a diagram showing the number of different numbers
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch12/sankey-diagram.png
+SUCCESS!!!! a graph showing the different types of data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch12/whatsapp_GUI_buttons.png
+SUCCESS!!!! a text message from a student to a parent
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch12/first_edition_inside_cover_chatbot_flow_diagram.png
+SUCCESS!!!! the process diagram for the data pipeline
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch12/chatbot-flow-diagram.drawio.png
+SUCCESS!!!! a diagram of the process for learning and teaching
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch12/approach-table.png
+SUCCESS!!!! the table shows the differences between two different types of data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch12/chatbot-convo-design.drawio.png
+SUCCESS!!!! a diagram of a computer with different types of items
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch12/cool-koul-lyft.png
+SUCCESS!!!! a diagram of the process of reporting a driver
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch12/voice-chatbot.drawio.png
+SUCCESS!!!! a diagram of a speech to text system
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch12/juan-one-lyft.png
+SUCCESS!!!! a flow diagram showing how to use the driver
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch12/explicit_implicit_confirmation.png
+SUCCESS!!!! a series of text bubbles with different messages
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch12/convoscript_to_convograph.drawio.png
+SUCCESS!!!! a diagram of a system with a single input and output
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch12/Chatbot-Techniques-and-Applications.png
+SUCCESS!!!! a diagram showing the different types of customer service
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch12/rori_conversation_diagram.drawio.png
+SUCCESS!!!! a flow diagram showing how to use the web application
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch02/survival-of-adequate-sentence-diagram.png
+SUCCESS!!!! a diagram shows the different types of words
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch02/wikipedia-smiley-icon.png
+SUCCESS!!!! smiley face clip art free download
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch02/survival-the-most-adequate.png
+SUCCESS!!!! a diagram shows the different types of words
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch02/book-thief-split.png
+SUCCESS!!!! a series of lines with different numbers
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch02/unesco.png
+SUCCESS!!!! a barcode with a line of black and white dots
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch02/trust-though.png
+SUCCESS!!!! a graph with a number of different lines
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch02/there-such-thing.png
+SUCCESS!!!! a diagram of the waveforms of a wave
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch02/piano_roll.png
+SUCCESS!!!! a roll of paper with a hole in it
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/gpuvscpu.png
+SUCCESS!!!! cpu vs gpu
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/aws_budget.png
+SUCCESS!!!! the aws dashboard is displayed on the screen
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/source.png
+SUCCESS!!!! the command line is displayed on the screen
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/term2.png
+SUCCESS!!!! the command line is displayed on a computer screen
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/aws10.png
+SUCCESS!!!! the settings page for the cloud
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/aws5.png
+SUCCESS!!!! the dashboard for a website with a list of items
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/aws1.png
+SUCCESS!!!! the azure portal is displayed on a computer screen
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/Screen Shot 2017-12-02 at 6.39.06 PM.png
+SUCCESS!!!! a computer screen with a black screen and a text box
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/tensorboard.png
+SUCCESS!!!! a screenshot of the map in the dashboard
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/ipython.png
+SUCCESS!!!! the command line interface for the linux operating system
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/aws8.png
+SUCCESS!!!! the aws cloud dashboard with the settings for the cloud
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/aws2.png
+SUCCESS!!!! the aws dashboard is shown with the settings and settings
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/generator.png
+SUCCESS!!!! a diagram showing the process of training data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/aws11.png
+SUCCESS!!!! the settings page for the cloud
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/ec2_dashboard.png
+SUCCESS!!!! the cloud dashboard is shown with the cloud dashboard
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/aws12.png
+SUCCESS!!!! the cloud dashboard is shown with the cloud dashboard
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/aws7.png
+SUCCESS!!!! the aws console shows the settings for the cloudwatch event
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/aws4.png
+SUCCESS!!!! the amazon cloud dashboard is shown
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/term3.png
+SUCCESS!!!! the command line interface for the linux operating system
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/aws6.png
+SUCCESS!!!! the step - up process for a new instance
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/aws3.png
+SUCCESS!!!! the amazon cloud search page
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/matrix_multiplication.png
+SUCCESS!!!! a diagram showing the different types of solar cells
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/aws_costs.png
+SUCCESS!!!! a screenshot of the billing cost management dashboard
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/term1.png
+SUCCESS!!!! the command line is displayed on a computer screen
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/no_generator.png
+SUCCESS!!!! a diagram showing the different steps in model training
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/aws9.png
+SUCCESS!!!! the step to add a key to your account is highlighted
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch13/term4.png
+SUCCESS!!!! a computer screen with a black text box
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch08/wet-paint-rainbow-lettering-smudged-encoding_drawio.png
+SUCCESS!!!! the letter v is shown in a colorful design
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch08/rnn-unrolled_drawio.png
+SUCCESS!!!! a diagram of the different types of cells
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch08/rnn-neuron-hidden-feedback_drawio.png
+SUCCESS!!!! a diagram showing the different types of letters
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch08/rnn_input.png
+SUCCESS!!!! a diagram of the process of creating a program
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch08/feed_forward_nlp.png
+SUCCESS!!!! a diagram of the process for a nuclear reactor
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch08/lstm_drawio.png
+SUCCESS!!!! a block diagram of a computer system
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch08/rnn-unrolled-neuron-simple-many-to-many_drawio.png
+SUCCESS!!!! a diagram showing the different types of data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch08/wet-paint-rainbow-lettering_drawio.png
+SUCCESS!!!! the word wet paint is in rainbow colors
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch08/rnn-unrolled-recurrence-simple_drawio.png
+SUCCESS!!!! a diagram showing the different types of blocks
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch08/learning-curve-10-nationalities.png
+SUCCESS!!!! a graph showing the number of users and the number of users
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch08/wet-paint-rainbow-lettering-smudged_drawio.png
+SUCCESS!!!! weevpaint.com logo
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch08/lda_tfidf_confusion_matrix_guide.drawio.png
+SUCCESS!!!! a four square diagram with the words true negative false positive and
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch08/neuron-with-recurrence_drawio.png
+SUCCESS!!!! a diagram of a system with different components
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch08/rnn-unrolled-many-to-many_drawio.png
+SUCCESS!!!! a diagram showing the different types of data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch08/lstm.png
+SUCCESS!!!! a diagram of a computer with multiple lines
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch08/gru_drawio.png
+SUCCESS!!!! a diagram of the process flow for a process
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch08/rnn-unrolled-neuron-simple_drawio.png
+SUCCESS!!!! a diagram showing the different types of blocks
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch08/neuron-feedforward_drawio.png
+SUCCESS!!!! a diagram of a block diagram with the different types of variables
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch08/confusion-pytorch-tutorial.png
+SUCCESS!!!! a graph shows the number of people who have been vaccinated
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch08/dataset-confusion.png
+SUCCESS!!!! a graph shows the number of people who have been infected with the coronavirus
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch08/bidirect_rnn_1.png
+SUCCESS!!!! a diagram of the three different types of data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch01/chatbot-pipeline.png
+SUCCESS!!!! the process diagram for the data quality process
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch01/canadian-coin-sorter.png
+SUCCESS!!!! a white tray with a variety of different types of buttons
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch01/text-NLU-vector-graphviz.png
+SUCCESS!!!! a diagram of a gene that has been split into two
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch01/sketch-token-sorter.png
+SUCCESS!!!! a drawing of a circuit board with a diagram of the components
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch01/NLP Applications.gv.png
+SUCCESS!!!! a map of the internet with different types of words
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch01/NLP Applications.png
+SUCCESS!!!! a map of the internet with various types of information
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch01/nlp-applications.png
+SUCCESS!!!! a map of the internet with many different types of connections
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch01/text-NLU-vector.png
+SUCCESS!!!! a diagram of the different types of words
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch01/chatbot-pipeline-v2.png
+SUCCESS!!!! the process diagram for the process of a project
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch01/vector-NLG-text-graphviz.png
+SUCCESS!!!! a diagram of a computer program that is being used to create a program
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch01/nlp-iq.png
+SUCCESS!!!! the graph shows the different types of jobs and their corresponding roles
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch01/nlp-layers.png
+SUCCESS!!!! a diagram of the data structure and the data flow
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch01/active-learning-repl.png
+SUCCESS!!!! a diagram of the relationship between the two different types of rep and lp
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch01/kinds-of-automata.png
+SUCCESS!!!! a diagram showing the different types of logic
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch04/term-topic-matrix-lsa.png
+SUCCESS!!!! a table with the number of items in each column
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch04/topic-document-matrix-lsa.png
+SUCCESS!!!! a table with the number of topics and topics
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch04/SVD-example-matrices.png
+SUCCESS!!!! the seating chart for the main stage at the o2 arena
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch04/horse-pca-2d.png
+SUCCESS!!!! a graph with a deer in the middle of it
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch04/confusion-matrix_drawio.png
+SUCCESS!!!! a diagram showing the different types of products
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch04/term-document-matrix-bow-annotated.png
+SUCCESS!!!! a diagram shows how to use the bow vector in our corpus
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch04/lsa_accuracy.png
+SUCCESS!!!! a graph shows the number of document conversions for each model
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch04/Manning #1 Best Seller.png
+SUCCESS!!!! the bestsellers list for april 2017
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch04/cats_and_dogs_petness_3D.png
+SUCCESS!!!! a diagram showing the relationship between the two points on the graph
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch04/confusion-matrix-plot.png
+SUCCESS!!!! a graph showing the number of people who are predicted to die
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch04/lshash-semantic-search.png
+SUCCESS!!!! a table with the number of false positives and false negatives
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch04/term-document-matrix-bow.png
+SUCCESS!!!! a table with the words and numbers in blue
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch04/3d-pointcloud-bottom.png
+SUCCESS!!!! a computer generated image of a person in a cube
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch04/term-document-matrix-tfidf.png
+SUCCESS!!!! a table with the number of words in each row
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch04/confusion-matrix-guide.png
+SUCCESS!!!! a square with four different colors on it
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch04/horse-head-right.png
+SUCCESS!!!! a plot of a line with dots on it
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch04/SVD-example-matrices-annotated.png
+SUCCESS!!!! the table shows the different types of tickets
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch04/semantic-search-lsh-table.png
+SUCCESS!!!! a table with the number of true and false statements
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch04/two-horses.png
+SUCCESS!!!! two graphs showing the same data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch04/horse-head-left.png
+SUCCESS!!!! a plot of the number of people in a city
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch04/term-document-matrix-tfidf-annotated.png
+SUCCESS!!!! a diagram showing the different types of words
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch04/equations/equation_4_1.png
+SUCCESS!!!! the formula for the v - v equation
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/equation_6_6.png
+SUCCESS!!!! a white paper with the words "county, county, county, county, county, county, county, county, county, county, county, county, county, county, county, county,
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/equation_6_5.png
+SUCCESS!!!! a diagram of a number and a number
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/adjacency_graph_ch_6_with_labels_bold.png
+SUCCESS!!!! a map of the internet with blue dots
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/word2vec-skip-gram-whatever-affects-one_drawio.png
+SUCCESS!!!! a diagram of the different types of words
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/equation_6_3.png
+SUCCESS!!!! a black and white drawing of a number of different numbers
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/uspca2big250k2perstate.png
+SUCCESS!!!! a plot of the number of people in each area
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/doc2vec_training.png
+SUCCESS!!!! a diagram showing the different types of data that can be used in a prediction
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/equation_6_5_score.png
+SUCCESS!!!! a graph with the number of points and the number of points
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/decoder-rings.png
+SUCCESS!!!! three different types of metal objects, including a clock, a clock face and a clock
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/word-brain-embedding.png
+SUCCESS!!!! a diagram of the brain with different parts
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/dot_product_calc.png
+SUCCESS!!!! a diagram of a computer with a number of different types of numbers
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/old_cbow.png
+SUCCESS!!!! a diagram of a computer program that is used to represent a binary tree
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/cbow_example.png
+SUCCESS!!!! a text box with the words continuous bag of words
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/vector_add.png
+SUCCESS!!!! a graph showing the location of the portland timbers and seattle sounders
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/us-city-word-vector-pca-map.png
+SUCCESS!!!! a graph shows the number of people in each city
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/sentence_to_tuples.png
+SUCCESS!!!! a picture of a word that says "small"
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/equation_6_4.png
+SUCCESS!!!! a diagram of a line with two different numbers
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/old_skipgram.png
+SUCCESS!!!! a diagram of the different types of data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/we-are-all-one_drawio.png
+SUCCESS!!!! we are all one, and we don't know how to put it all together
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/equation_6_8.png
+SUCCESS!!!! a diagram of the formula for the formula for the formula for the formula for the formula for the formula for the formula for the formula for the formula for the formula for the formula for the formula for the
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/pca2_Portland_OR_cropped.png
+SUCCESS!!!! a scatter plot with different colors and different types of data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/semantic_similarity_graph_ch_6_with_labels.png
+SUCCESS!!!! a map of the internet with blue dots
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/equation_6_1.png
+SUCCESS!!!! a table with the same number of numbers and different numbers
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/adjacency_graph_ch_6_zoom_in_center_with_labels_bold.png
+SUCCESS!!!! a network diagram of the internet
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/equation_6_2.png
+SUCCESS!!!! a series of lines that are all different
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/mikolov-paper-skip-gram.png
+SUCCESS!!!! a diagram of the input, output, and projection of a computer
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/cbow_input_output.png
+SUCCESS!!!! a diagram showing the different ways to use the word 'clue'
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/word2vec-cbow-whatever-affects-one_drawio.png
+SUCCESS!!!! a diagram of the different types of data structures
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/skipgram_input_output.png
+SUCCESS!!!! a diagram showing the different ways to use the word 'clause'
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/skipgram.png
+SUCCESS!!!! a diagram of the different types of neurons
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/equation_6_7.png
+SUCCESS!!!! the formula for the power of a function
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/word-brain-embedding_drawio.png
+SUCCESS!!!! a brain with many different words in it
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/us-10-city-word-vector-pca-map-labeled.png
+SUCCESS!!!! a graph shows the average number of people in each city
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/cbow.png
+SUCCESS!!!! a diagram of the different types of data structures
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/semantic_similarity_graph_ch_6_zoom_in_center_with_labels.png
+SUCCESS!!!! a network diagram of the internet
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch03/vecs.png
+SUCCESS!!!! a graph with a line that is drawn to the right
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch03/vecs_cosine.png
+SUCCESS!!!! a plot of the time frequency vectors in 2d space
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch03/cosine_distance_justification.png
+SUCCESS!!!! a graph showing the different types of queries
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch03/log_pop_from_wikipedia.png
+SUCCESS!!!! a graph shows the number of people who have been diagnosed with cancer
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch03/harry_faster_vecs.png
+SUCCESS!!!! a plot of the frequency vectors in 2d space
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch03/alternative-tfidf-schemes.png
+SUCCESS!!!! a table with the formula for the formula for the formula
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch03/log_pop.png
+SUCCESS!!!! a graph shows the relationship between the number of people and the number of people
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/NLP layers.png
+SUCCESS!!!! a diagram of the process for building an application
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/NLP IQ.png
+SUCCESS!!!! a diagram of the different types of sports and their impact on the audience
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/fully_connected.png
+SUCCESS!!!! a diagram showing the different types of data structures
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/cool-koul-lyft.png
+SUCCESS!!!! a flow diagram showing how to use the report action
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/ngram-viewer-word2vec-and-skipgram-trend-2014.png
+SUCCESS!!!! a screenshot of the google search bar
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/ngramviewer-word-embedding-word-vector-semantic-vector.png
+SUCCESS!!!! google search engine results page
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/NLP Pipeline.png
+SUCCESS!!!! the process diagram for a research project
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/2023-03-14 GitHub Copilot animation screenshot copilot-github-com.png
+SUCCESS!!!! a computer screen with a text editor open
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/ch08/wet-paint-text-rainbow-clean-and-smudged.drawio.png
+SUCCESS!!!! wee paint logo with the words wet paint
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/ch08/wet-paint-text-rainbow-smudged-last-letter.png
+SUCCESS!!!! a colorful abstract lettering with the word love
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/ch08/wet-paint-text-rainbow-black-stencil.png
+SUCCESS!!!! a black background with the words wet paint and wet paint
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/ch08/stanford-rnn-neuron-block-detail.png
+/home/hobs/code/tangibleai/nlpia2/.venv/lib/python3.10/site-packages/PIL/Image.py:981: UserWarning: Palette images with Transparency expressed in bytes should be converted to RGBA images
+  warnings.warn(
+SUCCESS!!!! a block diagram of a circuit with two different types of signals
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/ch08/bptt.png
+SUCCESS!!!! a diagram showing the different types of data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/ch08/wet-paint-text.drawio.png
+SUCCESS!!!! a black background with the words wet paint and wet paint
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/ch08/multi_bptt.png
+SUCCESS!!!! a diagram showing the different stages of a process
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/ch08/gru.rochdi.png
+SUCCESS!!!! a diagram of a circuit with two different types of blocks
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/ch06/3Dscatter_word_vectors.png
+SUCCESS!!!! a computer screen shows a graph with a line and a point
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/ch07/bamboo-clear-background.png
+SUCCESS!!!! bamboo plant clipart
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/ch07/learning_curve_underfit.png
+SUCCESS!!!! a graph shows the average number of words per sentence
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/ch07/1d_cnn_w_embeddings.png
+SUCCESS!!!! a diagram of the process of building a computer
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/ch07/bamboo.png
+SUCCESS!!!! bamboo clip art vector | price 1 credit usd $1
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/ch07/cnn.png
+SUCCESS!!!! a diagram shows how to use a block diagram to describe a process
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/ch07/learning_curve_overfit.png
+SUCCESS!!!! a graph showing the number of words in a sentence
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/ch07/1d_cnn.png
+SUCCESS!!!! the cat and dog went to the bodega together
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/ch07/cnn2.png
+SUCCESS!!!! a diagram shows how to use a single data point to calculate the mean
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/appendix-d/underfit.png
+SUCCESS!!!! a diagram showing the number of words in a message
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/appendix-d/affnist.png
+SUCCESS!!!! a grid of numbers with numbers written on them
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/appendix-d/machine_learning_pipeline.drawio.png
+SUCCESS!!!! a diagram showing the process of a fashion model
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/appendix-d/overfit.png
+SUCCESS!!!! a diagram showing the number of spam messages and the number of spam messages
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/appendix-d/kfold.png
+SUCCESS!!!! a schedule template for a group of people
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/non_lin_separable.png
+SUCCESS!!!! a plot with red dots and blue dots
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/fake_news_title_len_histogram.png
+SUCCESS!!!! a graph shows the number of people who have been diagnosed with cancer
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/fake_news_title_len_logistic_regression.png
+SUCCESS!!!! a plot of the number of times a person has been in a room
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/multilayer-perceptron.png
+SUCCESS!!!! a diagram of a network with different types of nodes
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/artificial_neuron.png
+SUCCESS!!!! a diagram showing the different types of lines
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/lin_regression.png
+SUCCESS!!!! a plot with a scatter plot of the number of people in each area
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/linear_reg.png
+SUCCESS!!!! a plot with a scatter plot of different types of data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/lumpy_error.png
+SUCCESS!!!! a computer generated image of a waveform
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/neuron_artificial_biology.png
+SUCCESS!!!! a diagram of a neuron with an input and output
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/lin_separable.png
+SUCCESS!!!! a plot with a line and a dot plot
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/logistic_regression_fake_news.png
+SUCCESS!!!! a plot of the number of people in a room
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/fake_news_title_len_logistic_regression_monochrome.png
+SUCCESS!!!! a plot of the number of times a person has been in a car
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/neuron_artificial.png
+SUCCESS!!!! a diagram showing the input and output of an input and output
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/artificial_vs_biological_neuron.png
+SUCCESS!!!! a diagram of a neuron with an input and output
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/fully_connected.png
+SUCCESS!!!! a diagram of the different types of water
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/biological_neuron_gray.png
+SUCCESS!!!! biological neuron dendrite axon nucleus
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/sigmoid.png
+SUCCESS!!!! the formula for the s - 1 - 1 - 1 - 1 - 1 - 1 - 1 - 1 - 1 - 1 - 1 - 1 - 1 - 1 - 1 - 1 - 1 -
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/mean_squared_error.png
+SUCCESS!!!! the formula for the mse equation
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/neuron_biology.png
+SUCCESS!!!! a diagram of a neuron and its axon
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/biological_neuron_cell.png
+SUCCESS!!!! a diagram of a neuron and axon
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/fake_news_title_len_histogram_zoomed.png
+SUCCESS!!!! a graph with a number of different types of data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/tanh.png
+Image size (315497280 pixels) exceeds limit of 178956970 pixels, could be decompression bomb DOS attack.
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/mystery_weight.png
+SUCCESS!!!! a diagram showing the different layers of a neural network
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/perceptron.png
+SUCCESS!!!! a diagram of the network model
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/smooth_error.png
+SUCCESS!!!! a graph with a red and blue pattern
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch05/equations/equation_5_1.png
+SUCCESS!!!! a whiteboard with the formula for the equation
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/l2_reg.png
+SUCCESS!!!! the formula for the zeta function
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/l1_reg.png
+SUCCESS!!!! the formula for the zeta function
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/underfit.png
+SUCCESS!!!! a diagram showing the number of words in a message
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/affnist.png
+SUCCESS!!!! a grid of numbers with numbers written on them
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/overfit.png
+SUCCESS!!!! a diagram showing the number of spam messages
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/kfold.png
+SUCCESS!!!! a schedule template for a group of people
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/ch08/rnn_1.png
+SUCCESS!!!! a diagram of the input layer and output layer
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/ch08/rnn_input.png
+SUCCESS!!!! a diagram of the process for a resource neural net
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/ch08/rnn_unrolled.png
+SUCCESS!!!! rnn same rnn unun
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/ch08/seq_false.png
+SUCCESS!!!! a diagram showing the different stages of a software development process
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/ch08/rnn_0.png
+SUCCESS!!!! rnn input layer hidden layer hidden layer hidden layer hidden layer hidden layer hidden layer hidden layer hidden layer hidden layer hidden layer hidden layer hidden layer hidden layer hidden layer hidden layer hidden layer hidden layer hidden layer
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/ch08/seq_true.png
+SUCCESS!!!! a diagram showing the different stages of a process
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/ch08/rnn_1_5.png
+SUCCESS!!!! a diagram shows how to use the hidden layer
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/08/08_07.png
+SUCCESS!!!! a diagram of the different types of objects in a computer
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/08/08_04.png
+SUCCESS!!!! a diagram of the same - n - t - rn - same - n - t - rn - same - n - t - rn - same - n - t - rn -
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/08/08_09.png
+SUCCESS!!!! a diagram showing the different types of data structures
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/08/08_08.png
+SUCCESS!!!! a diagram of a research network
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/08/08_12.png
+SUCCESS!!!! a diagram of a data structure that shows the different types of data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/08/08_03.png
+SUCCESS!!!! a diagram of an input layer and an output layer
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/08/08_02.png
+SUCCESS!!!! a diagram of the structure of a nuclear reactor
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/08/08_06.png
+SUCCESS!!!! a diagram of the different types of data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/08/08_05.png
+SUCCESS!!!! a diagram of the input and output layers of a neural network
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/08/08_10.png
+SUCCESS!!!! a diagram showing the different types of data structures
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/08/08_13.png
+SUCCESS!!!! a diagram of the different types of error handling
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/08/08_01.png
+SUCCESS!!!! a diagram of the storage system
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/08/08_11.png
+SUCCESS!!!! a diagram showing the different types of data structures
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/11/11_02.png
+SUCCESS!!!! the tree diagram shows the different types of words
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/11/11_01.png
+SUCCESS!!!! the diagram shows the military rank structure
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/10/10_04.png
+SUCCESS!!!! a diagram of the process of a soccer game
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/10/10_05.png
+SUCCESS!!!! a diagram showing the different types of data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/10/10_01.png
+SUCCESS!!!! a diagram showing the different types of words
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/10/10_10.png
+SUCCESS!!!! a diagram shows the different types of seating in a theater
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/10/10_06.png
+SUCCESS!!!! a diagram showing the different types of sentences
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/10/10_08.png
+SUCCESS!!!! a diagram of the process for a memory system
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/10/10_07.png
+SUCCESS!!!! the diagram shows the different stages of the process
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/10/10_03.png
+SUCCESS!!!! a diagram of the process of an encoder and a decoder
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/10/10_02.png
+SUCCESS!!!! the diagram shows the different stages of the game
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/10/10_09.png
+SUCCESS!!!! the diagram shows the different stages of the process
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/10/10_11.png
+SUCCESS!!!! a diagram of the different types of cells
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/d_02_EQ02.png
+SUCCESS!!!! the formula for the zeta function
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/d_01_01.png
+SUCCESS!!!! a diagram shows how spam messages are different from non - spam messages
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/d_02_EQ01.png
+SUCCESS!!!! the formula for the zeta function
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/inside_cover.png
+SUCCESS!!!! the process diagram for the data pipeline
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/d_02.png
+SUCCESS!!!! a training plan template with different types of training
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/d_03.png
+SUCCESS!!!! a grid with numbers and numbers in it
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/d_01_02.png
+SUCCESS!!!! a graph shows the number of spam messages and the number of spam messages
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/App C/C_01.png
+SUCCESS!!!! a graph shows the number of hits for each type of article
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/App E/E_06.png
+SUCCESS!!!! the step - up process for a new instance in aws
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/App E/E_07.png
+SUCCESS!!!! the aws console shows the start group and start group settings
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/App E/E_04.png
+SUCCESS!!!! the amazon cloudwatch dashboard
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/App E/E_01.png
+SUCCESS!!!! the aws account settings page
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/App E/E_02.png
+SUCCESS!!!! the aws dashboard with the settings and settings
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/App E/E_03.png
+SUCCESS!!!! the amazon cloud search page is shown
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/App E/E_11.png
+SUCCESS!!!! the cloud dashboard is shown with the cloud dashboard
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/App E/E_16.png
+SUCCESS!!!! the screen shot shows the amazon ssl page
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/App E/E_08.png
+SUCCESS!!!! the aws cloud dashboard with the settings for the cloud
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/App E/E_05.png
+SUCCESS!!!! the dashboard for a website with a list of items
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/App E/E_12.png
+SUCCESS!!!! the mac os x terminal window is open
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/App E/E_10.png
+SUCCESS!!!! the settings page for the cloud
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/App E/E_14.png
+SUCCESS!!!! a screenshot of the email message in the mac app
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/App E/E_09.png
+SUCCESS!!!! step 2 - add a key to your aws account
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/App E/E_13.png
+SUCCESS!!!! a screenshot of the mac os x terminal window
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/App E/E_15.png
+SUCCESS!!!! a screenshot of the billing cost management dashboard
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/App F/F_01.png
+SUCCESS!!!! a table with the number of false positives and false negatives
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/Appendices/App F/F_02.png
+SUCCESS!!!! a scatter plot with red and blue dots
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/04/04_02.png
+SUCCESS!!!! a scatter plot with a green and red dot
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/04/04_05.png
+SUCCESS!!!! two plots of the same data, one with a blue bird and the other with a blue bird
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/04/04_02_EQ01.png
+SUCCESS!!!! a diagram of the formula for the mass of a substance
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/04/04_06.png
+SUCCESS!!!! a table with the top 10% of true and false results
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/04/04_03.png
+SUCCESS!!!! a graph shows the number of documents that are being read
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/04/04_04.png
+SUCCESS!!!! a computer generated image of a blue bear
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/04/04_01.png
+SUCCESS!!!! a graph with the same points as the one on the right
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/12/12_02.png
+SUCCESS!!!! a diagram of the process for creating a user
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/12/12_03.png
+SUCCESS!!!! the table shows the different types of data and their advantages
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/12/12_01.png
+SUCCESS!!!! a diagram showing the different types of customer service
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/05/05_08.png
+SUCCESS!!!! a graph with a red and blue pattern
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/05/05_09.png
+SUCCESS!!!! a graph with a red and blue wave
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/05/05_05_EQ03.png
+SUCCESS!!!! the formula for the zeroth order derivative
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/05/05_07_EQ07.png
+SUCCESS!!!! a waveform is shown with a number of different types of waves
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/05/05_05_EQ02.png
+SUCCESS!!!! the formula for the function of a function
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/05/05_02.png
+SUCCESS!!!! a diagram of an algorithm for the same algorithm
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/05/05_05.png
+SUCCESS!!!! a plot with a scatter plot of the number of people in each group
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/05/05_07_EQ06.png
+SUCCESS!!!! a series of lines that are moving in different directions
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/05/05_07_EQ05.png
+SUCCESS!!!! the equation for the mass of a black hole
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/05/05_01.png
+SUCCESS!!!! a diagram of a neuron and its structure
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/05/05_06.png
+SUCCESS!!!! a diagram of the hidden layer of a neural network
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/05/05_04.png
+SUCCESS!!!! a plot with a line that shows the number of points
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/05/05_07_EQ08.png
+SUCCESS!!!! a black and white image of a mathematical formula
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/05/05_03_EQ01.png
+SUCCESS!!!! a white background with a black and white text
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/05/05_03.png
+SUCCESS!!!! a diagram of a neuron and its connections
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/05/05_07.png
+SUCCESS!!!! a diagram of the network of a neuron
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/05/05_07_EQ04.png
+SUCCESS!!!! the formula for the sx function
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/02/02_02.png
+SUCCESS!!!! a black and white image of a line of black and white lines
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/02/02_01.png
+SUCCESS!!!! a black and white image of a line of black and white lines
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/02/02_03.png
+SUCCESS!!!! a black and white image of a line of lines
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/03/03_01.png
+SUCCESS!!!! a graph with the line and the point in the middle
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/03/Table03_01_b.png
+SUCCESS!!!! math worksheet for the logarithm of a number
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/03/03_02_EQ01.png
+SUCCESS!!!! a formula for the cosine of a circle
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/03/03_04_EQ03.png
+SUCCESS!!!! a number of documents containing the same number of documents
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/03/03_03_EQ02.png
+SUCCESS!!!! the formula for cos and ab
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/03/Table03_01_a.png
+SUCCESS!!!! the text is written in black and white
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/03/03_04.png
+SUCCESS!!!! a plot of the population of the population of the population of the population of the population of the population of the population of the population of the population of the population of the population of the population of the
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/03/03_02.png
+SUCCESS!!!! a plot of the frequency of a function in 2d space
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/03/03_03.png
+SUCCESS!!!! a plot of the frequency of a frequency vector
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/03/03_04_EQ04.png
+SUCCESS!!!! the formula for cos and ab
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/09/09_12.png
+SUCCESS!!!! a diagram of the process of the production of alcohol
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/09/09_06.png
+SUCCESS!!!! a diagram of the process for a process
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/09/09_04.png
+SUCCESS!!!! a diagram of the process flow for a data processing system
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/09/09_09.png
+SUCCESS!!!! a diagram of the process flow for a memory controller
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/09/09_01.png
+SUCCESS!!!! a diagram of the memory hierarchy
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/09/09_03.png
+SUCCESS!!!! a diagram of the process flow for a system
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/09/09_07.png
+SUCCESS!!!! a diagram showing the different types of memory elements
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/09/09_11.png
+SUCCESS!!!! a diagram shows the different types of cells
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/09/09_10.png
+SUCCESS!!!! a diagram showing the different types of words
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/09/09_13.png
+SUCCESS!!!! a diagram of stacked lstm
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/09/09_05.png
+SUCCESS!!!! a flow diagram showing the steps for a process
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/09/09_02.png
+SUCCESS!!!! a diagram of the memory hierarchy
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/09/09_08.png
+SUCCESS!!!! a diagram of the process for the treatment of a patient
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/07/07_04.png
+SUCCESS!!!! a large number of numbers in a row
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/07/07_07.png
+SUCCESS!!!! a picture of a cat and dog going to the bodega together
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/07/07_03.png
+SUCCESS!!!! a telephone pole with a telephone wire and a tree
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/07/07_06_EQ01.png
+SUCCESS!!!! the formula for the zeta function
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/07/07_09.png
+SUCCESS!!!! a diagram showing the different types of windows
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/07/07_01.png
+SUCCESS!!!! a diagram of a network with different types of nodes
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/07/07_08.png
+SUCCESS!!!! a diagram of the different types of storage devices
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/07/07_05.png
+SUCCESS!!!! a diagram of a computer with multiple processors
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/07/07_06.png
+SUCCESS!!!! a diagram of a computer with a computer and a computer
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/07/07_02.png
+SUCCESS!!!! two diagrams showing the same window and the same window
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/13/13_04.png
+SUCCESS!!!! a diagram of a training data generator
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/13/13_01.png
+SUCCESS!!!! the difference between a cpu and a gpu
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/13/13_02.png
+SUCCESS!!!! a diagram of a computer with two different types of processors
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/13/13_03.png
+SUCCESS!!!! a diagram showing the process of training data store
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/13/13_05.png
+SUCCESS!!!! a screenshot of the map in the dashboard
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/06/06_03_EQ03_02.png
+SUCCESS!!!! the formula for the number of people in a class
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/06/06_05.png
+SUCCESS!!!! a diagram showing the number of words in a word
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/06/06_07_EQ07.png
+SUCCESS!!!! the formula for the formula for the formula for the formula for the formula for the formula for the formula for the formula for the formula for the formula for the formula for the formula for the formula for the
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/06/06_01.png
+SUCCESS!!!! a diagram showing the location of seattle and portland
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/06/06_09.png
+SUCCESS!!!! a collection of antique brass objects
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/06/06_07.png
+SUCCESS!!!! a diagram of the different types of data structures
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/06/06_03_EQ03_01.png
+SUCCESS!!!! the formula for the z-value of a function
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/06/06_02.png
+SUCCESS!!!! a graph with the number of players in each league
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/06/06_04.png
+SUCCESS!!!! two diagrams showing the different types of data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/06/06_06.png
+SUCCESS!!!! a diagram showing the different ways to use the word'surrounding'
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/06/06_10.png
+SUCCESS!!!! a diagram of the process of writing a book
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/06/06_07_EQ05.png
+SUCCESS!!!! a diagram showing the number of points in a graph
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/06/06_07_EQ06.png
+SUCCESS!!!! the formula for the power law
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/06/06_03_EQ04.png
+SUCCESS!!!! the formula for the number of people in a group
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/06/06_01_EQ02_01.png
+SUCCESS!!!! a table with four different numbers and a number of decimal places
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/06/06_01_EQ02_02.png
+SUCCESS!!!! a series of lines that are all different shapes
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/06/06_08.png
+SUCCESS!!!! a scatter plot shows the different types of data that are available
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/06/06_07_1sidebar.png
+SUCCESS!!!! a text box with the words continuous bag of words
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/06/06_03.png
+SUCCESS!!!! a diagram showing the different ways to use the word 'claudius'
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/01/01_01.png
+SUCCESS!!!! a diagram showing the different types of logic
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/01/01_05.png
+SUCCESS!!!! a diagram showing the different types of jobs and their roles
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/01/01_03.png
+SUCCESS!!!! the process diagram for the data pipeline
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/01/01_02.png
+SUCCESS!!!! a diagram of the process of a cell
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/PNGs-production/01/01_04.png
+SUCCESS!!!! a diagram of the data structure and its components
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/EPS-production/05/05-17.png
+SUCCESS!!!! the equation for the mass of a black hole
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/EPS-production/05/05-12.png
+SUCCESS!!!! the equation for the mass of a black hole
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/EPS-production/05/05-15.png
+SUCCESS!!!! a waveform is shown with the words "b" and "a"
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/EPS-production/05/05-16.png
+SUCCESS!!!! a black and white drawing of a number of different types of equations
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/EPS-production/05/05-08.png
+SUCCESS!!!! the formula for the z - min function
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/EPS-production/05/05-14.png
+SUCCESS!!!! a black and white image of a line of black and white stripes
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/EPS-production/05/05-07.png
+SUCCESS!!!! a black and white image of a mathematical equation
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/EPS-production/05/05-13.png
+SUCCESS!!!! a black and white image of a line with a number of different numbers
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch10/annoy_stage_1.png
+SUCCESS!!!! two orange and purple squares with dots on them
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch10/annoy_stage_2.png
+SUCCESS!!!! a diagram of a square with dots on it
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch10/prep_1.png
+SUCCESS!!!! the diagram shows the different types of sentences
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch10/gpt2_prob_table_prompt_large_language_models.png
+SUCCESS!!!! a calendar with a list of dates and times
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch10/qa_streamlit_app_v1.png
+SUCCESS!!!! the official nlpia website
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch10/ann-benchmarks-nyt-256-dataset.png
+SUCCESS!!!! a plot of the number of people who have died in each country
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch10/qa_streamlit_app_with_question.png
+SUCCESS!!!! ask me about nipa
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch10/llm_survey.png
+SUCCESS!!!! a graph shows the number of people who have been vaccinated
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch10/annoy_all_stages.png
+SUCCESS!!!! three panels with different colored lines and shapes
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch10/encoder.png
+SUCCESS!!!! the diagram shows the different stages of the game
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch10/attention.png
+SUCCESS!!!! a diagram of the different types of data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch10/decoder.png
+SUCCESS!!!! the diagram shows the different stages of the process
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch10/stochastic-chameleon-decision-tree_drawio.png
+SUCCESS!!!! a diagram of the different stages of the life cycle of a cell
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch10/bucketing.png
+SUCCESS!!!! a diagram shows the different types of seating in a theater
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch10/seq2seq_internal.png
+SUCCESS!!!! a diagram of the process for a project
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch10/prep_2.png
+SUCCESS!!!! a diagram showing the different types of words
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch10/encoder-decoder.png
+SUCCESS!!!! an image of a computer with an input, output, and output
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch10/language-modeling.png
+SUCCESS!!!! the diagram shows the different stages of the game
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch10/annoy_stage_3.png
+SUCCESS!!!! a colorful geometric pattern with dots on it
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch10/encoder-decoder-detail.png
+SUCCESS!!!! a diagram showing the different stages of a soccer game
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/cnn-embeddings-words-are-sacred_drawio.png
+SUCCESS!!!! a diagram showing the different types of words
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/secret_message_convolved_line_plot.whitgrid.png
+SUCCESS!!!! a plot of the time series of the same data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/wikipedia-morse-code-table_svg.png
+SUCCESS!!!! a black background with a white clock on it
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/conv1d-pos-rightly-timed-pause_df.png
+SUCCESS!!!! a table with the numbers and letters in it
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/cnn-stride-text-words-are-sacred_transparent_drawio.png
+SUCCESS!!!! a table with the words and numbers in it
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/fence.png
+SUCCESS!!!! a wooden fence with a black background
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/secret_message_convolved_line_plot.seaborn.png
+SUCCESS!!!! a plot of the number of times that a person has been in a room
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/cnn stencil sliding over phrase Words are sacred.png
+SUCCESS!!!! the four stages of the sacred are sacred
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/secret_message_convolved_line_plot.whitegrid.10x6.png
+SUCCESS!!!! a plot of the time series of the same data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/wikipedia-morse-code-key.png
+SUCCESS!!!! a small metal machine with a wooden base
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/morse-code-wav-plot-preprocessed.png
+SUCCESS!!!! a plot of the time series of the data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/secret_message_convolved_line_plot.png
+SUCCESS!!!! a plot of the time series of the same data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/convolve.png
+SUCCESS!!!! two diagrams showing the same line and the same line
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/hand-crafted-dot-detector-convolution.png
+SUCCESS!!!! a graph showing the time and frequency of an audio signal
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/framework-laptop-spacebar.png
+SUCCESS!!!! a black laptop sitting on top of a desk
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/cnn-stencil-sliding-over-phrase-words-are-sacred_drawio.png
+SUCCESS!!!! the four stages of the sacred are sacred
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/Screenshot from 2022-05-17 14-49-52.png
+SUCCESS!!!! a diagram of the different types of data structures
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/conv1d-pos-rightly-timed-pause-y_df.png
+SUCCESS!!!! a table with numbers and letters
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/conv1d-adv-verb-noun-4x3_df.png
+SUCCESS!!!! a table with the words adverb, verb, and noun
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/cnn stencil transprent lettering 2gram are sacred.png
+SUCCESS!!!! a brown sign with the words are sacred
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/conv1d-pos-rightly-timed-pause-squares_drawio.png
+SUCCESS!!!! a diagram showing the different types of data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/cnn_architecture_flow_diagram_drawio.png
+SUCCESS!!!! a diagram of the process of using the same data structure
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/hand-crafted-dot-detector-numpy-convolution.png
+SUCCESS!!!! a graph showing the time and frequency of an audio signal
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/learning-curve-87-79.png
+SUCCESS!!!! a graph shows the average speed of a car
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/square-wave-pure-python.png
+SUCCESS!!!! a graph showing the number of people in a room
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/s-kernel-convolved-with-secret-message.png
+SUCCESS!!!! a graph showing the time and frequency of the audio signal
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/dot-detecting-kernel.png
+SUCCESS!!!! a graph showing the time and number of times that a person has been in the room
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/df-glove-vectors-sacred-pad.png
+SUCCESS!!!! the table shows the number of people who have been killed in the war
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/cnn stencil transparent lettering expanded 2pixel margin for 2gram are sacred.png
+SUCCESS!!!! a brown square with the words are sacred
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/words-are-sacred-kernel-steping-over-text_drawio.png
+SUCCESS!!!! a diagram showing the different types of words
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/morse-code-wav-plot.png
+SUCCESS!!!! a bar graph with blue and white lines
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/cnn-embeddings-glove-words-are-sacred_drawio.png
+SUCCESS!!!! a diagram of the process of creating a secret key
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/800x741px_Zebra_standing_behind_cartoon_fence_cropped.png
+SUCCESS!!!! a zebra standing in a field next to a fence
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/unused/fernando_lopez_compute_linear_layer_size.png
+SUCCESS!!!! a diagram showing the relationship between the number of students and the number of students
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/unused/pooling.png
+SUCCESS!!!! two different types of max pooling
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/unused/fully_connected.png
+SUCCESS!!!! a diagram of the output layer of a neural network
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/unused/cnn-stride-text-words-are-sacred-3.drawio.png
+SUCCESS!!!! a diagram showing the words are sacred
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/unused/cnn POS one-hot 4d vector seq for phrase rightly timed _pause_ PAD.drawio.png
+SUCCESS!!!! as a… as a… as a… as a… as a… as a… as a… as a… as a… as a… as a… as a… as a… as
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/unused/pixel_values.png
+SUCCESS!!!! a large number of numbers in a row
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/transformer_recursion_drawio.png
+SUCCESS!!!! a diagram of the different types of data that can be used in a data pipeline
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/transformer_original.png
+SUCCESS!!!! a diagram of the process flow for a system
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/bert_inputs.png
+SUCCESS!!!! a table with different types of data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/multihead_attention_layer_drawio.png
+SUCCESS!!!! a diagram of a computer program with a number of different types of lines
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/translation_attention_5_6.png
+SUCCESS!!!! two graphs showing the same data for each group
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/multi-head-attention_drawio.png
+SUCCESS!!!! a diagram of a computer program with a number of different types of lines
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/translation_attention_validation_5_6.png
+SUCCESS!!!! two plots showing the same data for each of the two groups
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/encoder_decoder_drawio.png
+SUCCESS!!!! a diagram of the different types of encoders
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/translation_attention_3_4.png
+SUCCESS!!!! two plots showing the same data, one with a black and white image
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/translation_attention_1_2.png
+SUCCESS!!!! two different plots of the same data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/transformer_attention.png
+SUCCESS!!!! a diagram of the different types of matmul
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/attention_heatmap.png
+SUCCESS!!!! a plot of the number of people who have been diagnosed with cancer
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/unused/char_predict_no_seq.png
+SUCCESS!!!! a diagram of the process of creating a new word
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/unused/lstm_1.png
+SUCCESS!!!! a diagram of the memory state and the memory state
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/unused/lstm_4.png
+SUCCESS!!!! a diagram of the process flow for a process
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/unused/lstm_2.png
+SUCCESS!!!! unified lsm memory state
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/unused/lstm_3.png
+SUCCESS!!!! a diagram of the process flow for a computer
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/unused/forget_closeup.png
+SUCCESS!!!! a diagram of the process for a memory test
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/unused/forget_gate.png
+SUCCESS!!!! a diagram of the process for a data warehouse
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/unused/char_level_predict.png
+SUCCESS!!!! a diagram showing the different types of data
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/unused/forget_application.png
+SUCCESS!!!! a diagram showing the different types of memory
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/unused/stacked_lstm.png
+SUCCESS!!!! a diagram of the stacked lstm
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/unused/output_gate.png
+SUCCESS!!!! a diagram of the process flow for a web application
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/unused/transformer_multihead_attention.png
+SUCCESS!!!! a diagram of a linear product
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch09/unused/candidate_gate.png
+SUCCESS!!!! a diagram of the process for a drug
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch11/ch6-12-heatmap-min50-exp1_7.png
+SUCCESS!!!! a graph with a line that shows the number of people who have been infected with the coronavirus
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch11/ch6-12-heatmap-min50-exp2.png
+SUCCESS!!!! a graph with a line that shows the number of people who have been infected
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch11/ch9-12-heatmap.png
+SUCCESS!!!! a graph with a red and white line
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch11/ch9-12-heatmap-min50-exp2.png
+SUCCESS!!!! a graph with a line that shows the number of people who have been infected
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch11/knowledge-graph-extraction_drawio.png
+SUCCESS!!!! a diagram of the process for a smart grid
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch11/kg_150_biotech_company_graphviz.png
+SUCCESS!!!! a network of social media posts with different types of information
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch11/ch12-heatmap-min50-exp2.png
+SUCCESS!!!! a graph with a line that shows the number of people who have been infected
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch11/ch9-heatmap.png
+SUCCESS!!!! a graph with a line that shows the number of people who have been infected with the coronavirus
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch11/Stanislav-Knowledge-Graph.png
+SUCCESS!!!! the diagram shows the different branches of the military
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch11/convoscript-parsing-examples--parse-scenarios_drawio.png
+SUCCESS!!!! a diagram of the different types of data in a database
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch11/dependency_diagram.png
+SUCCESS!!!! a diagram of a building with different types of windows
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch11/ch1-12-heatmap-min50-exp1_5.png
+SUCCESS!!!! a graph with a line that shows the number of people who have been infected with the coronavirus
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch11/ch1-12-heatmap-min50-exp2.png
+SUCCESS!!!! a graph showing the number of people who have been infected with the coronavirus
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch11/ch3-heatmap.png
+SUCCESS!!!! a graph showing the number of people who have been tested for the coronavirus
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch02/piano_roll.jpg
+SUCCESS!!!! a close up of an old piano with a keyboard
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch01/coin-sorting-slide-machine.jpg
+SUCCESS!!!! a picture of a coin counting machine with coins and money
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch01/sculpture-alan-turing-at-enigma-machine.jpg
+SUCCESS!!!! a statue of a man in a suit
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch01/canadian-coin-sorter.jpg
+SUCCESS!!!! a white tray with a variety of different tools
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch04/horse.jpg
+SUCCESS!!!! a white horse standing on a black background
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/sports.jpg
+SUCCESS!!!! the list of muslims in berlin
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/we-are-all-one.jpg
+SUCCESS!!!! a diagram of a process flow for a process
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/decoder-ring-german.jpg
+SUCCESS!!!! a clock with a dial and numbers on it
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/decoder-ring-captain-midnight.jpg
+SUCCESS!!!! a close up of a badge with a baseball on it
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/decoder-wedding-ring.jpg
+SUCCESS!!!! a ring with the words love and peace on it
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/cbow.jpg
+SUCCESS!!!! a drawing of a computer with a diagram of the hardware
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/capital-state.jpg
+SUCCESS!!!! a drawing of a map with the names of different cities
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch06/skipgram.jpg
+SUCCESS!!!! a drawing of a computer with a diagram of a computer
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch03/uncanny_valley.jpg
+SUCCESS!!!! a graph of a person's life on a piece of paper
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch03/old/harry_faster_vecs.jpg
+SUCCESS!!!! a graph with a line and a line that is going up
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch03/old/vecs.jpg
+SUCCESS!!!! a graph with two points on it and a line
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/robot-reading-Mythical_Man-Month.jpg
+SUCCESS!!!! a robot in an office with a laptop
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/mail_sorting_machine_RabinowJacob_026.jpg
+SUCCESS!!!! a black and white photo of a machine in a factory
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/ch07/800px_Zebra_standing_alone_crop.jpg
+SUCCESS!!!! a zebra standing in a field
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/unused/ch07/250px-Zebra_standing_alone_crop-pt-wikipedia-modification-allowed.jpg
+SUCCESS!!!! a zebra standing in the middle of a field
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/front-matter/cole_portrait.jpg
+SUCCESS!!!! a man with glasses and a black shirt is smiling
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/front-matter/hobson_portrait.jpg
+SUCCESS!!!! a man wearing a black jacket
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/first-ed/front-matter/hannes_portrait.jpg
+SUCCESS!!!! a man in a green sweater smiling at the camera
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/wikipedia-morse-code-key.jpg
+SUCCESS!!!! a small metal machine with a wooden base
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/space_divider_1.jpg
+SUCCESS!!!! a large wooden screen with sticks on it
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/zebra-picture-by-gonzalo-malpartida-at-Mundopark-Guillena-from-flickr--3611653800_0f5f1103fa.jpg
+SUCCESS!!!! a zebra standing in a fenced in area
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/framework-laptop-spacebar.jpg
+SUCCESS!!!! a black laptop sitting on top of a desk
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch07/unused/pole.jpg
+SUCCESS!!!! a telephone pole and telephone wires in the fog
+
+/home/hobs/code/hobs/nlpia-manuscript/manuscript/images/ch11/pascagoula.jpg
+SUCCESS!!!! a diagram of the different types of data

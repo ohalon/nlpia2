@@ -1,0 +1,91 @@
+
+:toc: left
+:toclevels: 6
+
+++++
+  <style>
+  .first-sentence {
+    text-align: left;
+    margin-left: 0%;
+    margin-right: auto;
+    width: 66%;
+    background: Beige;
+  }
+  .last-sentence {
+    text-align: right;
+    margin-left: auto;
+    margin-right: 0%;
+    width: 66%;
+    background: AliceBlue;
+  }
+  </style>
+++++
+== About this book
+[.first-sentence]
+_Natural Language Processing in Action_ is a practical guide to processing and generating natural language text in the real world.
+
+[.last-sentence]
+In this book we provide you with all the tools and techniques you need to build the NLP systems to support a virtual assistant (chatbot), spam filter, forum moderator, sentiment analyzer, knowledge base builder, natural language text miner, or nearly any other NLP application you can imagine.
+
+[.first-sentence]
+And you'll learn much more than _what_ and _how_ of NLP -- you'll learn the _why_. Your right hand brain will wake up as you widen your focus from the nuts and bolts of an NLP pipeline to see the bigger picture. You'll synthesize an understanding of why NLP is so important and it affects society and the planet.footnote:[Ian McGilcrist explains in his TED talk how we neglect our philosophical right brain by focusing on "manipulating the world" with our left brain: https://www.ted.com/talks/iain_mcgilchrist_the_divided_brain] This will help you avoid becoming a _moral crumple zone_ for the bots and bosses in your life.footnote:[Madeleine Clare Elish 15 Mar 2019 "Moral Crumple Zones: Cautionary Tales in Human-Robot Interaction"
+
+[.last-sentence]
+ 260-Article Text-921-1-10-20190323.pdf]
+
+[.first-sentence]
+_Natural Language Processing in Action_ is aimed at intermediate to advanced Python developers. Readers already capable of  designing and building complex systems will also find most of this book useful since it provides numerous best-practice examples and insight into the capabilities of state-of-the art NLP algorithms. While knowledge of object-oriented Python development may help you build better systems, it's not required to use what you learn in this book.
+
+[.last-sentence]
+_Natural Language Processing in Action_ is aimed at intermediate to advanced Python developers. Readers already capable of  designing and building complex systems will also find most of this book useful since it provides numerous best-practice examples and insight into the capabilities of state-of-the art NLP algorithms. While knowledge of object-oriented Python development may help you build better systems, it's not required to use what you learn in this book.
+
+[.first-sentence]
+For special topics, I provide sufficient background material and cite resources (both text and online) for those who want to gain an in-depth understanding.
+
+[.last-sentence]
+For special topics, I provide sufficient background material and cite resources (both text and online) for those who want to gain an in-depth understanding.
+
+=== Roadmap
+[.first-sentence]
+If you are new to Python and natural language processing, you should first read part 1 and then any of the chapters of part 3 that apply to your interests or on-the-job challenges.
+
+[.last-sentence]
+If you want to get up to speed on the new NLP capabilities that deep learning enables, you'll also want to read part 2, in order. It builds your understanding of neural networks, incrementally ratcheting up the complexity and capability of those neural nets.
+
+[.first-sentence]
+As soon as you find a chapter or section with a snippet that you can "run in your head", you should run it for real on your machine.
+
+[.last-sentence]
+Then you can use the `nlpia.data.loaders.get_data()` function to retrieve that data and run the examples on your own data.
+
+=== About this book
+[.first-sentence]
+The chapters of part 1 deal with the logistics of working with natural language and turning them into numbers that can be searched and computed.
+
+[.last-sentence]
+You'll learn how to build a spam filter with better than 90% accuracy using 1990s scale technology -- calculating nothing more than the counts of words and some simple averages of those counts (pay attention when you see the acronym LDA).
+
+[.first-sentence]
+All this math with words may sound tedious, but it's actually quite fun.
+
+[.last-sentence]
+The high-dimensional vector-space view of words and thoughts will hopefully leave your brain spinning in recurrent loops of self-discovery.
+
+[.first-sentence]
+That crescendo of learning may reach a high point towards the middle of this book.
+
+[.last-sentence]
+The network effect of small logical units interacting in a web of "thinking" has empowered machines to solve problems that only smart humans even bothered to attempt in the past, things such as analogy questions, text summarization, and translation between natural languages.
+
+[.first-sentence]
+Yes, you'll learn about word vectors, don't worry, but oh so much more. You'll be able to visualize words, documents, and sentences in a cloud of connected concepts that stretches well beyond the three dimensions you can readily grasp. You'll start thinking of documents and words like a Dungeons and Dragons character sheet with a myriad of randomly selected characteristics and abilities that have evolved and grown over time, but only in our heads.
+
+[.last-sentence]
+Yes, you'll learn about word vectors, don't worry, but oh so much more. You'll be able to visualize words, documents, and sentences in a cloud of connected concepts that stretches well beyond the three dimensions you can readily grasp. You'll start thinking of documents and words like a Dungeons and Dragons character sheet with a myriad of randomly selected characteristics and abilities that have evolved and grown over time, but only in our heads.
+
+[.first-sentence]
+An appreciation for this intersubjective reality of words and their meaning will be the foundation for the coup-de-grace of part 3, where you learn how to build machines that converse and answer questions as well as humans.
+
+[.last-sentence]
+An appreciation for this intersubjective reality of words and their meaning will be the foundation for the coup-de-grace of part 3, where you learn how to build machines that converse and answer questions as well as humans.
+

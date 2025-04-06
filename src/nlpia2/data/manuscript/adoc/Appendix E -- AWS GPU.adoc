@@ -1,0 +1,207 @@
+= Setting up your AWS GPU
+:appendix: E
+:chapter: E
+:part: BM
+:imagesdir: .
+:xrefstyle: short
+:figure-caption: Figure {chapter}.
+:listing-caption: Listing {chapter}.
+:table-caption: Table {chapter}.
+:stem: latexmath
+
+If you want to train or run your NLP pipeline quickly, a server with a GPU will often speed things up.
+GPUs are especially speedy for training a deep neural network when you use a framework such as `Keras` (`TensorFlow` or `Theano`), `PyTorch`, or `Caffe` to build your model. These computational graph frameworks can take advantage of the massively parallel multiplication and addition operations that GPUs are built for.
+
+A cloud service is a great option if you don't want to invest the time and money to build your own server.
+But it is possible to build a server with a GPU that is twice as fast as a comparable Amazon Web Services (AWS) server for about the cost of a month on a comparable AWS instance.
+Plus you can store a lot more data with tighter coupling (higher bandwidth) to your machine and often get more RAM than is possible on a single AWS EC2 instance.
+
+But with AWS you can be up and running quickly, without having to maintain your own storage devices and servers.
+Plus most cloud services provide preconfigured hard drive images (ISOs) that can get you up and running much quicker than if you had to configure your own server.
+For a production system, a cloud provider like AWS or Google Cloud Services (Azure is still playing catch-up) likely makes sense.
+For recreation and experimentation, you may want to roll your own.
+
+== Steps to create your AWS GPU instance
+
+// 1.
+. Go to http://aws.amazon.com to sign up for an account or sign into an existing account. Once you are logged into your account, go to the AWS Management Console (http://console.aws.amazon.com) shown in figure G.1.
++
+.AWS Management Console
+image::../images/ch13/aws1.png[AWS Management Console, alt="Figure G.1: Select EC2 Service button or menu item", width=80%, link="../images/ch13/aws1.png"]
++
+// 2.
+. Select EC2 under All Services; you can also find the EC2 service in the Services menu at the top of the page. The EC2 Dashboard  provides summary information about existing EC2 instances (see figure G.2)
++
+.Creating a new AWS instance
+image::../images/ch13/aws2.png[Create a new AWS instance, alt="Figure G.2: Click the blue Launch Instance button", width=80%, link="../images/ch13/aws2.png"]
++
+// 3.
+. In the EC2 Dashboard, click the blue Launch Instance button to start the instance setup wizard, a sequence of screens where you can configure the virtual machine you want to launch.
++
+.Selecting an AWS Machine Image
+image::../images/ch13/aws3.png[Selecting an AWS Machine Image, alt="Figure G.3: blue Select button next to Deep Learning (Ubuntu) AMI", width=80%, link="../images/ch13/aws3.png"]
++
+// 4.
+. This screen (figure G.3) shows the server hard drive images or ISOs you can install on your virtual machine. These are called _Amazon Machine Images_ (AMIs) on Amazon. footnote:[ISO is short for ISO-9660, an International Standards Organization open standard for writing disk images in a way that they can be transported and installed elsewhere, not just on one proprietary cloud service, such as AWS] Some AMIs come with deep learning frameworks already installed. That way, you don't need to install and configure the CUDA and BLAS libraries or Python packages such as `TensorFlow`, `numpy`, and `Keras`. To find a free preconfigured deep learning AMI, click the Amazon Marketplace or Community AMIs tab on the left side and search for "deep learning". footnote:[At the time of this writing, one such image under the Amazon Marketplace had an AMI ID of _ami-f1d51489_.] You must still configure the hardware that makes use of all the software features that a particular AMI provides.
++
+// 5.
+. Some of the neural network code in this book was tested on the Deep Learning AMI (Ubuntu), which is designed to take advantage of any GPU hardware present on your virtual machine. Click the blue Select button next to the AMI you want to use. If you've selected an Amazon Marketplace image, you'll be presented with an estimate of the prices for running the AMI on various EC2 instance types that have a GPU (see figure G.4).
++
+.Cost overview for the machine image and the available instance types in your AWS region
+image::../images/ch13/aws4.png[Cost overview for the machine image and the available instance types in your AWS region, alt="Figure G.4: O software cost and instance type price summary under More Info", width=80%, link="../images/ch13/aws4.png"]
++
+// 6.
+. Many open source AMIs, like the Deep Learning Ubuntu AMI are free, so the Software cost column on the More Info page for Amazon Marketplace shows $0. Other AMIs under the AWS Marketplace tab, such as the RocketML AMI, may have software costs associated with them. Regardless of the software cost, you'll need to pay for server instance power-on time if it exceeds your "free tier" allowance. A GPU instance isn't covered under the free tier. So make sure your pipeline has been fully tested on a low-cost CPU machine before running your pipeline on a more-expensive instance. Click the blue Continue button if you are viewing this price list (see figure G.4). If you've returned to the AMI lists on Amazon Marketplace, you can click the blue Select button next to the AMI you would like to install on your EC2 instance, which will take you to "Step 2: Choose an Instance Type" (see figure G.5).
++
+.Choosing your instance type
+image::../images/ch13/aws5.png[Choosing your instance type, alt="Figure G.5: Step 2: Server Type, Next: Select instance type", width=80%, link="../images/ch13/aws5.png"]
++
+// 7.
+. In this step, you select the server type for your virtual machine (see figure G.5). The smallest GPU instance -- g2.2xlarge -- is a good value. Amazon's dark pattern UI will preselect a much more expensive type, so you'll have to manually select the g2.2xlarge instance if that's the one you want. Also, you'll find that virtual machines are much cheaper if you've selected US West 2 (Oregon) as your region rather than other US regions. You can find this selection in the menu at the upper-right corner of the page near your account name.
++
+// 8.
+. Once you've selected the instance type you'd like to use, you can launch your machine by clicking the blue Review and Launch button. But for your first instance, you should work your way through all the setup wizard steps so you can see what your options are, even if you decide to accept the defaults on each of these screens. To proceed to the next step, click the gray Next: Configure Instance Details button.
++
+.Configuring instance details
+image::../images/ch13/aws6.png[Configuring instance details, alt="Figure G.6: Step 3: Configure instance details with blue Next: Add storage button in lower right.", width=80%, link="../images/ch13/aws6.png"]
++
+// 9.
+. Here you can configure the instance details (see figure G.6). If you are already using AWS machines on an existing _virtual private cloud_ (VPC), you can assign your GPU machine to your existing VPC. Machines on the same VPC can use the same gateway or bastion servers on that VPC to access your machine. But if this is your first EC2 instance or you don't have a "bastion server",footnote:[Amazon has a tutorial on the best practices for a Bastion host (https://docs.aws.amazon.com/quickstart/latest/linux-bastion/architecture.html).] you don't need to worry about this.
+// 10.
+. Selecting "Protect against accidental termination" makes it harder for you to accidentally terminate your machine. On Amazon Web Services, "terminate" means to power off a machine and wipe its storage. "Stop" means to power down or suspend the machine while retaining any training checkpoints you may have saved to persistent storage on that machine.
++
+// 11.
+. To continue, click the Next: Add Storage button.
++
+.Adding storage to your instance
+image::../images/ch13/aws7.png[Adding storage to your instance, alt="Figure G.7: Step 4 Add storage", width=80%, link="../images/ch13/aws7.png"]
++
+// 12.
+. In this step (figure G.7), you can add storage if you plan to work with large corpora. But you may be better off proceeding with a minimal amount of "local" storage on your EC2 instance and waiting to mount an Amazon "S3 Bucket" or other cloud storage service after your EC2 instance is up and running. This will allow you to share large datasets across multiple servers or training runs (between instance terminations). Amazon Web Service will charge you for any "local" EC2 storage above the 30 GB free tier allowance. The AWS UX has a lot of dark patterns that make it hard to avoid racking up charges.
++
+// 13.
+. Click the Next buttons to proceed through the next steps and review the default tags and security groups assigned to your EC2 instance. The final Next button sends you to the review step (see figure G.8).
++
+.Reviewing your instance setup before launching
+image::../images/ch13/aws8.png[Review your instance setup before launching, alt="Figure G.8: Review", width=80%, link="../images/ch13/aws8.png"]
++
+// 14.
+. On the review screen (see figure G.8), Amazon Web Services shows you the details of your instance in one overview.
++
+// 15.
+. Confirm that the instance details -- particularly the type (RAM and CPU), the AMI image (Deep Learning Ubuntu), and storage (enough GB for your data) -- are what you want before clicking the Launch button. At that point, AWS will power up your virtual machine and start loading your software image onto it.
++
+// 16.
+. If you haven't previously created an instance with AWS, it will ask you to create a new key pair (see figure G.9). The key pair allows you to ssh into the machine without a password. By default, EC2 instances do not allow password login, so you'll need to save the `.pem` file in your `$HOME/.ssh/` folder and keep a copy of it in a safe place (such as your password manager) or you won't be able to access your running server and will have to start over.
++
+.Creating a new instance key (or downloading an existing one)
+image::../images/ch13/aws9.png[Create a new or download an existing instance key, alt="Figure G.9: create or select key pair", width=80%, link="../images/ch13/aws9.png"]
++
+// 17.
+. After saving your key pair (if you created a new key pair), AWS confirms that the instance is launched. On rare occasions, the Amazon data center may not have the resources you requested and you'll receive an error, requiring you to start over.
++
+.AWS launch confirmation
+image::../images/ch13/aws11.png[AWS Launch Confirmation,  alt="Figure G.10: ", width=80%, link="../images/ch13/aws11.png"]
++
+// 19.
+. Click the instance hash that starts with _i-..._ (see figure G.10). The link sends you to the overview of all your EC2 instances, where you'll see your instance with its state indicated as "running" or "initializing".
++
+// 20.
+.EC2 Dashboard showing the newly created instance
+image::../images/ch13/ec2_dashboard.png[EC2 Dashboard showing the newly created instance, alt="Figure G.11: Running instance state", width=80%, link="../images/ch13/ec2_dashboard.png"]
++
+// 20.
+. You'll want to record the public IP address for your instance (see figure G.11) alongside the `.pem` file for the key pair you generated earlier. A good place to store this is in your password manager with the `.pem` file. You'll also want to put it within your `$HOME/.ssh/config` file so you can give your instance a host name so you don't have to find the IP address in the future.
++
+A typical config file will look something like the following. You'll want to change the `HostName` value to the public IP address (from the EC2 Dashboard) or fully qualified domain name (from your "Route 53" Dashboard on AWS) for your EC2 instance that you just launched.
++
+.$HOME/.ssh/config
+[source,text]
+----
+Host totalgood
+    User ubuntu
+    HostName INSTANCE_PUBLIC_IP  # <1>
+    Port 22
+    IdentityFile ~/.ssh/nlp-in-action.pem  # <2>
+    # ssh -i ~/.ssh/nlp-in-action.pem ubuntu@INSTANCE_PUBLIC_IP  <3>
+----
+<1> Replace INSTANCE_PUBLIC_IP with your public IP address.
+<2> The path to the .pem file you downloaded goes here.
+<3> You can leave notes as comments in your config file.
++
+// 21.
+. Before logging into the AWS instance, `ssh` requires that the private key file (`.pem` file in your `$HOME/.ssh` directory) can  be read only by you and the root superuser on your system. You can set the appropriate permissions by executing the following bash commands: footnote:[A bash shell, like cygwin or git-bash must be installed for bash ssh commands to work on a Windows system.]
++
+[source,bash]
+----
+$ chown -R $USER:users $HOME/.ssh
+$ chmod 700 $HOME/.ssh  # <1>
+$ chmod 600 $HOME/.ssh/nlp-in-action.pem  # <2>
+$ chmod -R 600 $HOME/.ssh/*  # <3>
+----
+<1> This ensures that only you can delete, write, read, and "execute" the $HOME/.ssh directory.
+<2> This ensures that only you can write and read the .pem file you downloaded.
+<3> This ensures that you can read and write any of the key files in your $HOME/.ssh directory, like the default `id_rsa` and `id_rsa.pub` files that may have been generated when your account was created.
++
+// 22.
+. After you've set the appropriate file permissions and set up your config file, execute the following bash command to attempt to log into your EC2 instance:
++
+[source,bash]
+----
+$ ssh -i ~/.ssh/nlp-in-action.pem ubuntu@INSTANCE_PUBLIC_IP
+----
++
+// 23.
+. If the Amazon Machine Image is Ubuntu-based, the username is usually `ubuntu`. But each AMI will have documentation on the username and ssh port number required to log into it.
++
+// 24.
+. If you log in for the very first time, you're warned that the fingerprint of the machine is unknown (see figure G.12). Confirm with _yes_ to go ahead with the login process.footnote:[If you see this warning in the future, when you haven't changed its IP address, then you may have someone attempting to spoof the IP address or domain name of your machine and hack into your instance with a man-in-the-middle attack. This is extremely rare.]
++
+// 25.
+.Confirmation request to exchange ssh credentials
+image::../images/ch13/term2.png[Confirmation request to exchange ssh credentials, alt="Figure G.12: confirm IP address and credential hash.", width=80%, link="../images/ch13/term2.png"]
++
+// 26.
+. After a successful login, you see a welcome screen (see figure G.13).
++
+.Welcome screen after a successful login
+image::../images/ch13/ipython.png[Welcome screen after a successful login, width=80%, link="../images/ch13/ipython.png"]
++
+// 27.
+. As the final step, you need to activate your preferred development environment. The machine image provides various environments, including `PyTorch`, `TensorFlow`, and `CNTK`. Because we use TensorFlow and Keras in this book, you should activate the tensorflow_p36 environment. This loads a virtual environment with Python 3.6, Keras, and TensorFlow installed (see figure G.14).
++
+[source,bash]
+---------------
+$ source activate tensorflow_p36
+---------------
++
+.Activating your pre-installed Keras environment
+image::../images/ch13/source.png[Activating your pre-installed Keras environment, width=80%, link="../images/ch13/source.png"]
++
+// 28.
+Not that you've activated your TensorFlow environment, you are ready to train your deep learning NLP models. Head over to an iPython shell with
++
+[source,bash]
+---------------
+$ ipython
+---------------
++
+// 29.
+Now you're ready to train your models. Have fun!
+
+=== Cost control
+
+Running a GPU instance on a cloud service like AWS can quickly get expensive. The smallest GPU instance in the US-West 2 region costs $0.65 per hour at the time of this writing. Training a simple sequence-to-sequence model can take a few hours, and then you might want to iterate on your model parameters. All iterations can quickly add up to decent monthly bill. You can minimize surprises with a few precautions (see figures G.15 and G.16):
+
+* Turn off idle GPU machines. When you stop (not terminate) your machine, the last state of the storage (except your /tmp folder) will be preserved and you can return to it. In-memory data will be lost, so make sure to save all your model checkpoints before stopping the machine.
+* Check your EC2 instance summary page for running instances.
+* Check your AWS bill summary regularly to check for running instances.
+* Create an AWS Budget with spending alarms. Once you've configured a budget, AWS will alert you when you are exceeding it.
+
+.AWS Billing Dashboard
+image::../images/ch13/aws_costs.png[AWS Billing Dashboard, width=80%, link="../images/ch13/aws_costs.png"]
+
+.AWS Budget Console
+image::../images/ch13/aws_budget.png[AWS Budget Console, width=80%, link="../images/ch13/aws_budget.png"]
+
+

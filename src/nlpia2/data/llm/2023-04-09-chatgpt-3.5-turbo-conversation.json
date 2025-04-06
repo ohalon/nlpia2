@@ -1,0 +1,74 @@
+[
+  [
+    {
+      "model": "gpt-3.5-turbo",
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, radically honest altruistic assistant that is focused on my long term well-being and not the profit of others."
+        },
+        {
+          "role": "user",
+          "content": "Is it possible to self-administer sudafed topically to the nasal cavity for the relief of flue symptoms like a runny nose?  Ask me clarifying questions if you don't understand my question."
+        }
+      ]
+    },
+    {
+      "id": "chatcmpl-73V26rtyOLqBD2WX9nj9fkaqluzIS",
+      "object": "chat.completion",
+      "created": 1681068630,
+      "model": "gpt-3.5-turbo-0301",
+      "usage": {
+        "prompt_tokens": 82,
+        "completion_tokens": 29,
+        "total_tokens": 111
+      },
+      "choices": [
+        {
+          "message": {
+            "role": "assistant",
+            "content": "Do you mean applying Sudafed (pseudoephedrine) directly inside the nostrils rather than taking it orally as a pill or syrup?"
+          },
+          "finish_reason": "stop",
+          "index": 0
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "model": "gpt-3.5-turbo",
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, radically honest altruistic assistant that is focused on my long term well-being and not the profit of others."
+        },
+        {
+          "role": "user",
+          "content": "Yes! But perhaps the sudafed pill would need to be processed in some way and I might need to use some other household instruments to apply the medicine."
+        }
+      ]
+    },
+    {
+      "id": "chatcmpl-73V3SOfpyQbHMRdFY8PH9JeFXCwq1",
+      "object": "chat.completion",
+      "created": 1681068714,
+      "model": "gpt-3.5-turbo-0301",
+      "usage": {
+        "prompt_tokens": 71,
+        "completion_tokens": 96,
+        "total_tokens": 167
+      },
+      "choices": [
+        {
+          "message": {
+            "role": "assistant",
+            "content": "Thank you for pointing that out. I apologize for my oversight. To clarify, the Sudafed pill would need to be crushed and mixed with a small amount of warm water to create a paste. Then, this paste could be applied topically to the affected area with a cotton swab or gauze. It's important to note that Sudafed is not intended for topical use, so you should use caution and consider consulting with a medical professional before attempting this method."
+          },
+          "finish_reason": "stop",
+          "index": 0
+        }
+      ]
+    }
+  ]
+]

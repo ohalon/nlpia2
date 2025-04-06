@@ -1,0 +1,1795 @@
+= Natural Language Processing in Action, Second Edition
+:chapter: 4
+:part: 1
+:sectnums:
+:imagesdir: .
+:xrefstyle: short
+:figure-caption: Figure {chapter}.
+:listing-caption: Listing {chapter}.
+:table-caption: Table {chapter}.
+:leveloffset: 1
+// :sectnumoffset: 2
+:stem: latexmath
+:toc:
+:icons!:
+:sub1: q̂ = q · V
+:sub2: `U · S`
+
+= Finding meaning in word counts (semantic analysis)
+
+This chapter covers
+
+* Analyzing semantics (meaning) to create topic vectors
+* Semantic search using the semantic similarity between topic vectors
+* Scalable semantic analysis and semantic search for large corpora
+* Using semantic components (topics) as features in your NLP pipeline
+* Navigating high-dimensional vector spaces
+
+You have learned quite a few natural language processing tricks.
+But now may be the first time you will be able to do a little bit of "magic."
+This is the first time we talk about a machine being able to understand the _meaning_ of words.
+
+The TF-IDF vectors (term frequency &#8211; inverse document frequency vectors) from chapter 3 helped you estimate the importance of words in a chunk of text.
+You used TF-IDF vectors and matrices to tell you how important each word is to the overall meaning of a bit of text in a document collection.
+These TF-IDF "importance" scores worked not only for words, but also for short sequences of words, _n_-grams.
+They are great for searching text if you know the exact words or _n_-grams you're looking for.
+But they also have certain limitations.
+Often, you need a representation that takes not just counts of words, but also their _meaning_.
+
+Researchers have discovered several ways to represent the meaning of words using their co-occurrence with other words.
+You will learn about some of them, like _Latent Semantic Analysis_(LSA) and _Latent Dirichlet Allocation_, in this chapter.
+These methods create _semantic_ or _topic_ vectors to represent words and documents. footnote:[We use the term "topic vector" in this chapter about topic analysis and we use the term "word vector" in chapter 6 about Word2vec. Formal NLP texts such as the NLP bible by Jurafsky and Martin (https://web.stanford.edu/~jurafsky/slp3/ed3book.pdf#chapter.15:) use "topic vector." Others, like the authors of Semantic Vector Encoding and Similarity Search (https://arxiv.org/pdf/1706.00957.pdf:), use the term "semantic vector."]
+You will use your weighted frequency scores from TF-IDF vectors, or the bag-of-words (BOW) vectors that you learned to create in the previous chapter.
+These scores and the correlations between them, will help you compute the topic "scores" that make up the dimensions of your topic vectors.
+
+Topic vectors will help you do a lot of interesting things.
+They make it possible to search for documents based on their meaning -- _semantic search_.
+Most of the time, semantic search returns search results that are much better than keyword search.
+Sometimes semantic search returns documents that are exactly what the user is searching for, even when they can't think of the right words to put in the query.
+
+Semantic vectors can also be used to identify the words and _n_-grams that best represent the subject (topic) of a statement, document, or corpus (collection of documents).
+And with this vector of words and their relative importance, you can provide someone with the most meaningful words for a document -- a set of keywords that summarizes its meaning.
+
+And lastly, you will be able to compare any two statements or documents and tell how "close" they are in _meaning_ to each other.
+
+[TIP]
+====
+The terms "topic", "semantic", and "meaning" have a similar meaning and are often used interchangeably when talking about NLP.
+In this chapter, you're learning how to build an NLP pipeline that can figure out this kind of synonymy, all on its own.
+Your pipeline might even be able to find the similarity in meaning of the phrase "figure it out" and the word "compute".
+Machines can only "compute" meaning, not "figure out" meaning.
+====
+
+You'll soon see that the linear combinations of words that make up the dimensions of your topic vectors are pretty powerful representations of meaning.
+
+== From word counts to topic scores
+
+You know how to count the frequency of words, and to score the importance of words in a TF-IDF vector or matrix.
+But that's not enough.
+Let's look at what problems that might create, and how to approach representing the meaning of your text rather than just individual term frequencies.
+
+=== The limitations of TF-IDF vectors and lemmatization
+
+TF-IDF vectors count the terms according to their exact spelling in a document.
+So texts that restate the same meaning will have completely different TF-IDF vector representations if they spell things differently or use different words.
+This messes up search engines and document similarity comparisons that rely on counts of tokens.
+
+In chapter 2, you normalized word endings so that words that differed only in their last few characters were collected together under a single token.
+You used normalization approaches such as stemming and lemmatization to create small collections of words with similar spellings, and often similar meanings.
+You labeled each of theses small collections of words, with their lemma or stem, and then you processed these new tokens instead of the original words.
+
+This lemmatization approach kept similarly _spelled_ footnote:[Both stemming and lemmatization remove or alter the word endings and prefixes, the last few characters of a word. Edit-distance calculations are better for identifying similarly spelled (or misspelled) words] words together in your analysis, but not necessarily words with similar meanings.
+And it definitely failed to pair up most synonyms.
+Synonyms usually differ in more ways than just the word endings that lemmatization and stemming deal with.
+Even worse, lemmatization and stemming sometimes erroneously lump together antonyms, words with opposite meaning.
+
+The end result is that two chunks of text that talk about the same thing but use different words will not be "close" to each other in your lemmatized TF-IDF vector space model.
+And sometimes two lemmatized TF-IDF vectors that are close to each other aren't similar in meaning at all.
+Even a state-of-the-art TF-IDF similarity score from chapter 3, such as Okapi BM25 or cosine similarity, would fail to connect these synonyms or push apart these antonyms.
+Synonyms with different spellings produce TF-IDF vectors that just aren't close to each other in the vector space.
+
+For example, the TF-IDF vector for this chapter in _NLPIA_, the chapter that you're reading right now, may not be at all close to similar-meaning passages in university textbooks about latent semantic indexing.
+But that's exactly what this chapter is about, only we use modern and colloquial terms in this chapter.
+Professors and researchers use more consistent, rigorous language in their textbooks and lectures.
+Plus, the terminology that professors used a decade ago has likely evolved with the rapid advances of the past few years.
+For example, terms such "latent semantic _indexing_" were more popular than the term "latent semantic analysis" that researchers now use.footnote:[I love Google Ngram Viewer for visualizing trends like this one: (http://mng.bz/ZoyA).]
+
+So, different words with similar meaning pose a problem for TF-IDF.
+But so do words that look similar, but mean very different things.
+Even formal English text written by an English professor can't avoid the fact that most English words have multiple meanings, a challenge for any new learner, including machine learners.
+This concept of words with multiple meanings is called _polysemy_.
+
+Here are some ways in which polysemy can affect the semantics of a word or statement.
+
+* Homonyms -- Words with the same spelling and pronunciation, but different meanings (For example: _The band was playing old Beatles' songs. Her hair band was very beautiful._ )
+
+* Homographs -- Words spelled the same, but with different pronunciations and meanings.(For example: _I object to this decision. I don't recognize this object._)
+
+* Zeugma -- Use of two meanings of a word simultaneously in the same sentence (For example: _Mr. Pickwick took his hat and his leave._)
+
+You can see how all of these phenomena will lower TF-IDF's performance, by making the TF-IDF vectors of sentences with similar words but different meanings being more similar to each other than they should be.
+To deal with these challenges, we need a more powerful tool.
+
+=== Topic vectors
+
+When you do math on TF-IDF vectors, such as addition and subtraction, these sums and differences only tell you about the frequency of word uses in the documents whose vectors you combined or differenced.
+That math doesn't tell you much about the "meaning" behind those words.
+You can compute word-to-word TF-IDF vectors (word co-occurrence or correlation vectors) by just multiplying your TF-IDF matrix by itself.
+But "vector reasoning" with these sparse, high-dimensional vectors doesn't work well.
+You when you add or subtract these vectors from each other, they don't represent an existing concept or word or topic well.
+
+So you need a way to extract some additional information, meaning, from word statistics.
+You need a better estimate of what the words in a document "signify."
+And you need to know what that combination of words *means* in a particular document.
+You'd like to represent that meaning with a vector that's like a TF-IDF vector, only more compact and more meaningful.
+
+Essentially, what you'll be doing when creating these new vectors is defining a new space.
+When you represent words and documents by TF-IDF or bag-of-words vectors, you are operating in a space defined by the words, or terms occuring in your document.
+There is a dimension for each term - that's why you easily reach several thousand dimensions.
+And every term is "orthogonal" to every other term - when you multiply the vector signifying one word with a vector representing another one, you always get a zero, even if these words are synonyms.
+
+The process of topic modeling is finding a space with fewer dimensions, so that words that are close semantically are aligned to similar dimensions.
+We will call these dimensions _topics_, and the vectors in the new space _topic vectors_.
+You can have as many topics as you like.
+Your topic space can have just one dimension, or thousands of dimensions.
+
+You can add and subtract the topic vectors you'll compute in this chapter just like any other vector.
+Only this time the sums and differences mean a lot more than they did with TF-IDF vectors.
+The distance or _similarity_ between topic vectors is useful for things like finding documents about similar subjects,or for semantic search.
+
+When you'll transform your vectors into the new space, you'll have one document-topic vector for each document in your corpus.
+You'll have one word-topic vector for each word in your lexicon (vocabulary).
+So you can compute the topic vector for any new document by just adding up all its word topic vectors.
+
+Coming up with a numerical representation of the semantics (meaning) of words and sentences can be tricky.
+This is especially true for "fuzzy" languages like English, which has multiple dialects and many different interpretations of the same words.
+
+Keeping these challenges in mind, can you imagine how you might squash a TF-IDF vector with one million dimensions (terms) down to a vector with 10 or 100 dimensions (topics)?
+This is like identifying the right mix of primary colors to try to reproduce the paint color in your apartment so you can cover over those nail holes in your wall.
+
+You'd need to find those word dimensions that "belong" together in a topic and add their TF-IDF values together to create a new number to represent the amount of that topic in a document.
+You might even weight them for how important they are to the topic, how much you'd like each word to contribute to the "mix."
+And you could have negative weights for words that reduce the likelihood that the text is about that topic.
+
+=== Thought experiment
+
+Let's walk through a thought experiment.
+Let's assume you have some TF-IDF vector for a particular document and you want to convert that to a topic vector.
+You can think about how much each word contributes to your topics.
+
+Let's say you're processing some sentences about pets in Central Park in New York City (NYC).
+Let's create three topics: one about pets, one about animals, and another about cities.
+Call these topics "petness", "animalness", and "cityness."
+So your "petness" topic about pets will score words like "cat" and "dog" significantly, but probably ignore words like "NYC" and "apple."
+The "cityness" topic will ignore words like "cat" and "dog" but might give a little weight to "apple", just because of the "Big Apple" association.
+
+If you "trained" your topic model like this, without using a computer, just your common sense, you might come up with some weights like those in Listing 4.1.
+
+.Sample weights for your topics
+[source,python]
+----
+>>> import numpy as np
+
+>>> topic = {}
+>>> tfidf = dict(list(zip('cat dog apple lion NYC love'.split(),
+...     np.random.rand(6))))  # <1>
+>>> topic['petness'] = (.3 * tfidf['cat'] +\
+...                     .3 * tfidf['dog'] +\
+...                      0 * tfidf['apple'] +\
+...                      0 * tfidf['lion'] -\
+...                     .2 * tfidf['NYC'] +\
+...                     .2 * tfidf['love'])  # <2>
+>>> topic['animalness']  = (.1 * tfidf['cat']  +\
+...                         .1 * tfidf['dog'] -\
+...                         .1 * tfidf['apple'] +\
+...                         .5 * tfidf['lion'] +\
+...                         .1 * tfidf['NYC'] -\
+...                         .1 * tfidf['love'])
+>>> topic['cityness']    = ( 0 * tfidf['cat']  -\
+...                         .1 * tfidf['dog'] +\
+...                         .2 * tfidf['apple'] -\
+...                         .1 * tfidf['lion'] +\
+...                         .5 * tfidf['NYC'] +\
+...                         .1 * tfidf['love'])
+----
+<1> This `tfidf` vector is just a random example, as if it were computed for a single document that contained these words in some random proportion.
+<2> "Hand-crafted" weights (.3, .3, 0, 0, -.2, .2) are multiplied by imaginary `tfidf` values to create `topic` vectors for your imaginary random document. You'll compute real topic vectors later.
+
+In this thought experiment, we added up the word frequencies that might be indicators of each of your topics.
+We weighted the word frequencies (TF-IDF values) by how likely the word is associated with a topic.
+Note that these weights can be negative as well for words that might be talking about something that is in some sense the opposite of your topic.
+
+Note this is not a real algorithm, or example implementation, just a thought experiment.
+You're just trying to figure out how you can teach a machine to think like you do.
+You arbitrarily chose to decompose your words and documents into only three topics ("petness", "animalness", and "cityness").
+And your vocabulary is limited, it has only six words in it.
+
+The next step is to think through how a human might decide mathematically which topics and words are connected, and what weights those connections should have.
+Once you decided on three topics to model, you then had to then decide how much to weight each word for those topics.
+You blended words in proportion to each other to make your topic "color mix."
+The topic modeling transformation (color mixing recipe) is a 3 x 6 matrix of proportions (weights) connecting three topics to six words.
+You multiplied that matrix by an imaginary 6 x 1 TF-IDF vector to get a 3 x 1 topic vector for that document.
+
+You made a judgment call that the terms "cat" and "dog" should have similar contributions to the "petness" topic (weight of .3).
+So the two values in the upper left of the matrix for your TF-IDF-to-topic transformation are both `.3`.
+Can you imagine ways you might "compute" these proportions with software?
+Remember, you have a bunch of documents your computer can read, tokenize, and count tokens for.
+You have TF-IDF vectors for as many documents as you like.
+Keep thinking about how you might use those counts to compute topic weights for a word as you read on.
+
+You decided that the term "NYC" should have a negative weight for the "petness" topic.
+In some sense city names, and proper names in general, and abbreviations, and acronyms, share little in common with words about pets.
+Think about what "sharing in common" means for words.
+Is there something in a TF-IDF matrix that represents the meaning that words share in common?
+
+Notice the small amount of the word "apple" into the topic vector for "city."
+This could be because you're doing this by hand and we humans know that "NYC" and "Big Apple" are often synonymous.
+Our semantic analysis algorithm will hopefully be able to calculate this synonymy between "apple" and "NYC" based on how often "apple" and "NYC" occur in the same documents.
+
+As you read the rest of the weighted sums in Listing 4.1, try to guess how we came up with these weights for these three topics and six words.
+You may have a different "corpus" in your head than the one we used in our heads.
+So you may have a different opinion about the "appropriate" weights for these words.
+How might you change them?
+What could you use as an objective measure of these proportions (weights)?
+We'll answer that question in the next section.
+
+[NOTE]
+====
+We chose a signed weighting of words to produce the topic vectors.
+This allows you to use negative weights for words that are the "opposite" of a topic.
+And because you're doing this manually by hand, we chose to normalize your topic vectors by the easy-to-compute L^1^-norm (meaning the sum of absolute values of the vector dimensions equals 1).
+Nonetheless, the real LSA you'll use later in this chapter normalizes topic vectors by the more useful L^2^-norm.
+We'll cover the different norms and distances later in this chapter.
+====
+
+You might have realized in reading these vectors that the relationships between words and topics can be "flipped."
+The 3 x 6 matrix of three topic vectors can be transposed to produce topic weights for each word in your vocabulary.
+These vectors of weights would be your word vectors for your six words:
+
+[source,python]
+----
+>>> word_vector = {}
+>>> word_vector['cat']  =  .3*topic['petness'] +\
+...                        .1*topic['animalness'] +\
+...                         0*topic['cityness']
+>>> word_vector['dog']  =  .3*topic['petness'] +\
+...                        .1*topic['animalness'] -\
+...                        .1*topic['cityness']
+>>> word_vector['apple']=   0*topic['petness'] -\
+...                        .1*topic['animalness'] +\
+...                        .2*topic['cityness']
+>>> word_vector['lion'] =   0*topic['petness'] +\
+...                        .5*topic['animalness'] -\
+...                        .1*topic['cityness']
+>>> word_vector['NYC']  = -.2*topic['petness'] +\
+...                        .1*topic['animalness'] +\
+...                        .5*topic['cityness']
+>>> word_vector['love'] =  .2*topic['petness'] -\
+...                        .1*topic['animalness'] +\
+...                        .1*topic['cityness']
+----
+
+These six word-topic vectors shown in Figure <<six-lovable-words>>, one for each word, represent the meanings of your six words as 3D vectors.
+
+[id=six-lovable-words, reftext={chapter}.{counter:figure}]
+.3D vectors for a thought experiment about six words about pets and NYC
+image::../images/ch04/cats_and_dogs_petness_3D.png["3D plot of six word vectors indicating their x-axis petness, y-axis animalness, and z-axis cityness by their position and listing their weights as 3-tuple of numbers, their x-y-z coordinates",width=650,align="center",link="../images/ch04/cats_and_dogs_petness_3D.png"]
+
+Earlier, the vectors for each topic, with weights for each word, gave you 6-D vectors representing the linear combination of words in your three topics.
+Now, you hand-crafted a way to represent a document by its topics.
+If you just count up occurrences of these six words and multiply them by your weights, you get the 3D topic vector for any document.
+And 3D vectors are fun because they're easy for humans to visualize.
+You can plot them and share insights about your corpus or a particular document in graphical form.
+
+3D vectors (or any low-dimensional vector space) are great for machine learning classification problems, too.
+An algorithm can slice through the vector space with a plane (or hyperplane) to divide up the space into classes.
+
+The documents in your corpus might use many more words, but this particular topic vector model will only be influenced by the use of these six words.
+You could extend this approach to as many words as you had the patience (or an algorithm) for.
+As long as your model only needed to separate documents according to three different dimensions or topics, your vocabulary could keep growing as much as you like.
+In the thought experiment, you compressed six dimensions (TF-IDF normalized frequencies) into three dimensions (topics).
+
+This subjective, labor-intensive approach to semantic analysis relies on human intuition and common sense to break documents down into topics.
+Common sense is hard to code into an algorithm.footnote:[Doug Lenat at Stanford is trying to do just that, code common sense into an algorithm. See the Wired Magazine article "Doug Lenat's Artificial Intelligence Common Sense Engine" (https://www.wired.com/2016/03/doug-lenat-artificial-intelligence-common-sense-engine).]
+And obviously this isn't suitable for a machine learning pipeline.
+Plus it doesn't scale well to more topics and words.
+
+So let's automate this manual procedure.
+Let's use an algorithm that doesn't rely on common sense to select topic weights for us.
+
+If you think about it, each of these weighted sums is just a dot product.
+And three dot products (weighted sums) is just a matrix multiplication, or inner product.
+You multiply a 3 x _n_ weight matrix with a TF-IDF vector (one value for each word in a document), where _n_ is the number of terms in your vocabulary.
+The output of this multiplication is a new 3 x 1 topic vector for that document.
+What you've done is "transform" a vector from one vector space (TF-IDFs) to another lower-dimensional vector space (topic vectors).
+Your algorithm should create a matrix of _n_ terms by _m_ topics that you can multiply by a vector of the word frequencies in a document to get your new topic vector for that document.
+
+=== Algorithms for scoring topics
+
+You still need an algorithmic way to determine these topic vectors, or to derive them from vectors you already have - like TF-IDF or bag-of-words (BOW) vectors.
+A machine can't tell which words belong together or what any of them signify, can it?
+J. R. Firth, a 20th century British linguist, studied the ways you can estimate what a word or morpheme footnote:[A _morpheme_ is the smallest meaningful parts of a word. See Wikipedia article "Morpheme" (https://en.wikipedia.org/wiki/Morpheme).] signifies.
+In 1957 he gave you a clue about how to compute the topics for words. Firth wrote:
+
+[quote, J. R. Firth, 1957]
+You shall know a word by the company it keeps.
+
+So how do you tell the "company" of a word?
+Well, the most straightforward approach would be to count co-occurrences in the same document.
+And you have exactly what you need for that in your BOW and TF-IDF vectors from chapter 3.
+This "counting co-occurrences" approach led to the development of several algorithms for creating vectors to represent the statistics of word usage within documents or sentences.
+
+In the next sections, you'll see 2 algorithms for creating these topic vectors.
+The first one, _Latent Semantic Analysis_ (LSA), is applied to your TF-IDF matrix to gather up words into topics.
+It works on bag-of-words vectors, too, but TF-IDF vectors give slightly better results.
+LSA optimizes these topics to maintain diversity in the topic dimensions; when you use these new topics instead of the original words, you still capture much of the meaning (semantics) of the documents.
+The number of topics you need for your model to capture the meaning of your documents is far less than the number of words in the vocabulary of your TF-IDF vectors.
+So LSA is often referred to as a dimension reduction technique.
+LSA reduces the number of dimensions you need to capture the meaning of your documents.footnote:[The wikipedia page for topic models has a video that shows the intuition behind LSA. https://upload.wikimedia.org/wikipedia/commons/7/70/Topic_model_scheme.webm#t=00:00:01,00:00:17.600]
+
+The other algorithm we'll cover is called _Latent Dirichlet Allocation_, often shortened to LDA.
+Because we use LDA to signify Latent Discriminant Analysis classifier in this book, we will shorten Latent Dirichlet Allocation to LDiA instead.
+
+LDiA takes the math of LSA in a different direction.
+It uses a nonlinear statistical algorithm to group words together.
+As a result, it generally takes much longer to train than linear approaches like LSA.
+Often this makes LDiA less practical for many real-world applications, and it should rarely be the first approach you try.
+Nonetheless, the statistics of the topics it creates sometimes more closely mirror human intuition about words and topics.
+So LDiA topics will often be easier for you to explain to your boss.
+It is also more useful for some single-document problems such as document summarization.
+
+For most classification or regression problems, you’re usually better off using LSA.
+So we explain LSA and its underlying SVD linear algebra first.
+
+== The challenge: detecting toxicity
+
+To see the power of topic modeling, we'll try to solve a real problem: recognizing toxicity in Wikipedia comments.
+This is a common NLP task that content and social media platforms face nowadays.
+Throughout this chapter, we'll work on a dataset of Wikipedia discussion comments,footnote:[The larger version of this dataset was a basis for a Kaggle competition in 2017(https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge), and was released by Jigsaw under CC0 license.] which we'll want to classify into two categories - toxic and non-toxic.
+First, let's load our dataset and take a look at it:
+
+.The toxic comment dataset
+[source,python]
+----
+>>> import pandas as pd
+>>> pd.options.display.width = 120  # <1>
+>>> DATA_DIR = ('https://gitlab.com/tangibleai/nlpia/-/raw/master/'
+...             'src/nlpia/data')
+>>> url= DATA_DIR + '/toxic_comment_small.csv'
+>>>
+>>> comments = pd.read_csv(url)
+>>> index = ['comment{}{}'.format(i, '!'*j) for (i,j) in
+...          zip(range(len(comments)), comments.toxic)
+...         ]  # <2>
+>>> comments = pd.DataFrame(
+...     comments.values, columns=comments.columns, index=index)
+>>> mask = comments.toxic.astype(bool).values
+>>> comments['toxic'] = comments.toxic.astype(int)
+>>> len(comments)
+5000
+>>> comments.toxic.sum()
+650
+>>> comments.head(6)
+                                                        text  toxic
+comment0   you have yet to identify where my edits violat...      0
+comment1   "\n as i have already said,wp:rfc or wp:ani. (...      0
+comment2   your vote on wikiquote simple english when it ...      0
+comment3   your stalking of my edits i've opened a thread...      0
+comment4!  straight from the smear site itself. the perso...      1
+comment5   no, i can't see it either - and i've gone back...      0
+----
+<1> To display more of the comment text within a Pandas DataFrame printout.
+<2> To help you recognize toxic comments you can append an exclamation point ("!") to their label.
+
+So you have 5,000 comments, and 650 of them are labeled with the binary class label "toxic."
+
+Before you dive into all the fancy dimensionality reduction stuff, let's try to solve our classification problem using vector representations for the messages that you are already familiar with - TF-IDF.
+But what _model_ will you choose to classify the messages?
+To decide, let's look at the TF-IDF vectors first.
+
+.Creating TF-IDF vectors for the SMS dataset
+[source,python]
+----
+>>> from sklearn.feature_extraction.text import TfidfVectorizer
+>>> import spacy
+>>> nlp = spacy.load("en_core_web_sm")
+>>>
+>>> def spacy_tokenize(sentence):
+...    return [token.text for token in nlp(sentence.lower())]
+>>>
+>>> tfidf_model = TfidfVectorizer(tokenizer=spacy_tokenize)
+>>> tfidf_docs = tfidf_model.fit_transform(\
+...     raw_documents=comments.text).toarray()
+>>> tfidf_docs.shape
+(5000, 19169)
+----
+
+The spaCy tokenizer gave you 19,169 words in your vocabulary.
+You have almost 4 times as many words as you have messages.
+And you have almost 30 times as many words as toxic comments.
+So your model will not have a lot of information about the words that will indicate whether a comment is toxic or not.
+
+You have already met at least one classifier in this book - Naive Bayes in chapter 2.
+Usually, a Naive Bayes classifier will not work well when your vocabulary is much larger than the number of labeled examples in your dataset.
+So we need something different this time.
+
+=== Latent Discriminant Analysis classifier
+
+In this chapter, we're going to introduce a classifier that is based on an algorithm called Latent Discriminant Analysis (LDA).
+LDA is one of the most straightforward and fast classification models you’ll find, and it requires fewer samples than the fancier algorithms.
+
+The input to LDA will be a labeled data - so we need not just the vectors representing the messages, but their class too.
+In this case, we have two classes - toxic comments and non-toxic comments.
+LDA algorithm uses some math that beyond the scope of this book, but in the case of two classes, its implementation is pretty intuitive.
+
+In essence, this is what LDA algorithm does when faced with a two-class problem:
+
+1. It finds a line, or axis, in your vector space, such that if you project all the vectors (data points) in the space on that axis, the two classes would be as separated as possible.
+2. It projects all the vectors on that line.
+3. It predicts the probability of each vector to belong to one of two classes, according to a _cutoff_ point between the two classes.
+
+Surprisingly, in the majority of cases, the line that maximizes class separation is very close to the line that connects the two _centroids_ footnote:[A centroid of a cluster is a point whose coordinates are the average of the coordinates of all the points in that cluster.] of the clusters representing each class.
+
+Let's perform manually this approximation of LDA, and see how it does on our dataset.
+
+[source,python]
+----
+>>> mask = comments.toxic.astype(bool).values  # <1>
+>>> toxic_centroid = tfidf_docs[mask].mean(axis=0)  # <2>
+>>> nontoxic_centroid = tfidf_docs[~mask].mean(axis=0)  # <3>
+
+----
+<1> You can use this mask to select only the toxic comment rows from a `numpy.array` or `pandas.DataFrame`.
+<2> Because your TF-IDF vectors are *row* vectors, you need to make sure numpy computes the mean for each column (or dimension) independently using `axis=0`.
+<3> You can invert the mask to choose all nontoxic messages by using the tilde (~) operator for "not".
+// ~
+Now you can subtract one centroid from the other to get the line between them, and calculate each vector's toxicity.
+
+[source,python]
+----
+>>> centroid_axis = toxic_centroid - nontoxic_centroid
+>>> toxicity_score = tfidf_docs.dot(centroid_axis)  # <1>
+>>> toxicity_score.round(3)
+array([-0.008, -0.022, -0.014, ..., -0.025, -0.001, -0.022])
+----
+<1> `toxicity_score` is the embedding vector's shadow (projection) along the line from the nontoxic centroid to the toxic centroid.
+
+The toxicity score for a particular comment is the length of the shadow (projection) of that comment's vector along the line between the nontoxic and nontoxic comments.
+You compute these projections just as you did for the cosine distance.
+It is the normalized dot product of the comment's vector with the vector pointing from nontoxic comments towards toxic comments.
+You calculated the toxicity score by projecting each TF-IDF vector onto that line between the centroids using the dot product.
+And you did those 5,000 dot products all at once in a "vectorized" numpy operation using the `.dot()` method.
+This can speed things up 100 times compared to a Python `for` loop.
+
+You have just one step left in our classification.
+You need to transform our score into the actual class prediction.
+Ideally, you'd like your score to range between 0 and 1, like a probability.
+Once you have the scores normalized, you can deduce the classification from the score based on a cutoff - here, we went with a simple 0.5
+You can use `sklearn` `MinMaxScaler` to perform the normalization:
+
+[source,python]
+----
+>>> from sklearn.preprocessing import MinMaxScaler
+>>> comments['manual_score'] = MinMaxScaler().fit_transform(\
+...     toxicity_score.reshape(-1,1))
+>>> comments['manual_predict'] = (comments.manual_score > .5).astype(int)
+>>> comments['toxic manual_predict manual_score'.split()].round(2).head(6)
+           toxic  manual_predict  manual_score
+comment0       0               0          0.41
+comment1       0               0          0.27
+comment2       0               0          0.35
+comment3       0               0          0.47
+comment4!      1               0          0.48
+comment5       0               0          0.31
+----
+
+That looks pretty good.
+Almost all of the first six messages were classified correctly.
+Let's see how it did on the rest of the training set.
+
+[source,python]
+----
+>>> (1 - (comments.toxic - comments.manual_predict).abs().sum() 
+...     / len(comments))
+0.895...
+----
+
+Not bad!
+89.5% of the messages were classified correctly with this simple "approximate" version of LDA.
+How will the "full" LDA do?
+Use SciKit Learn (`sklearn`) to get a state-of-the art LDA implementation.
+
+[source,python]
+----
+>>> from sklearn import discriminant_analysis
+>>> lda_tfidf = discriminant_analysis.LinearDiscriminantAnalysis
+>>> lda_tfidf = lda_tfidf.fit(tfidf_docs, comments['toxic'])
+>>> comments['tfidf_predict'] = lda_tfidf.predict(tfidf_docs)
+>>> float(lda_tfidf.score(tfidf_docs, comments['toxic']))
+0.999...
+----
+
+99.9%!
+Almost perfect accuracy.
+Does this mean you don't need to use fancier topic modeling algorithms like Latent Dirichlet Allocation or deep learning?
+This is a trick question.
+You have probably already figured out the trap.
+The reason for this perfect 99.9% result is that we haven't separated out a test set.
+This A+ score is on "questions" that the classifier has already "seen."
+This is like getting an exam in school with the exact same questions that you practiced on the day before.
+So this model probably wouldn't do well in the real world of trolls and spammers.
+
+[TIP]
+====
+Note the class methods you used in order to train and make predictions.
+Every model in `sklearn` has those same methods: `fit()` and `predict()`.
+And all classifier models will even have a `predict_proba()` method that gives you the probability scores for all the classes.
+That makes it easier to swap out different model algorithms as you try to find the best ones for solving your machine learning problems.
+That way you can save your brainpower for the creative work of an NLP engineer, tuning your model hyperparameters to work in the real world.
+====
+
+Let's see how our classifier does in a more realistic situation.
+You'll split your comment dataset into 2 parts - training set and testing set.
+(As you can imagine, there is a function in `sklearn` just for that!)
+And you'll see how the classifier performs on the messages it wasn't trained on.
+
+.LDA model performance with train-test split
+[source,python]
+----
+>>> from sklearn.model_selection import train_test_split
+>>> X_train, X_test, y_train, y_test = train_test_split(tfidf_docs,\
+...     comments.toxic.values, test_size=0.5, random_state=271828)
+>>> lda_tfidf = LDA(n_components=1)
+>>> lda = lda_tfidf.fit(X_train, y_train)  # <1>
+>>> round(float(lda.score(X_train, y_train)), 3)
+0.999
+>>> round(float(lda.score(X_test, y_test)), 3)
+0.554
+----
+<1> Fitting an LDA model to all these thousands of features will take quite a long time. Be patient, it's slicing up your vector space with a 20k-dimension hyperplane!
+
+The training set accuracy for your TF-IDF based model is almost perfect.
+But the test set accuracy is 0.55 - a bit better than flipping a coin.
+And test set accuracy is the only accuracy that counts.
+This is exactly what topic modeling will help you.
+It will allow you to generalize your models from a small training set so it still works well on messages using different combinations of words (but similar topics).
+
+[TIP]
+====
+Note the `random_state` parameter for the `train_test_split`
+The algorithm for `train_test_split()` are stochastic.
+So each time you run it you will get different results and different accuracy values.
+If you want to make your pipeline repeatable, look for the `seed` argument for these models and dataset splitters.
+You can set the seed to the same value with each run to get reproducible results.
+====
+
+Let's look a bit deeper at how our LDA model did, using a tool called _confusion matrix_.
+It will you the comments that it labeled as toxic that weren't toxic (false positives), and the ones that were labeled as non-toxic that should have been labeled toxic (false negatives).
+Here's how you do it with an `sklearn function`:
+
+[source,python]
+----
+>>> from sklearn.metrics import confusion_matrix
+>>> confusion_matrix(y_test, lda.predict(X_test))
+array([[1261,  913],
+       [ 201,  125]], dtype=int64)
+----
+
+Hmmm.
+It's not exactly clear what's going on here.
+Fortunately, `sklearn` have taken into account that you might need a more visual way to present your confusion matrix to people, and included a function just for that.
+Let's try it out:
+
+[source,python]
+----
+>>> import matplotlib.pyplot as plt
+>>> from sklearn.metrics import plot_confusion_matrix
+>>> plot_confusion_matrix(lda,X_test, y_test, cmap="Greys",
+...                display_labels=['non-toxic', 'toxic'], colorbar=False)
+>>> plt.show()
+----
+
+You can see the resulting `matplotlib` plot on Fig. 4.3.
+Now, that's a bit clearer.
+From this plot, you can see what's problematic with your model's performace.
+
+[id=confusion-matrix, reftext={chapter}.{counter:figure}]
+.Confusion matrix of TF-IDF based classifier
+image::../images/ch04/lda_tfidf_confusion_matrix.png[Result of 'sklearn` `plot_confusion_matrix()` function for TF-IDF based classifier,width=350,align="center",link="../images/ch04/lda_tfidf_confusion_matrix.png"]
+
+[id=confusion-matrix, reftext={chapter}.{counter:figure}]
+.Confusion matrix of TF-IDF based classifier
+image::../images/ch04/lda_tfidf_confusion_matrix_guide.png["Diagram with labels for the four quadrants in a confusion matrix, similar to the Wikipedia article 'Confusion Matrix'. Lower right quadrant is labeled True Positive (TP). Upper left quadrant is True (correct) Negative.  Upper right is False (incorrect) Positive (FP). Lower left is  ",width=350,align="center",link="../images/ch04/lda_tfidf_confusion_matrix.png"]
+
+First of all, out of 326 comments in the test set that were actually toxic, the model was able to identify correctly only 125 - that's 38.3%.
+This measure (how many of the instances of the class we're interested in the model was able to identify), is called _recall_, or _sensitivity_.
+On the other hand, out of 1038 comments the model labeled as toxic, only 125 are truly toxic comments.
+So the "positive" label is only correct in 12% of cases.
+This measure is called _precision_.footnote:[To gain some more intuition about precision and recall, Wikipedia's article (https://en.wikipedia.org/wiki/Precision_and_recall) has some good visuals.]
+
+You can already see how precision and recall give us more information than model accuracy.
+For example, imagine that instead of using machine learning models, you decided to use a deterministic rule and just label all the comments as non-toxic.
+As about 13% of comments in our dataset are actually toxic, this model will have accuracy of 0.87 - much better than the last LDA model you trained!
+However, its recall is going to be 0 - it doesn't help you at all in our task, which is to identify toxic messages.
+
+You might also realize that there is a tradeoff between these two measures.
+What if you went with another deterministic rule and labeled all the comments as toxic?
+In this case, your recall would be perfect, as you would correctly classify all the toxic comments.
+However, the precision will suffer, as most of the comments labeled as toxic will actually be perfectly OK.
+
+Depending our your use case, you might decide to prioritize either precision or recall on top of the other.
+But in a lot of cases, you would want both of them to be reasonably good.
+
+In this case, you're likely to use the _F~1~ score_ - a harmonic mean of precision and recall.
+Higher precision and higher recall both lead to a higher F~1~ score, making it easier to benchmark your models with just one metric.footnote:[You can read more about the reasons _not_ to use F~1~ score in some cases, and about alternative metrics in the Wikipedia article: https://en.wikipedia.org/wiki/F-score ]
+
+You can learn more about analyzing your classifier's performance in Appendix D.
+For now, we will just note this model's F~1~ score before we continue on.
+
+=== Going beyond linear
+
+LDA is going to serve you well in many circumstances.
+However, it still has some assumptions that will cause the classifier to underperform when these assumptions are not fulfilled.
+For example, LDA assumes that the feature covariance matrices for all of your classes are the same.
+That's a pretty strong assumption!
+As a result of it, LDA can only learn linear boundaries between classes.
+
+If you need to relax this assumption, you can use a more general case of LDA called _Quadratic Discriminant Analysis_, or QDA.
+QDA allows different covariance matrices for different classes, and estimates each covariance matrix separately.
+That's why it can learn quadratic, or curved, boundaries.footnote:[You can see a visual example of the two estimator's in Scikit-Learn's documentation: https://scikit-learn.org/dev/modules/lda_qda.html]
+That makes it more flexible, and helps it to perform better in some cases.
+
+== Reducing dimensions
+
+Before we dive into LSA, let's take a moment to understand what, conceptually, it does to our data.
+The idea behind LSA's approach to topic modeling is _dimensionality reduction_.
+As its name suggests, dimensionality reduction is a process in which we find a lower-dimensional representation of data that retains as much information as possible.
+
+Let's examine this definition and understand what it means.
+To give you an intuition, let's step away from NLP for a moment and switch to more visual examples.
+First, what's a lower-dimension representation of data?
+Think about taking a 3-D object (like your sofa) and representing it in 2-D space.
+For example, if you shine a light behind your sofa in a dark room, its shadow on the wall is its two-dimensional representation.
+
+Why would we want such a representation?
+There might be many reasons.
+Maybe we don't have the capacity to store or transmit the full data as it is.
+Or maybe we want to visualize our data to understand it better.
+You already saw the power of visualizing your data points and clustering them when we talked about LDA.
+But our brain can't really work with more than 2 or 3 dimensions - and when we're dealing with real-world data, especially natural language data, our datasets might have hundreds or even thousands of dimensions.
+Dimensionality reduction tools like PCA are very useful when we want to simplify and visually map our dataset.
+
+Another important reason is the curse of dimensionality we briefly mentioned in chapter 3.
+Sparse, multidimensional data is harder to work with, and classifiers trained on it are more prone to overfitting.
+A rule of thumb that's often used by data scientists is that there should be at least 5 records for every dimension.
+We've already seen that even for small text datasets, TF-IDF matrices can quickly push into 10 or 20 thousand dimensions.
+And that's true for many other types of data, too.
+
+From the "sofa shadow" example, you can see that we can build infinitely many lower-dimensional representations of the same "original" dataset.
+But some representations are better than others.
+What does "better" mean in this case?
+When talking about visual data, you can intuitively understand that a representation that allows us to recognize the object is better than one that doesn't.
+For example, let's take a point cloud that was taken from a 3D scan of a real object, and project it onto a two dimensional plane.
+
+You can see the result in Figure 4.3.
+Can you guess what the 3D object was from that representation?
+
+[id=up-from-below-the, reftext={chapter}.{counter:figure}]
+.Looking up from below the "belly" at the point cloud for a real object
+image::../images/ch04/3d-pointcloud-bottom.png[Looking up from below the "belly" at the point cloud for a real object,width=650,align="center",link="../images/ch04/3d-pointcloud-bottom.png"]
+
+To continue our "shadows" analogy, think about the midday sun shining above the heads of a group of people.
+Every person's shadow would be a round patch.
+Would we be able to use those patches to tell who is tall and who is short, or which people have long hair?
+Probably not.
+
+Now you understand that good dimensionality reduction has to do with being able to _distinguish_ between different objects and data points in the new representation.
+And that not all features, or dimensions, of your data are equally important for that process of distinguishing.
+So there will be features which you can easily discard without losing much information.
+But for some features, losing them will significantly hurt your ability to understand your data.
+And because you are dealing with linear algebra here, you don't only have the option of leaving out or including a dimension - you can also combine several dimensions into a smaller dimension set that will represent our data in a more concise way.
+Let's see how we do that.
+
+=== Enter Principal Component Analysis
+You now know that to find your data's representation in fewer dimensions, you need to find a combination of dimensions that will preserve your ability to distinguish between data points.
+This will let you, for example, to separate them into meaningful clusters.
+To continue the shadow example, a good "shadow representation" allows you to see where is the head and where are the legs of your shadow.
+It does it by preserving the difference in height between these objects, rather than "squishing them" into one spot like the "midday sun representation" does.
+On the other hand, our body's "thickness" is roughly uniform from top to bottom - so when you see our "flat" shadow representation, that discards that dimension, you don't lose as much information as in the case of discarding our height.
+
+In mathematics, this difference is represented by _variance_.
+And when you think about it makes sense that features with _more_ variance - wider and more frequent deviation from the mean - are more helpful for you to tell the difference between data points.
+
+But you can go beyond looking at each feature by itself.
+What matters also is how the features relate between each other.
+Here, the visual analogies may start to fail you, because the three dimensions we operate in are orthogonal to each other, and thus completely unrelated.
+But let's think back about your topic vectors you saw in the previous part: "animalness", "petness", "cityness".
+If you examine every two features among this triad, it becomes obvious that some features are more strongly connected than others.
+Most words that have a "petness" quality to them, also have some "animalness" one.
+This property of a pair of features, or dimensions, is called _covariance_.
+It is strongly connected to _correlation_, which is just covariance normalized by the variance of each feature in the tandem.
+The higher the covariance between features, the more connected they are - and therefore, there is more redundancy between the two of them, as you can deduce one from the other.
+It also means that you can find a single dimension that preserves most of the variance contained in these two dimensions.
+
+To summarize, to reduce the number of dimensions describing our data without losing information, you need to find a representation that _maximizes_ the variance along each of its new axes, while reducing the dependence between the dimensions and getting rid of those with high covariance.
+This is exactly what _Principal Component Analysis_, or PCA, does.
+It finds a set of dimensions along which the variance is maximized.
+These dimensions are _orthonormal_ (like _x,y_ and _z_ axes in the physical world) and are called _principal components_ - hence the name of the method.
+PCA also allows you to see how much variance each dimension "is responsible for", so that you can choose the optimal number of principal components that preserve the "essence" of your data set.
+PCA then takes your data and projects it into a new set of coordinates.
+
+Before we dive into how PCA does that, let's see the magic in action.
+In the following listing, you will use the PCA method of Scikit-Learn to take the same 3D point cloud you've seen on the last page, and find a set of two dimensions that will maximize the variance of this point cloud.
+
+.PCA Magic
+[source,python]
+----
+>>> import pandas as pd
+>>> pd.set_option('display.max_columns', 6)  # <1>
+>>> from sklearn.decomposition import PCA
+>>> import seaborn
+>>> from matplotlib import pyplot as plt
+
+>>> DATA_DIR = ('https://gitlab.com/tangibleai/nlpia/'
+...             '-/raw/master/src/nlpia/data')
+
+>>> df = pd.read_csv(DATA_DIR + '/pointcloud.csv.gz', index_col=0)
+>>> pca = PCA(n_components=2)  # <3>
+>>> df2d = pd.DataFrame(pca.fit_transform(df), columns=list('xy'))
+>>> df2d.plot(kind='scatter', x='x', y='y')
+>>> plt.show()
+----
+<1> The result of running this code may look like a picture on the right or the left of figure 4.4, but it will never tip or twist to a new angle.
+That's because PCA always finds the two dimensions that will maximize the variance, and in the code we align these dimensions with x and y axes.
+However the _polarity_ (sign) of these axes is arbitrary because the optimization has two remaining degrees of freedom.
+The optimization is free to flip the polarity of the vectors (points) along the x or y axis, or both.
+//^^added <1>, not sure about formatting for the sentences after
+
+[id=head-to-head, reftext={chapter}.{counter:figure}]
+.Head-to-head horse point clouds upside down
+image::../images/ch04/two-horses.png[Head to head horse point clouds upside down,width=100%,align="center",link="../images/ch04/two-horses.png"]
+
+Now that we've seen PCA in the works,footnote:[To understand dimensionality reduction more in depth, check out this great 4-part post series by Hussein Abdullatif: http://mng.bz/RlRv] let's take a look at how it finds those principal components that allow us to work with our data in fewer dimensions without losing much information.
+
+=== Singular Value Decomposition
+At the heart of PCA is a mathematical procedure called Singular Value Decomposition, or SVD.footnote:[There are actually two main ways to perform PCA; you can dig into the Wikipedia article for PCA (https://en.wikipedia.org/wiki/Principal_component_analysis#Singular_value_decomposition) and see what the other method is and how the two basically yield an almost identical result.]
+SVD is an algorithm for decomposing any matrix into three "factors", three matrices that can be multiplied together to recreate the original matrix.
+This is analogous to finding exactly three integer factors for a large integer.
+But your factors aren't scalar integers, they are 2D real matrices with special properties.
+
+Let's say we have our dataset, consisting of _m_ n-dimensional points, represented by a matrix W.
+In its full version, this is what SVD of W would look like in math notation (assuming _m>n_):
+
+W~m~ ~x~ ~n~ = U~m~ ~x~ ~m~ S~m~ ~x~ ~n~ V~n~ ~x~ ~n~^T^
+
+The matrices U, S and V have special properties.
+U and V matrices are _orthogonal_, meaning that if you multiply them by their transposed versions, you'll get a unit matrix.
+And S is _diagonal_, meaning that it has non-zero values only on its diagonal.
+
+Note the equality sign in this formula.
+It means that if you multiply U, S and V, you'll get _exactly_ W, our original dataset.
+But you can see that the smallest dimension of our matrices is still _n_.
+Didn't we want to reduce the number of dimensions?
+That's why in this chapter, you'll be using the version of SVD called _reduced_, or _truncated_ SVD.footnote:[To learn more about _Full_ SVD and its other applications, you can read the Wikipedia article: https://en.wikipedia.org/wiki/Singular_value_decomposition]
+That means that you'll only looking for the top _p_ dimensions that you're interested in.
+
+At this point you could say "Wait, but couldn't we do the full SVD and just take the dimensions that preserve maximum variance?"
+And you'll be completely right, we could do it this way!
+However, there are other benefits to using truncated SVD.
+In particular, there are several algorithms that allow computing truncated SVD decomposition of the matrix pretty fast, especially when the matrice is sparse.
+_Sparse matrices_ are matrices that have the same value (usually zero or NaN) in most of its cells.
+NLP bag-of-words and TF-IDF matrices are almost always sparse because most documents don't contain many of the words in your vocabulary.
+
+This is what truncated SVD looks like:
+
+W~m~ ~x~ ~n~ ~ U~m~ ~x~ ~p~ S~p~ ~x~ ~p~ V~p~ ~x~ ~n~^T^
+//~
+In this formula, _m_ and _n_ are the number of rows and columns in the original matrix, while _p_ is the number of dimensions you want to keep.
+For example, in the horse example, _p_ would be equal to two if we want to display the horse in a two-dimensional space.
+In the next chapter, when you'll use SVD for LSA, it will signify the number of topics you want to use while analyzing your documents.
+Of course, _p_ needs to be lesser than both _m_ and _n_.
+
+Note the "approximately equal" sign in this case - because we're losing dimensions, we can't expect to get exactly the same matrix when we multiply our factors!
+There's always some loss of information.
+What we're gaining, though, is a new way to represent our data with fewer dimensions than the original representation.
+With our horse point cloud, we are now able to convey its "horsy" essence without needing to print voluminous 3-D plots.
+And when PCA is used in real life, it can simplify hundred- or thousand-dimensional data into short vectors that are easier to analyze, cluster and visualize.
+
+So, what are the matrices U,S and V useful for?
+For now, we'll give you a simple intuition of their roles.
+In the next chapter, we'll dive deeper into these matrices' application when we talk about LSA.
+
+Let's start with _V^T^_ - or rather, with its transposed version _V_.
+_V_ matrix's columns are sometimes called _principal directions_, and sometimes _principal components_.
+As Scikit-Learn library, which you utilize in this chapter, uses the latter convention, we're going to stick to it as well.
+
+You can think of _V_ as a "transformer" tool, that is used to map your data from the "old" space (its representation in matrix W's "world") to the new, lower dimensional one.
+Imagine our we added a few more points to our 3D horse point cloud and now want to understand where those new points would be in our 2D representation, without needing to recalculate the transformation for all the points.
+To map every new point _q_ to its location on a 2D plot, all you need to do is to multiply it by V:
+
+//stem:[\hat{q} = q \cdot V]
+
+`{sub1}`
+
+What is, then the meaning of _{sub2}_?
+//stem:[U \cdot S]
+With some algebra wizardry, you can see that it is actually your data mapped into the new space!
+Basically, it your data points in new, lesser-dimensional representation.
+
+== Latent Semantic Analysis
+Finally, we can stop "horsing around" and get back to topic modeling!
+Let's see how everything you've learned about dimensionality reduction, PCA and SVD will start making sense when we talk about finding topics and concepts in our text data.
+
+Let's start with the dataset itself.
+You'll use the same comment corpus you used for the LDA classifier in section 4.1, and transform it into a matrix using TF-IDF.
+You might remember that the result is called a term-document matrix.
+This name is useful because it gives you an intuition on what the rows and the columns of the matrix contain: the rows would be terms, your vocabulary words; and the columns will be documents.
+
+Let's re-run listings 4.1 and 4.2 to get to our TF-IDF matrix again.
+Before diving into LSA, we examined the matrix shape:
+
+[source,python]
+----
+>>> tfidf_docs.shape
+(5000, 19169)
+----
+
+So what do you have here?
+A 19,169-dimensional dataset, whose "space" is defined by the terms in the corpus vocabulary.
+It's quite a hassle to work with a single vector representation of comments in this space, because there are almost 20,000 numbers to work with in each vector - longer than the message itself!
+It's also hard to see if the messages, or sentences inside them, are similar conceptually - for example, expressions like "leave this page" and "go away" will have very low similarity score, despite their meanings being very close to each other.
+So it's much harder to cluster and classify documents in the way it's represented in TF-IDF matrix.
+
+Also note that only 650 of your 5,000 messages (13%) are labeled as toxic.
+So you have an unbalanced training set with about 8:1 normal comments to toxic comments (personal attacks, obscenity, racial slurs, etc.).
+And you have a large vocabulary - the number of your vocabulary tokens (25172) is greater than the 4,837 messages (samples) you have to go on.
+So you have many more unique words in your vocabulary (or lexicon) than you have comments, and even more when you compare it to the number of toxic messages.
+That's a recipe for overfitting.footnote:[See the web page titled "Overfitting - Wikipedia" (https://en.wikipedia.org/wiki/Overfitting).]
+Only a few unique words out of your large vocabulary will be labeled as "toxic" words in your dataset.
+
+Overfitting means that you will "key" off of only a few words in your vocabulary.
+So your toxicity filter will be dependent on those toxic words being somewhere in the toxic messages it filters out.
+Trolls could easily get around your filter if they just used synonyms for those toxic words.
+If your vocabulary doesn't include the new synonyms, then your filter will misclassify those cleverly constructed comments as non-toxic.
+
+And this overfitting problem is an inherent problem in NLP.
+It's hard to find a labeled natural language dataset that includes all the ways that people might say something that should be labeled that way.
+We couldn't find an "ideal" set of comments that included all the different ways people say toxic and nontoxic things.
+And only a few corporations have the resources to create such a dataset.
+So all the rest of us need to have "countermeasures" for overfitting.
+You have to use algorithms that "generalize" well on just a few examples.
+
+The primary countermeasure to overfitting is to map this data into a new, lower-dimensional space.
+What will define this new space are weighted combinations of words, or _topics_, that your corpus talks about in a variety of ways.
+Representing your messages using topics, rather than specific term frequency, will make your NLP pipeline more "general", and allow our spam filter to work on a wider range of messages.
+That's exactly what LSA does - it finds the new topic "dimensions", along which variance is maximized, using SVD method we discovered in the previous section.
+
+These new topics will not necessarily correlate to what we humans think about as topics, like "pets" or "history".
+The machine doesn't "understand" what combinations of words mean, just that they go together.
+When it sees words like "dog", "cat", and "love" together a lot, it puts them together in a topic.
+It doesn't know that such a topic is likely about "pets."
+It might include a lot of words like "domesticated" and "feral" in that same topic, words that mean the opposite of each other.
+If they occur together a lot in the same documents, LSA will give them high scores for the same topics together.
+It's up to us humans to look at what words have a high weight in each topic and give them a name.
+
+But you don't have to give the topics a name to make use of them.
+Just as you didn't analyze all the 1000s of dimensions in your stemmed bag-of-words vectors or TF-IDF vectors from previous chapters, you don't have to know what all your topics "mean."
+You can still do vector math with these new topic vectors, just like you did with TF-IDF vectors.
+You can add and subtract them and estimate the similarity between documents based on their "topic representation", rather than "term frequency representation".
+And these similarity estimates will be more accurate, because your new representation actually takes into account the meaning of tokens and their co-occurence with other tokens.
+
+=== Diving into semantic analysis
+
+But enough talking about LSA - let's do some coding!
+This time, we're going to use another Scikit-Learn tool named `TruncatedSVD` that performs - what a surprise - the truncated SVD method that we examined in the previous chapter.
+We could use the `PCA` model you saw in the previous section, but we'll go with this more direct approach - it will allow us to understand better what's happening "under the hood".
+In addition `TruncatedSVD` is meant to deal with sparse matrices, so it will perform better on most TF-IDF and BOW matrices.
+
+We will start with decreasing the number of dimensions from 9232 to 16 - we'll explain later how we chose that number.
+
+.LSA using TruncatedSVD
+[source,python]
+----
+>>> from sklearn.decomposition import TruncatedSVD
+>>>
+>>> svd = TruncatedSVD(n_components=16, n_iter=100)  # <1>
+>>> columns = ['topic{}'.format(i) for i in range(svd.n_components)]
+>>> svd_topic_vectors = svd.fit_transform(tfidf_docs)  # <2>
+>>> svd_topic_vectors = pd.DataFrame(svd_topic_vectors, columns=columns,\
+...     index=index)
+>>> svd_topic_vectors.round(3).head(6)
+           topic0  topic1  topic2  ...  topic13  topic14  topic15
+comment0    0.121  -0.055   0.036  ...   -0.038    0.089    0.011
+comment1    0.215   0.141  -0.006  ...    0.079   -0.016   -0.070
+comment2    0.342  -0.200   0.044  ...   -0.138    0.023    0.069
+comment3    0.130  -0.074   0.034  ...   -0.060    0.014    0.073
+comment4!   0.166  -0.081   0.040  ...   -0.008    0.063   -0.020
+comment5    0.256  -0.122  -0.055  ...    0.093   -0.083   -0.074
+----
+<1> The SVD algorithm inside `TruncatedSVD` is randomized, so we will iterate through our data 100 times to balance that.
+<2> `fit_transform` decomposes your TF-IDF vectors and transforms them into topic vectors in one step.
+
+What you have just produced using `fit-transform` method is your document vectors in the new representation.
+Instead of representing your comments with 19,169 frequency counts, you represented it with just 16.
+This matrix is also called _document-topic_ matrix.
+By looking at the columns, you can see how much every topic is "expressed" in every comment.
+
+[NOTE]
+====
+How do the methods we use relate to the matrix decomposition process we described?
+You might have realized that what the `fit_transform` method returns is exactly \latex{U \cdot S} - your tf-idf vectors projected into the new space.
+And your V matrix is saved inside the `TruncatedSVD` object in the `components_` variable.
+====
+
+If you want to explore your topics, you can find out how much of each word they "contain" by examining the weights of each word, or groups of words, across every topic.
+
+First let's assign words to all the dimensions in your transformation.
+You need to get them in the right order because your `TFIDFVectorizer` stores the vocabulary as a dictionary that maps each term to an index number (column number).
+
+[source,python]
+----
+>>> list(tfidf_model.vocabulary_.items())[:5]  # <1>
+[('you', 18890),
+ ('have', 8093),
+ ('yet', 18868),
+ ('to', 17083),
+ ('identify', 8721)]
+>>> column_nums, terms = zip(*sorted(zip(tfidf.vocabulary_.values(),
+...     tfidf.vocabulary_.keys())))  # <2>
+>>> terms[:5]
+('\n', '\n ', '\n \n', '\n \n ', '\n  ')
+----
+<1> Turn your vocabulary into an iterable object with `items()` method to list the first 5 items.
+<2> Sort the vocabulary by term count. This `zip(\*sorted(zip()))` pattern is useful when you want to unzip something to sort by a an element that isn't on the far left, and then rezip it after sorting.
+
+Now you can create a nice Pandas DataFrame containing the weights, with labels for all the columns and rows in the right place.
+But it looks like our first few terms are just different combinations of newlines - that's not very useful!
+
+Whoever gave you the dataset should have done a better job of cleaning them out.
+Let's look at a few random terms from your vocabulary using the helpful Pandas method `DataFrame.sample()`
+
+[source,python]
+----
+>>> topic_term_matrix = pd.DataFrame(
+...     svd.components_, columns=terms,
+...     index=['topic{}'.format(i) for i in range(16)])
+>>> pd.options.display.max_columns = 8
+>>> topic_term_matrix.sample(5, axis='columns',
+...     random_state=271828).head(4)  # <1>
+...
+        littered  unblock.(t•c  orchestra  flanking  civilised
+topic0  0.000268      0.000143   0.000630  0.000061   0.000119
+topic1  0.000297     -0.000211  -0.000830 -0.000088  -0.000168
+topic2 -0.000367      0.000157  -0.001457 -0.000150  -0.000133
+topic3  0.000147     -0.000458   0.000804  0.000127   0.000181
+----
+<1> Using the same `random_state` parameter to get the same output
+
+None of these words looks like "inherently toxic".
+Let's look at some words that we would intuitively expect to appear in "toxic" comments, and see how much weight those words have in different topics.
+
+[source,python]
+----
+>>> pd.options.display.max_columns = 8
+>>> toxic_terms = topic_term_matrix[
+...     'pathetic crazy stupid idiot lazy hate die kill'.split()
+...     ].round(3) * 100  # <1>
+...
+>>> toxic_terms
+         pathetic  crazy  stupid  idiot  lazy  hate  die  kill
+topic0        0.3    0.1     0.7    0.6   0.1   0.4  0.2   0.2
+topic1       -0.2    0.0    -0.1   -0.3  -0.1  -0.4 -0.1   0.1
+topic2        0.7    0.1     1.1    1.7  -0.0   0.9  0.6   0.8
+topic3       -0.3   -0.0    -0.0    0.0   0.1  -0.0  0.0   0.2
+topic4        0.7    0.2     1.2    1.4   0.3   1.7  0.6   0.0
+topic5       -0.4   -0.1    -0.3   -1.3  -0.1   0.5 -0.2  -0.2
+topic6        0.0    0.1     0.8    1.7  -0.1   0.2  0.8  -0.1
+...
+>>> toxic_terms.T.sum()
+topic0     2.4
+topic1    -1.2
+topic2     5.0
+topic3    -0.2
+topic4     5.9
+topic5    -1.8
+topic6     3.4
+topic7    -0.7
+topic8     1.0
+topic9    -0.1
+topic10   -6.6
+...
+----
+<1> Multiplying by 100 makes the weights easier to read and compare to each other
+
+Topics 2 and 4 appear to be more likely to contain toxic sentiment.
+And topic 10 seems to be an "anti-toxic" topic.
+So words associated with toxicity can have a positive impact on some topics and a negative impact on others.
+There's no single obvious toxic topic number.
+
+And what `transform` method does is just multiply whatever you pass to it with V matrix, which is saved in `components_`.
+You can check out the code of `TruncatedSVD` to see it with your own eyes! footnote:[You can access the code of any Scikit-Learn function by clicking the [source] link at the top left of the screen.]
+
+=== `TruncatedSVD` or `PCA`?
+
+You might be asking yourself now - why did we use Scikit-Learn's `PCA` class in the horse example, but `TruncatedSVD` for topic analysis for our comment dataset?
+Didn't we say that PCA is based on the SVD algorithm?
+
+And you will be right - if you look into the implementation of `PCA` and `TruncatedSVD` in `sklearn`, you'll see that most of the code is similar between the two.
+They both use the same algorithms for SVD decomposition of matrices.
+However, there are several differences that might make each model preferrable for some use cases or others.
+
+The biggest difference is that `TruncatedSVD` does not center the matrix before the decomposition, while `PCA` does.
+What this means is that if you center your data before performing TruncatedSVD by subtracting columnwise mean from the matrix, like this:
+
+[source,python]
+----
+>>> tfidf_docs = tfidf_docs - tfidf_docs.mean()
+----
+
+You'll get the same results for both methods.
+Try this yourself by comparing the results of `TruncatedSVD` on centered data and of PCA, and see what you get!
+
+The fact that the data is being centered is important for some properties of Principal Component Analysis,footnote:[You can dig into the maths of PCA here: https://en.wikipedia.org/wiki/Principal_component_analysis] which, you might remember, has a lot of applications outside NLP.
+However, for TF-IDF matrices, that are mostly sparse, centering doesn't always make sense.
+In most cases, centering makes a sparse matrix dense, which causes the model run slower and take much more memory.
+PCA is often used to deal with dense matrices and can compute a precise, full-matrix SVD for small matrices.
+In contrast, `TruncatedSVD` already assumes that the input matrix is sparse, and uses the faster approximated, randomized methods.
+So it deals with your TF-IDF data much more efficiently than PCA.
+
+=== How well LSA performs for toxicity detection?
+
+You've spent enough time peering into the topics - let's see how our model performs with lower-dimensional representation of the comments!
+You'll use the same code we ran in listing 4.3, but will apply it on the new 16-dimensional vectors.
+This time, the classification will go much faster:
+
+[source,python]
+----
+>>> X_train_16d, X_test_16d, y_train_16d, y_test_16d = train_test_split(
+...     svd_topic_vectors, comments.toxic.values, test_size=0.5,
+...     random_state=271828)
+>>> lda_lsa = LinearDiscriminantAnalysis(n_components=1)
+>>> lda_lsa = lda_lsa.fit(X_train_16d, y_train_16d)
+>>> round(float(lda_lsa.score(X_train_16d, y_train_16d)), 3)
+0.881
+>>> round(float(lda_lsa.score(X_test_16d, y_test_16d)), 3)
+0.88
+----
+
+Wow, what a difference!
+The classifier's accuracy on the training set dropped from 99.9% for TF-IDF vectors to 88.1%
+But the test set accuracy jumped by 33%!
+That's quite an improvement.
+
+Let's check the F1 score:
+
+[source,python]
+----
+>>> from sklearn.metrics import f1_score
+>>> f1_score(y_test_16d, lda_lsa.predict(X_test_16d).round(3)
+0.342
+----
+
+We've almost doubled out F1 score, compared to TF-IDF vectors classification!
+Not bad.
+
+Unless you have a perfect memory, by now you must be pretty annoyed by scrolling or paging back to the performance of the previous model.
+And when you'll be doing real-life natural langugae processing, you'll probably be trying much more models than in our toy example.
+That's why data scientists record their model parameters and performance in a _hyperparameter table_.
+
+Let's make one of our own.
+First, recall the classification performance we got when we run an LDA classifier on TF-IDF vectors, and save it into our table.
+
+[source,python]
+----
+>>> hparam_table = pd.DataFrame()
+>>> tfidf_performance = {'classifier': 'LDA',
+...                      'features': 'tf-idf (spacy tokenizer)',
+...                      'train_accuracy': 0.99 ,
+...                      'test_accuracy': 0.554,
+...                      'test_precision': 0.383 ,
+...                      'test_recall': 0.12,
+...                      'test_f1': 0.183}
+>>> hparam_table = hparam_table.append(
+...     tfidf_performance, ignore_index=True)  # <1>
+----
+<1> Use `ignore_index` parameter to add records in a dictionary form to a Pandas DataFrame
+
+Actually, because you're going to extract these scores for a few models, it might make sense to create a function that does this:
+
+.A function that creates a record in hyperparameter table.
+[source,python]
+----
+>>> def hparam_rec(model, X_train, y_train, X_test, y_test,
+[CA] model_name, features):
+...     return {'classifier': model_name,
+...       'features': features,
+...       'train_accuracy': float(model.score(X_train, y_train)),
+...       'test_accuracy': float(model.score(X_test, y_test)),
+...       'test_precision': precision_score(y_test, model.predict(X_test)),
+...       'test_recall': recall_score(y_test, model.predict(X_test)),
+...       'test_f1': f1_score(y_test, model.predict(X_test)) }
+>>> lsa_performance = hparam_rec(lda_lsa, X_train_16d, y_train_16d,
+...        X_test_16d,y_test_16d, 'LDA', 'LSA (16 components)'))
+>>> hparam_table = hparam_table.append(lsa_performance)
+>>> hparam_table.T  # <1>
+                                       0          1
+classifier                           LDA        LDA
+features        tf-idf (spacy tokenizer)  LSA (16d)
+train_accuracy                      0.99     0.8808
+test_accuracy                      0.554       0.88
+test_precision                     0.383        0.6
+test_recall                         0.12   0.239264
+test_f1                            0.183   0.342105
+----
+<1> We transposed the table for printability
+
+You can go even further and wrap most of your analysis in a nice function, so that you don't have to copy-paste again:
+
+[source,python]
+----
+>>> def evaluate_model(X,y, classifier, classifier_name, features):
+...  X_train, X_test, y_train, y_test = train_test_split(X, y,
+[CA] test_size=0.5, random_state=271828)
+...    classifier = classifier.fit(X_train, y_train)
+...    return hparam_rec(classifier, X_train, y_train, X_test,y_test,
+...                      classifier_name, features)
+----
+
+=== Other ways to reduce dimensions
+
+SVD is by far the most popular way to reduce dimensions of a dataset, making LSA your first choice when thinking about topic modeling.
+However, there are several other dimensionality reduction techniques you can also use to achieve the same goal.
+Not all of them are even used in NLP, but it's good to be aware of them.
+We'll mention two methods here - _random projection_ and _non-negative matrix factorization_ (NMF).
+
+Random projection is a method to project a high-dimensional data on lower-dimensional space, so that the distances between data points are preserved.
+Its stochastic nature makes it easier to run it on parallel machines.
+It also allows the algorithm to use less memory as it doesn't need to hold all the the data in the memory at the same time the way PCA does.
+And because its computational complexity lower, random projections can be occasionally used on datasets with very high dimensions, when decomposition speed is an important factor.
+
+Similarly, NMF is another matrix factorization method that is similar to SVD, but assumes that the data points and the components are all non-negative.
+It's more commonly used in image processing and computer vision, but can occasionally come handy in NLP and topic modeling too.
+
+In most cases, you're better off sticking with LSA, which uses the tried and true SVD algorithm under the hood.
+
+== Latent Dirichlet allocation (LDiA)
+
+You've spent most of this chapter talking about latent semantic analysis and various ways to accomplish it using Scikit-Learn.
+LSA should be your first choice for most topic modeling, semantic search, or content-based recommendation engines.footnote:[A 2015 comparison of content-based movie recommendation algorithms by Sonia Bergamaschi and Laura Po found LSA to be approximately twice as accurate as LDiA. See "Comparing LDA and LSA Topic Models for Content-Based Movie Recommendation Systems" by Sonia Bergamaschi and Laura Po (https://www.dbgroup.unimo.it/~po/pubs/LNBI_2015.pdf).]
+Its math is straightforward and efficient, and it produces a linear transformation that can be applied to new batches of natural language without training and with little loss in accuracy.
+But we'll shouw you another algorithm, _Latent Dirichlet Allocation_ (or LDiA, to distinguish it from LDA you've met before), than can give you slightly better results in some situations.
+
+LDiA does a lot of the things you did to create your topic models with LSA (and SVD under the hood), but unlike LSA, LDiA assumes a Dirichlet distribution of word frequencies.
+It's more precise about the statistics of allocating words to topics than the linear math of LSA.
+
+LDiA creates a semantic vector space model (like your topic vectors) using an approach similar to how your brain worked during the thought experiment earlier in the chapter.
+In your thought experiment, you manually allocated words to topics based on how often they occurred together in the same document.
+The topic mix for a document can then be determined by the word mixtures in each topic by which topic those words were assigned to.
+This makes an LDiA topic model much easier to understand, because the words assigned to topics and topics assigned to documents tend to make more sense than for LSA.
+
+LDiA assumes that each document is a mixture (linear combination) of some arbitrary number of topics that you select when you begin training the LDiA model.
+LDiA also assumes that each topic can be represented by a distribution of words (term frequencies).
+The probability or weight for each of these topics within a document, as well as the probability of a word being assigned to a topic, is assumed to start with a Dirichlet probability distribution (the _prior_ if you remember your statistics).
+This is where the algorithm gets it name.
+
+=== The LDiA idea
+
+The LDiA approach was developed in 2000 by geneticists in the UK to help them "infer population structure" from sequences of genes.footnote:["Jonathan K. Pritchard, Matthew Stephens, Peter Donnelly, Inference of Population Structure Using Multilocus Genotype Data" http://www.genetics.org/content/155/2/945]
+Stanford Researchers (including Andrew Ng) popularized the approach for NLP in 2003.footnote:[See the PDF titled "Latent Dirichlet Allocation" by David M. Blei, Andrew Y. Ng, and Michael I. Jordan (http://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf).]
+But don't be intimidated by the big names that came up with this approach.
+We explain the key points of it in a few lines of Python shortly.
+You only need to understand it enough to get a feel for what it's doing (an intuition), so you know what you can use it for in your pipeline.
+
+Blei and Ng came up with the idea by flipping your thought experiment on its head.
+They imagined how a machine that could do nothing more than roll dice (generate random numbers) could write the documents in a corpus you want to analyze.
+And because you're only working with bags of words, they cut out the part about sequencing those words together to make sense, to write a real document.
+They just modeled the statistics for the mix of words that would become a part of a particular the BOW for each document.
+
+They imagined a machine that only had two choices to make to get started generating the mix of words for a particular document.
+They imagined that the document generator chose those words randomly, with some probability distribution over the possible choices, like choosing the number of sides of the dice and the combination of dice you add together to create a D&D character sheet.
+Your document "character sheet" needs only two rolls of the dice.
+But the dice are large and there are several of them, with complicated rules about how they are combined to produce the desired probabilities for the different values you want.
+You want particular probability distributions for the number of words and number of topics so that it matches the distribution of these values in real documents analyzed by humans for their topics and words.
+
+The two rolls of the dice represent:
+
+1. Number of words to generate for the document (Poisson distribution)
+2. Number of topics to mix together for the document (Dirichlet distribution)
+
+After it has these two numbers, the hard part begins, choosing the words for a document.
+The imaginary BOW generating machine iterates over those topics and randomly chooses words appropriate to that topic until it hits the number of words that it had decided the document should contain in step 1.
+Deciding the probabilities of those words for topics -- the appropriateness of words for each topic -- is the hard part.
+But once that has been determined, your "bot" just looks up the probabilities for the words for each topic from a matrix of term-topic probabilities.
+If you don't remember what that matrix looks like, glance back at the simple example earlier in this chapter.
+
+So all this machine needs is a single parameter for that Poisson distribution (in the dice roll from step 1) that tells it what the "average" document length should be, and a couple more parameters to define that Dirichlet distribution that sets up the number of topics.
+Then your document generation algorithm needs a term-topic matrix of all the words and topics it likes to use, its vocabulary.
+And it needs a mix of topics that it likes to "talk" about.
+
+Let's flip the document generation (writing) problem back around to your original problem of estimating the topics and words from an existing document.
+You need to measure, or compute, those parameters about words and topics for the first two steps.
+Then you need to compute the term-topic matrix from a collection of documents.
+That's what LDiA does.
+
+Blei and Ng realized that they could determine the parameters for steps 1 and 2 by analyzing the statistics of the documents in a corpus.
+For example, for step 1, they could calculate the mean number of words (or _n_-grams) in all the bags of words for the documents in their corpus, something like this:
+
+[source,python]
+----
+>>> total_corpus_len = 0
+>>> for document_text in comments.text:
+...     total_corpus_len += len(spacy_tokenize(document_text))
+>>> mean_document_len = total_corpus_len / len(sms)
+>>> round(mean_document_len, 2)
+21.35
+----
+
+Or, in a one-liner:
+
+[source,python]
+----
+>>> sum([len(spacy_tokenize(t)) for t in comments.text]) * 1. /
+[CA] len(comments.text)
+21.35
+----
+
+Keep in mind, you should calculate this statistic directly from your BOWs.
+You need to make sure you're counting the tokenized and vectorized words in your documents.
+And make sure you've applied any stop word filtering, or other normalizations before you count up your unique terms.
+That way your count includes all the words in your BOW vector vocabulary (all the _n_-grams you're counting), but only those words that your BOWs use (not stop words, for example).
+This LDiA algorithm relies on a bag-of-words vector space model, unlike LSA that took TF-IDF matrix as input.
+
+The second parameter you need to specify for an LDiA model, the number of topics, is a bit trickier.
+The number of topics in a particular set of documents can't be measured directly until after you've assigned words to those topics.
+Like _k-means_ and _KNN_ and other clustering algorithms, you must tell it the _k_ ahead of time.
+You can guess the number of topics (analogous to the _k_ in k-means, the number of "clusters") and then check to see if that works for your set of documents.
+Once you've told LDiA how many topics to look for, it will find the mix of words to put in each topic to optimize its objective function.footnote:[You can learn more about the particulars of the LDiA objective function here in the original paper "Online Learning for Latent Dirichlet Allocation" by Matthew D. Hoffman, David M. Blei, and Francis Bach (https://www.di.ens.fr/%7Efbach/mdhnips2010.pdf).]
+
+You can optimize this "hyperparameter" (_k_, the number of topics)footnote:[The symbol used by Blei and Ng for this parameter was _theta_ rather than _k_] by adjusting it until it works for your application.
+You can automate this optimization if you can measure something about the quality of your LDiA language model for representing the meaning of your documents.
+One "cost function" you could use for this optimization is how well (or poorly) that LDiA model performs in some classification or regression problem, like sentiment analysis, document keyword tagging, or topic analysis.
+You just need some labeled documents to test your topic model or classifier on.
+
+=== LDiA topic model for comments
+
+The topics produced by LDiA tend to be more understandable and "explainable" to humans.
+This is because words that frequently occur together are assigned the same topics, and humans expect that to be the case.
+Where LSA tries to keep things spread apart that were spread apart to start with, LDiA tries to keep things close together that started out close together.
+
+This may sound like it's the same thing, but it's not.
+The math optimizes for different things.
+Your optimizer has a different objective function so it will reach a different objective.
+To keep close high-dimensional vectors close together in the lower-dimensional space, LDiA has to twist and contort the space (and the vectors) in nonlinear ways.
+This is a hard thing to visualize until you do it on something 3D and take "projections" of the resultant vectors in 2D.
+
+Let's see how that works for a dataset of a few thousand comments, labeled for spaminess.
+First, compute the TF-IDF vectors and then some topics vectors for each SMS message (document).
+We assume the use of only 16 topics (components) to classify the spaminess of messages, as before.
+Keeping the number of topics (dimensions) low can help reduce overfitting.footnote:[See Appendix D if you want to learn more about why overfitting is a bad thing and how _generalization_ can help.]
+
+LDiA works with raw BOW count vectors rather than normalized TF-IDF vectors.
+You've already done this process in Chapter 3:
+
+[source,python]
+----
+>>> from sklearn.feature_extraction.text import CountVectorizer
+>>>
+>>> counter = CountVectorizer(tokenizer=spacy_tokenize)
+>>> bow_docs = pd.DataFrame(counter.fit_transform(
+[CA]raw_documents=comments.text)\
+...     .toarray(), index=index)
+>>> column_nums, terms = zip(*sorted(zip(counter.vocabulary_.values(),
+...     counter.vocabulary_.keys())))
+>>> bow_docs.columns = terms
+----
+
+Let's double-check that your counts make sense for that first comment labeled "comment0":
+
+[source,python]
+----
+>>> comments.loc['comment0'].text
+'you have yet to identify where my edits violated policy.
+ 4 july 2005 02:58 (utc)'
+>>> bow_docs.loc['comment0'][bow_docs.loc['comment0'] > 0].head()
+         1
+(        1
+)        1
+.        1
+02:58    1
+Name: comment0, dtype: int64
+----
+
+We'll apply Latent Dirichlet Allocation to the count vector matrix in the same way we applied LSA to TF-IDF matrix:
+
+[source,python]
+----
+>>> from sklearn.decomposition import LatentDirichletAllocation as LDiA
+
+>>> ldia = LDiA(n_components=16, learning_method='batch')
+>>> ldia = ldia.fit(bow_docs)  # <1>
+>>> ldia.components_.shape
+(16, 19169)
+----
+<1> LDiA takes a bit longer than PCA or SVD, especially for a large number of topics and a large number of words in your corpus.
+
+So your model has allocated your 19,169 words (terms) to 16 topics (components).
+Let's take a look at the first few words and how they're allocated.
+Keep in mind that your counts and topics will be different from ours.
+LDiA is a stochastic algorithm that relies on the random number generator to make some of the statistical decisions it has to make about allocating words to topics.
+So each time you run `sklearn.LatentDirichletAllocation` (or any LDiA algorithm), you will get different results unless you set the random seed to a fixed value.
+
+[source,python]
+----
+>>> pd.set_option('display.width', 75)
+>>> term_topic_matrix = pd.DataFrame(ldia.components_, index=terms,\ 
+...     columns=columns)  # <1>
+>>> term_topic_matrix.round(2).head(3)
+                          topic0  topic1  ...  topic14  topic15
+a                         21.853   0.063  ...    0.063  922.515
+aaaaaaaaaahhhhhhhhhhhhhh   0.063   0.063  ...    0.063    0.063
+aalst                      0.063   0.063  ...    0.063    0.063
+aap                        0.063   0.063  ...    2.062    0.062
+----
+<1> This is the same matrix we built for our LSA topic model, just transposed!
+
+It looks like the values in LDiA topic vectors have much higher spread than LSA topic vectors - there are a lot of near-zero values, but also some really big ones.
+Let's do the same trick you did when performing topic modeling with LSA.
+We can look at typical "toxic" words and see how pronounced they are in every topic.
+
+[source,python]
+----
+>>> toxic_terms= components.loc['pathetic crazy stupid lazy idiot hate die kill'.split()].round(2)
+>>> toxic_terms
+          topic0  topic1  topic2  ...  topic13  topic14  topic15
+pathetic    1.06    0.06   32.35  ...     0.06     0.06     9.47
+crazy       0.06    0.06    3.82  ...     1.17     0.06     0.06
+stupid      0.98    0.06    4.58  ...     8.29     0.06    35.80
+lazy        0.06    0.06    1.34  ...     0.06     0.06     3.97
+idiot       0.06    0.06    6.31  ...     0.06     1.11     9.91
+hate        0.06    0.06    0.06  ...     0.06   480.06     0.06
+die         0.06    0.06   26.17  ...     0.06     0.06     0.06
+kill        0.06    4.06    0.06  ...     0.06     0.06     0.06
+----
+
+That looks very different from the LSA representation of our toxic terms!
+Looks like some terms can have high topic-term weights in some topics, but not others.
+`topic0` and `topic1` seem pretty "indifferent" to toxic terms, while topic 2 and topic 15 have quite large topic-terms weight for at least 4 or 5 of the toxic terms.
+And `topic14` has a very high weight for the term `hate`!
+
+Let's see what other terms scored high in this topic.
+As you saw earlier, because we didn't do any preprocessing to our dataset, a lot of terms are not very interesting.
+Let's focus on terms that are words, and are longer than 3 letters - that would eliminate a lot of the stop words.
+
+[source,python]
+----
+>>> non_trivial_terms = [term for term in components.index
+                            if term.isalpha() and len(term)>3]
+components.topic14.loc[non_trivial_terms].sort_values(ascending=False)[:10]
+hate         480.062500
+killed        14.032799
+explosion      7.062500
+witch          7.033359
+june           6.676174
+wicked         5.062500
+dead           3.920518
+years          3.596520
+wake           3.062500
+arrived        3.062500
+----
+
+It looks like a lot of the words in the topic have semantic relationship between them.
+Words like "killed" and "hate", or "wicked" and "witch", seem to belong in the "toxic" domain.
+You can see that the allocation of words to topics can be rationalized or reasoned about, even with this quick look.
+
+Before you fit your classifier, you need to compute these LDiA topic vectors for all your documents (comments).
+And let's see how they are different from the topic vectors produced by LSA for those same documents.
+
+[source,python]
+----
+>>> ldia16_topic_vectors = ldia.transform(bow_docs)
+>>> ldia16_topic_vectors = pd.DataFrame(ldia16_topic_vectors,\
+...     index=index, columns=columns)
+>>> ldia16_topic_vectors.round(2).head()
+           topic0  topic1  topic2  ...  topic13  topic14  topic15
+comment0      0.0     0.0    0.00  ...     0.00      0.0      0.0
+comment1      0.0     0.0    0.28  ...     0.00      0.0      0.0
+comment2      0.0     0.0    0.00  ...     0.00      0.0      0.0
+comment3      0.0     0.0    0.00  ...     0.95      0.0      0.0
+comment4!     0.0     0.0    0.07  ...     0.00      0.0      0.0
+----
+
+You can see that these topics are more cleanly separated.
+There are a lot of zeros in your allocation of topics to messages.
+This is one of the things that makes LDiA topics easier to explain to coworkers when making business decisions based on your NLP pipeline results.
+
+So LDiA topics work well for humans, but what about machines?
+How will your LDA classifier fare with these topics?
+
+=== Detecting toxicity with LDiA
+
+Let's see how good these LDiA topics are at predicting something useful, such as comment toxicity.
+You'll use your LDiA topic vectors to train an LDA model again (like you did twice - with your TF-IDF vectors and LSA topic vectors).
+And because of the handy function you defined in listing 4.5, you only need a couple of lines of code to evaluate your model:
+
+[source,python]
+----
+>>> model_ldia16 = LinearDiscriminantAnalysis()
+>>> ldia16_performance=evaluate_model(ldia16_topic_vectors,
+       comments.toxic,model_ldia16, 'LDA', 'LDIA (16 components)')
+>>> hparam_table = hparam_table.append(ldia16_performance,
+...    ignore_index = True)
+>>> hparam_table.T
+                                       0          1          2
+classifier                           LDA        LDA        LDA
+features        tf-idf (spacy tokenizer)  LSA (16d) LDIA (16d)
+train_accuracy                      0.99     0.8808     0.8688
+test_accuracy                      0.554       0.88     0.8616
+test_precision                     0.383        0.6   0.388889
+test_recall                         0.12   0.239264   0.107362
+test_f1                            0.183   0.342105   0.168269
+----
+
+It looks that the classification performance on 16-topic LDIA vectors is worse than on the raw TF-IDF vectors, without topic modeling.
+Does it mean the LDiA is useless in this case?
+Let's not give up on it too soon and try to increase the number of topics.
+
+=== A fairer comparison: 32 LDiA topics
+
+Let's try one more time with more dimensions, more topics.
+Perhaps LDiA isn't as efficient as LSA so it needs more topics to allocate words to.
+Let's try 32 topics (components).
+
+[source,python]
+----
+>>> ldia32 = LDiA(n_components=32, learning_method='batch')
+>>> ldia32 = ldia32.fit(bow_docs)
+>>> model_ldia32 = LinearDiscriminantAnalysis()
+>>> ldia32_performance =evaluate_model(ldia32_topic_vectors,
+...          comments.toxic, model_ldia32, 'LDA', 'LDIA (32d)')
+>>> hparam_table = hparam_table.append(ldia32_performance,
+...           ignore_index = True)
+>>> hparam_table.T
+                                       0          1          2           3
+classifier                           LDA        LDA        LDA         LDA
+features        tf-idf (spacy tokenizer)  LSA (16d) LDIA (16d)  LDIA (32d)
+train_accuracy                      0.99     0.8808     0.8688      0.8776
+test_accuracy                      0.554       0.88     0.8616      0.8796
+test_precision                     0.383        0.6   0.388889    0.619048
+test_recall                         0.12   0.239264   0.107362    0.199387
+test_f1                            0.183   0.342105   0.168269    0.301624
+----
+
+That's nice!
+Increasing the dimensions for LDIA almost doubled both the precision and the recall of the models, and our F1 score looks much better.
+The larger number of topics allows LDIA to be more precise about topics, and, at least for this dataset, produce topics that linearly separate better.
+But the performance of these vector representations still is not quite as good as that of LSA.
+So LSA is keeping your comment topic vectors spread out more efficiently, allowing for a wider gap between comments to cut with a hyperplane to separate classes.
+
+Feel free to explore the source code for the Dirichlet allocation models available in both Scikit-Learn as well as `gensim`.
+They have an API similar to LSA (`sklearn.TruncatedSVD` and `gensim.LsiModel`).
+We'll show you an example application when we talk about summarization in later chapters.
+Finding explainable topics, like those used for summarization, is what LDiA is good at.
+And it's not too bad at creating topics useful for linear classification.
+
+[TIP]
+====
+You saw earlier how you can browse the source code of all 'sklearn' from the documentation pages.
+But there is even a more straightforward method to do it from your Python console.
+You can find the source code path in the `+++__file__+++` attribute on any Python module, such as `+++sklearn.__file__+++`. And in `ipython` (`jupyter console`), you can view the source code for any function, class, or object with `??`, like `LDA??`:
+
+[source,python]
+----
+>>> import sklearn
+>>> sklearn.__file__
+'/Users/hobs/anaconda3/envs/conda_env_nlpia/lib/python3.6/site-packages/skl
+earn/__init__.py'
+>>> from sklearn.discriminant_analysis\
+...     import LinearDiscriminantAnalysis as LDA
+>>> LDA??
+Init signature: LDA(solver='svd', shrinkage=None, priors=None, n_components
+=None, store_covariance=False, tol=0.0001)
+Source:
+class LinearDiscriminantAnalysis(BaseEstimator, LinearClassifierMixin,
+                                 TransformerMixin):
+    """Linear Discriminant Analysis
+
+    A classifier with a linear decision boundary, generated by fitting
+    class conditional densities to the data and using Bayes' rule.
+
+    The model fits a Gaussian density to each class, assuming that all
+    classes share the same covariance matrix."""
+...
+----
+
+This won't work on functions and classes that are extensions, whose source code is hidden within a compiled C++ module.
+====
+
+
+== Distance and similarity
+
+We need to revisit those similarity scores we talked about in chapters 2 and 3 to make sure your new topic vector space works with them.
+Remember that you can use similarity scores (and distances) to tell how similar or far apart two documents are based on the similarity (or distance) of the vectors you used to represent them.
+
+You can use similarity scores (and distances) to see how well your LSA topic model agrees with the higher-dimensional TF-IDF model of chapter 3.
+You'll see how good your model is at retaining those distances after having eliminated a lot of the information contained in the much higher-dimensional bags of words.
+You can check how far away from each other the topic vectors are and whether that's a good representation of the distance between the documents' subject matter.
+You want to check that documents that mean similar things are close to each other in your new topic vector space.
+
+LSA preserves large distances, but it does not always preserve close distances (the fine "structure" of the relationships between your documents).
+The underlying SVD algorithm is focused on maximizing the variance between all your documents in the new topic vector space.
+
+Distances between feature vectors (word vectors, topic vectors, document context vectors, and so on) drive the performance of an NLP pipeline, or any machine learning pipeline.
+So what are your options for measuring distance in high-dimensional space?
+And which ones should you chose for a particular NLP problem?
+Some of these commonly used examples may be familiar from geometry class or linear algebra, but many others are probably new to you:
+
+* Euclidean or Cartesian distance, or root mean square error (RMSE): 2-norm or L~2~
+* Squared Euclidean distance, sum of squares distance (SSD): L~2~^2^
+* Cosine or angular or projected distance: normalized dot product
+* Minkowski distance: p-norm or L~p~
+* Fractional distance, fractional norm: p-norm or L~p~ for `0 < p < 1`
+* City block, Manhattan, or taxicab distance, sum of absolute distance (SAD): 1-norm or L~1~
+* Jaccard distance, inverse set similarity
+* Mahalanobis distance
+* Levenshtein or edit distance
+
+The variety of ways to calculate distance is a testament to how important it is.
+In addition to the pairwise distance implementations in Scikit-Learn, many others are used in mathematics specialties such as topology, statistics, and engineering.footnote:[See Math.NET Numerics for more distance metrics (https://numerics.mathdotnet.com/Distance.html).] For reference, here are all the ways you can compute distances in the `sklearn.metrics` module: footnote:[See the documentation for sklearn.metrics (https://scikit-learn.org/stable/modules/generated/sklearn.metrics.DistanceMetric.html).]
+
+.Pairwise distances available in `sklearn`
+[source,python]
+----
+'cityblock', 'cosine', 'euclidean', 'l1', 'l2', 'manhattan', 'braycurtis',
+'canberra', 'chebyshev', 'correlation', 'dice', 'hamming', 'jaccard',
+'kulsinski', 'mahalanobis', 'matching', 'minkowski', 'rogerstanimoto',
+'russellrao', 'seuclidean', 'sokalmichener', 'sokalsneath', 'sqeuclidean',
+'yule'
+----
+
+Distance measures are often computed from similarity measures (scores) and vice versa such that distances are inversely proportional to similarity scores. Similarity scores are designed to range between 0 and 1. Typical conversion formulas look like this:
+
+[source,python]
+----
+>>> similarity = 1. / (1. + distance)
+>>> distance = (1. / similarity) - 1.
+----
+
+But for distances and similarity scores that range between 0 and 1, like probabilities, it's more common to use a formula like this:
+
+[source,python]
+----
+>>> similarity = 1. - distance
+>>> distance = 1. - similarity
+----
+
+And cosine distances have their own convention for the range of values they use.
+The angular distance between two vectors is often computed as a fraction of the maximum possible angular separation between two vectors, which is 180 degrees or `pi` radians.footnote:[See the web page titled "Cosine similarity - Wikipedia" (https://en.wikipedia.org/wiki/Cosine_similarity).]
+As a result cosine similarity and distance are the reciprocal of each other:
+
+[source,python]
+----
+>>> import math
+>>> angular_distance = math.acos(cosine_similarity) / math.pi
+>>> distance = 1. / similarity - 1.
+>>> similarity = 1. - distance
+----
+
+Why do we spend so much time talking about distances?
+In the last section of this book, we'll be talking about semantic search.
+The idea behind semantic search is to find documents that have the highest _semantic similarity_ with your search query - or the lowest _semantic distance_.
+In our semantic search application, we'll be using cosine similarity - but as you can see in the last two pages, there are multiple ways to measure how similar documents are.
+
+== Steering with feedback
+
+All the previous approaches to semantic analysis failed to take into account information about the similarity between documents.
+We created topics that were optimal for a generic set of rules.
+Our unsupervised learning of these models for feature (topic) extraction didn't have any data about how "close" the topic vectors should be to each other.
+We didn't allow any "feedback" about where the topic vectors ended up, or how they were related to each other.
+
+Steering or "learned distance metrics"footnote:[See the web page titled "eccv spgraph" (http://users.cecs.anu.edu.au/~sgould/papers/eccv14-spgraph.pdf).] are the latest advancement in dimension reduction and feature extraction.
+By adjusting the distance scores reported to clustering and embedding algorithms, you can "steer" your vectors so that they minimize some cost function.
+In this way you can force your vectors to focus on some aspect of the information content that you're interested in.
+
+In the previous sections about LSA, you ignored all the meta information about your documents.
+For example, with the comments you ignored the sender of the message.
+This is a good indication of topic similarity and could be used to inform your topic vector transformation (LSA).
+
+At Talentpair we experimented with matching resumes to job descriptions using the cosine distance between topic vectors for each document.
+This worked OK.
+But we learned pretty quickly that we got much better results when we started "steering" our topic vectors based on feedback from candidates and account managers responsible for helping them find a job.
+Vectors for "good pairings" were steered closer together than all the other pairings.
+
+One way to do this is to calculate the mean difference between your two centroids (like you did for LDA) and add some portion of this "bias" to all the resume or job description vectors.
+Doing so should take out the average topic vector difference between resumes and job descriptions.
+Topics such as beer on tap at lunch might appear in a job description but never in a resume.
+Similarly bizarre hobbies, such as underwater sculpture, might appear in some resumes but never a job description.
+Steering your topic vectors can help you focus them on the topics you're interested in modeling.
+
+== Topic vector power
+
+With topic vectors, you can do things like compare the meaning of words, documents, statements, and corpora.
+You can find "clusters" of similar documents and statements.
+You're no longer comparing the distance between documents based merely on their word usage.
+You're no longer limited to keyword search and relevance ranking based entirely on word choice or vocabulary.
+You can now find documents that are relevant to your query, not just a good match for the word statistics themselves.
+
+This is called "semantic search", not to be confused with the "semantic web."footnote:[The semantic web is the practice of structuring natural language text with the use of tags in an HTML document so that the hierarchy of tags and their content provide information about the relationships (web of connections) between elements (text, images, videos) on a web page.]
+Semantic search is what strong search engines do when they give you documents that don't contain many of the words in your query, but are exactly what you were looking for.
+These advanced search engines use LSA topic vectors to tell the difference between a `Python` package in "The Cheese Shop" and a python in a Florida pet shop aquarium, while still recognizing its similarity to a "Ruby gem."footnote:[Ruby is a programming language whose packages are called `gems`.]
+
+Semantic search gives you a tool for finding and generating meaningful text.
+But our brains are not good at dealing with high-dimensional objects, vectors, hyperplanes, hyperspheres, and hypercubes.
+Our intuitions as developers and machine learning engineers breaks down above three dimensions.
+
+For example, to do a query on a 2D vector, like your lat/lon location on Google Maps, you can quickly find all the coffee shops nearby without much searching.
+You can just scan (with your eyes or with code) near your location and spiral outward with your search.
+Alternatively, you can create bigger and bigger bounding boxes with your code, checking for longitudes and latitudes within some range on each, that's just for comparison operations and that should find you everything nearby.
+
+However, dividing up a high dimensional vector space (hyperspace) with hyperplanes and hypercubes as the boundaries for your search is impractical, and in many cases, impossible.
+
+As Geoffry Hinton says, "To deal with hyperplanes in a 14-dimensional space, visualize a 3D space and say 14 to yourself loudly."
+If you read Abbott's 1884 _Flatland_ when you were young and impressionable, you might be able to do a little bit better than this hand waving.
+You might even be able to poke your head partway out of the window of your 3D world into hyperspace, enough to catch a glimpse of that 3D world from the outside.
+Like in _Flatland_, you used a lot of 2D visualizations in this chapter to help you explore the shadows that words in hyperspace leave in your 3D world.
+If you're anxious to check them out, skip ahead to the section showing "scatter matrices" of word vectors.
+You might also want to glance back at the 3D bag-of-words vector in the previous chapter and try to imagine what those points would look like if you added just one more word to your vocabulary to create a 4-D world of language meaning.
+
+If you're taking a moment to think deeply about four dimensions, keep in mind that the explosion in complexity you're trying to wrap your head around is even greater than the complexity growth from 2D to 3D and exponentially greater than the growth in complexity from a 1D world of numbers to a 2D world of triangles, squares, and circles.
+
+=== Semantic search
+
+When you search for a document based on a word or partial word it contains, that's called _full text search_.
+This is what search engines do.
+They break a document into chunks (usually words) that can be indexed with an _inverted index_ like you'd find at the back of a textbook.
+It takes a lot of bookkeeping and guesswork to deal with spelling errors and typos, but it works pretty well.footnote:[A full-text index in a database like PostgreSQL is usually based on trigrams of characters, to deal with spelling errors and text that doesn't parse into words.]
+
+Semantic search is full-text search that takes into account the meaning of the words in your query and the documents you're searching.
+In this chapter, you've learned two ways --  LSA and LDiA -- to compute topic vectors that capture the semantics (meaning) of words and documents in a vector.
+One of the reasons that latent semantic analysis was first called latent semantic _indexing_ was because it promised to power semantic search with an index of numerical values, like BOW and TF-IDF tables.
+Semantic search was the next big thing in information retrieval.
+
+But unlike BOW and TF-IDF tables, tables of semantic vectors can't be easily discretized and indexed using traditional inverted index techniques.
+Traditional indexing approaches work with binary word occurrence vectors, discrete vectors (BOW vectors), sparse continuous vectors (TF-IDF vectors), and low-dimensional continuous vectors (3D GIS data).
+But high-dimensional continuous vectors, such as topic vectors from LSA or LDiA, are a challenge.footnote:[Clustering high-dimensional data is equivalent to discretizing or indexing high-dimensional data with bounding boxes and is described in the Wikipedia article "Clustering high dimensional data" (https://en.wikipedia.org/wiki/Clustering_high-dimensional_data).]
+Inverted indexes work for discrete vectors or binary vectors, like tables of binary or integer word-document vectors, because the index only needs to maintain an entry for each nonzero discrete dimension.
+Either that value of that dimension is present or not present in the referenced vector or document.
+Because TF-IDF vectors are sparse, mostly zero, you don't need an entry in your index for most dimensions for most documents.footnote:[See the web page titled "Inverted index - Wikipedia" (https://en.wikipedia.org/wiki/Inverted_index).]
+
+LSA (and LDiA) produce topic vectors that are high-dimensional, continuous, and dense (zeros are rare).
+And the semantic analysis algorithm does not produce an efficient index for scalable search.
+In fact, the curse of dimensionality that you talked about in the previous section makes an exact index impossible.
+The "indexing" part of latent semantic indexing was a hope, not a reality, so the LSI term is a misnomer.
+Perhaps that is why LSA has become the more popular way to describe semantic analysis algorithms that produce topic vectors.
+
+One solution to the challenge of high-dimensional vectors is to index them with a _locality-sensitive hash_ (LSH).
+A locality-sensitive hash is like a zip code (postal code) that designates a region of hyperspace so that it can easily be found again later.
+And like a regular hash, it is discrete and depends only on the values in the vector.
+But even this doesn't work perfectly once you exceed about 12 dimensions.
+In Figure 4.6, each row represents a topic vector size (dimensionality), starting with 2 dimensions and working up to 16 dimensions, like the vectors you used earlier for the SMS spam problem.
+
+[id=semantic-search-accuracy, reftext={chapter}.{counter:figure}]
+.Semantic search accuracy deteriorates at around 12-D
+image::../images/ch04/semantic-search-lsh-table.png["Search results for top 100 will be perfect with 6D semantic vectors, only the top 10 will be correct for 9D vectors, 2 correct for 13D.",width=650,align="center",link="../images/ch04/semantic-search-lsh-table.png"]
+
+The table shows how good your search results would be if you used locality sensitive hashing to index a large number of semantic vectors.
+Once your vector had more than 16 dimensions, you'd have a hard time returning 2 search results that were any good.
+
+So how can you do semantic search on 100-D vectors without an index?
+You now know how to convert the query string into a topic vector using LSA.
+And you know how to compare two vectors for similarity using the cosine similarity score (the scalar product, inner product, or dot product) to find the closest match.
+To find precise semantic matches, you need to find all the closest document topic vectors to a particular query (search) topic vector.
+(In the professional lingo, it's called _exhaustive search_.)
+But if you have _n_ documents, you have to do _n_ comparisons with your query topic vector.
+That's a lot of dot products.
+
+You can vectorize the operation in `numpy` using matrix multiplication, but that doesn't reduce the number of operations, it only makes them 100 times faster.footnote:[Vectorizing your Python code, especially doubly-nested `+++for+++` loops for pairwise distance calculations can speed your code by almost 100-fold. See Hacker Noon article "Vectorizing the Loops with Numpy" (https://hackernoon.com/speeding-up-your-code-2-vectorizing-the-loops-with-numpy-e380e939bed3).]
+Fundamentally, exact semantic search still requires _O_(_N_) multiplications and additions for each query.
+So it scales only linearly with the size of your corpus.
+That wouldn't work for a large corpus, such as Google Search or even Wikipedia semantic search.
+
+The key is to settle for "good enough" rather than striving for a perfect index or LSH algorithm for our high-dimensional vectors.
+There are now several open source implementations of some efficient and accurate _approximate nearest neighbors_ algorithms that use LSH to efficiently implement semantic search.
+We'll talk more about them in chapter 10. 
+
+Technically these indexing or hashing solutions cannot guarantee that you will find all the best matches for your semantic search query.
+But they can get you a good list of close matches almost as fast as with a conventional reverse index on a TF-IDF vector or bag-of-words vector, if you're willing to give up a little precision.footnote:[If you want to learn about faster ways to find a high-dimensional vector's nearest neighbors, check out appendix F, or just use the Spotify `annoy` package to index your topic vectors.]
+
+== Equipping your bot with semantic search
+
+Let's use your newly-acquired knowledge in topic modeling to improve the bot you started to build in the previous chapter.
+We'll focus on the same task - question answering.
+
+Our code is actually going to be pretty similar to your code in chapter 3.
+We will still use vector representations to find the most similar question in our dataset.
+But this time, our representations are going to be closer to representing the meaning of those questions.
+
+First, let's load the question and answer data just like we did in the last chapter
+
+[source,python]
+----
+>>> REPO_URL = 'https://gitlab.com/tangibleai/qary/-/raw/master'
+>>> FAQ_DIR = 'src/qary/data/faq'
+>>> FAQ_FILENAME = 'short-faqs.csv'
+>>> DS_FAQ_URL = '/'.join([REPO_URL, FAQ_DIR, FAQ_FILENAME])
+
+>>> df = pd.read_csv(DS_FAQ_URL)
+----
+
+The next step is to represent both the questions and our query as vectors.
+This is where we need to add just a few lines to make our representations semantic.
+Because our qestion dataset is small, we won't need to apply LSH or any other indexing algorithm.
+
+[source,python]
+----
+>>> vectorizer = TfidfVectorizer()
+>>> vectorizer.fit(df['question'])
+>>> tfidfvectors = vectorizer.transform(df['question'])
+>>> svd = TruncatedSVD(n_components=16, n_iterations=100)
+>>> tfidfvectors_16d = svd.fit_transform(tfidfvectors)
+>>>
+>>> def bot_reply(question):
+...       question_tfidf = vectorizer.transform([question]).todense()
+...       question_16d = svd.transform(question_tfidf)
+...       idx = question_16d.dot(tfidfvectors_16d.T).argmax()
+...       print(
+...            f"Your question:\n  {question}\n\n"
+...            f"Most similar FAQ question:\n  {df['question'][idx]}\n\n"
+...            f"Answer to that FAQ question:\n  {df['answer'][idx]}\n\n"
+...           )
+----
+
+Let's do a sanity check of our model and make sure it still can answer easy questions:
+
+[source,python]
+----
+>>> bot_reply("What's overfitting a model?")
+Your question:
+  What's overfitting a model?
+Most similar FAQ question:
+  What is overfitting?
+Answer to that FAQ question:
+  When your test set accuracy is significantly lower than your training
+  [CA]set accuracy.
+----
+
+Now, let's give our model a tougher nut to crack - like the question our previous model wasn't good in dealing with.
+Can it do better?
+
+[source,python]
+----
+>>> bot_reply("How do I decrease overfitting for Logistic Regression?")
+Your question:
+  How do I decrease overfitting for Logistic Regression?
+Most similar FAQ question:
+  How to reduce overfitting and improve test set accuracy for a
+  [CA] LogisticRegression model?
+Answer to that FAQ question:
+  Decrease the C value, this increases the regularization strength.
+----
+
+Wow!
+Looks like the new version of our bot was able to "realize" that 'decrease' and 'reduce' have similar meanings.
+Not only that, it was also able to "understand" that 'Logistic Regression' and "LogisticRegression" are very close - such a simple step was almost impossible for our TF-IDF model.
+
+Looks like we're getting closer to building a truly robust question-answering system.
+We'll see in the next chapter how we can do even better than topic modeling!
+
+== What's Next?
+
+In the next chapters, you'll learn how to fine tune this concept of topic vectors so that the vectors associated with words are more precise and useful.
+To do this we first start learning about neural nets.
+This will improve your pipeline's ability to extract meaning from short texts or even solitary words.
+
+== Test yourself
+* What preprocessing techniques would you use to prepare your text for more efficient topic modeling with LDiA? What about LSA?
+* Can you think of a dataset/problem where TF-IDF performs better than LSA? What about the opposite?
+* We mentioned filtering stopwords as a prep process for LDiA. When would this filtering be beneficial?
+* The main challenge of semantic search is that the dense LSA topic vectors are not inverse-indexable. Can you explain why it's so?
+
+== Summary
+
+* You can derive the meaning of your words and documents by analyzing the co-occurence of terms in your dataset.
+* SVD can be used for semantic analysis to decompose and transform TF-IDF and BOW vectors into topic vectors.
+* Hyperparameter table can be used to compare the performances of different pipelines and models.
+* Use LDiA when you need to conduct an explainable topic analysis.
+* No matter how you create your topic vectors, they can be used for semantic search to find documents based on their meaning.

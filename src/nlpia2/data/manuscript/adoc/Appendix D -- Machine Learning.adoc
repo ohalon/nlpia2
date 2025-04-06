@@ -1,0 +1,400 @@
+= Machine learning tools and techniques
+:appendix: D
+:chapter: D
+:part: BM
+:imagesdir: .
+:xrefstyle: short
+:figure-caption: Figure {chapter}.
+:listing-caption: Listing {chapter}.
+:table-caption: Table {chapter}.
+:stem: latexmath
+
+Much of natural language processing involves machine learning.
+So it pays to understand some of the basic tools and techniques of machine learning.
+Some have been covered in earlier chapters, some have not, but all warrant at least a few words here.
+
+== Data selection and avoiding bias
+
+Data selection and feature engineering, are ripe grounds for introducing bias (in human terms) into a model. Once you've baked in your own biases into your algorithm, by chosing a particular set of features, the model will fit to those biases and produced biased results. If you're luck enough to discover this bias before going to production, it can require a significant amount of effort to undo the bias. Your entire pipeline must be rebuilt and retrained to be able to take advantage of the new vocabulary from your tokenizer, for example. You have to start over.
+
+One example is the data and feature selection for the famous Google Word2vec model.
+Word2vec was trained on a vast array of news articles and from this corpus some 1 million or so _N_-grams were chosen as the vocabulary (features) for this model.
+This produced a model that excited data scientists and linguists with the power of math on word vectors with expressions like "king - man + woman = queen".
+But as researchers dug deeper, more problematic relationships revealed themselves in the model.
+
+For example, for the expression "doctor - father + mother = nurse", the answer "nurse" wasn't the unbiased and logical result that they'd hoped for. A gender bias was inadvertently trained into the model. Similar racial, religious, and even geographic regional biases are prevalent in the original Word2vec model.
+The Google researchers didn't create these biases intentionally.
+The bias is inherent in the data, the statistics of word usage in the Google News corpus they trained Word2vec on.
+
+Many of the news articles simply had cultural biases because they were written by journalists motivated to keep their readers happy.
+And these journalists were writing about a world with institutional biases and biases in the real-world events and people.
+The word usage statistics in Google News merely reflects that there are many more mothers who are nurses than doctors. And there are many more fathers who are doctors than are nurses. The Word2vec model is just giving us a window into the world we have created.
+
+Fortunately models like Word2vec do not require labeled training data. So you have the freedom to chose any text you like to train your model. You can chose a dataset that is more balanced, more representative of the beliefs and inferences that you would like your model to make. And when others hide behind the algorithms to say that they are just doing what the model tells them, you can share with them your datasets that more fairly represent a society where we aspire to provide everyone with equal opportunity.
+
+As you are training and testing your models, you can rely on your innate sense of fairness to help you decide when a model is ready to make predictions that affect the lives of your customers. If your model treats _all_ of your users they way you would like to be treated you can sleep well at night. It can also help to pay particularly close attention to the needs of your users that are unlike you, especially those that are typically disadvantaged by society. And if you need more formal justification for your actions you can learn more about statistics, philosophy, ethics, psychology, behavioral economics, and anthropology to augment the computer science skills you've learned in this book.
+
+As a natural language processing practitioner and machine learning engineer you have an opportunity to train machines to do better than many humans do. You bosses and colleagues aren't going to tell you which documents to add or remove from your training set. You have the power to influence the behavior of machines that shape communities and society as a whole.
+
+We've given you some ideas about how to assemble a dataset that is less biased and more fair.
+Now we'll show you how to fit your models to that unbiased data so that they are also accurate and useful in the real world.
+
+== How fit is fit?
+
+With any machine learning model, one of the major challenges is overcoming the model's ability to do _too well_. How can something be "too good"? When working with example data in any model, the given algorithm may do very well at finding patterns in that particular dataset. But given that we already likely know the label of any particular example in the training set (or it wouldn't be in the training set), that is not particularly helpful. The real goal is to use those training examples to build a model that will _generalize_, and be able to correctly label an example that, while similar to members of the training set, is outside of the training set. Performance on new examples that are outside the training set is what we want to maximize.
+
+.Overfit on training samples
+image::../images/app_d/overfit.png[Overfit Model, width=80%, link="../images/app_d/overfit.png"]
+
+A model that perfectly describes (and predicts) your training examples is _overfit_ (see figure D.1). Such a model will have little or no capacity to describe new data. It is not a general model that you can trust to do well when you give it an example not in your training set.
+
+.Underfit on training samples
+image::../images/app_d/underfit.png[Underfit Model, width=80%, link="../images/app_d/underfit.png"]
+
+Conversely, if your model gets many of the training predictions wrong and also does poorly on new examples, it is _underfit_ (see figure D.2).
+Neither of these kinds of models will be useful for making predictions in the real world.
+So let's look at techniques to detect these issues and, more importantly, ways to avoid them.
+
+== Knowing is half the battle
+
+In machine learning practice, if data is gold, labeled data is raritanium (or whatever metaphor for what is most precious to you). Your first instinct may be to take every last bit of labeled data and feed it to the model. More training data leads to a more resilient model, right?  But that would leave us with no way to test the model short of throwing it out into the real world and hoping for the best. This obviously isn't practical. The solution is to split your labeled data into two and sometimes three datasets: a training set, a _validation_ set, and in some cases a _test_ set.
+
+The training set is obvious. The validation set is a smaller portion of the labeled data we hold out and _never_ show to the model for training. Good performance on the validation set is a first step to verifying that the trained model will perform well in the wild, as novel data comes in. You will often see an 80%/20% or 70%/30% split for training versus validation from a given labeled dataset. The _test_ set is just like the validation set -- a subset of the labeled training data to run the model against and measure performance. But how is this _test_ set different from the validation set then? In formulation, they are not different at all. The difference comes in how you use each of them.
+
+While training the model on the training set, there will be several iterations with various hyperparameters; the final model you choose will be the one that performs the best on the validation set.
+But there's a catch.
+How do you know you haven't tuned a model that is merely highly biased toward the validation set?
+There is no way to verify that the model will perform well on data from the wild.
+And this is what your boss or the readers of your white paper are most interested in -- how well will it work on _their_ data.
+
+So if you have enough data, you want to hold a third chunk of the labeled dataset as a _test set_. This will allow your readers (or boss) to have more confidence that your model will work on data that your training and tuning process was never allowed to seen.
+Once the trained model is selected based on validation set performance, and you are no longer training or tweaking your model at all, you can then run predictions (inference) on each sample in the test set. If the model performs well against this third set of data, it has generalized well. For this kind of high-confidence model verification, you will often see a 60%/20%/20% training/validation/test dataset split.
+
+[TIP]
+====
+Shuffling your dataset before you make the split between training, validation, and testing datasets is vital.
+You want each subset to be a representative sample of the "real world", and they need to have roughly equal proportions of each of the labels you expect to see.
+If your training set has 25% positive examples and 75% negative examples, you want your test and validation sets to have 25% positive and 75% negative examples, too.
+And if your original dataset had all the negative examples first and you did a 50/50 train/test split without shuffling the dataset first, you'd end up with 100% negative examples in your training set and 50/50 in your test set.
+Your model would never learn from the positive examples in your dataset.
+====
+
+== Cross-fit training
+
+Another approach to the train/test split question is _cross-validation_ or _k-fold cross-validation_ (see figure D.3). The concept behind cross validation is very similar to the rough splits we just covered, but it allows you a path to use the entire labeled set as training. The process involves dividing your training set into _k_ equal sets, or _folds_. You then train your model with _k_-1 of the folds as a training set and validate it against the _k-th_ fold. You then restart the training afresh with one of the _k_-1 sets used in training on the first attempt as your held-out validation set. The remaining _k_-1 folds become your new training set.
+
+.K-fold cross-validation
+image::../images/app_d/kfold.png[K-Fold cross-validation, width=80%, link="../images/app_d/kfold.png"]
+
+This technique is valuable for analyzing the structure of the model and finding hyperparameters that perform well against a variety of validation data. Once your hyperparameters are chosen, you still have to select the _trained_ model that performed the best and as such is susceptible to the bias expressed in the previous section, so holding a test set out from this process is still advisable.
+
+This approach also gives you some new information about the reliability of your model.
+You can compute a P-value for the likelihood that the relationship discovered by your model, between the input features and the output predictions, is statistically significant and not just the result of random chance.
+But this is significantly new piece of information if your training dataset is truly a representative sample of the real world.
+
+The cost of this extra confidence in your model is that it takes _K_ times as long to train, for _K_-fold cross-validation.
+So if you want to get the 90% answer to your problem, you can often simply do 1-fold cross validation.
+This 1-fold is exactly equivalent to our training set and validation set split that we did earlier.
+You will not have 100% confidence in the reliability of your model as a description of the real world dynamics, but if it works well on your test set you can be very confident that it is a _useful_ model for predicting your target variable.
+So this is the practical approach that makes sense for most business application of machine learning models.
+
+== Holding your model back
+
+During the `model.fit()`, the gradient descent is over-enthusiastic about pursuing the lowest possible error in your model.
+This can lead to overfitting, where your model does really well on the training set but poorly on new unseen examples (the test set).
+So you probably want to "hold back" on the reins of your model.
+Here are a three ways to do that:
+
+* Regularization
+* Random dropout
+* Batch normalization
+
+=== Regularization
+
+In any machine learning model, overfitting will eventually come up. Luckily, several tools can combat it. The first is _regularization_, which is a penalization to the learned parameters at each training step. It is usually, but not always, a factor of the parameters themselves. _L1-norm_ and _L2-norm_ are the most common.
+
+.L1 regularization
+image::../images/app_d/l1_reg.png[L1 regularization, width=100%, link="../images/app_d/l1_reg.png"]
+
+L1 is the sum of the absolute values of all the parameters (weights) multiplied by some lambda (a hyperparameter), usually a small float between 0 and 1. This sum is applied to the weights update -- the idea being that weights that spike upwards or downwards cause a penalty to be incurred, and the model is encouraged to use more of its weights ... evenly.
+
+.L2 regularization
+image::../images/app_d/l2_reg.png[L2 regularization, width=100%, link="../images/app_d/l2_reg.png"]
+
+Similarly, L2 is a weight penalization but defined slightly differently. In this case, it is the sum of the weights squared multiplied by some value lambda (a separate hyperparameter to be chosen ahead of training).
+
+=== Dropout
+
+In neural networks,  _dropout_ is another handy tool for this situation -- one that is seemingly magical on first glance. Dropout is the concept that at any given layer of a neural network we will turn off a percentage of the signal coming through that layer at training time. Note that this occurs _only_ during training, and never during inference. At any given training pass, a subset of the neurons in the layer below are "ignored"; those output values are explicitly set to zero. And because they have no input onto the resulting prediction, they will receive no weight update during the backpropagation step. In the next training step, a different subset of the weights in the layer will be chosen and those others are zeroed out.
+
+How is a network supposed to learn anything with 20 percent of its brain turned off at any given time? The idea is that no specific weight path should define wholly a particular attribute of the data. The model must generalize its internal structures to be able to handle data via multiple paths through the neurons.
+
+The percentage of the signal that gets turned off is defined as a hyperparameter, because it is a percentage that will be a float between 0 and 1. In practice, a dropout of .1 to .5 is usually optimal, but of course it's model dependent.
+
+And at inference time, dropout is ignored and the full power of the trained is brought to bear on the novel data.
+
+Keras provides a very simple way to implement this, and it can be seen in the book's examples.
+
+.A dropout layer in Keras reduces overfitting
+[source,python]
+---------------
+>>> from keras.models import Sequential
+>>> from keras.layers import Dropout, LSTM, Flatten, Dense
+
+>>> num_neurons = 20  # <1>
+>>> maxlen = 100
+>>> embedding_dims = 300
+
+>>> model = Sequential()
+
+>>> model.add(LSTM(num_neurons, return_sequences=True,
+...                input_shape=(maxlen, embedding_dims)))
+>>> model.add(Dropout(.2))  # <2>
+
+>>> model.add(Flatten())
+>>> model.add(Dense(1, activation='sigmoid'))
+---------------
+<1> Arbitrary hyperparmeters used as an example
+<2> .2 here is the hyperparameter, so 20% of the outputs of the LSTM layer above will be zeroed out and therefore ignored.
+
+
+=== Batch normalization
+
+A newer concept in neural networks called _batch normalization_ can help regularize and generalize your model.
+_Batch normalization_ is the idea that, much like the input data, the outputs of each layer should be normalized to values between 0 and 1. There is still some debate about how or why or when this is beneficial, and under which conditions it should be used. We leave it to you to explore that research on your own.
+
+But Keras does provide a handy implementation with its `BatchNormalization` layer.
+
+.`BatchNormalization`
+[source,python]
+----
+>>> from keras.models import Sequential
+>>> from keras.layers import Activation, Dropout, LSTM, Flatten, Dense
+>>> from keras.layers.normalization import BatchNormalization
+
+>>> model = Sequential()
+>>> model.add(Dense(64, input_dim=14))
+>>> model.add(BatchNormalization())
+>>> model.add(Activation('sigmoid'))
+>>> model.add(Dense(64, input_dim=14))
+>>> model.add(BatchNormalization())
+>>> model.add(Activation('sigmoid'))
+>>> model.add(Dense(1, activation='sigmoid'))
+----
+
+== Imbalanced training sets
+
+Machine learning models are only ever as good as the data you feed them. Having a huge amount of data is only helpful if you have examples that cover all the cases you hope to predict in the wild. And just covering each case once isn't necessarily enough. Imagine you are trying to predict whether an image is a dog or a cat. But you have a training set with 20,000 pictures of cats and only 200 pictures of dogs. If you were to train a model on this dataset, it would not be unlikely that the model would simply learn to predict any given image was a cat regardless of the input. And from the model's perspective that would be fine, right? I mean it would be correct in 99% of the cases from the training set. Of course, that's a bogus argument and that model is worthless. But totally outside the scope of any particular model, the most likely cause of this failure is the _imbalanced training set_.
+
+Models, especially neural nets, can be very finicky regarding training sets, for the simple reason that the signal from an overly sampled class in the labeled data can overwhelm the signal from the small cases. The weights will more often be updated by the error generated by the dominant class and the signal from the minority class will be washed out. It isn't vital to get an exactly even representation of each class, because the models have the ability to overcome some noise. The goal here is just to get the counts into the same ballpark.
+
+The first step, as with any machine learning task, is to look long and hard at your data. Get a feel for the details and run some rough statistics on what the data actually represent. Find out not just how much data you have, but how much of which kinds of data you have.
+
+So what to do if things aren't magically even from the beginning? If the goal is to even out the class representations (and it is), there are three main options: oversampling, undersampling, and augmenting.
+
+=== Oversampling
+
+_Oversampling_ is the technique of repeating examples from the under-represented class or classes. Let's take the dog/cat example from earlier (only 200 dogs to 20,000 cats). You can simply repeat the dog images you do have 100 times each and end up with 40,000 total samples, half dogs/half cats.
+
+This is an extreme example, and as such will lead to its own problems. The network will likely get very good at recognizing those specific 200 dogs and not generalize well to other dogs not in the training set. But the technique of oversampling can certainly help balance a training set in cases that aren't so radically spread.
+
+=== Undersampling
+
+_Undersampling_ is the opposite technique of the same coin. Here you just drop examples from the over-represented class. In the dog/cat example, we would just randomly drop 19,800 cat images and be left with 400 examples, half dog/half cat. This, of course, has a glaring problem of its own. We've thrown away the vast majority of the data and are working from a much less general footing. Extreme cases such as this aren't ideal but can be a good path forward if you have a large number of examples in the under-represented class. Having that much data is definitely a luxury.
+
+=== Augmenting your data
+
+This is a little trickier, but in the right circumstances, _augmenting_ the data can be your friend. The concept of augmentation is to generate novel data, either from perturbations of the existing data or generating it from scratch. AffNIST (http://www.cs.toronto.edu/~tijmen/affNIST) is such an example. The famous MNIST dataset is a set of handwritten digits, 0-9 (see figure D.6). AffNIST takes each of the digits and skews, rotates, and scales them in various ways, while maintaining the original labels.
+
+.The entries in the leftmost column are examples from the original MNIST, the other columns are all affine transformations of the data included in affNIST footnote:[image credit: "affNIST" (http://www.cs.toronto.edu/~tijmen/affNIST).]
+image::../images/app_d/affnist.png[Affnist Digits, width=80%, link="../images/app_d/affnist.png"]
+
+The purpose of this particular effort wasn't to balance the training set but to make nets such as convolutional neural nets more resilient to new data written in other ways, but the concept of augmenting the data is the same.
+
+But you must be cautious. Adding data that is not truly representative of that which you're trying to model can hurt more than it helps. Say your dataset is the 200/20,000 dogs/cats from earlier. And let's further assume that the images are all high-resolution color images taken under ideal conditions. Now handing a box of crayons to 19,000 kindergarteners would not necessarily get you the augmented data you desired. So think a bit about what augmenting your data will do to the model. The answer isn't always clear, so if you do go down this path, keep it in mind while you validate the resulting model and try to test around its edges to verify that you didn't introduce unexpected behavior unintentionally.
+
+And lastly, probably the least helpful thing to say, but it is true, going back to the well to look for additional data should always be considered if your dataset is "incomplete". It isn't always feasible, but you should at least consider it as an option.
+
+== Performance metrics
+
+The most important piece of any machine learning pipeline is the performance metric.
+If you don't know how well your machine learning model is working, you can't make it better.
+The first thing we do when starting a machine learning pipeline is set up a performance metric, such as ".score()" on any sklearn machine learning model.
+We then build a completely random classification/regression pipeline with that performance score computed at the end.
+This lets us make incremental improvements to our pipeline that gradually improve the score, getting us closer to our goal.
+It's also a great way to keep your bosses and coworkers convinced that you're on the right track.
+
+=== Measuring classifier performance
+
+A classifier has two things you want it to get right: labeling things that truly belong in the class with that class label, and not labeling things that aren't in that class with that label.
+The counts of these that it got right are called the true positives and the true negatives, respectively.
+If you have an array of all your model classifications or predictions in numpy arrays, you can count these correct predictions like this:
+
+.Count what the model got right
+[source,python]
+----
+>>> y_true = np.array([0, 0, 0, 1, 1, 1, 1, 1, 1, 1])  # <1>
+>>> y_pred = np.array([0, 0, 1, 1, 1, 1, 1, 0, 0, 0])  # <2>
+>>> true_positives = ((y_pred == y_true) & (y_pred == 1)).sum()
+>>> true_positives  # <3>
+4
+>>> true_negatives = ((y_pred == y_true) & (y_pred == 0)).sum()
+>>> true_negatives  # <4>
+2
+----
+<1> `y_true` is a numpy array of the true (correct) class labels. Usually these are determined by a human
+<2> `y_pred` is a numpy array of your model's predicted class labels (0 or 1)
+<3> `true_positives` are the positive class labels (1) that your model got right (correctly labeled 1)
+<4> `true_negatives` are the negative class labels (0) that your model got right (correctly labeled 0)
+
+It's also important to count up the predictions that your model got wrong, like this:
+
+.Count what the model got wrong
+[source,python]
+----
+>>> false_positives = ((y_pred != y_true) & (y_pred == 1)).sum()
+>>> false_positives  # <1>
+1
+>>> false_negatives = ((y_pred != y_true) & (y_pred == 0)).sum()
+>>> false_negatives  # <2>
+3
+----
+<1> `false_positives` are the negative class examples (1) that were falsely labeled positive by your model (labeled 1 when they should be 0)
+<2> `false_negatives` are the positive class examples (0) that were falsely labeled negative by your model (labeled 0 when they should be 1)
+
+
+// PROOFER: user [557658](https://forums.manning.com/posts/list/45137) found this bug and it's been fixed above
+
+Sometimes these four numbers are combined into a single 4x4 matrix called an error matrix or confusion matrix.
+Here's what our made-up predictions and truth values would look like in a confusion matrix:
+
+.Confusion matrix
+[source,python]
+----
+>>> confusion = [[true_positives, false_positives],
+...              [false_negatives, true_negatives]]
+>>> confusion
+[[4, 3], [1, 2]]
+>>> import pandas as pd
+>>> confusion = pd.DataFrame(confusion, columns=[1, 0], index=[1, 0])
+>>> confusion.index.name = r'pred \ truth'
+>>> confusion
+              1  0
+pred \ truth
+1             4  1
+0             3  2
+----
+
+In a confusion matrix, you want to have large numbers along the diagonal (upper left and lower right) and low numbers in the off diagonal (upper right and lower left).
+However the order of positives and negatives are arbitrary, so sometimes you may see this table transposed.
+Always label your confusion matrix columns and indexes.
+And sometimes you might hear statisticians call this matrix a classifier contingency table, but you can avoid confusion if you stick with the name "confusion matrix."
+
+There are two useful ways to combine some of these four counts into a single performance metric for your machine learning classification problem are _precision_ and _recall_.
+Information retrieval (search engines) and semantic search are examples of such classification problems, since your goal is to classify documents as a "match" or not.
+In chapter 2 you learned how stemming and lemmatization can improve recall but reduce precision.
+
+Precision measures how good your model is at detecting all the members of the class you're interested in, called the positive class.
+For this reason it is also called the positive predictive value.
+Since your true positives are the positive labels that you got right and false positives are the negative examples that you mislabeled as positive, the precision calculation is:
+
+.Precision
+[source,python]
+----
+>>> precision = true_positives / (true_positives + false_positives)
+>>> precision
+0.571...
+----
+
+The example confusion matrix gives a precision of about 57% because it got 57% of the true labels correct.
+
+The recall performance number is similar.
+It's also called the sensitivity or the true positive rate or the probability of detection.
+Because the total number of examples in your dataset is the sum of the true positives and the false negatives you can calculate recall, the percentage of positive labels that were detected, with:
+
+.Recall
+[source,python]
+----
+>>> recall = true_positives / (true_positives + false_negatives)
+>>> recall
+0.8
+----
+
+So this says that our example model detected 80% of the positive examples in the dataset.
+
+=== Measuring regressor performance
+
+The two most common performance scores used for machine learning regression problems are root mean square error (RMSE) and Pearson correlation (R^2^).
+It turns out that classification problems are really regression problems under the hood.
+So you can use your regression metrics on your class labels if the have been converted to numbers, as we did in the previous section.
+So these code examples will reuse those example predictions and truth values here.
+
+RMSE is the most useful for most problems because it tells you how far away from the truth your predictions are likely to be.
+RMSE gives you the standard deviation of your error.
+
+.RMSE
+[source,python]
+----
+>>> y_true = np.array([0, 0, 0, 1, 1, 1, 1, 1, 1, 1])
+>>> y_pred = np.array([0, 0, 1, 1, 1, 1, 1, 0, 0, 0])
+>>> rmse = np.sqrt((y_true - y_pred) ** 2) / len(y_true))
+>>> rmse
+0.632...
+----
+
+Another common performance metric for regressors in the Pierson correlation coefficient.
+The `sklearn` module attaches it to most models as the default `.score()` method.
+You should calculate these scores manually if you are unclear on exactly what they measure:
+
+.Correlation
+[source,python]
+----
+>>> corr = pd.DataFrame([y_true, y_pred]).T.corr()
+>>> corr[0][1]
+0.218...
+>>> np.mean((y_pred - np.mean(y_pred)) * (y_true - np.mean(y_true))) /
+...     np.std(y_pred) / np.std(y_true)
+0.218...
+----
+
+So our example predictions are correlated with the truth by only 28%.
+
+== Pro tips
+
+Once you have the basics down, some simple tricks will help you build good models faster.
+
+* Work with a small random sample of your dataset to get the kinks out of your pipeline
+* When you're ready to deploy to production, train your model on all the data you have.
+* The first approach you should try is the one you know best. This goes for both the feature extractors and the model itself.
+* Use scatter plots and scatter matrices on low-dimensional features and targets to make sure you aren't missing some obvious patterns.
+* Plot high-dimensional data as a raw image to discover shifting across features.footnote:[Time series training sets will often be generated with a time shift or lag. Discovering this can help you on Kaggle competitions that hide the source of the data, like the Santander Value Prediction competition (www.kaggle.com/c/santander-value-prediction-challenge/discussion/61394).]
+* Try PCA on high-dimensional data (LSA on NLP data) when you want to maximize the *differences* between pairs of vectors (classification).
+* Use nonlinear dimension reduction, like t-SNE, when you want to find *matches* between pairs of vectors or perform regression in the low-dimensional space.
+* Build a `sklearn.Pipeline` object to improve the maintainability reusability of your models and feature extractors.
+* Automate the hyperparameter tuning so your model can learn about the data and you can spend your time learning about machine learning.
+
+.Hyperparameter tuning
+[IMPORTANT, definition]
+====
+Hyperparameters are all the values that determine the performance of your pipeline, including the model type and how it is configured. This can be things like how many neurons and layers are in a neural network or the value of alpha in an `sklearn.linear_model.Ridge` regressor. Hyperparameters also include the values that govern any preprocessing steps, like the tokenizer type, any list of words that are ignored, the minimum and maximum document frequency for the TF-IDF vocabulary, whether or not to use a lemmatizer, the TF-IDF normalization approach, and so on.
+====
+
+Hyperparameter tuning can be a slow process, because each experiment requires you to train and validate a new model.
+So it pays to reduce your dataset size to a minimum representative sample while you are searching a broad range of hyperparameters.
+When your search gets close to the final model that you think is going to meet your needs you can increase the dataset size to use as much of the data as you need.
+
+Tuning the hyperparameters of your pipeline is how you improve the performance of your model. Automating the hyperparameter tuning can give you more time to spend reading books like this or visualizing and analyzing your results. You can still guide the tuning with your intuition by setting the hyperparameter ranges to try.
+
+[TIP]
+====
+The most efficient algorithms for hyperparameter tuning are (from best to worst):
+
+1. Bayesian search
+2. Genetic algorithms
+3. Random search
+4. Multi-resolution grid searches
+5. Grid search
+
+But any algorithm that lets your computer do this searching at night while you sleep is better than manually guessing new parameters one by one.
+====
+

@@ -1,0 +1,1073 @@
+
+:toc: left
+:toclevels: 6
+
+++++
+  <style>
+  .first-sentence {
+    text-align: left;
+    margin-left: 0%;
+    margin-right: auto;
+    width: 66%;
+    background: Beige;
+  }
+  .last-sentence {
+    text-align: right;
+    margin-left: auto;
+    margin-right: 0%;
+    width: 66%;
+    background: AliceBlue;
+  }
+  </style>
+++++
+= Chapter 10&#8201;&#8212;&#8201;Large Language Models in the Real World
+[.first-sentence]
+This chapter covers
+
+[.last-sentence]
+This chapter covers
+
+[.first-sentence]
+If you scale up transformer-based language models to obscene sizes, you can achieve some surprisingly impressive results.
+
+[.last-sentence]
+This chapter will help you use LLMs smartly so you can do more than merely _sound_ intelligent.
+
+[.first-sentence]
+This chapter will help you recognize the problems with LLMs so you can use them smartly and minimize their harm to you and others.
+
+[.last-sentence]
+This chapter will help you recognize the problems with LLMs so you can use them smartly and minimize their harm to you and others.
+
+[.first-sentence]
+You can mitigate all these harms by building and using LLMs that are smarter and more efficient.
+
+[.last-sentence]
+And you will learn how to make your LLMs more efficient and less wasteful, not only reducing the environmental impact but also helping more people gain access to the power of LLMs.
+
+== Large Language Models (LLMs)
+[.first-sentence]
+The largest of the LLMs have more than a trillion parameters.
+
+[.last-sentence]
+We're easily fooled because we _anthropomorphize_ everything around us, from pets to corporations and video game characters.
+
+[.first-sentence]
+This was surprising for both researchers and everyday technology users.
+
+[.last-sentence]
+But the human mind is easily fooled by a machine that has been trained on the entire Internet and can regurgitate patterns of words that look a lot like reasonable answers to your questions.
+
+[.first-sentence]
+It takes a pretty smart user to detect the quirks of poor reasoning that come out in your conversations with LLMs.
+
+[.last-sentence]
+OpenAI bragged that they had signed up their 100 millionth ChatGPT user in January 2023, two months after launch.
+
+[.first-sentence]
+Conversational LLMs appear to be intelligent!
+
+[.last-sentence]
+Keep that in the back of your mind, look at the brief history and explosive expansion of LLM size over the past three years in Figure <<figure-llm-survey>>.
+
+.Large Language Model sizes
+
+[.first-sentence]
+To put these model sizes into perspective, a model with a trillion trainable parameters has less than 1% of the number of connections between neurons than an average human brain has.
+
+[.last-sentence]
+This is why researchers and large organizations have been investing millions of dollars on the compute resources required to train the largest language models.
+
+[.first-sentence]
+Researchers and their corporate backers are hopeful that increased size will unlock human-like capabilities.
+
+[.last-sentence]
+And then trillion parameter models such as GPT-4 can perform few-shot learning where the entire machine learning training set is contained within a single conversational prompt.
+
+=== Example LLM application - education
+[.first-sentence]
+But how deep does this in-context few-shot learning go?
+
+[.last-sentence]
+Can `GPT-3.5-turbo` pick up within the middle of a Rori.AI conversation with a student?
+
+.ChatGPT can&#8217;t count
+
+[.first-sentence]
+This ChatGPT response would definitely get the thumbs-down from the teacher.
+
+[.last-sentence]
+But elementary school math is evidently not ChatGPT's strong suit.
+
+[.first-sentence]
+Fortunately, ChatGPT will often respond differently if you send the same prompt multiple times, or if you increase the temperature.
+
+[.last-sentence]
+See the illustration on the inside cover of the first edition of NLPiA for a bit of foreshadowing about large language models and their need for grounding and curation within a rule-based conversation manager.
+
+.If at first you don&#8217;t succeed try and try again
+
+[.first-sentence]
+As you can see ChatGPT did much better on the second round of testing.
+
+[.last-sentence]
+After all this LLM uses reinforcement learning with human feedback to try to keep up with the changing needs of humans using LLMs in the real world.
+
+[.first-sentence]
+For ChatGPT the human feedback is the like button and any explicit feedback users or trained employees of OpenAI provide.
+
+[.last-sentence]
+And it accomplished this objective, reportedly attracting 100 million monthly users in only 2 months, the fastest-growing product launch ever.
+
+[.first-sentence]
+You probably will want to call an LLM many times using the exact same prompts to quantify the range of possible responses you can expect.
+
+[.last-sentence]
+When you use the nlpia2.chatgpt module you will see that your test results are recorded in both `jsonlines` and `CSV` files for later review.
+
+[.first-sentence]
+In addition to the system or context prompt and the main instructional prompt, you can adjust two other parameters during your prompt engineering experiments: temperature and time.
+
+[.last-sentence]
+A higher temperature increases the randomness or entropy (surprise) of the responses the LLM will generate.
+
+[.first-sentence]
+Here are some more examples.
+
+[.last-sentence]
+So if you try to make it do something new, it will simply fall back to similar things it has done before.
+
+.ChatGPT doesn&#8217;t have a conversation goal
+
+.ChatGPT likes word problems
+
+[.first-sentence]
+So ChatGPT has read many word problem texts and can regurgitate word problem questions and recognize the correct answers to those questions.
+
+[.last-sentence]
+For word problems requiring significant reasoning and generalization, ChatGPT will often provide incorrect answers and explanations to students.
+
+[.first-sentence]
+Nonetheless, some of the most intelligent and skeptical experts are impressed by the ability of LLMs to do few-shot learning.
+
+[.last-sentence]
+The code here lets your explore the results from their paper "Emergent Abilities of Large Language Models."
+
+[.first-sentence]
+The code snippet gives you a alphabetical sampling of the 130 nonemergent capabilities cataloged by Google researchers.
+
+[.last-sentence]
+So the paper that provided this data shows that the current transformer-based language models don't scale at all for a large portion of the most interesting tasks that are needed to demonstrate intelligent behavior.
+
+[.first-sentence]
+As you might suspect, much of the talk about emergent capabilities is just marketing hype.
+
+[.last-sentence]
+The smarter, collaboratively designed open source models are turning out to scale much much more efficiently.
+
+=== Smarter smaller LLMs
+[.first-sentence]
+The open source language models like BLOOMZ, StableLM, and InstructGPT have been better trained and pruned to make them more efficient and more robust (smarter) than prorietary models hundreds of times larger.
+
+[.last-sentence]
+Here are some examples of organizations getting ahead in AI by contributing to open source language models:
+
+[.first-sentence]
+Bigger is better if you're optimizing for likes, but smaller is smarter if what you care about is truly intelligent behavior.
+
+[.last-sentence]
+So bigger is better, if you're talking about open source communities rather than LLMs.
+
+[.first-sentence]
+One great idea that came out of the open source community was building higher level _meta models_ that utilize LLMs and other NLP pipelines to accomplish their goals.
+
+[.last-sentence]
+If you break down a prompt into the steps needed to accomplish a task, you can then ask an LLM to generate the API queries that can reach out into the world and accomplish those tasks efficiently.
+
+=== Generating warm words
+[.first-sentence]
+How does a generative model create new text?
+
+[.last-sentence]
+By reading a bunch of text, a language model can learn how often each word occurs based on the words that proceeded it.
+
+[.first-sentence]
+If you browse an n-gram viewer and use the wild card after a token, you can see what the most common (probable) words are that follow your search term, auto-complete style.
+
+[.last-sentence]
+If you browse an n-gram viewer and use the wild card after a token, you can see what the most common (probable) words are that follow your search term, auto-complete style.
+
+[.first-sentence]
+So if you tell a language model to start a sentence with the "<SOS>" (start of sentence) token, followed by the token "LLMs", it might work through a decision tree to decide each subsequent word.
+
+[.last-sentence]
+You can see what this might look like in Figure <<figure-stochastic-chameleon>>.
+
+.Stochastic chameleons decide words one at a time
+
+[.first-sentence]
+Figure <<figure-stochastic-chameleon>> shows the probabilities for each word in the sequence as an LLM is generating new text from left to right.
+
+[.last-sentence]
+A hotter model has more randomness and will be more likely to head off in a hot-headed, less predictable direction.
+
+[.first-sentence]
+In this illustration, sometimes the LLM chooses the second or third most probable token rather than the most likely one.
+
+[.last-sentence]
+But for this diagram the sentence generated along the _spine_ of this fishbone diagram is a pretty surprising (high entropy) and meaningful sentence: "LLMs are stochastic chameleons."
+
+[.first-sentence]
+As an LLM generates the next token it looks up the most probable words from a probability distribution conditioned on the previous words it has already generated. So imagine a user prompted an LLM with two tokens "<SOS> LLM".
+
+[.last-sentence]
+And the language model would have learned the English grammar rules that define the kinds of words that usually follow plural nouns.
+
+[.first-sentence]
+When the language model then tries to predict the third word in the sentence it would probably come up with some adjectives that are associated with the subject of the sentence, "LLMs."
+
+[.last-sentence]
+Here's some `numpy` code to illustrate what an LLM is doing under the hood.
+
+[.first-sentence]
+This code snippet uses made up probability numbers to illustrate how a generative model chooses the next word randomly, without generating total nonsense.
+
+[.last-sentence]
+Perhaps you can now see why simple language models like this are not very smart and will often generate nonsense
+
+=== Nonsense (hallucination)
+[.first-sentence]
+As language models get larger, they start to sound better.
+
+[.last-sentence]
+A grounded language model should be able to count and do addition much better.
+
+[.first-sentence]
+Like a baby learning to walk and talk, LLMs could be forced to learn from their mistakes by allowing them to sense when their assumptions were incorrect.
+
+[.last-sentence]
+An LLM "lives" in the world of social media, where fact and fantasy are often indistinguishable to a chatbot.
+
+[.first-sentence]
+So even the largest of the large, trillion-parameter transformer will generate nonsense responses.
+
+[.last-sentence]
+An LLM can't even hallucinate because it can't think, much less reason or have a mental model of reality.
+
+[.first-sentence]
+Hallucination happens when a human fails to separate imagined images or words from the reality of the world they live in.
+
+[.last-sentence]
+So it can't hallucinate.
+
+[.first-sentence]
+LLMs have no concept of truth, facts, correctness, or reality.
+
+[.last-sentence]
+Most of the text found online is either fiction or intentionally misleading.
+
+[.first-sentence]
+So the researchers' hope for a shortcut was misguided.
+
+[.last-sentence]
+And yet LLMs have no ability or incentives (objective functions) to help them differentiate fact from fiction.
+
+[.first-sentence]
+Luckily, organizations such as Cohere and Anthropic and the authors of this book are working hard to fill this gap.
+
+[.last-sentence]
+In the next chapter, you will learn how to use these knowledge bases to ground your LLMs in reality so that at least they will not be incentivized to be deceiving as most BigTech LLMs are.
+
+=== Serve your "users" better
+[.first-sentence]
+In the real world, corporations are using NLP to deliver extreme profitability to their investors.
+
+[.last-sentence]
+Once you see what LLMs do well, you will be able to use them correctly and more efficiently to create much more valuable tools for you and your business.
+
+[.first-sentence]
+And if you think this is all a pipe dream, you only have to look back at our suggestions in the first edition of this book.
+
+[.last-sentence]
+This chapter will show you how to "mainline" the information flow as a user of your own personalized search engine and NLP.
+
+[.first-sentence]
+Corporations are using LLMs incorrectly because they are restrained by their _fiduciary responsibility_ to investors in the US.
+
+[.last-sentence]
+Federal legislation is currently being proposed in the US Congress that would make it illegal for investment firms to favor corporations with ESG programs and values.
+
+[.first-sentence]
+Fortunately, many smart, responsible organizations are bucking this greedy zero-sum thinking.
+
+[.last-sentence]
+Here are some alternatives to ChatGPT with more prosocial, magnanimous objective functions:
+
+[.first-sentence]
+For example, Vicuna requires only 13 billion parameters to achieve twice the accuracy of LLaMa (5 times larger and slower) and almost the same accuracy as ChatGPT.footnote:[Vicuna home page (https://vicuna.lmsys.org/)] footnote:[Vicuna LLM on Hugging Face (https://huggingface.co/lmsys/vicuna-13b-delta-v1.1)]
+
+[.last-sentence]
+If you want to contribute to the battle against exploitative and manipulative AI, the Open Assistant project is a great place to start.footnote:[GitHub page for Open Assistant (https://github.com/LAION-AI/Open-Assistant/)]
+
+=== Creating your own Generative LLM
+[.first-sentence]
+To understand how GPT-3.5 works, you'll use its "grandfather", GPT-2, which was the last open-source generative model released by OpenAI.
+
+[.last-sentence]
+To understand how GPT-3.5 works, you'll use its "grandfather", GPT-2, which was the last open-source generative model released by OpenAI.
+
+[.first-sentence]
+In this chapter, to get closer to the way NLP is done in the real world, you'll be using HuggingFace classes a lot.
+
+[.last-sentence]
+They allow you to simplify your development process, while still retaining most of PyTorch's customization ability.
+
+[.first-sentence]
+As usual, you'll start by importing your libraries and setting a random seed - as we're using several libraries and tools, there are a lot of random seeds to "plant"!
+
+[.last-sentence]
+As usual, you'll start by importing your libraries and setting a random seed - as we're using several libraries and tools, there are a lot of random seeds to "plant"!
+
+[.first-sentence]
+You can do all this seed-setting with a single line of code in Hugging Face's Transformers package:
+
+[.last-sentence]
+You can do all this seed-setting with a single line of code in Hugging Face's Transformers package:
+
+[.first-sentence]
+Now, you can load our model and tokenizer.
+
+[.last-sentence]
+You'll use the pretrained model that the package provides out of the box.
+
+[.first-sentence]
+Let's see how good this model is in generating useful text.
+
+[.last-sentence]
+For GPT-2, the prompt will simply serve as the beginning of the sentence.
+
+[.first-sentence]
+Hmm.
+
+[.last-sentence]
+So instead of using the higher-level `generate()` method, let's look at what the model returns when called directly on the input like we did in our training loops in previous chapters:
+
+[.first-sentence]
+If you dabbled with neural networks before this book, you might be familiar with logit function.
+
+[.last-sentence]
+But what's the shape of our logit tensor in this case?
+
+[.first-sentence]
+Incidentally, 50257 is the size of GPT-2's _vocabulary_ - that is, the total number of tokens this model uses.
+
+[.last-sentence]
+Let's see what token has a maximum probability for the input sequence "NLP is a":
+
+[.first-sentence]
+So this is how your model generated the sentence: at each timestep, it chose the token with the maximum probability given the sequence it received.
+
+[.last-sentence]
+This means your generate function could even be used to complete phrases that end in a part of a word, such as "NLP is a non".
+
+[.first-sentence]
+This type of stochastic generation is the default for GPT2 and is called _greedy_ search because it grabs the "best" (most probable) token every time.
+
+[.last-sentence]
+So you can use both temperature and a repetition penalty to help your _stochastic chameleon_ do a better job of blending in among humans.
+
+[.first-sentence]
+We're inventing new terms every year to describe AI and help us develop intuitions about how they do what they do.
+
+[.last-sentence]
+Some common ones are:
+
+[.first-sentence]
+Yes, these are real terms, used by really smart people to describe AI.
+
+[.last-sentence]
+You'll learn a lot by researching these terms online to develop your own intuitions.
+
+[.first-sentence]
+Fortunately, there are much better and more complex algorithms for choosing the next token.
+
+[.last-sentence]
+We won't discuss all of them here - you can read more about them in HuggingFace's excellent guide. footnote:[How to generate text: using different decoding methods for language generation with Transformers (https://huggingface.co/blog/how-to-generate)]
+
+[.first-sentence]
+Let's try to generate text using nucleus sampling method.
+
+[.last-sentence]
+Note that because sampling is probabilistic, the generated text will be different for you - this is not something that can be controlled with a random seed.
+
+[.first-sentence]
+OK.
+
+[.last-sentence]
+To get generated text that is domain-specific, you need to _fine-tune_ our model - train it on a dataset that is specific to our task.
+
+=== Fine-tuning your generative model
+[.first-sentence]
+In your case, this dataset would be this very book, parsed into a database of lines.
+
+[.last-sentence]
+In this case, we only need the book's text, so we'll ignore code, headers, and all other things that will not be helpful for our generative model.
+
+[.first-sentence]
+Let's also initialize a new version of our GPT-2 model for finetuning. We can reuse the tokenizer for GPT-2 we initialized before.
+
+[.last-sentence]
+Let's also initialize a new version of our GPT-2 model for finetuning. We can reuse the tokenizer for GPT-2 we initialized before.
+
+[.first-sentence]
+This will read all the sentences of natural language text in the manuscript for this book.
+
+[.last-sentence]
+You want to wrap your list of sentences with a PyTorch `Dataset` class so that your text will be structured in the way that our training pipeline expects.
+
+[.first-sentence]
+Now, we want to set aside some samples for evaluating our loss mid-training.
+
+[.last-sentence]
+Usually, we would need to wrap them in the `DataLoader` wrapper, but luckily, the Transformers package simplifies things for us.
+
+[.first-sentence]
+Finally, you need one more Transformers library object - DataCollator.
+
+[.last-sentence]
+We suggest starting from single-digit batch sizes and seeing if you run into out-of-memory errors.
+
+[.first-sentence]
+If you were doing the training in PyTorch, there are multiple parameters that you would need to specify - such as the optimizer, its learning rate, and the warmup schedule for adjusting the learning rate.
+
+[.last-sentence]
+Easy-peasy.
+
+[.first-sentence]
+Now you have the pieces that a HuggingFace training pipeline needs to know to start training (finetuning) your model.
+
+[.last-sentence]
+You need to move fast to compete with the _chickenized reverse centaur_ algorithms that BigTech is using to try to enslave you.
+
+[.first-sentence]
+The `mlm=False` (masked language model) setting is an especially tricky quirk of transformers.
+
+[.last-sentence]
+This is the kind of dataset used to train bidirectional language models such as BERT.
+
+[.first-sentence]
+A causal language model is designed to work the way a neurotypical human brain model works when reading and writing text.
+
+[.last-sentence]
+Perhaps the language models in neurodivergent brains (and speed readers) are more similar to BERT (bidirectional) rather than GPT (left-to-right).
+
+[.first-sentence]
+Now you are ready for training!
+
+[.last-sentence]
+You can use your collator and training args to configure the training and turn it loose on your data.
+
+[.first-sentence]
+This training run can take a couple of hours on a CPU.
+
+[.last-sentence]
+The training should run about 100x faster on a GPU.
+
+[.first-sentence]
+Of course, there is a tradeoff in using off-the-shelf classes and presets - it gives you less visibility on how the training is actually done and makes it harder to tweak the parameters to improve performance.
+
+[.last-sentence]
+As a take-home task, see if you can train the model the old way, with a PyTorch routine.
+
+[.first-sentence]
+Let's see how well our model does now!
+
+[.last-sentence]
+Let's see how well our model does now!
+
+[.first-sentence]
+OK, that's closer to a sentence we could possibly find in this book.
+
+[.last-sentence]
+Let's take a prompt and look at our models side-by-side.
+
+[.first-sentence]
+That looks like quite a difference!
+
+[.last-sentence]
+Actually, the sentence that the fine-tuned model generated resembles closely a sentence from Chapter 7:
+
+[.first-sentence]
+There's a slight difference though.
+
+[.last-sentence]
+All it does is predict the next word in a sequence.
+
+[.first-sentence]
+Now that you've toyed with text generation a bit, you can see that it has its limitations.
+
+[.last-sentence]
+But before we get to that, let's take a look at the basics of search.
+
+== Searching for words: full-text search
+[.first-sentence]
+Navigating the gargantuan landscape of the Internet to find accurate information can often feel like an arduous quest.
+
+[.last-sentence]
+Most of the text generated by machines contains misinformation crafted to attract your clicks rather than help you discover new knowledge or refine your own thinking.
+
+[.first-sentence]
+Fortunately, just as machines are used to create misleading text they can also be your ally in finding the accurate information you're looking for.
+
+[.last-sentence]
+While at its very beginning, the WWW was indexed by hand by its creator, Tim Berners-Lee,footnote:[Wikipedia article on Search Engines: (https://en.wikipedia.org/wiki/Search_engine)] after the HTTP protocol was released to the public, this was no longer feasible.
+
+[.first-sentence]
+_Full-text searches_ started to appear very quickly due to people's need to find information related to keywords.
+
+[.last-sentence]
+Inverse indexes work similarly to the way you would find a topic in a textbook - by looking at the index at the end of the book and finding the page numbers where the topic is mentioned.
+
+[.first-sentence]
+The first full-text search indices just cataloged the words on every web page and their position on the page to help find the pages that matched the keywords they were looking for exactly.
+
+[.last-sentence]
+That's why modern full-text search engines use character based trigram indexes to help you find both "cats" and "cat" no matter what you type into the search bar ... or LLM chatbot prompt.
+
+=== Web-scale reverse indices
+[.first-sentence]
+As the internet grew, the need for more efficient search engines grew with it.
+
+[.last-sentence]
+Lucene is a Java library that is used by many open-source search engines, including Elasticsearch,footnote:[(https://www.elastic.co/elasticsearch/)] Solr footnote:[https://solr.apache.org/] and OpenSearch.
+
+[.first-sentence]
+A (relatively) new player in the field, Meilisearch offers a search engine that is easy to use and deploy.
+
+[.last-sentence]
+Therefore, it might be a better starting point in your journey in the full-text search world than other, more complex engines.
+
+[.first-sentence]
+The reverse indices we introduced in the previous section are very useful for finding exact matches of words, but not great for finding approximate matches.
+
+[.last-sentence]
+Stemming and lemmatization can help increase the matching of different forms of the same word; however, what happens when your search contains typos or misspellings?
+
+[.first-sentence]
+To give you an example - Maria might be searching the internet for the biography of the famous author Steven King.
+
+[.last-sentence]
+That's where trigram indices come in handy.
+
+[.first-sentence]
+Trigrams are groups of three consecutive characters in a word.
+
+[.last-sentence]
+And multiple databases and search engines, from Elasticsearch to PostgreSQL, support trigram indices.
+
+== Searching for meaning: semantic search
+[.first-sentence]
+ElasticSearch, Meilisearch and other full-text searches are useful in a lot of cases, but they have a weak point - they depend strongly on the exact words, and return a "false negative" when they don't find the exact phrase you're looking for.
+
+[.last-sentence]
+For example, if you look for "big cats" in a corpus that contains texts about cheetahs and lions, but never mentions the word "cat", the search query will return empty results.
+
+[.first-sentence]
+Here's another scenario where full-text search won't be helpful - let's say you have a movie plots database, and you're trying to find a movie whose plot you vaguely remember.
+
+[.last-sentence]
+You might be lucky if you remember the names of the actors - but if you type something like "Diverse group spends 9 hours returning jewelry", you're not likely to receive "Lord of the Rings" as part of your search results.
+
+[.first-sentence]
+Lastly, FTS algorithms don't quite leverage the new, better ways to embed words and sentences we just learnt in the recent chapter.
+
+[.last-sentence]
+These embeddings, generated by LLMs like BERT, are better at reflecting the meaning of the text, and the _semantic similarity_ of pieces of text that talk about the same thing.
+
+[.first-sentence]
+And you really need those semantic capabilities for your LLM to be truly useful.
+
+[.last-sentence]
+For example, when you ask an LLM a question about something you've said earlier in a conversation, the LLM can't answer you unless it saved the conversation in some way.
+
+[.first-sentence]
+So now let's reframe your problem from full-text search to semantic search.
+
+[.last-sentence]
+Among those vectors, you want to find the vector that is closest to your query vector - that is, its _cosine similarity_ (or dot product, assuming your vectors are normalized) is maximized.
+
+=== Approximate Nearest Neighbor search
+[.first-sentence]
+There is only one way to find the _exact_ nearest neighbor for our query.
+
+[.last-sentence]
+You wouldn't want Wikipedia's users to wait while you're performing dot products on 6 million articles!
+
+[.first-sentence]
+As often happens in the real world, you need to give something to get something.
+
+[.last-sentence]
+As you saw in Chapter 4, you don't need to compromise too much, and the fact that you find several approximate neighbors can actually be useful for your users, and increase the chance they'll find what they've been looking for.
+
+[.first-sentence]
+In Chapter 4 you saw an algorithm called Locality Sensitive Hashing (LSH) that helps you to find your _approximate nearest neighbors_ by assigning a hash to each part of the hyperspace.
+
+[.last-sentence]
+Each of them has its strengths and weaknesses.
+
+[.first-sentence]
+To create your semantic search pipeline, you'll need to make two crucial choices - what indexing algorithm you're going to use, and what library or libraries to pick to implement your pipeline.
+
+[.last-sentence]
+This will allow you to store and retrieve your semantic vectors at an acceptable speed as you add information to your library and increase the number of users - but that's beyond the scope of this book.
+
+[.first-sentence]
+Now you're ready to create your own vector index for semantic search!
+
+[.last-sentence]
+Now you're ready to create your own vector index for semantic search!
+
+=== Choose your index
+[.first-sentence]
+With the increasing need to search for pieces of information in increasingly large datasets, the field of ANN algorithms flourished.
+
+[.last-sentence]
+We'll look at three of them - hash-based, tree-based and graph-based.
+
+[.first-sentence]
+The hash-based algorithms are best represented by LSH itself.
+
+[.last-sentence]
+It also has sprouted a bunch of modified versions for specific goals, such as the DenseFly algorithm that is used for searching biological datasets.footnote:[(https://github.com/dataplayer12/Fly-LSH)]
+
+[.first-sentence]
+To understand how tree-based algorithms work, let's look at Annoy, a package created by Spotify for its music recommendations.
+
+[.last-sentence]
+Eventually, each data point is assigned to a leaf node of the tree.
+
+[.first-sentence]
+To search for the nearest neighbors of a query point, the algorithm starts at the root of the tree and goes down by making comparisons between the distance of the query point to the hyperplane of each node and the distance to the nearest point found so far.
+
+[.last-sentence]
+You can see a simplified visualization of the algorithm in Figure <<figure-annoy-algorithm>>.
+
+.A simplified visualization of the Annoy algorithm
+
+[.first-sentence]
+Next, let's look at graph-based algorithms.
+
+[.last-sentence]
+Nowadays, for Twitter users, this number is as low as 3.5.)
+
+[.first-sentence]
+HNSW then breaks the NSW graphs into layers, where each layer contains fewer points that are further away from each other than the layer beyond it.
+
+[.last-sentence]
+At each layer, you're getting closer to your nearest neighbor - and you can stop the retrieval at whatever layer, according to the throughput your use case requires.
+
+=== Quantizing the math
+[.first-sentence]
+You may hear about _quantization_ being used in combination with other indexing techniques.
+
+[.last-sentence]
+This way your queries can look for exact matches of integer values, a database and numerical computation that is much faster than searching for a floating point range of values.
+
+[.first-sentence]
+Imagine you have a 5D embedding vector stored as an array of 64-bit ``float``s.
+
+[.last-sentence]
+Here's a crude way to quantize a `numpy` float.
+
+.Quantizing numpy floats
+
+[.first-sentence]
+If your indexer does the scaling and integer math correctly, you can retain all of the precision of your original vectors with half the space.
+
+[.last-sentence]
+And if you quantize a bit more, retaining only 16 bits of information, you can gain another order of magnitude in compute and memory requirements.
+
+[.first-sentence]
+The product quantization used in semantic search is actually much more complicated than that - because the vectors we need to compress are longer and the compression needs to be much more efficient.
+
+[.last-sentence]
+You can read more about the quantization process in the excellent blog post by Peggy Chang.footnote:[Product quantization for similarity search: (https://towardsdatascience.com/product-quantization-for-similarity-search-2f1f67c5fddd)]
+
+[.first-sentence]
+If you keep exploring the world of nearest neighbors algorithms, you might run into the acronym IVFPQ
+
+[.last-sentence]
+So this is definitely the state of the art for many web-scale applications.
+
+[.first-sentence]
+Indexes that combine many different algorithms are called _composite indexes_.
+
+[.last-sentence]
+Why would you want all that extra complexity?
+
+[.first-sentence]
+The main reason is memory (RAM and GPU memory size).
+
+[.last-sentence]
+That's why it's common to use techniques like PQ to compress the vectors before they are fed into another indexing algorithm like IVF or HNSW.
+
+[.first-sentence]
+For most real-world applications when you are not attempting to index the entire Internet you can get by with simpler indexing algorithms.
+
+[.last-sentence]
+And you can always use memory mapping libraries to work efficiently with tables of data stored on disk, especially Flash drives (solid state disk).
+
+==== Choose your implementation library
+[.first-sentence]
+Now that you have a better idea of the different algorithms, it's time to look at the wealth of implementation libraries that are out there.
+
+[.last-sentence]
+Most of the libraries are implemented in memory-efficient languages, such as C++, and have Python bindings so that they can be used in Python programming.
+
+[.first-sentence]
+Some libraries implement a single algorithm, such as Spotify's annoy library.footnote:[https://github.com/spotify/annoy]
+
+[.last-sentence]
+Others, such as Faiss footnote:[Faiss Github repository: (https://github.com/facebookresearch/faiss)] and `nmslib` footnote:[NMSlib Github repository (https://github.com/nmslib/nmslib)]  have a variety of algorithms you can choose from.
+
+[.first-sentence]
+Figure <<figure-ann-benchmarks>> shows the comparison of different algorithm libraries on a text dataset.
+
+[.last-sentence]
+You can discover more comparisons and links to every library in Erik Bern's ANN benchmarking repository.footnote:[(https://github.com/erikbern/ann-benchmarks/)]
+
+.Benchmarking of ANN libraries on the New York Times
+
+[.first-sentence]
+If you feel decision fatigue and are overwhelmed with all the choices, there are some turn-key solutions that can help you out.
+
+[.last-sentence]
+The open source community has even contributed cutting edge plugins such as Approximate k-Nearest Neighbors (ANN) vector search.footnote:[OpenSearch k-NN Documentation (https://opensearch.org/docs/latest/search-plugins/knn)]
+
+[.first-sentence]
+If you're feeling a bit intimidated by the prospect of deploying the Java OpenSearch packages on Docker containers, you may have more fun with Haystack.
+
+[.last-sentence]
+Haystack is the latest and greatest Python package for building question answering and semantic search pipelines.
+
+=== Pulling it all together with <code>haystack</code>
+[.first-sentence]
+You've now seen almost all the components of a question answering pipeline and it may seem overwhelming.
+
+[.last-sentence]
+The `haystack` project brings together all these models and algorithms into one package that you can `pip install` within your environment wherever you need a search engine.
+
+[.first-sentence]
+Here are the pieces you've seen so far:
+
+[.last-sentence]
+Here are the pieces you've seen so far:
+
+[.first-sentence]
+For a production app you will need a vector store (database).
+
+[.last-sentence]
+You can also use some general-purpose datastores like ElasticSearch.
+
+[.first-sentence]
+How do you combine all of this together?
+
+[.last-sentence]
+Leading open-source semantic search frameworks include Jina,footnote:[(https://github.com/jina-ai/jina)] Haystack,footnote:[https://github.com/deepset-ai/haystack] and txtai.footnote[(https://github.com/neuml/txtai)]
+
+[.first-sentence]
+In our next section, we're going to leverage one of these frameworks, Haystack, to combine all you've learned in the recent chapter into something you can use.
+
+[.last-sentence]
+In our next section, we're going to leverage one of these frameworks, Haystack, to combine all you've learned in the recent chapter into something you can use.
+
+=== Getting real
+[.first-sentence]
+Now that you've learned about the different components of your question-answering pipeline, it's time to bring it all together and create a useful app.
+
+[.last-sentence]
+Now that you've learned about the different components of your question-answering pipeline, it's time to bring it all together and create a useful app.
+
+[.first-sentence]
+You'll be creating a question-answering app based on... this very book!
+
+[.last-sentence]
+Your app is going to find the sentence that contains the answer to your question.
+
+[.first-sentence]
+Let's dive into it!
+
+[.last-sentence]
+First, we'll load our dataset and take only the text sentences from it, like we did before.
+
+=== A haystack of knowledge
+[.first-sentence]
+If it feels like the facts you are looking for are needles of truth in the Internet's haystack of misinformation and clickbait, open source AI can help.
+
+[.last-sentence]
+So you can cheat a bit and put the content of the sentence in both the title and the content of your `Document` objects.
+
+[.first-sentence]
+Now you want to put our documents into a database and set up an index so you can find the "needle" of knowledge you're looking for.
+
+[.last-sentence]
+For now, use the FAISSDataStore and its default indexing algorithm (``'Flat'``).
+
+[.first-sentence]
+The FAISSDocumentStore in haystack gives you three of these indexing approaches to choose from.
+
+[.last-sentence]
+The default `'Flat'` index will give you the most accurate results (highest recall rate) but will use a lot of RAM and CPU.
+
+[.first-sentence]
+If you're really constrained on RAM or CPU, like when you're hosting your app on Hugging Face, you can experiment with two other FAISS options: `'HNSW'` or `f'IVF{num_clusters},Flat'`.
+
+[.last-sentence]
+Hopefully, when you ask this question to your question-answering app, it will say something like "It depends...".
+
+[.first-sentence]
+Now go to your working directory where you ran this Python code.
+
+[.last-sentence]
+We'll do that later in the code after we fill the document store with embeddings.
+
+[.first-sentence]
+Now, it's time to set up our indexing models!
+
+[.last-sentence]
+So you will need an EmbeddingRetriever semantic vector index and a generative transformer model.
+
+[.first-sentence]
+In chapter 9 you met BERT and learn how to use it to create general purpose embeddings that represent the meaning of text.
+
+[.last-sentence]
+Luckily there are a lot of BERT-based models that have been pretrained on question-answering datasets like SQuAD.
+
+[.first-sentence]
+Note that the Reader and the Retriever don't have to be based on the same model - because they don't perform the same job.
+
+[.last-sentence]
+`roberta-base-squad2` on the other hand, was trained on a set of questions and short answers, making it better at finding the relevant part of the context that answers the question.
+
+[.first-sentence]
+We have also finally saved our datastore for later reuse.
+
+[.last-sentence]
+Spoilers - you're going to need those soon enough!
+
+[.first-sentence]
+Now you are ready to put the pieces together into a question answering pipeline powered by semantic search!
+
+[.last-sentence]
+You only need to connect your `"Query"` output to the `Retriever` output to the Reader input so your your:
+
+[.first-sentence]
+You can also do it in one line with some of Haystack's ready-made pipelines:
+
+[.last-sentence]
+You can also do it in one line with some of Haystack's ready-made pipelines:
+
+=== Answering questions
+[.first-sentence]
+Let's give our question-answering machine a try!
+
+[.last-sentence]
+We can start with a basic question and see how it performs:
+
+[.first-sentence]
+Not bad!
+
+[.last-sentence]
+Note the "context" field that gives you the full sentence that contains the answer.
+
+=== Combining semantic search with text generation
+[.first-sentence]
+So, your extractive question-answering pipeline is pretty good at finding simple answers that are clearly stated within the text you give it.
+
+[.last-sentence]
+That way your pipeline can handle complex logic and reasoning to answer your "why" and "how" questions.
+
+[.first-sentence]
+Fortunately, you don't have to cobble together these different models on your own.
+
+[.last-sentence]
+But BART takes care of that _recurrence_ part of text generation for you with its unidirectional decoder.
+
+[.first-sentence]
+In particular, you will use a BART model that was pretrained for Long-Form Question Answering (LFQA).
+
+[.last-sentence]
+Let's see how a model trained on it performs.
+
+[.first-sentence]
+We can continue using the same retriever, but this time, we'll use one of Haystack pre-made pipelines, GenerativeQAPipeline.
+
+[.last-sentence]
+So there are only a few lines of code that we need to change.
+
+[.first-sentence]
+And that's it! Let's see how our model does on a couple of questions.
+
+[.last-sentence]
+And that's it! Let's see how our model does on a couple of questions.
+
+[.first-sentence]
+Well, that was a bit vague but correct!
+
+[.last-sentence]
+Let's see how our model deals with a question that doesn't have an answer in the book:
+
+[.first-sentence]
+Well said, for a stochastic chameleon!
+
+[.last-sentence]
+Well said, for a stochastic chameleon!
+
+=== Smart prompting
+[.first-sentence]
+So you know how to create prompt templates and populate them with context information from databases and semantic search matches.
+
+[.last-sentence]
+And the open source community may have found the answer.
+
+[.first-sentence]
+In the San Diego machine learning community, Thomas Meschede recently showed us what he thinks may be the answer.
+
+[.last-sentence]
+Rather than querying a vector database with the raw embedding of has reverse engineered@xyntopia.com directly in your database.
+
+=== Deploying your app in the cloud
+[.first-sentence]
+It's time to share your application with more people.
+
+[.last-sentence]
+You need to deploy your model on a server and create a user interface (UI) so that people can easily interact with it.
+
+[.first-sentence]
+There are many companies offering cloud hosting services - in this chapter, we'll go with HuggingFace Spaces.
+
+[.last-sentence]
+HuggingFace also offers several ways to quickly ship your app by integrating with frameworks like Streamlit and Gradio.
+
+==== Building your app&#8217;s UI with Streamlit
+[.first-sentence]
+We'll use Streamlit footnote:[(https://docs.streamlit.io/)] to build your question-answering web App.
+
+[.last-sentence]
+And both Streamlit company itself and Hugging Face offer the possibility to deploy your app seamlessly to HuggingFace Spaces by offering an out-of-the-box Streamlit Space option.
+
+[.first-sentence]
+Let's stick with Huggingface this time, and we'll let you check Streamlit Share on your own.footnote:[(https://share.streamlit.io/)]
+
+[.last-sentence]
+If you clone this git repository to your machine you can edit it to make it do whatever you like.
+
+[.first-sentence]
+Look for the `app.py` file within Hugging Face or on your local clone of the repository.
+
+[.last-sentence]
+You may even want to experiment with adding the prefix "What is ..." if your users prefer to just enter noun phrases without forming a complete question.
+
+[.first-sentence]
+Deep dive into Streamlit is beside the scope of this book, but you should understand some basics before creating your first app.
+
+[.last-sentence]
+In the script above, there are several components: `title`, `markdown` (instructions below the title), as well as the `text_input` component that receives the user's question.
+
+[.first-sentence]
+Go ahead and try to run your app locally by executing line `streamlit run app.py` in your console.
+
+[.last-sentence]
+You should see something like the app in Figure <<figure-streamlit-helloworld-app>>.
+
+.Question answering streamlit app
+
+[.first-sentence]
+Time to add some question-answering capabilities to your app!
+
+[.last-sentence]
+You'll use the same code as before, but you'll optimize it to run faster on Streamlit.
+
+[.first-sentence]
+First, let's load the document store you created and saved previously.
+
+[.last-sentence]
+Then, you can use the `load` method of `FAISSDocumentStore` class.
+
+[.first-sentence]
+Note that you're wrapping our code in a function.
+
+[.last-sentence]
+Your document store, unfortunately, can be neither cached nor hashed (very confusing!), but the two models you're using for the question-answering pipeline can be.
+
+[.first-sentence]
+Now, insert the code building your QA pipeline between the title/subtitle and the question input:
+
+[.last-sentence]
+Now, insert the code building your QA pipeline between the title/subtitle and the question input:
+
+[.first-sentence]
+Finally, you can make your app ready to answer questions!
+
+[.last-sentence]
+Let's make it return the context of the answer too, not just the answer itself.
+
+[.first-sentence]
+And your question-answering app is ready!
+
+[.last-sentence]
+You should see something similar to Figure <<figure-streamlit-qa-app>>.
+
+.Working Streamlit app with a question answered
+
+[.first-sentence]
+Now, deploy your app to the cloud!
+
+[.last-sentence]
+Congratulations on your first NLP web application.
+
+=== Wikipedia for the ambitious reader
+[.first-sentence]
+If training your model on the text in this book seems a little constraining for you, consider going "all in" and training your model on Wikipedia.
+
+[.last-sentence]
+After all, Wikipedia contains all of the human knowledge, at least the knowledge that the _wisdom of the crowd_ (humanity) thinks is important.
+
+[.first-sentence]
+Be careful though.
+
+[.last-sentence]
+And it's hard to curate billions of words of natural language text.
+
+[.first-sentence]
+If you use full-text search on PyPi.org for "Wikipedia" you won't notice that "It's A Trap!"footnote:[Know Your Meme article for "It's A Trap" (https://knowyourmeme.com/memes/its-a-trap)]
+
+[.last-sentence]
+If you use the `wikipedia` package you will likely create bad source text for your API (and your mind):
+
+[.first-sentence]
+That's fishy.
+
+[.last-sentence]
+And you can contribute your own enhancements or improvements to pay it forward yourself.
+
+[.first-sentence]
+You can see here how the `nlpia2_wikipedia` package on PyPi will give you straight answers to your queries about AI.footnote:["It Takes a Village to Combat a Fake News Army" by Zachary J. McDowell & Matthew A Vetter (https://journals.sagepub.com/doi/pdf/10.1177/2056305120937309)]
+
+[.last-sentence]
+You can see here how the `nlpia2_wikipedia` package on PyPi will give you straight answers to your queries about AI.footnote:["It Takes a Village to Combat a Fake News Army" by Zachary J. McDowell & Matthew A Vetter (https://journals.sagepub.com/doi/pdf/10.1177/2056305120937309)]
+
+[.first-sentence]
+Now you can use Wikipedia's full-text search API to feed your retrieval-augmented AI with everything that humans understand.
+
+[.last-sentence]
+And even if powerful people are trying to hide the truth from you, there are likely a lot of others in your "village" that have contributed to Wikipedia in your language.
+
+[.first-sentence]
+Now you know how to retrieve a corpus of documents about any topic that is important to you.
+
+[.last-sentence]
+You can build your own retrieval-augmented LLMs to answer questions factually for you and those you care about at your workplace or in your community.
+
+== Test yourself
+== Summary

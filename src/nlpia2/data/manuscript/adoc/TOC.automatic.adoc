@@ -1,0 +1,20 @@
+=== Preface
+=== Wordy machines
+=== Machines that read and write (NLP overview)
+=== Tokens of thought (natural language words)
+=== Math with words (TF-IDF vectors)
+=== Finding meaning in word counts (semantic analysis)
+=== Deeper learning (neural networks)
+=== Natural Language Processing in Action, 2E
+=== Word brain (neural networks)
+=== Reasoning with word embeddings (word vectors)
+=== === Reception === =
+=== Getting words in order with convolutional neural networks (CNNs)
+=== Loopy (recurrent) neural networks (RNNs)
+=== Sequence-to-sequence models (machine translation)
+=== Getting real (real-world NLP challenges)
+=== Information extraction and logic (semantic parsing)
+=== Stackable deep learning (attention, BERT, GPT)
+=== Getting creative (finding and generating text summaries and paraphrases)
+=== Scaling up (optimization, parallelization, and batch processing)
+=== Getting chatty (dialog engines)

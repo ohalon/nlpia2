@@ -1,0 +1,32 @@
+{
+    "hidden_size": [
+        200
+    ],
+    "epochs": [
+        1,
+        12,
+        32
+    ],
+    "rnn_type": [
+        "RNN_TANH",
+        "RNN_RELU",
+        "GRU",
+        "LSTM"
+    ],
+    "dropout": [
+        0,
+        0.2,
+        0.5
+    ],
+    "lr": [
+        0.5,
+        2
+    ],
+    "num_layers": [
+        1,
+        2,
+        3,
+        4,
+        5
+    ]
+}

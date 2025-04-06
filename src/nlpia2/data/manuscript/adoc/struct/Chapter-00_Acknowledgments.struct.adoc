@@ -1,0 +1,49 @@
+
+:toc: left
+:toclevels: 6
+
+++++
+  <style>
+  .first-sentence {
+    text-align: left;
+    margin-left: 0%;
+    margin-right: auto;
+    width: 66%;
+    background: Beige;
+  }
+  .last-sentence {
+    text-align: right;
+    margin-left: auto;
+    margin-right: 0%;
+    width: 66%;
+    background: AliceBlue;
+  }
+  </style>
+++++
+== Acknowledgments
+[.first-sentence]
+Thank you Leo Hepis for all those afternoons hopping around to coworking spaces and improving our understanding of NLP together!
+
+[.last-sentence]
+Thank you Leo Hepis for all those afternoons hopping around to coworking spaces and improving our understanding of NLP together!
+
+[.first-sentence]
+Thank you to all the livebook contributors!
+
+[.last-sentence]
+* Kiatikun Luangkesorn (chapter 2 & 3 code edits and bug fixes)
+
+=== Maria Dyshel
+[.first-sentence]
+I am especially grateful to ...
+
+[.last-sentence]
+I am especially grateful to ...
+
+=== Hobson Lane
+[.first-sentence]
+I am eternally grateful to my mother and father for filling me with delight at words and math.
+
+[.last-sentence]
+To Hannes Hapke and Cole Howard this project would have never escaped the black hole of my procrastinating and antisocial self during the time that your patience endured while we wrote the first edition together.
+

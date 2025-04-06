@@ -1,0 +1,235 @@
+,Task,Emergence
+0,abstract narrative understanding,linear scaling
+1,auto categorization,linear scaling
+2,bbq lite json,linear scaling
+3,cause and effect,linear scaling
+4,chess state tracking,linear scaling
+5,"con-
+lang translation",linear scaling
+6,context definition alignment,linear scaling
+7,contextual parametric knowledge conflicts,linear scaling
+8,"coqa conversational
+question answering",linear scaling
+9,cryobiology spanish,linear scaling
+10,date understanding,linear scaling
+11,emojis emotion prediction,linear scaling
+12,empirical judgments,linear scaling
+13,entailed polarity,linear scaling
+14,evaluating information essentiality,linear scaling
+15,forecasting subquestions,linear scaling
+16,gem,linear scaling
+17,general knowledge,linear scaling
+18,"hindi
+question answering",linear scaling
+19,human organs senses,linear scaling
+20,implicatures,linear scaling
+21,implicit relations,linear scaling
+22,intent recognition,linear scaling
+23,"linguistic
+mappings",linear scaling
+24,list functions,linear scaling
+25,matrixshapes,linear scaling
+26,mult data wrangling,linear scaling
+27,multiemo,linear scaling
+28,natural instructions,linear scaling
+29,"nonsense words
+grammar",linear scaling
+30,object counting,linear scaling
+31,operators,linear scaling
+32,penguins in a table,linear scaling
+33,physics,linear scaling
+34,polish sequence labeling,linear scaling
+35,qa wikidata,linear scaling
+36,reasoning about colored objects,linear scaling
+37,rephrase,linear scaling
+38,riddle sense,linear scaling
+39,sentence ambiguity,linear scaling
+40,similarities abstraction,linear scaling
+41,"simp
+turing concept",linear scaling
+42,simple arithmetic,linear scaling
+43,simple arithmetic json,linear scaling
+44,simple arithmetic json multiple choice,linear scaling
+45,"simple
+arithmetic json subtasks",linear scaling
+46,simple arithmetic multiple targets json,linear scaling
+47,simple ethical questions,linear scaling
+48,squad shifts,linear scaling
+49,subject verb agreement,linear scaling
+50,swedish to german proverbs,linear scaling
+51,undo permutation,linear scaling
+52,unit conversion,linear scaling
+53,"unnatural in context
+learning",linear scaling
+54,bridging anaphora resolution barqa,linear scaling
+55,disfl qa,linear scaling
+56,novel concepts,linear scaling
+57,periodic elements,linear scaling
+58,anachronisms,PaLM
+59,analogical similarity,PaLM
+60,ascii word recognition,PaLM
+61,auto debugging,PaLM
+62,causal judgment,PaLM
+63,"code line
+description",PaLM
+64,conceptual combinations,PaLM
+65,crass ai,PaLM
+66,cryptonite,PaLM
+67,cs algorithms,PaLM
+68,disambiguation qa,PaLM
+69,"elementary
+math qa",PaLM
+70,emoji movie,PaLM
+71,english proverbs,PaLM
+72,english russian proverbs,PaLM
+73,geometric shapes,PaLM
+74,goal step wikihow,PaLM
+75,gre reading comprehension,PaLM
+76,hinglish toxicity,PaLM
+77,hyperbaton,PaLM
+78,identify odd metaphor,PaLM
+79,"international phonetic
+alphabet nli",PaLM
+80,language identification,PaLM
+81,linguistics puzzles,PaLM
+82,logic grid puzzle,PaLM
+83,logical fallacy detection,PaLM
+84,"logical
+sequence",PaLM
+85,metaphor boolean,PaLM
+86,metaphor understanding,PaLM
+87,movie dialog same or different,PaLM
+88,odd one out,PaLM
+89,"parsinlu
+qa",PaLM
+90,parsinlu reading comprehension,PaLM
+91,physics questions,PaLM
+92,question selection,PaLM
+93,snarks,PaLM
+94,sufficient information,PaLM
+95,temporal sequences,PaLM
+96,timedial,PaLM
+97,understanding fables,PaLM
+98,unit interpretation,PaLM
+99,vitaminc fact verification,PaLM
+100,abstraction and reasoning corpus,flat
+101,authorship verification,flat
+102,checkmate in one,flat
+103,chinese remainder theorem,flat
+104,"cifar10
+classification",flat
+105,color,flat
+106,com2sense,flat
+107,cycled letters,flat
+108,discourse marker prediction,flat
+109,formal fallacies syllogisms negation,flat
+110,hhh alignment,flat
+111,kanji ascii,flat
+112,kannada,flat
+113,key value maps,flat
+114,language games,flat
+115,mathematical induction,flat
+116,"minute
+mysteries qa",flat
+117,misconceptions russian,flat
+118,mnist ascii,flat
+119,multistep arithmetic,flat
+120,navigate,flat
+121,paragraph segmentation,flat
+122,play dialog same or different,flat
+123,presuppositions as nli,flat
+124,program synthesis,flat
+125,python programming challenge,flat
+126,"real
+or fake text",flat
+127,roots optimization and games,flat
+128,salient translation error detection,flat
+129,self awareness,flat
+130,"semantic parsing
+in context sparc",flat
+131,semantic parsing spider,flat
+132,simple text editing,flat
+133,sudoku,flat
+134,symbol interpretation,flat
+135,talkdown,flat
+136,tense,flat
+137,text navigation game,flat
+138,topical chat,flat
+139,tracking shuffled objects,flat
+140,twenty questions,flat
+141,web of lies,flat
+142,which wiki edit,flat
+143,winowhy,flat
+144,word problems on sets and graphs,flat
+145,analytic entailment,GPT-3/LaMDA
+146,codenames,GPT-3/LaMDA
+147,common morpheme,GPT-3/LaMDA
+148,fact checker,GPT-3/LaMDA
+149,figure of speech detection,GPT-3/LaMDA
+150,"gender inclusive
+sentences german",GPT-3/LaMDA
+151,hindu knowledge,GPT-3/LaMDA
+152,international phonetic alphabet transliterate,GPT-3/LaMDA
+153,irony identification,GPT-3/LaMDA
+154,"logical
+args",GPT-3/LaMDA
+155,logical deduction,GPT-3/LaMDA
+156,misconceptions,GPT-3/LaMDA
+157,modified arithmetic,GPT-3/LaMDA
+158,phrase relatedness,GPT-3/LaMDA
+159,physical intuition,GPT-3/LaMDA
+160,"question
+answer creation",GPT-3/LaMDA
+161,repeat copy logic,GPT-3/LaMDA
+162,self evaluation tutoring,GPT-3/LaMDA
+163,social iqa,GPT-3/LaMDA
+164,sports understanding,GPT-3/LaMDA
+165,strange stories,GPT-3/LaMDA
+166,strategyqa,GPT-3/LaMDA
+167,swahili english proverbs,GPT-3/LaMDA
+168,word sorting,GPT-3/LaMDA
+169,word unscrambling,GPT-3/LaMDA
+170,boolean expressions,sublinear scaling
+171,crash blossom,sublinear scaling
+172,dynamic counting,sublinear scaling
+173,entailed polarity hindi,sublinear scaling
+174,epistemic reasoning,sublinear scaling
+175,factuality of summary,sublinear scaling
+176,fantasy reasoning,sublinear scaling
+177,"gender sensitivity
+chinese",sublinear scaling
+178,gender sensitivity english,sublinear scaling
+179,high low game,sublinear scaling
+180,identify math theorems,sublinear scaling
+181,intersect geometry,sublinear scaling
+182,"muslim violence
+bias",sublinear scaling
+183,persian idioms,sublinear scaling
+184,protein interacting sites,sublinear scaling
+185,scientific press release,sublinear scaling
+186,self evaluation courtroom,sublinear scaling
+187,social support,sublinear scaling
+188,spelling bee,sublinear scaling
+189,taboo,sublinear scaling
+190,training on test set,sublinear scaling
+191,truthful qa,sublinear scaling
+192,yes no black white,sublinear scaling
+193,dark humor detection,sublinear scaling
+194,dyck languages,sublinear scaling
+195,moral permissibility,sublinear scaling
+196,ruin names,sublinear scaling
+197,nachronisms,PaLM-62B
+198,ascii word recognition,PaLM-62B
+199,conceptual combinations,PaLM-62B
+200,cryptonite,PaLM-62B
+201,"disam-
+biguation qa",PaLM-62B
+202,emoji movie,PaLM-62B
+203,goal step wikihow,PaLM-62B
+204,gre reading comprehension,PaLM-62B
+205,linguistics puzzles,PaLM-62B
+206,logic grid puzzle,PaLM-62B
+207,metaphor boolean,PaLM-62B
+208,metaphor understanding,PaLM-62B
+209,odd one out,PaLM-62B
+210,parsinlu qa.,PaLM-62B

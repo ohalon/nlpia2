@@ -1,0 +1,60 @@
+ manuscript/A.adoc                                  |  255 ---
+ manuscript/ADoc_chapter_template.adoc              |   77 -
+ manuscript/Appendix A -- Your NLP Tools.adoc        |  288 +++
+ ...B -- Playful Python and Regular Expressions.adoc |  204 ++
+ ...Vectors and Matrices (Basic Linear Algebra).adoc |  257 +++
+ manuscript/Appendix D -- Machine Learning.adoc      |  401 ++++
+ manuscript/Appendix E -- AWS GPU.adoc               |  207 ++
+ .../Appendix F -- Locality Sensitive Hashing.adoc   |  251 +++
+ manuscript/B.adoc                                  |  176 --
+ manuscript/BIO_Lane, Hapke, Howard.doc             |  Bin 0 -> 48128 bytes
+ manuscript/C.adoc                                  |  206 --
+ manuscript/Chapter 00 -- About this Book.adoc       |   39 +
+ manuscript/Chapter 00 -- Acknowledgments.adoc       |   46 +
+ .../Chapter 00 -- Foreword by Arwen Griffioen.adoc  |   20 +
+ manuscript/Chapter 00 -- Preface.adoc               |  159 ++
+ ...achines (Vector Models of Natural Language).adoc |   20 +
+ ...ter 01 -- Packets of Thought (NLP Overview).adoc |  706 ++++++
+ ...- Build Your Vocabulary (Word Tokenization).adoc | 1870 ++++++++++++++++
+ ...pter 03 -- Math with Words (TF-IDF Vectors).adoc | 1046 +++++++++
+ ... Meaning in Word Counts (Semantic Analysis).adoc | 2274 ++++++++++++++++++++
+ ...art 02 -- Deeper Learning (Neural Networks).adoc |   22 +
+ ... Networks (Perceptrons and Backpropagation).adoc |  718 ++++++
+ ...6 -- Reasoning with Word Vectors (Word2vec).adoc | 1334 ++++++++++++
+ ...r with Convolutional Neural Networks (CNNs).adoc |  794 +++++++
+ ...-- Loopy (Recurrent) Neural Networks (RNNs).adoc |  762 +++++++
+ ...ith Long Short-Term Memory Networks (LSTMs).adoc | 1242 +++++++++++
+ ...ce Models and Attention (Generative Models).adoc |  790 +++++++
+ ...-- Getting Real (Real World NLP Challenges).adoc |   11 +
+ ...d Entity Extraction and Question Answering).adoc | 1005 +++++++++
+ ...tention, Networks, Transformers, BERT, GPT).adoc |  444 ++++
+ ...e (Summarization, Paraphrasing, Generation).adoc |   48 +
+ ...tion, Parallelization and Batch Processing).adoc |  844 ++++++++
+ ...apter 15 -- Getting Chatty (Dialog Engines).adoc | 1297 +++++++++++
+ manuscript/D.adoc                                  |  386 ----
+ manuscript/E.adoc                                  |  232 --
+ manuscript/F.adoc                                  |  185 --
+ manuscript/G.adoc                                  |  236 --
+ manuscript/Glossary.adoc                            |  116 +
+ manuscript/H.adoc                                  |  296 ---
+ manuscript/MEAP--Welcome.adoc                       |   15 +
+ manuscript/MQR.adoc                                 |   34 +
+ manuscript/P1.adoc                                 |   31 -
+ manuscript/P2.adoc                                 |   26 -
+ manuscript/P3.adoc                                 |   24 -
+ manuscript/Resources.adoc                           |  191 ++
+ manuscript/TOC.adoc                                 |   70 +
+ manuscript/ch01.adoc                               |  555 -----
+ manuscript/ch02.adoc                               | 1194 ----------
+ manuscript/ch03.adoc                               |  829 -------
+ manuscript/ch04.adoc                               | 1520 -------------
+ manuscript/ch05.adoc                               |  725 -------
+ manuscript/ch06.adoc                               | 1191 ----------
+ manuscript/ch07.adoc                               |  825 -------
+ manuscript/ch08.adoc                               |  720 -------
+ manuscript/ch09.adoc                               | 1262 -----------
+ manuscript/ch10.adoc                               |  721 -------
+ manuscript/ch11.adoc                               |  817 -------
+ manuscript/ch12.adoc                               |  979 ---------
+ manuscript/ch13.adoc                               |  799 -------
+ 59 files changed, 17525 insertions(+), 14267 deletions(-)

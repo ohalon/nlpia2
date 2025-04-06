@@ -1,0 +1,4 @@
+streamlit>=1.19.0
+transformers
+torch
+farm-haystack[faiss]

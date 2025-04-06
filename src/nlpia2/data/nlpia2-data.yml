@@ -1,0 +1,9 @@
+# nlpia2-data.yml nlpia2-bigdata.yml
+-
+  - .nlpia2-data/nell/NELL.08m.1115.esv.csv.gz
+  - http://rtw.ml.cmu.edu/resources/results/08m/NELL.08m.1115.esv.csv.gz
+  - [ch11]
+  - |+
+    pd.read_csv(
+        'http://rtw.ml.cmu.edu/resources/results/08m/NELL.08m.1115.esv.csv.gz',
+        encoding='latin', sep='\t')

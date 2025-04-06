@@ -1,0 +1,1242 @@
+== Improving retention (LSTMs)
+:chapter: 9
+:part: 2
+:imagesdir: .
+:xrefstyle: short
+:figure-caption: Figure {chapter}.
+:listing-caption: Listing {chapter}.
+:table-caption: Table {chapter}.
+:stem: latexmath
+
+
+This chapter covers
+
+* Adding deeper memory to recurrent neural nets
+* Gating information inside neural nets
+* Classification vs. generation
+* Modeling language patterns
+
+For all the benefits recurrent neural nets provide for modeling relationships, and therefore _possibly_ causal relationships, in time series data they suffer from one main deficiency: A token's _effect_ is almost completely lost by the time two time steps have passed.footnote:[Christopher Olah explains why: https://colah.github.io/posts/2015-08-Understanding-LSTMs] Any effect the first node has on the third node (two time steps after the first time step) will be thoroughly stepped on by new data introduced in the intervening time step. This is important to the basic structure of the net, but it precludes the common case in human language that the tokens may be deeply interrelated even when they are separated greatly in a sentence.
+
+Take this example:
+
+_The young woman went to the movies with her friends._
+
+The subject "woman" immediately precedes its main verb "went".footnote:["Went" is the predicate (main verb) in this sentence. Find additional English grammar terminology at https://www.butte.edu/departments/cas/tipsheets/grammar/sentence_structure.html.]
+You learned in the previous chapters that both convolutional and recurrent nets would have no trouble learning from that relationship.
+
+But in a similar thought:
+
+_The young woman, having found a free ticket on the ground, went to the movies._
+
+The noun and verb are no longer one time step apart in the sequence.
+A recurrent neural net is going to have difficulty picking up on the relationship between the subject and predicate in this new, longer sentence.
+For this new sentence a recurrent network would overemphasize the tie between the verb "having" and your subject "woman".
+And your network would underemphasize the word "went", the main verb of the predicate.
+You've lost the connection between the subject and verb of the sentence.
+The weights in a recurrent network decay too quickly in time as you roll through each sentence.
+
+Your challenge is to build a network that can pick up on the same core _thought_ in both sentences.
+What you need is a way to remember the past across the entire input sequence.
+A _long short-term memory_ (LSTM) is just what you need.footnote:[One of the first papers on LSTMs was by Hochreiter and Schmidhuber in 1997 "Long Short-Term Memory" (http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.676.4320&rep=rep1&type=pdf).]
+
+Modern versions of a long short-term memory network typically use a special neural network unit called a _gated recurrent unit_ (GRU).
+A gated recurrent unit can maintain both long- and short-term memory efficiently, enabling an LSTM to process a long sentence or document more accurately.footnote:["Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation" by Kyunghyun Cho et al, 2014: https://arxiv.org/pdf/1406.1078.pdf]
+In fact, LSTMs work so well they have replaced recurrent neural networks in almost all applications involving time series, discrete sequences, and NLP.footnote:[Christopher Olah's blog post explains why this is: https://colah.github.io/posts/2015-08-Understanding-LSTMs.]
+
+== LSTM
+
+LSTMs introduce the concept of a _state_ for each layer in the recurrent network.
+The state acts as its _memory_.
+You can think of it as adding attributes to a class in object-oriented programming.
+The memory state's attributes are updated with each training example.
+
+In LSTMs, the rules that govern the information stored in the state (memory) are trained neural nets themselves -- therein lies the magic.
+They can be trained to learn what to remember while at the same time the rest of the recurrent net learns to predict the target label!
+With the introduction of a memory and state, you can begin to learn dependencies that stretch not just one or two tokens away, but across the entirety of each data sample.
+With those long-term dependencies in hand, you can start to see beyond the words themselves and into something deeper about language.
+
+With LSTMs, patterns that humans take for granted and process on a subconscious level begin to be available to your model.
+And with those patterns, you can not only more accurately predict sample classifications, but you can start to generate novel text using those patterns.
+The state of the art in this field is still far from perfect, but the results you'll see, even in your toy examples, are striking.
+
+So how does this thing work (see figure 9.1)?
+
+.LSTM network and its memory
+image::../images/ch09/lstm_1.png[alt="Figure 9.1: LSTM Network and its Memory: recurrent network with neurons in a single column like in RNN chapter, but this time there is a new 'neuron' down and to the left labeled 'memory state' with bidirectional arrows indicating data flowing to and from it back into the recurrent unit", width=80%, link="../images/ch09/lstm_1.png"]
+
+The memory state is affected by the input and also affects the layer output just as in a normal recurrent net.
+But that memory state persists across all the time steps of the time series (your sentence or document).
+So each input can have an effect on the state as well as an effect on the hidden layer output.
+The magic of the memory state is that it _learns_ what to remember at the same time that it learns to reproduce the output, using standard backpropagation!
+So what does this look like?
+
+First, let's unroll a standard recurrent neural net and add your memory unit.
+
+.Unrolled LSTM network and its memory
+image::../images/ch09/lstm_2.png[alt="Figure 9.2: Unrolled LSTM Network and its Memory: unrolled recurrent network with neurons in three columns, like the unrolled diagrams in RNN chapter, but this time there is a new 'neuron' to the left labeled 'state' with a solid line passing horizontally through (behind) all 3 hidden units and extending on to the right for any additional hidden units. This line indicates data flowing to and from all the hidden units back into the 'state' unit, the memory of the LSTM.", width=80%, link="../images/ch09/lstm_2.png"]
+
+Figure 9.2 looks similar to a normal recurrent neural net.
+However, in addition to the activation output feeding into the next time-step version of the layer, you add a memory state that also passes through time steps of the network.
+At each time step iteration, the hidden recurrent unit has access to the memory unit.
+The addition of this memory unit, and the mechanisms that interact with it, make this quite a bit different from a traditional neural network layer.
+However, you may like to know that it is possible to design a set of traditional recurrent neural network layers (a computational graph) that accomplishes all the computations that exist within an LSTM layer.
+An LSTM layer is just a highly specialized recurrent neural network.
+
+[TIP]
+====
+In much of the literature,footnote:[A good recent example of LSTM terminology usage is Alex Graves' 2012 Thesis "Supervised Sequence Labelling with Recurrent Neural Networks": https://mediatum.ub.tum.de/doc/673554/file.pdf] you'll find the "Memory State" block shown in figure 5.8 is referred to as an LSTM _cell_ rather than an LSTM _neuron_ because it contains two additional neurons or gates just like a silicon computer memory _cell_.footnote:[See the Wikipedia article "Memory cell" (https://en.wikipedia.org/wiki/Memory_cell_(computing)).] When an LSTM memory _cell_ is combined with a sigmoid activation function to output a value to the next LSTM _cell_, this structure, containing multiple interacting elements, is referred to as an LSTM _unit_.
+Multiple LSTM _units_ are combined to form an LSTM _layer_. The horizontal line running across the unrolled recurrent neuron in figure 5.8 is the signal holds the memory or state. It becomes a vector with a dimension for each LSTM _cell_ as the sequence of tokens is passed into a multi-unit LSTM _layer_.
+====
+
+So let's take a closer look at one of these cells.
+
+.LSTM layer at time step _t_
+image::../images/ch09/lstm_3.png[LSTM Cell, width=80%, link="../images/ch09/lstm_3.png"]
+
+Instead of being a series of weights on the input and an activation function on those weights, each cell is now somewhat more complicated. As before, the input to the layer (or cell) is a combination of the input sample and output from the previous time step. As information flows into the cell instead of a vector of weights, it is now is greeted by three gates: a forget gate, an input/candidate gate, and an output gate (see figure 9.3).
+
+Each of these gates is a feed-forward network layer composed of a series of weights that the network will learn and an activation function. Technically one of the gates is composed of two feed-forward networks, so there will be four sets of weights to learn in this layer. The weights and activations will aim to _allow_ information to flow through the cell in different amounts all in relation to the cell's state (or memory).
+
+Before getting too deep in the weeds, let's look at this in Python, using the example from the previous chapter with the SimpleRNN layer swapped out for an LSTM. You can use the same vectorized, padded/truncated processed data from the last chapter, x_train, y_train, x_test, and y_test.
+
+.LSTM layer in Keras
+[source,python]
+----
+>>> maxlen = 400
+>>> batch_size = 32
+>>> embedding_dims = 300
+>>> epochs = 2
+>>> from keras.models import Sequential
+>>> from keras.layers import Dense, Dropout, Flatten, LSTM
+>>> num_neurons = 50
+>>> model = Sequential()
+>>> model.add(LSTM(num_neurons, return_sequences=True,
+...                input_shape=(maxlen, embedding_dims)))
+>>> model.add(Dropout(.2))
+>>> model.add(Flatten())
+>>> model.add(Dense(1, activation='sigmoid'))
+>>> model.compile('rmsprop', 'binary_crossentropy',  metrics=['accuracy'])
+>>> print(model.summary())
+Layer (type)                 Output Shape              Param #
+=================================================================
+lstm_1 (LSTM)                (None, 400, 50)           70200
+_________________________________________________________________
+dropout_1 (Dropout)          (None, 400, 50)           0
+_________________________________________________________________
+flatten_1 (Flatten)          (None, 20000)             0
+_________________________________________________________________
+dense_1 (Dense)              (None, 1)                 20001
+=================================================================
+Total params: 90,201.0
+Trainable params: 90,201.0
+Non-trainable params: 0.0
+----
+
+One import and one line of Keras code changed. But a great deal more is going on under the surface. From the summary, you can see you have many more parameters to train than you did in the SimpleRNN from last chapter for the same number of neurons (50). Recall the simple RNN had the following weights:
+
+* 300 (one for each element of the input vector)
+
+* 1 (one for the bias term)
+
+* 50 (one for each neuron's output from the previous time step)
+
+For a total of 351 per neuron.
+
+351 * 50 = 17,550 for the layer
+
+The cells have three gates (a total of four nets):
+
+17,550 * 4 = 70,200
+
+But what is the memory? The memory is going to be represented by a vector that is the same number of elements as neurons in the cell. Your example has a relatively simple 50 neurons, so the memory unit will be a vector of floats that is 50 elements long.
+
+Now what are these gates? Let's follow the first sample on its journey through the net and get an idea (see figure 9.4).
+
+.LSTM layer inputs
+image::../images/ch09/lstm_4.png[LSTM Cell Entry, width=80%, link="../images/ch09/lstm_4.png"]
+
+The "journey" through the cell is not a single road; it has branches, and you'll follow each for a while then back up, progress, branch, and finally come back together for the grand finale of the cell's output.
+
+You take the first token from the first sample and pass its 300-element vector representation into the first LSTM cell. On the way into the cell, the vector representation of the data is concatenated with the vector output from the previous time step (which is a 0 vector in the first time step). In this example, you'll have a vector that is 300 + 50 elements long. Sometimes you'll see a 1 appended to the vector -- this corresponds to the bias term. Because the bias term always multiplies its associated weight by one before passing to the activation function, that input is just assumed and occasionally omitted from the input vector representation to keep the diagrams more digestible.
+
+At the first fork in the road, you hand off a copy of the combined input vector to the ominous sounding _forget gate_ (see figure 9.5).
+
+//HL: If there's time, in figure 9.5, please hyphenate "50-element", "350-element", "1-word", and "300-element". DM
+//DM: done. but 1 word is a noun not an adjective so left it. I should probably have spelled it out though "one word"
+.First stop -- the forget gate
+image::../images/ch09/forget_closeup.png[alt="Figure 9.5: First Stop - The Forget Gate with more detail about the 300-element word vector 350-element +1 input", width=80%, link="../images/ch09/forget_closeup.png"]
+
+The forget gate's goal is to learn, based on a given input, how much of the cell's memory you want erase. Whoa, wait a minute. You just got this memory thing plugged in and the first thing you want to do is start erasing things? Sheesh.
+
+The idea behind wanting to forget is just as important as wanting to remember.
+As a human reader, when you pick up certain bits of information from text -- say whether the noun is singular or plural -- you want to retain that information so that later in the sentence you can recognize the right verb conjugation or adjective form to match with it.
+In romance languages you'd have to recognize a noun's gender, too, and use that later in a sentence as well.
+But an input sequence can easily switch from one noun to another, because an input sequence can be composed of multiple phrases, sentences, or even documents.
+As new thoughts are expressed in later statements, the fact that the noun is plural may not be at all relevant to later unrelated text.
+
+[quote,Friedrich Nietzsche]
+A thinker sees his own actions as experiments and questions -- as attempts to find out something. Success and failure are for him answers above all.
+
+In this quote, the verb "see" is conjugated to fit with the noun "thinker".
+The next active verb you come across is "to be" in the second sentence.
+At that point "be" is conjugated into "are" to agree with "Success and failure".
+If you were to conjugate it to match the first noun you came across, "thinker", you would use the wrong verb form, "is" instead.
+So an LSTM must model not just long-term dependencies within a sequence, but just as crucially, also forget long-term dependencies as new ones arise.
+This is what forgetting gates are for, making room for the _relevant_ memories in your memory cells.
+
+The network isn't working with these kinds of explicit representations.
+Your network is trying to find a set of weights to multiply by the inputs from the sequence of tokens so that the memory cell and the output are both updated in a way that minimizes the error.
+It is amazing that they work at all. And they work very well indeed.
+But enough marveling, back to forgetting.
+
+.Forget gate
+image::../images/ch09/forget_gate.png[Forget Gate, alt="Figure 9.6: more detail about the inputs on the left and the forget gate: output from time step t-1 is a 50-element vector, concatenated input is a 350 element vector plus one token for time step t represented by a 300-element vector.", width=80%, link="../images/ch09/forget_gate.png"]
+
+The forget gate itself (shown in figure 9.6) is just a feed-forward network.
+It consists of _n_ neurons each with latexmath:[m + n + 1] weights. So your example forget gate has 50 neurons each with 351 (300+50+1) weights. The activation function for a forget gate is the sigmoid function, because you want the output for each neuron in the gate to be between 0 and 1.
+
+The output vector of the forget gate is then a "mask" of sorts, albeit a porous one that "erases" elements of the memory vector. As the forget gate outputs values closer to 1, more of the memory's knowledge in the associated element is retained for that time step; the closer it is to 0 the more of that memory value is erased (see figure 9.7).
+
+.Forget gate application
+image::../images/ch09/forget_application.png[Forget Gate Application, alt="Figure 9.7: 2 column vectors (memory at t-1 and forgetting gate mask at t) multiplied elementwise to create the new memory vector. the mask isn't binary but contains values close to zero and 1", width=80%, link="../images/ch09/forget_application.png"]
+
+Actively forgetting things, check. You better learn how to remember something new, or this is going to go south pretty quickly. Just like in the forget gate, you use a small network to learn how much to augment the memory based on two things: the input so far and the output from the last time step. This is what happens in the next gate you branch into: the _candidate gate_.
+
+The candidate gate has two separate neurons inside it that:
+
+1. Decide which input vector elements are worth remembering (similar to the mask in the forget gate)
+2. Route the remembered input elements to the right memory "slot"
+
+The first part of a candidate gate is a neuron with a sigmoid activation function whose goal is to learn which input values of the memory vector to update. This neuron closely resembles the mask in the forget gate.
+
+The second part of this gate determines what values you're going to update the memory with. This second part has a _tanh_ activation function which forces the output value to range between -1 and 1. The output of these two vectors are multiplied together elementwise. The resulting vector from this multiplication is then added, again elementwise, to the memory register, thus remembering the new details (see figure 9.8).
+
+This gate is learning simultaneously which values to extract and the magnitude of those particular values. The mask and magnitude become what is added to the memory state. As in the forget gate, the candidate gate is learning to mask off the "inappropriate" information before adding into the cell's memory.
+
+.Candidate gate
+image::../images/ch09/candidate_gate.png[alt="Figure 9.8: Candidate Gate", width=80%, link="../images/ch09/candidate_gate.png"]
+
+So old, seemingly irrelevant things are forgotten, and new things are remembered. Then you arrive at the last gate of the cell: the _output gate_.
+
+Up until this point in the journey through the cell, you've only written to the cell's memory. Now it is finally time to get some use out of this structure. The output gate takes the input (remember this is still the concatenation of the input at time step _t_ and the output of the cell at time step _t_-1) and passes it into the output gate.
+
+The concatenated input is passed into the weights of the _n_ neurons, and then you apply a sigmoid activation function outputting an _n_-dimensional vector of floats, just like the output of a SimpleRNN. But instead of handing that information out through the cell wall, you pause.
+
+The memory structure you've built up is now primed, and it gets to weigh in on what you _should_ output. This judgment is achieved by using the memory to create one last mask. This mask is a kind of gate as well, but you refrain from using that term explicitly because this mask doesn't have any learned parameters, which differentiates it from the three previous gates described.
+
+//HL: If there's time, please change "Layer's Output" to "Layer's output" (two instances). DM
+//done
+.Update/output gate
+image::../images/ch09/output_gate.png[alt="Figure 9.9: Update Output Gate", width=80%, link="../images/ch09/output_gate.png"]
+
+The mask created from the memory is just the memory state with a tanh function applied elementwise, which gives an _n_-dimensional vector of floats between -1 and 1. That mask vector is then multiplied elementwise against the raw vector computed in the output gate's first step. The resultant _n_-dimensional vector is finally passed out of the cell as the cell's official output at time step _t_ (see figure 9.9).
+
+[TIP]
+================
+Remember that the output from an LSTM cell is just like the output from a simple recurrent neural network layer. It is passed out of the cell as the layer output (at time step _t_) *and* to itself as part of the input to time step _t+1_.
+================
+
+Thereby the memory of the cell gets the last word on what is important to output at time step _t_ given what was input at time step _t_ _and_ output at _t_-1, and all the details it has gleaned up to this point in the input sequence.
+
+
+=== Backpropagation through time
+
+How does this thing learn then? Backpropagation -- as with any other neural net. For a moment, let's step back and look at the problem you're trying to solve with this new complexity. A vanilla RNN is susceptible to a vanishing gradient because the derivative at any given time step is a factor of the weights themselves, so as you step back in time coalescing the various deltas, after a few iterations, the weights (and the learning rate) may shrink the gradient away to 0. The update to the weights at the end of the backpropagation (which would equate to the beginning of the sequence) are either minuscule or effectively 0. A similar problem occurs when the weights are somewhat large: The gradient _explodes_ and grows disproportionately to the network.
+
+An LSTM avoids this problem via the memory state itself. The neurons in each of the gates are updated via derivatives of the functions they fed, namely those that update the memory state on the forward pass. So at any given time step, as the normal chain rule is applied backwards to the forward propagation, the updates to the neurons are dependent on only the memory state at that time step and the previous one. This way, the error of the entire function is kept "nearer" to the neurons for each time step. This is known as the _error carousel_.
+
+==== In practice
+
+How does this work in practice then? Exactly like the simple RNN from last chapter. All you've changed is the inner workings of the black box that is a recurrent layer in the network. So you can just swap out the Keras SimpleRNN layer for the Keras LSTM layer, and all the other pieces of your classifier will stay the same.
+
+You'll use the same dataset, prepped the same way: Tokenize the text and embed those using Word2vec. Then you'll pad/truncate the sequences again to 400 tokens each using the functions you defined in the previous chapters.
+
+.Load and prepare the IMDB data
+[source,python]
+----
+>>> import numpy as np
+
+>>> dataset = pre_process_data('./aclimdb/train')  # <1>
+>>> vectorized_data = tokenize_and_vectorize(dataset)
+>>> expected = collect_expected(dataset)
+>>> split_point = int(len(vectorized_data) * .8)
+
+>>> x_train = vectorized_data[:split_point]  # <2>
+>>> y_train = expected[:split_point]
+>>> x_test = vectorized_data[split_point:]
+>>> y_test = expected[split_point:]
+
+>>> maxlen = 400  # <3>
+>>> batch_size = 32         # <4>
+>>> embedding_dims = 300    # <5>
+>>> epochs = 2
+
+>>> x_train = pad_trunc(x_train, maxlen)  # <6>
+>>> x_test = pad_trunc(x_test, maxlen)
+>>> x_train = np.reshape(x_train,
+...     (len(x_train), maxlen, embedding_dims))  # <7>
+>>> y_train = np.array(y_train)
+>>> x_test = np.reshape(x_test, (len(x_test), maxlen, embedding_dims))
+>>> y_test = np.array(y_test)
+----
+<1> Gather the data and prep it.
+<2> Split the data into training and testing sets.
+<3> Declare the hyperparameters.
+<4> Number of samples to show the net before backpropagating the error and updating the weights.
+<5> Length of the token vectors we will create for passing into the Convnet.
+<6> Further prep the data by making each point of uniform length.
+<7> Reshape into a numpy data structure.
+
+Then you can build your model using the new LSTM layer.
+
+.Build a Keras LSTM network
+[source,python]
+----
+>>> from keras.models import Sequential
+>>> from keras.layers import Dense, Dropout, Flatten, LSTM
+>>> num_neurons = 50
+>>> model = Sequential()
+>>> model.add(LSTM(num_neurons, return_sequences=True,
+...              input_shape=(maxlen, embedding_dims)))  # <1>
+>>> model.add(Dropout(.2))
+>>> model.add(Flatten())  # <2>
+>>> model.add(Dense(1, activation='sigmoid'))  # <3>
+>>> model.compile('rmsprop', 'binary_crossentropy',  metrics=['accuracy'])
+>>> model.summary()
+Layer (type)                 Output Shape              Param #
+=================================================================
+lstm_2 (LSTM)                (None, 400, 50)           70200
+_________________________________________________________________
+dropout_2 (Dropout)          (None, 400, 50)           0
+_________________________________________________________________
+flatten_2 (Flatten)          (None, 20000)             0
+_________________________________________________________________
+dense_2 (Dense)              (None, 1)                 20001
+=================================================================
+Total params: 90,201.0
+Trainable params: 90,201.0
+Non-trainable params: 0.0
+----
+<1> Keras makes the implementation easy.
+<2> Stretch the output of the LSTM.
+<3> A one neuron layer that will output a float between 0 and 1.
+
+And train the model just as before as well.
+
+.Fit your LSTM model
+[source,python]
+----
+>>> model.fit(x_train, y_train,  # <1>
+...           batch_size=batch_size,
+...           epochs=epochs,
+...           validation_data=(x_test, y_test))
+Train on 20000 samples, validate on 5000 samples
+Epoch 1/2
+20000/20000 [==============================] - 548s - loss: 0.4772 -
+acc: 0.7736 - val_loss: 0.3694 - val_acc: 0.8412
+Epoch 2/2
+20000/20000 [==============================] - 583s - loss: 0.3477 -
+acc: 0.8532 - val_loss: 0.3451 - val_acc: 0.8516
+<keras.callbacks.History at 0x145595fd0>
+----
+<1> Train the model.
+
+.Save it for later
+[source,python]
+---------------
+>>> model_structure = model.to_json()  # <1>
+>>> with open("lstm_model1.json", "w") as json_file:
+...     json_file.write(model_structure)
+
+>>> model.save_weights("lstm_weights1.h5")
+---------------
+<1> Save its structure so you don't have to do this part again.
+
+That is an enormous leap in the validation accuracy compared to the simple RNN you implemented in chapter 8 with the same dataset. You can start to see how large a gain you can achieve by providing the model with a memory when the relationship of tokens is so important. The beauty of the algorithm is that it learns the *relationships* of the tokens it sees. The network is now able to model those relationships, specifically in the context of the cost function you provide.
+
+In this case, how close are you to correctly identifying positive or negative sentiment? Granted this is a narrow focus of a much grander problem within natural language processing. How do you model humor, sarcasm, or angst, for example? Can they be modeled together? It's definitely a field of active research for sure. But working on them separately, while demanding a lot of hand-labeled data (and there is more of this out there every day), is certainly a viable path, and stacking these kinds of discrete classifiers in your pipeline is a perfectly legitimate path to pursue in a focused problem space.
+
+=== Where does the rubber hit the road?
+
+This is the fun part. With a trained model, you can begin trying out various sample phrases and seeing how well the model performs. Try to trick it. Use happy words in a negative context. Try long phrases, short ones, contradictory ones.
+
+.Reload your LSTM model
+[source,python]
+---------------
+>>> from keras.models import model_from_json
+>>> with open("lstm_model1.json", "r") as json_file:
+...     json_string = json_file.read()
+>>> model = model_from_json(json_string)
+
+>>> model.load_weights('lstm_weights1.h5')
+---------------
+
+.Use the model to predict on a sample
+[source,python]
+---------------
+>>> sample_1 = """I hate that the dismal weather had me down for so long,
+...  when will it break! Ugh, when does happiness return?  The sun is
+...  blinding and the puffy clouds are too thin. I can't wait for the
+...  weekend."""
+
+>>> vec_list = tokenize_and_vectorize([(1, sample_1)])  # <1>
+
+>>> test_vec_list = pad_trunc(vec_list, maxlen)  # <2>
+
+>>> test_vec = np.reshape(test_vec_list,
+...                       (len(test_vec_list), maxlen, embedding_dims))
+
+>>> print("Sample's sentiment, 1 - pos, 0 - neg : {}"\
+...     .format(model.predict_classes(test_vec)))
+1/1 [==============================] - 0s
+Sample's sentiment, 1 - pos, 0 - neg : [[0]]
+
+>>> print("Raw output of sigmoid function: {}"\
+...     .format(model.predict(test_vec)))
+Raw output of sigmoid function: [[ 0.2192785]]
+---------------
+<1> You pass a dummy value in the first element of the tuple just because your helper expects it from the way you processed the initial data. That value won't ever see the network, so it can be whatever.
+<2> Tokenize returns a list of the data (length 1 here).
+
+As you play with the possibilities, watch the raw output of the sigmoid in addition to the specific sentiment classifications. Unlike the `.predict_class()` method, the `.predict()` method reveals the raw sigmoid activation function output before thresholding, so you can see a continuous value between 0 and 1.
+Anything above 0.5 will be classified as positive, below 0.5 will be negative.
+As you try your samples, you'll get a sense of how confident the model is in its prediction, which can be helpful in parsing results of your spot checks.
+
+Pay close attention to the misclassified examples (both positively and negatively).
+If the sigmoid output is close to 0.5, that means the model is just flipping a coin for that example.
+You can then look at why that phrase is ambiguous to the model, but try not to be human about it.
+Set aside your human intuition and subjective perspective for a bit and try to think statistically.
+Try to remember what documents your model has "seen".
+Are the words in the misclassified example rare?
+Are they rare in your corpus or the corpus that trained the language model for your embedding?
+Do all of the words in the example exist in your model's vocabulary?
+
+//HL: Incomplete sentence below. DM
+//changed both sentences here
+Just going through this process of examining the probabilities and input data associated with incorrect predictions helps build your machine learning intuition so you can build better NLP pipelines in the future.
+This is backpropagation through the human brain for the problem of model tuning.
+
+=== Dirty data
+
+This more powerful model still has a great number of hyperparameters to toy with. But now is a good time to pause and look back to the beginning to your data. You've been using the same data, processed in exactly the same way since you started with convolutional neural nets, specifically so you could see the variations in the types of models and their performance on a given dataset. But you did make some choices that compromised the integrity of the data, or _dirtied_ it if you will.
+
+Padding or truncating each sample to 400 tokens was important for convolutional nets so that the filters could "scan" a vector with a consistent length.
+And convolutional nets output a consistent vector as well.
+It's important for the output to be a consistent dimensionality because the output goes into a fully-connected feed-forward layer at the end of the chain which needs a fixed length vector as input.
+
+Similarly, your implementations of recurrent neural nets, both simple and LSTM, are striving toward a fixed length _thought vector_ you can pass into a feed-forward layer for classification.
+A fixed-length vector representation of an object, such as a thought vector, is also called an _embedding_.
+So that the thought vector is of consistent size, you have to _unroll_ the net to a consistent number of time steps (tokens).
+Let's look at the choice of 400 as the number of time steps to unroll the net.
+
+.Optimize the thought vector size
+[source,python]
+---------------
+>>> def test_len(data, maxlen):
+...     total_len = truncated = exact = padded = 0
+...     for sample in data:
+...         total_len += len(sample)
+...         if len(sample) > maxlen:
+...             truncated += 1
+...         elif len(sample) < maxlen:
+...             padded += 1
+...         else:
+...             exact +=1
+...     print('Padded: {}'.format(padded))
+...     print('Equal: {}'.format(exact))
+...     print('Truncated: {}'.format(truncated))
+...     print('Avg length: {}'.format(total_len/len(data)))
+
+>>> dataset = pre_process_data('./aclimdb/train')
+>>> vectorized_data = tokenize_and_vectorize(dataset)
+>>> test_len(vectorized_data, 400)
+Padded: 22559
+Equal: 12
+Truncated: 2429
+Avg length: 202.4424
+---------------
+
+Whoa. Okay, 400 was a bit on the high side (probably should have done this analysis earlier).
+Let's dial the `maxlen` back closer to the average sample size of 202 tokens.
+Let's round that to 200 tokens, and give your LSTM another crack at it.
+
+.Optimize LSTM hyperparameters
+[source,python]
+----
+>>> import numpy as np
+>>> from keras.models import Sequential
+>>> from keras.layers import Dense, Dropout, Flatten, LSTM
+>>> maxlen = 200  # <1>
+>>> batch_size = 32
+>>> embedding_dims = 300
+>>> epochs = 2
+>>> num_neurons = 50
+>>> dataset = pre_process_data('./aclimdb/train')
+>>> vectorized_data = tokenize_and_vectorize(dataset)
+>>> expected = collect_expected(dataset)
+>>> split_point = int(len(vectorized_data)*.8)
+>>> x_train = vectorized_data[:split_point]
+>>> y_train = expected[:split_point]
+>>> x_test = vectorized_data[split_point:]
+>>> y_test = expected[split_point:]
+>>> x_train = pad_trunc(x_train, maxlen)
+>>> x_test = pad_trunc(x_test, maxlen)
+>>> x_train = np.reshape(x_train, (len(x_train), maxlen, embedding_dims))
+>>> y_train = np.array(y_train)
+>>> x_test = np.reshape(x_test, (len(x_test), maxlen, embedding_dims))
+>>> y_test = np.array(y_test)
+----
+<1> All the same code as earlier, but you limit the max length to 200 tokens.
+
+.A more optimally sized LSTM
+[source,python]
+----
+>>> model = Sequential()
+>>> model.add(LSTM(num_neurons, return_sequences=True,
+...                input_shape=(maxlen, embedding_dims)))
+>>> model.add(Dropout(.2))
+>>> model.add(Flatten())
+>>> model.add(Dense(1, activation='sigmoid'))
+>>> model.compile('rmsprop', 'binary_crossentropy',  metrics=['accuracy'])
+>>> model.summary()
+Layer (type)                 Output Shape              Param #
+=================================================================
+lstm_1 (LSTM)                (None, 200, 50)           70200
+_________________________________________________________________
+dropout_1 (Dropout)          (None, 200, 50)           0
+_________________________________________________________________
+flatten_1 (Flatten)          (None, 10000)             0
+_________________________________________________________________
+dense_1 (Dense)              (None, 1)                 10001
+=================================================================
+Total params: 80,201.0
+Trainable params: 80,201.0
+Non-trainable params: 0.0
+----
+
+.Train a smaller LSTM
+[source,python]
+---------------
+>>> model.fit(x_train, y_train,
+...           batch_size=batch_size,
+...           epochs=epochs,
+...           validation_data=(x_test, y_test))
+Train on 20000 samples, validate on 5000 samples
+Epoch 1/2
+20000/20000 [==============================] - 245s - loss: 0.4742 -
+acc: 0.7760 - val_loss: 0.4235 - val_acc: 0.8010
+Epoch 2/2
+20000/20000 [==============================] - 203s - loss: 0.3718 -
+acc: 0.8386 - val_loss: 0.3499 - val_acc: 0.8450
+
+>>> model_structure = model.to_json()
+>>> with open("lstm_model7.json", "w") as json_file:
+...     json_file.write(model_structure)
+
+>>> model.save_weights("lstm_weights7.h5")
+---------------
+
+Well that trained much faster and the validation accuracy dropped less than half a percent (84.5% vs 85.16%).
+With samples that were half the number of time steps, you cut the training time by more than half!
+There were half the LSTM time steps to compute and half the weights in the feed-forward layer to learn.
+But most importantly the backpropagation only had to travel half the distance (half the time steps back into the past) each time.
+
+The accuracy got worse, though.
+Wouldn't a 200-D model generalize better (overfit less) than the earlier 400-D model?
+This is because you included a `Dropout` layer in both models.
+A dropout layer helps prevent overfitting so your validation accuracy should only get worse as you reduce the degrees of freedom or the training epochs for your model.
+
+With all the power of neural nets and their ability to learn complex patterns, it is easy to forget that a well-designed neural net is just as good at learning to discard noise and systematic biases.
+You had inadvertently introduced a lot of bias into the data by appending all those zero vectors. The bias elements in each node will still give it some signal even if all the input is zero. But the net will eventually learn to disregard those elements entirely (specifically by adjusting the weight on that bias element down to zero) and focus on the portions of the samples that contain meaningful information.
+
+So your optimized LSTM didn't learn any more, but it learned a lot faster. The most important takeaway from this, though, is to be aware of the length of your test samples in relation to length of the training sample lengths. If your training set is composed of documents thousands of tokens long, you may not get an accurate classification of something only 3 tokens long padded out to 1,000. And vice versa -- cutting a 1,000-token opus to 3 tokens will severely hinder your poor, little model. Not that an LSTM won't make a good go of it, just a note of caution as you experiment.
+
+
+=== Back to the dirty data
+
+What is arguably the greater sin in data handling? Dropping the "unknown" tokens on the floor. The list of "unknowns", which is basically just words you couldn't find in the pretrained Word2vec model, is quite extensive. Dropping this much data on the floor, especially when attempting to model the sequence of words, is problematic.
+
+Sentences like
+
+_I don't like this movie._
+
+may become
+
+_I like this movie._
+
+if your token "don't" doesn't appear in the Word2vec model. This isn't the case of your specific Word2vec model, but many tokens  are skipped and they may or may not be relevant. Dropping these unknown tokens is one strategy you can pursue, but there are others. You can use or train a Word2vec model that has a vector for every last one of your tokens, but doing so is almost always prohibitively expensive.
+
+Two more-commonplace approaches provide decent results without exploding the computational requirements. Both involve replacing the unknown token with a new vector representation. The first approach is counter-intuitive: For every token not modeled by a vector, randomly select a vector from the existing model and use that instead. You can easily see how this would flummox a human reader.
+
+A sentence like
+
+_The man who was defenestrated, brushed himself off with a nonchalant glance back inside._
+
+may become
+
+_The man who was duck, brushed himself off with a airplane glance back inside._
+
+How is a model supposed to learn from nonsense like this? As it turns out, the model does overcome these hiccups in much the same way your example did when you dropped them on the floor. Remember, you're not trying model every statement in the training set explicitly. The goal is to create a generalized model of the language in the training set. So outliers will exist, but hopefully not so much as to derail the model in describing the prevailing patterns.
+
+The second and more common approach is to replace all tokens not in the word vector library with a specific token, usually referenced as "UNK" (for unknown) when reconstructing the original input. The vector itself is chosen either when modeling the original embedding or at random (and ideally far away from the known vectors in the space).
+
+As with padding, the network can learn its way around these unknown tokens and come to its own conclusions around them.
+
+=== Words are hard. Letters are easier.
+
+Words have meaning -- we can all agree on this. Modeling natural language with these basic building blocks only seems natural then. Using these models to describe meaning, feeling, intent, and everything else in terms of these atomic structures seems natural as well. But, of course, words aren't atomic at all. As you saw earlier, they are made up of smaller words, stems, phonemes, and so on. But they are also, even more fundamentally, a sequence of characters.
+
+As you're modeling language, a good deal lies all the way back at the character level. Intonations in voice, alliteration, rhymes -- all of this can be modeled if you break things down all the way to the character level. They can be modeled by humans without breaking things down that far, too, but the definitions that would arise from that modeling are fraught with complexity and not easily imparted to a machine, which after all is why you're here. Many of those patterns are inherent in text when you examine it with an eye toward which character came after which, given the characters you've already seen.
+
+In this paradigm, a space or a comma or a period all become just another character. And as your network is learning meaning from sequences, if you break it down all the way to the individual characters themselves, the model is forced to find these lower-level patterns. To notice a repeated suffix after a certain number of syllables, which would quite probably rhyme, may be a pattern that carries meaning, perhaps joviality or derision. With a large enough training set, these patterns begin to emerge.
+
+And because there are many fewer distinct letters than words in the English language, you have a smaller variety of input vectors to worry about.
+
+Training a model at the character level is tricky though. The patterns and long-term dependencies found at the character level can vary greatly across voices. You can find these patterns, but they may not generalize as well. Let's try the LSTM at the character level on the same example dataset. First, you need to process the data differently.
+
+As before, you grab the data and sort out the labels:
+
+.Prepare the data
+[source,python]
+---------------
+>>> dataset = pre_process_data('./aclimdb/train')
+>>> expected = collect_expected(dataset)
+---------------
+
+You then need to decide how far to unroll the network, so you'll see how many characters on average are in the data samples.
+
+.Calculate the average sample length
+[source,python]
+---------------
+>>> def avg_len(data):
+...     total_len = 0
+...     for sample in data:
+...         total_len += len(sample[1])
+...     return total_len/len(data)
+
+>>> avg_len(dataset)
+1325.06964
+---------------
+
+So immediately you can see that the network is going to be unrolled much further. And you're going to be waiting a significant amount of time for this model to finish. Spoiler: This model doesn't do much other than overfit, but it provides an interesting example nonetheless.
+
+Next, you need to clean the data of tokens unrelated to the text's natural language. This function cheats in that there are HTML tags in the dataset, so really the data should be more thoroughly scrubbed.
+
+.Prepare the strings for a character-based model
+[source,python]
+---------------
+>>> def clean_data(data):
+...     """Shift to lower case, replace unknowns with UNK, and listify"""
+...     new_data = []
+...     VALID = 'abcdefghijklmnopqrstuvwxyz0123456789"\'?!.,:; '
+...     for sample in data:
+...         new_sample = []
+...         for char in sample[1].lower():  # <1>
+...             if char in VALID:
+...                 new_sample.append(char)
+...             else:
+...                 new_sample.append('UNK')
+...         new_data.append(new_sample)
+...     return new_data
+
+>>> listified_data = clean_data(dataset)
+---------------
+<1> Just grab the string, not the label.
+
+You're using the `'UNK'` as single character in the list for everything that doesn't match the VALID list.
+
+Then, as before, you pad or truncate the samples to a given `maxlen`. Here you introduce another "single character" for padding: `'PAD'`.
+
+.Pad and truncated characters
+[source,python]
+----
+>>> def char_pad_trunc(data, maxlen=1500):
+...     """ We truncate to maxlen or add in PAD tokens """
+...     new_dataset = []
+...     for sample in data:
+...         if len(sample) > maxlen:
+...             new_data = sample[:maxlen]
+...         elif len(sample) < maxlen:
+...             pads = maxlen - len(sample)
+...             new_data = sample + ['PAD'] * pads
+...         else:
+...             new_data = sample
+...         new_dataset.append(new_data)
+...     return new_dataset
+----
+
+You chose `maxlen` of 1500 to capture slightly more data than was in the average sample, but you tried to avoid introducing too much noise with PADs. Thinking about these choices in the sizes of words can be helpful. At a fixed character length, a sample with lots of long words could be undersampled, compared to a sample composed entirely of simple one-syllable words. As with any machine learning problem, knowing your dataset and its ins and outs is important.
+
+This time instead of using Word2vec for your embeddings, you're going to one-hot encode the characters. So you need to create a dictionary of the tokens (the characters) mapped to an integer index. You'll also create a dictionary to map the reverse as well, but more on that later.
+
+.Character-based model "vocabulary"
+[source,python]
+----
+>>> def create_dicts(data):
+...     """ Modified from Keras LSTM example"""
+...     chars = set()
+...     for sample in data:
+...         chars.update(set(sample))
+...     char_indices = dict((c, i) for i, c in enumerate(chars))
+...     indices_char = dict((i, c) for i, c in enumerate(chars))
+...     return char_indices, indices_char
+----
+
+And then you can use that dictionary to create input vectors of the indices instead of the tokens themselves.
+
+.One-hot encoder for characters
+[source,python]
+----
+>>> import numpy as np
+
+>>> def onehot_encode(dataset, char_indices, maxlen=1500):
+...     """
+...     One-hot encode the tokens
+...
+...     Args:
+...         dataset  list of lists of tokens
+...         char_indices
+...                  dictionary of {key=character,
+...                                 value=index to use encoding vector}
+...         maxlen  int  Length of each sample
+...     Return:
+...         np array of shape (samples, tokens, encoding length)
+...     """
+...     X = np.zeros((len(dataset), maxlen, len(char_indices.keys())))
+...     for i, sentence in enumerate(dataset):
+...         for t, char in enumerate(sentence):
+...             X[i, t, char_indices[char]] = 1
+...     return X  # <1>
+----
+<1> A numpy array of length equal to the number of data samples -- each sample will be a number of tokens equal to `maxlen`, and each token will be a one-hot encoded vector of length equal to the number of characters.
+
+.Load and preprocess the IMDB data
+[source,python]
+----
+>>> dataset = pre_process_data('./aclimdb/train')
+>>> expected = collect_expected(dataset)
+>>> listified_data = clean_data(dataset)
+
+>>> common_length_data = char_pad_trunc(listified_data, maxlen=1500)
+>>> char_indices, indices_char = create_dicts(common_length_data)
+>>> encoded_data = onehot_encode(common_length_data, char_indices, 1500)
+----
+
+And then you split up or data just like before.
+
+.Split dataset for training (80%) and testing (20%)
+[source,python]
+----
+>>> split_point = int(len(encoded_data)*.8)
+
+>>> x_train = encoded_data[:split_point]
+>>> y_train = expected[:split_point]
+>>> x_test = encoded_data[split_point:]
+>>> y_test = expected[split_point:]
+----
+
+.Build a character-based LSTM
+[source,python]
+----
+>>> from keras.models import Sequential
+>>> from keras.layers import Dense, Dropout, Embedding, Flatten, LSTM
+
+>>> num_neurons = 40
+>>> maxlen = 1500
+>>> model = Sequential()
+
+>>> model.add(LSTM(num_neurons,
+...                return_sequences=True,
+...                input_shape=(maxlen, len(char_indices.keys()))))
+>>> model.add(Dropout(.2))
+>>> model.add(Flatten())
+>>> model.add(Dense(1, activation='sigmoid'))
+>>> model.compile('rmsprop', 'binary_crossentropy',  metrics=['accuracy'])
+>>> model.summary()
+Layer (type)                 Output Shape              Param #
+=================================================================
+lstm_2 (LSTM)                (None, 1500, 40)          13920
+_________________________________________________________________
+dropout_2 (Dropout)          (None, 1500, 40)          0
+_________________________________________________________________
+flatten_2 (Flatten)          (None, 60000)             0
+_________________________________________________________________
+dense_2 (Dense)              (None, 1)                 60001
+=================================================================
+Total params: 73,921.0
+Trainable params: 73,921.0
+Non-trainable params: 0.0
+----
+
+So you're getting more and more efficient at building LSTM models.
+Your latest character-based model needs to train only 74k parameters compared to the optimized word-based LSTM which required 80k.
+And this simpler model should train faster and generalize to new text better, since it has fewer degrees of freedom for overfitting.
+
+Now you can try it out to see what character-based LSTM models have to offer.
+
+.Train a character-based LSTM
+[source,python]
+---------------
+>>> batch_size = 32
+>>> epochs = 10
+>>> model.fit(x_train, y_train,
+...           batch_size=batch_size,
+...           epochs=epochs,
+...           validation_data=(x_test, y_test))
+Train on 20000 samples, validate on 5000 samples
+Epoch 1/10
+20000/20000 [==============================] - 634s - loss: 0.6949 -
+acc: 0.5388 - val_loss: 0.6775 - val_acc: 0.5738
+Epoch 2/10
+20000/20000 [==============================] - 668s - loss: 0.6087 -
+acc: 0.6700 - val_loss: 0.6786 - val_acc: 0.5962
+Epoch 3/10
+20000/20000 [==============================] - 695s - loss: 0.5358 -
+acc: 0.7356 - val_loss: 0.7182 - val_acc: 0.5786
+Epoch 4/10
+20000/20000 [==============================] - 686s - loss: 0.4662 -
+acc: 0.7832 - val_loss: 0.7605 - val_acc: 0.5836
+Epoch 5/10
+20000/20000 [==============================] - 694s - loss: 0.4062 -
+acc: 0.8206 - val_loss: 0.8099 - val_acc: 0.5852
+Epoch 6/10
+20000/20000 [==============================] - 694s - loss: 0.3550 -
+acc: 0.8448 - val_loss: 0.8851 - val_acc: 0.5842
+Epoch 7/10
+20000/20000 [==============================] - 645s - loss: 0.3058 -
+acc: 0.8705 - val_loss: 0.9598 - val_acc: 0.5930
+Epoch 8/10
+20000/20000 [==============================] - 684s - loss: 0.2643 -
+acc: 0.8911 - val_loss: 1.0366 - val_acc: 0.5888
+Epoch 9/10
+20000/20000 [==============================] - 671s - loss: 0.2304 -
+acc: 0.9055 - val_loss: 1.1323 - val_acc: 0.5914
+Epoch 10/10
+20000/20000 [==============================] - 663s - loss: 0.2035 -
+acc: 0.9181 - val_loss: 1.2051 - val_acc: 0.5948
+---------------
+
+.And save it for later
+[source,python]
+---------------
+>>> model_structure = model.to_json()
+>>> with open("char_lstm_model3.json", "w") as json_file:
+...     json_file.write(model_structure)
+>>> model.save_weights("char_lstm_weights3.h5")
+---------------
+
+The 92% training set accuracy vs the 59% validation accuracy is evidence of overfitting. The model slowly started to learn the sentiment of the training set. Oh so slowly. It took over 1.5 hours on a modern laptop without a GPU. But the validation accuracy never improved much above a random guess, and later in the epochs it started to get worse, which you can also see in the validation loss.
+
+Lots of things could be going on here. The model could be too rich for the dataset, meaning it has enough parameters that it can begin to model patterns that are unique to the training set's 20,000 samples, but aren't useful for a general language model focused on sentiment. One might alleviate this issue with a higher dropout percentage or fewer neurons in the LSTM layer. More labeled data would also help if you think the model is defined too "richly." But quality labeled data is usually the hardest piece to come by.
+
+In the end, this model is creating a great deal of expense for both your hardware and your time for limited reward compared to where you got with a word-level LSTM model and even the convolutional neural nets in previous chapters. So why bother with the character level at all? The character-level model can be extremely good at modeling the language itself given a broad enough example. Or it can model a specific kind of language given a focused enough training set, say from one author instead of thousands. Either way, you've taken the first step toward generating novel text with a neural net.
+
+=== My turn to chat
+
+If you could generate new text with a certain "style" or "attitude", you'd certainly have an entertaining chatbot indeed. Of course, being able to generate novel text with a given style doesn't guarantee your bot will talk about what you want it to. But you can use this approach to generate lots of text within a given set of parameters (in response to a user's style, for example), and this larger corpus of novel text could then be indexed and searched as possible responses to a given query.
+
+Much like a Markov chain that predicts a sequence's next word based on the probability of any given word appearing after the 1-gram or 2-gram or _n_-gram that just occurred, your LSTM model can learn the probability of the next word based on what it just saw, but with the added benefit of _memory_! A Markov chain only has information about the _n_-gram it is using to search and the frequency of words that occur after that _n_-gram. The RNN model does something similar in that it encodes information about the next term based on the few that preceded it. But with the LSTM memory state, the model has a greater context in which to judge the most appropriate next term. And most excitingly, you can predict the next character based on the characters that came before. This level of granularity is beyond a basic Markov chain.
+
+How do you train your model to do this magic trick?
+First, you're going to abandon your classification task.
+The real core of what the LSTM learned is in the LSTM cell itself.
+But you were using the model's successes and failures around a specific classification task to train it.
+That approach is not necessarily going to help your model learn a general representation of language.
+You trained it to pay attention only to sequences that contained strong sentiment.
+
+So instead of using the training set's sentiment label as the target for learning, you can use the training samples themselves!
+For each token in the sample, you want your LSTM to learn to _predict_ the next token (see figure 9.10).
+This is very similar to the word vector embedding approach you used in chapter 6, only you're going to train a network on bigrams (2-grams) instead of skip-grams:
+
+.Next word prediction
+image::../images/ch09/word_level_predict.png[alt="Figure 9.10: Next Word Prediction", width=80%, link="../images/ch09/word_level_predict.png"]
+
+A word generator model trained this way (see figure 9.10) would work just fine, but you're going to cut to the chase and go straight down to the character level with the same approach (see figure 9.11).
+
+.Next character prediction
+image::../images/ch09/char_level_predict.png[alt="Figure 9.11: Next Character Prediction", width=80%, link="../images/ch09/char_level_predict.png"]
+
+Instead of a thought vector coming out of the last time step, you're going to focus on the output of each time step individually. The error will still backpropagate through time from each time step back to the beginning, but the error is determined specifically at the time step level. In a sense, it was in the other LSTM classifiers of this chapter as well, but in the other classifiers the error wasn't determined until the end of the sequence.
+Only at the end of a sequence was an aggregated output available to feed into the feed-forward layer at the end of the chain.
+Nonetheless, backpropagation is still working the same way, aggregating the errors by adjusting all your weights at the end of the sequence.
+
+So the first thing you need to do is adjust your training set labels. The output vector will be measured not against a given classification label but against the one-hot encoding of the next character in the sequence.
+
+You can also fall back to a simpler model.
+Instead of trying to predict every subsequent character, just predict the next character for a given sequence.
+This is exactly the same as all the other LSTM layers in this chapter, if you just drop the keyword argument `return_sequences=True` (see listing 9.17).
+Doing so will focus the LSTM model on the return value of the last time step in the sequence (see figure 9.12).
+
+.Last character prediction only
+image::../images/ch09/char_predict_no_seq.png[Last Character Prediction Only, width=80%, link="../images/ch09/char_predict_no_seq.png"]
+
+
+=== My turn to speak more clearly
+
+Simple character-level modeling is the gateway to more-complex models -- ones that can pick up on not only details such as spelling, but grammar and punctuation also. The real magic of these models comes when you get to learn these details but start to pick up the rhythms and cadences of text as well. Let's take a tour on how you can start to generate some novel text with the tools you were using for classification so far.
+
+The Keras documentation provides an excellent example. For this project, you're going to set aside the movie review dataset you have used up to this point. For finding concepts as deep as tone and word choice, that dataset has two attributes that are difficult to overcome. First of all, it is diverse. It's written by many writers, each with their own writing style and personality.
+Finding commonalities across them all is difficult.
+With a large enough dataset, developing a complex language model that can handle a diversity of styles might be possible .
+But that leads to the second problem with the IMDB dataset: It's an extremely small dataset for learning a general character-based language model. To overcome this problem, you'll need a dataset that is more consistent across samples in style and tone or a much larger dataset; you'll choose the former. The Keras example provides a sample of the work of Friedrich Nietzsche. That's fun, but you'll choose someone else with a singular style: William Shakespeare. He hasn't published anything in a while, so let's help him out.
+
+.Import the Project Gutenberg dataset
+[source,python]
+---------------
+>>> import nltk
+>>> nltk.download('gutenberg')
+>>> from nltk.corpus import gutenberg
+>>> gutenberg.fileids()
+['austen-emma.txt',
+ 'austen-persuasion.txt',
+ 'austen-sense.txt',
+ 'bible-kjv.txt',
+ 'blake-poems.txt',
+ 'bryant-stories.txt',
+ 'burgess-busterbrown.txt',
+ 'carroll-alice.txt',
+ 'chesterton-ball.txt',
+ 'chesterton-brown.txt',
+ 'chesterton-thursday.txt',
+ 'edgeworth-parents.txt',
+ 'melville-moby_dick.txt',
+ 'milton-paradise.txt',
+ 'shakespeare-caesar.txt',
+ 'shakespeare-hamlet.txt',
+ 'shakespeare-macbeth.txt',
+ 'whitman-leaves.txt']
+---------------
+
+Ah, three plays by Shakespeare. You'll grab those and concatenate them into a large string. And if you want more, there's *lots* more where that came from at https://www.gutenberg.org. footnote:[The Project Gutenberg website hosts 57,000 scanned books in various formats. You can download them all for free in about a day, if you are polite about it: https://www.exratione.com/2014/11/how-to-politely-download-all-english-language-text-format-files-from-project-gutenberg/.]
+
+.Preprocess Shakespeare plays
+[source,python]
+---------------
+>>> text = ''
+>>> for txt in gutenberg.fileids():  # <1>
+...     if 'shakespeare' in txt:
+...         text += gutenberg.raw(txt).lower()
+>>> chars = sorted(list(set(text)))
+>>> char_indices = dict((c, i)
+...     for i, c in enumerate(chars))  # <2>
+>>> indices_char = dict((i, c)
+...     for i, c in enumerate(chars))  # <3>
+>>> 'corpus length: {}  total chars: {}'.format(len(text), len(chars))
+'corpus length: 375542  total chars: 50'
+---------------
+<1> Concatenate all Shakespeare plays in the Gutenberg corpus in NLTK.
+<2> Make a dictionary of characters to an index, for reference in the one-hot encoding.
+<3> Make the opposite dictionary for lookup when interpreting the one-hot encoding back to the character.
+
+This is nicely formatted as well.
+
+[source,python]
+---------------
+>>> print(text[:500])
+[the tragedie of julius caesar by william shakespeare 1599]
+
+
+actus primus. scoena prima.
+
+enter flauius, murellus, and certaine commoners ouer the stage.
+
+  flauius. hence: home you idle creatures, get you home:
+is this a holiday? what, know you not
+(being mechanicall) you ought not walke
+vpon a labouring day, without the signe
+of your profession? speake, what trade art thou?
+  car. why sir, a carpenter
+
+   mur. where is thy leather apron, and thy rule?
+what dost thou with thy best apparrell on
+---------------
+
+Next you're going to chop up the source text into data samples, each of a fixed, _maxlen_ set of characters. To increase your dataset size and focus on consistent patterns, the Keras example oversamples the data into semi-redundant chunks. Take 40 characters from the beginning, move to the third character from the beginning, and take 40 from there, move to sixth ... and so on.
+
+Remember, the goal of this particular model is to learn to predict the 41st character in any sequence, given the 40 characters that came before it.  So we will build a training set of semi redundant sequences, each 40 characters long.
+
+.Assemble a training set
+[source,python]
+----
+>>> maxlen = 40
+>>> step = 3
+>>> sentences = []                                # <1>
+>>> next_chars = []
+>>> for i in range(0, len(text) - maxlen, step):  # <2>
+...     sentences.append(text[i: i + maxlen])     # <3>
+...     next_chars.append(text[i + maxlen])       # <4>
+>>> print('nb sequences:', len(sentences))
+nb sequences: 125168
+----
+<1> Ignore sentence (and line) boundaries for now, so the character-based model will learn when to halt a sentence with a period ('.') or linefeed character ('\n').
+<2> Step by three characters, so the generated training samples will overlap, but not be identical.
+<3> Grab a slice of the text.
+<4> Collect the next expected character.
+
+So you have 125,168 training samples and the character that follows each of them, the target for our model.
+
+.One-hot encode the training examples
+[source,python]
+----
+>>> X = np.zeros((len(sentences), maxlen, len(chars)), dtype=np.bool)
+>>> y = np.zeros((len(sentences), len(chars)), dtype=np.bool)
+>>> for i, sentence in enumerate(sentences):
+...     for t, char in enumerate(sentence):
+...         X[i, t, char_indices[char]] = 1
+...     y[i, char_indices[next_chars[i]]] = 1
+----
+
+You then one-hot encode each character of each sample in the dataset and store it as the list _X_. You also store the list of one-hot encoded "answers" in the list _y_.
+
+You then construct the model ...
+
+.Assemble a character-based LSTM model for generating text
+[source,python]
+----
+>>> from keras.models import Sequential
+>>> from keras.layers import Dense, Activation
+>>> from keras.layers import LSTM
+>>> from keras.optimizers import RMSprop
+>>> model = Sequential()
+>>> model.add(LSTM(128,
+...                input_shape=(maxlen, len(chars))))  # <1>
+>>> model.add(Dense(len(chars)))  # <2>
+>>> model.add(Activation('softmax'))
+>>> optimizer = RMSprop(lr=0.01)
+>>> model.compile(loss='categorical_crossentropy', optimizer=optimizer)
+>>> model.summary()
+Layer (type)                 Output Shape              Param #
+=================================================================
+lstm_1 (LSTM)                (None, 128)               91648
+_________________________________________________________________
+dense_1 (Dense)              (None, 50)                6450
+_________________________________________________________________
+activation_1 (Activation)    (None, 50)                0
+=================================================================
+Total params: 98,098.0
+Trainable params: 98,098.0
+Non-trainable params: 0.0
+----
+<1> You use a much wider LSTM layer -- 128, up from 50. And you don't return the sequence. You just want the last output character.
+<2> This is a classification problem, so you want a probability distribution over all possible characters.
+
+This looks slightly different than before, so let's look at the components. Sequential and LSTM layers you know, same as before with your classifier. In this case the _num_neurons_ is 128 in the hidden layer of the LSTM cell. 128 is quite a few more than you used in the classifier, but you're trying to model much more complex behavior in reproducing a given text's tone. Next, the optimizer is defined in a variable, but this is the same one you've used up until this point. It is just broken out here for readability purposes because the learning rate parameter is being adjusted from its default (.001 normally). For what its worth, `RMSProp` works by updating each weight by adjusting the learning rate with "a running average of the magnitudes of recent gradients for that weight"footnote:[Hinton, etal, http://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf]. Reading up on optimizers can definitely save you some heartache in your experiments, but the details of each individual optimizer is beyond the scope of this book.
+
+The next big difference is the loss function you want to minimize. Up until now it has been `binary_crossentropy`. You were only trying to determine the level at which one single neuron was firing. But here you've swapped out `Dense(1)` for `Dense(len(chars))` in the last layer. So the output of the network at each time step will be a 50-dimensional vector (`len(chars) == 50` in listing 9.20). You're using `softmax` as the activation function, so the output vector will be the equivalent of a probability distribution over the entire 50-D vector (the sum of the values in the vector will always add up to one). `categorical_crossentropy` will attempt to minimize the difference between the resultant probability distribution and the one-hot encoded expected character.
+
+And the last major change is no dropout. Because you're looking to specifically model this dataset, you have no interest in generalizing to other problems so not only is overfitting okay, it is ideal.
+
+.Train your Shakespearean chatbot
+[source,python]
+---------------
+>>> epochs = 6
+>>> batch_size = 128
+>>> model_structure = model.to_json()
+>>> with open("shakes_lstm_model.json", "w") as json_file:
+>>>     json_file.write(model_structure)
+>>> for i in range(5):  # <1>
+...     model.fit(X, y,
+...               batch_size=batch_size,
+...               epochs=epochs)
+...     model.save_weights("shakes_lstm_weights_{}.h5".format(i+1))
+Epoch 1/6
+125168/125168 [==============================] - 266s - loss: 2.0310
+Epoch 2/6
+125168/125168 [==============================] - 257s - loss: 1.6851
+...
+---------------
+<1> This is one way to train the model for a while, save its state, and then continue training. Keras also has callback function built in that does similar tasks when called.
+
+
+This setup saves the model every six epochs and keeps training. If it stops reducing the loss, further training is no longer worth the cycles, so you can safely stop the process and have a saved weight set within a few epochs. We found it takes 20 to 30 epochs to start to get something decent from this dataset. You can look to expand the dataset. Shakespeare's works are readily available in the public domain, so just be sure and strive for consistency by appropriately preprocessing if you get them from disparate sources. Fortunately character-based models do not have to worry about tokenizers and sentence segmenters, but your case-folding approach could be important. We used a sledgehammer. You might find a softer touch works better.
+
+Let's make our own play! Because the output vectors are 50-dimensional vectors describing a probability distribution over the 50 possible output characters, you can sample from that distribution. The Keras example has a helper function to do just that.
+
+.Sampler to generate character sequences
+[source,python]
+---------------
+>>> import random
+>>> def sample(preds, temperature=1.0):
+...     preds = np.asarray(preds).astype('float64')
+...     preds = np.log(preds) / temperature
+...     exp_preds = np.exp(preds)
+...     preds = exp_preds / np.sum(exp_preds)
+...     probas = np.random.multinomial(1, preds, 1)
+...     return np.argmax(probas)
+---------------
+
+Because the last layer in the network is a `softmax`, the output vector will be a probability distribution over all possible outputs of the network. By looking at the highest value in the output vector, you can see what the network thinks has the highest probability of being the next character. In explicit terms, the index of the output vector with the highest value (which will be between 0 and 1) will correlate with the index of the one-hot encoding of the expected token.
+
+But here you aren't looking to exactly recreate what the input text was, but instead just what is likely to come next. Just as in a Markov chain, the next token is selected randomly based on the probability of the next token, not the most commonly occurring next token.
+
+The effect of dividing the log by the temperature is flattening (temperature > 1) or sharpening (temperature < 1) the probability distribution. So a temperature (or diversity in the calling arguments) less than 1 will tend toward a more strict attempt to recreate the original text, whereas a temp greater than 1 will produce a more diverse outcome, but as the distribution flattens the  learned patterns begin to wash away and you tend back toward nonsense. Higher diversities are fun to play with though.
+
+//Author: Is "once from the probability distribution, one time" OK? DM
+//fixed
+The numpy random function `multinomial(num_samples, probabilities_list, size)` will make `num_samples` from the distribution whose possible outcomes are described by `probabilities_list`, and it will output a list of length `size`, which is equal to the number of times the experiment is run. So in this case, you'll draw once from the probability distribution. You only need one sample.
+
+When you go to predict, the Keras example has you cycle through various different values for the temperature, because each prediction will see a range of different outputs based on the temperature used in the `sample` function to sample from the probability distribution.
+
+.Generate three texts with three diversity levels
+[source,python]
+----
+>>> import sys
+>>> start_index = random.randint(0, len(text) - maxlen - 1)
+>>> for diversity in [0.2, 0.5, 1.0]:
+...     print()
+...     print('----- diversity:', diversity)
+...     generated = ''
+...     sentence = text[start_index: start_index + maxlen]
+...     generated += sentence
+...     print('----- Generating with seed: "' + sentence + '"')
+...     sys.stdout.write(generated)
+...     for i in range(400):
+...         x = np.zeros((1, maxlen, len(chars)))
+...         for t, char in enumerate(sentence):  # <1>
+...             x[0, t, char_indices[char]] = 1.
+...         preds = model.predict(x, verbose=0)[0]  # <2>
+...         next_index = sample(preds, diversity)
+...         next_char = indices_char[next_index]  # <3>
+...         generated += next_char
+...         sentence = sentence[1:] + next_char  # <4>
+...         sys.stdout.write(next_char)
+...         sys.stdout.flush()                   # <5>
+...     print()
+----
+<1> You seed the trained network and see what it spits out as the next character.
+<2> Model makes a prediction.
+<3> Look up which character that index represents.
+<4> Add it to the "seed" and drop the first character to keep the length the same. This is now the seed for the next pass.
+<5> Flushes the internal buffer to the console so your character appears immediately
+
+(Diversity 1.2 from the example was removed for brevity's sake, but feel free to add it back in and play with the output.)
+
+//HL: Word(s) missing in the last sentence below? I don't quite understand what it's saying. DM
+//rewrote the paragraph.
+You're taking a random chunk of 40 (`maxlen`) characters from the source and predicting what character will come next. You then append that predicted character to the input sentence, drop the first character, and predict again on those 40 characters as your input. Each time you write out the predicted character to the console (or a string buffer) and `flush()` so that your character immediately goes to the console. If the predicted character happens to be a newline, then that ends the line of text, but your generator keeps rolling along predicting the next line from the previous 40 characters it just output.
+
+And what do you get? Something like this:
+
+[source,python]
+---------------
+----- diversity: 0.2
+----- Generating with seed: " them through & through
+the most fond an"
+ them through & through
+the most fond and stranger the straite to the straite
+him a father the world, and the straite:
+the straite is the straite to the common'd,
+and the truth, and the truth, and the capitoll,
+and stay the compurse of the true then the dead and the colours,
+and the comparyed the straite the straite
+the mildiaus, and the straite of the bones,
+and what is the common the bell to the straite
+the straite in the commised and
+
+----- diversity: 0.5
+----- Generating with seed: " them through & through
+the most fond an"
+ them through & through
+the most fond and the pindage it at them for
+that i shall pround-be be the house, not that we be not the selfe,
+and thri's the bate and the perpaine, to depart of the father now
+but ore night in a laid of the haid, and there is it
+
+   bru. what shall greefe vndernight of it
+
+   cassi. what shall the straite, and perfire the peace,
+and defear'd and soule me to me a ration,
+and we will steele the words them with th
+
+----- diversity: 1.0
+----- Generating with seed: " them through & through
+the most fond an"
+ them through & through
+the most fond and boy'd report alone
+
+   yp. it best we will st of me at that come sleepe.
+but you yet it enemy wrong, 'twas sir
+
+   ham. the pirey too me, it let you?
+  son. oh a do a sorrall you. that makino
+beendumons vp?x, let vs cassa,
+yet his miltrow addome knowlmy in his windher,
+a vertues. hoie sleepe, or strong a strong at it
+mades manish swill about a time shall trages,
+and follow. more. heere shall abo
+---------------
+
+Diversity 0.2 and 0.5 both give us something that looks a little like Shakespeare at first glance. Diversity 1.0 (given this dataset)  starts to go off the rails fairly quickly, but note that some basic structures, such as the line break followed by a character's abbreviated name, still show up. All and all not bad for a relatively simple model, and definitely something you can have fun with generating text for a given style.
+
+[NOTE]
+====
+If you want to use a generative model for more than just fun, what might you do to make it more consistent and useful?
+
+* Expand the quantity and quality of the corpus.
+* Expand the complexity of the model (number of neurons).
+* Implement a more refined case folding algorithm.
+* Segment sentences.
+* Add filters on grammar, spelling, and tone to match your needs.
+* Generate many many more examples than you actually show your users.
+* Use seed texts chosen from the context of the session to steer the chatbot towards useful topics.
+* Use multiple different seed texts within each dialog round to explore what the chatbot can talk about well and what the user finds helpful.
+
+See figure 1.4 for more ideas. Maybe it will make more sense now than when you first looked at it.
+====
+
+=== Learned how to say, but not yet what
+
+So you're generating novel text based solely on example text. And from that you're learning to pick up style. But, and this is somewhat counterintuitive, you have no control of what is being said. The context is limited to the source data, as that will limit its vocabulary if nothing else. But given an input, you can train toward what you think the original author or authors would say, but the best you can really hope for from this level of model is _how_ they would say it. And specifically how they would finish saying what was started with a specific seed sentence. That sentence by no means has to come from the text itself. Since the model is trained on characters themselves, you can use novel words as the seed and get interesting results in many cases. Now you have fodder for an entertaining chatbot. But to have your bot say something of substance _and_ in a certain style, you'll have to wait until the next chapter.
+
+=== Other kinds of memory
+
+LSTMs are an extension of the basic concepts of a recurrent neural net, and a variety of other extensions exist in the same vein. All of them are slight variations on the number or operations of the gates inside the cell. The gated recurrent unit, for example, combines the forget gate and the candidate choice branch from the candidate gate into a single update gate. This gate saves on the number of parameters to learn and has been shown to be comparable to a standard LSTM while being that much less computationally expensive. Keras provides a GRU layer abstraction that you can implement just as with LSTMs.
+
+.Gated recurrent units in Keras
+[source,python]
+---------------
+>>> from keras.models import Sequential
+>>> from keras.layers import GRU
+>>> model = Sequential()
+>>> model.add(GRU(num_neurons, return_sequences=True,
+...               input_shape=X[0].shape))
+---------------
+
+Another technique is to use an LSTM with _peephole_ connections. Keras does not have a direct implementation of this, but several examples on the web extend the Keras LSTM class to do this. The idea is that each gate in a standard LSTM cell has access to the current memory state directly, taken in as part of its input. As described in the paper _Learning Precise Timing with LSTM Recurrent Networks_ footnote:[Gers, Schraudolph, Schmidhuber; http://www.jmlr.org/papers/volume3/gers02a/gers02a.pdf], the gates contain additional weights of the same dimension as the memory state. The input to each gate is then a concatenation of the input to the cell at that time step and the output of the cell from the previous time step _and_ the memory state itself. The authors found more precise modeling of the timing of events in time series data. Although they were not working specifically in the NLP domain, the concept has validity here as well, but we leave it to the reader to experiment with that.
+
+Those are just two of the RNN/LSTM derivatives out there. Experiments are ever ongoing, and we encourage you join the fun. The tools are all readily available, so finding the next newest greatest iteration is in the reach of all.
+
+=== Going deeper
+
+It's convenient to think of the memory unit as encoding a specific representations of noun/verb pairs or sentence-to-sentence verb tense references, but that is not specifically what is going on. It is just a happy byproduct of the patterns that the network learns, assuming the training went well. Like in any neural network, layering allows the model to form more-complex representations of the patterns in the training data. And you can just as easily stack LSTM layers (see figure 9.13).
+
+.Stacked LSTM
+image::../images/ch09/stacked_lstm.png[Stacked LSTM, width=80%, link="../images/ch09/stacked_lstm.png"]
+
+Stacked layers are much more computationally expensive to train. But _stacking_ them takes only a few seconds in Keras.
+
+.Two LSTM layers
+[source,python]
+---------------
+>>> from keras.models import Sequential
+>>> from keras.layers import LSTM
+>>> model = Sequential()
+>>> model.add(LSTM(num_neurons, return_sequences=True,
+...                input_shape=X[0].shape))
+>>> model.add(LSTM(num_neurons_2, return_sequences=True))
+---------------
+
+Note that the parameter `return_sequences=True` is required in the first and intermediary layers for the model to build correctly. This requirement makes sense because the output at each time step is needed as the input for the time steps of the next layer.
+
+Remember, however, that creating a model that is capable of representing more-complex relationships than is present in the training data can lead to strange results. Simply piling layers onto the model, while fun, is rarely the answer to building the most representative model.
+
+=== Summary
+
+* Remembering information with memory units enables more accurate and general models of the sequence.
+* It's important to forget information that is no longer relevant.
+* Only some new information needs to be retained for the upcoming input, and LSTMs can be trained to find it.
+* If you can predict what comes next, you can generate novel text from probabilities.
+* Character-based models can more efficiently and successfully learn from small focused corpora than word-based models.
+* LSTM thought vectors capture much more than just the sum of the words in a statement.
+

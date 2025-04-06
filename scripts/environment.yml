@@ -1,0 +1,55 @@
+channels:
+  - huggingface
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - asciidoctor=2.0.16
+  - beautifulsoup4==4.11.1
+  - boto3==1.22.2
+  - configargparse=1.5.3
+  # - click=7.1.2  # pip downgrades to this version during pip install -e
+  - django=4.0.4
+  # - docutils=0.18.1
+  - ffmpeg=4.3
+  - gitpython=3.1.27
+  - graphviz=2.48.0
+  - h5py=3.6.0
+  - html2text>=2020.1.16
+  - html5lib==1.1
+  - huggingface_hub
+  - jupyter_console=6.4.3
+  - libxml2>=2.8.0
+  - matplotlib-base>=3.4.2
+  - nltk>=3.6.7
+  - numpy=1.21.1
+  - pandas>=1.3.1
+  - pip
+  - poetry>=1.1.13 
+  - pre-commit>=2.17.0
+  - protobuf=3.16.0
+  - psutil>=5.8.0
+  - pynndescent>=0.5.6
+  - pytest-cov
+  - python=3.9.7
+  - pytorch>=1.11.0,<1.12.0
+  # - pytorch-cpu>=1.9.0
+  - qtpy=2.0.1
+  # - regex>=2021.8.3
+  - ruby=2.6.6
+  - scikit-learn>=1.0.2
+  - scipy>=1.7.0
+  - seaborn>=0.11.2
+  - sentence-transformers>=2.1.0
+  - sentencepiece=0.1.95
+  - spacy=3.2.4
+  - spacy-legacy=3.0.8
+  - sphinx=4.4.0
+#   - torchtext>=0.12.0
+#   - torchvision>=0.12.0
+#   - transformers>=4.11.3
+  - wikipedia>=1.4.0
+  - xmltodict>=0.12.0
+  - pip:
+    - wikipedia @ https://gitlab.com/tangibleai/Wikipedia/-/archive/1.4.1/Wikipedia-1.4.1.zip
+

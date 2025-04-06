@@ -1,0 +1,42 @@
+== About this book
+:chapter: FM
+
+_Natural Language Processing in Action_ is a practical guide to processing and generating natural language text in the real world.
+In this book we provide you with all the tools and techniques you need to build the NLP systems to support a virtual assistant (chatbot), spam filter, forum moderator, sentiment analyzer, knowledge base builder, natural language text miner, or nearly any other NLP application you can imagine.
+
+And you'll learn much more than _what_ and _how_ of NLP -- you'll learn the _why_. Your right hand brain will wake up as you widen your focus from the nuts and bolts of an NLP pipeline to see the bigger picture. You'll synthesize an understanding of why NLP is so important and it affects society and the planet.footnote:[Ian McGilcrist explains in his TED talk how we neglect our philosophical right brain by focusing on "manipulating the world" with our left brain: https://www.ted.com/talks/iain_mcgilchrist_the_divided_brain] This will help you avoid becoming a _moral crumple zone_ for the bots and bosses in your life.footnote:[Madeleine Clare Elish 15 Mar 2019 "Moral Crumple Zones: Cautionary Tales in Human-Robot Interaction"
+ 260-Article Text-921-1-10-20190323.pdf]
+
+_Natural Language Processing in Action_ is aimed at intermediate to advanced Python developers. Readers already capable of  designing and building complex systems will also find most of this book useful since it provides numerous best-practice examples and insight into the capabilities of state-of-the art NLP algorithms. While knowledge of object-oriented Python development may help you build better systems, it's not required to use what you learn in this book.
+
+For special topics, I provide sufficient background material and cite resources (both text and online) for those who want to gain an in-depth understanding.
+
+=== Roadmap
+
+If you are new to Python and natural language processing, you should first read part 1 and then any of the chapters of part 3 that apply to your interests or on-the-job challenges.
+If you want to get up to speed on the new NLP capabilities that deep learning enables, you'll also want to read part 2, in order. It builds your understanding of neural networks, incrementally ratcheting up the complexity and capability of those neural nets.
+
+As soon as you find a chapter or section with a snippet that you can "run in your head", you should run it for real on your machine.
+And if any of the examples look like they might run on your own text documents, you should put that text into a CSV or text file (one document per line) in the `nlpia/src/nlpia/data/` directory.
+Then you can use the `nlpia.data.loaders.get_data()` function to retrieve that data and run the examples on your own data.
+
+=== About this book
+
+The chapters of part 1 deal with the logistics of working with natural language and turning them into numbers that can be searched and computed.
+This "blocking and tackling" of words comes with the reward of some surprisingly useful applications such as information retrieval and sentiment analysis.
+Once you master the basics, you'll find that some very simple arithmetic, computed over and over and over in a loop, can solve some pretty important problems, such as spam filtering.
+Spam filters of the type you'll build in chapters 2 through 4 are what saved the global email system from anarchy and stagnation.
+You'll learn how to build a spam filter with better than 90% accuracy using 1990s scale technology -- calculating nothing more than the counts of words and some simple averages of those counts (pay attention when you see the acronym LDA).
+
+All this math with words may sound tedious, but it's actually quite fun.
+Very quickly you'll be able to build algorithms that can make decisions about natural language as well or better than you can (and certainly much faster).
+This may be the first time in your life that you have the perspective to fully appreciate the way that words reflect and empower your thinking.
+The high-dimensional vector-space view of words and thoughts will hopefully leave your brain spinning in recurrent loops of self-discovery.
+
+That crescendo of learning may reach a high point towards the middle of this book.
+The core of this book in part 2 will be your exploration of the complicated web of computation and communication within neural networks.
+The network effect of small logical units interacting in a web of "thinking" has empowered machines to solve problems that only smart humans even bothered to attempt in the past, things such as analogy questions, text summarization, and translation between natural languages.
+
+Yes, you'll learn about word vectors, don't worry, but oh so much more. You'll be able to visualize words, documents, and sentences in a cloud of connected concepts that stretches well beyond the three dimensions you can readily grasp. You'll start thinking of documents and words like a Dungeons and Dragons character sheet with a myriad of randomly selected characteristics and abilities that have evolved and grown over time, but only in our heads.
+
+An appreciation for this intersubjective reality of words and their meaning will be the foundation for the coup-de-grace of part 3, where you learn how to build machines that converse and answer questions as well as humans.

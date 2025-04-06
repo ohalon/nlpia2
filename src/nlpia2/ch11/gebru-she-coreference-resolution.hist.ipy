@@ -1,0 +1,153 @@
+# pip install spacy-experimental
+# pip install https://github.com/explosion/spacy-experimental/releases/download/v0.6.0/en_coreference_web_trf-3.4.0a0-py3-none-any.whl
+# note spacy 3.4.0 version number (must be exactly the same for binary compatibility)
+# https://github.com/explosion/spacy-experimental/releases/tag/v0.6.0
+# https://github.com/explosion/spacy-experimental#coreference-components
+# https://github.com/explosion/projects/tree/v3/experimental/coref
+>>> nlp = spacy.load('en_coreference_web_trf')
+>>> import spacy
+>>> nlp = spacy.load('en_coreference_web_trf')
+>>> doc = nlp('This sentence is what it is.')
+>>> toks = []
+... for tok in doc:
+...     toks.append(vars(tok))
+...
+>>> toks = []
+... for tok in doc:
+...     toks.append(dir(tok))
+...
+>>> dir(tok)
+['_',
+ '__bytes__',
+ '__class__',
+ '__delattr__',
+ '__dir__',
+ '__doc__',
+ '__eq__',
+ '__format__',
+ '__ge__',
+ '__getattribute__',
+ '__gt__',
+ '__hash__',
+ '__init__',
+ '__init_subclass__',
+ '__le__',
+ '__len__',
+ '__lt__',
+ '__ne__',
+ '__new__',
+ '__pyx_vtable__',
+ '__reduce__',
+ '__reduce_ex__',
+ '__repr__',
+ '__setattr__',
+ '__sizeof__',
+ '__str__',
+ '__subclasshook__',
+ '__unicode__',
+ 'ancestors',
+ 'check_flag',
+ 'children',
+ 'cluster',
+ 'conjuncts',
+ 'dep',
+ 'dep_',
+ 'doc',
+ 'ent_id',
+ 'ent_id_',
+ 'ent_iob',
+ 'ent_iob_',
+ 'ent_kb_id',
+ 'ent_kb_id_',
+ 'ent_type',
+ 'ent_type_',
+ 'get_extension',
+ 'has_dep',
+ 'has_extension',
+ 'has_head',
+ 'has_morph',
+ 'has_vector',
+ 'head',
+ 'i',
+ 'idx',
+ 'iob_strings',
+ 'is_alpha',
+ 'is_ancestor',
+ 'is_ascii',
+ 'is_bracket',
+ 'is_currency',
+ 'is_digit',
+ 'is_left_punct',
+ 'is_lower',
+ 'is_oov',
+ 'is_punct',
+ 'is_quote',
+ 'is_right_punct',
+ 'is_sent_end',
+ 'is_sent_start',
+ 'is_space',
+ 'is_stop',
+ 'is_title',
+ 'is_upper',
+ 'lang',
+ 'lang_',
+ 'left_edge',
+ 'lefts',
+ 'lemma',
+ 'lemma_',
+ 'lex',
+ 'lex_id',
+ 'like_email',
+ 'like_num',
+ 'like_url',
+ 'lower',
+ 'lower_',
+ 'morph',
+ 'n_lefts',
+ 'n_rights',
+ 'nbor',
+ 'norm',
+ 'norm_',
+ 'orth',
+ 'orth_',
+ 'pos',
+ 'pos_',
+ 'prefix',
+ 'prefix_',
+ 'prob',
+ 'rank',
+ 'remove_extension',
+ 'right_edge',
+ 'rights',
+ 'sent',
+ 'sent_start',
+ 'sentiment',
+ 'set_extension',
+ 'set_morph',
+ 'shape',
+ 'shape_',
+ 'similarity',
+ 'subtree',
+ 'suffix',
+ 'suffix_',
+ 'tag',
+ 'tag_',
+ 'tensor',
+ 'text',
+ 'text_with_ws',
+ 'vector',
+ 'vector_norm',
+ 'vocab',
+ 'whitespace_']
+>>> doc.clusters
+>>> doc.spans
+{'coref_clusters_1': [This sentence is, it is]}
+>>> text = "John Smith called from New York, he says it's raining in the city."
+>>> doc = nlp(text)
+>>> doc.spans
+{'coref_clusters_1': [John Smith called, he says], 'coref_clusters_2': [New York,, the city.]}
+>>> text = 'Gebru had determined that publishing research papers was more effective at bringing forth the ethical change she was focused on than pressing her superiors in the company. She and five others coauthored a research paper, "On the Dangers of Stochastic Parrots: Can Language Models Be Too Big?"'
+>>> doc = nlp(text)
+>>> doc.spans
+{'coref_clusters_1': [Gebru had, she was, her superiors, She and]}
+# >>> hist -o -p -f src/nlpia2/ch11/gebru-she-coreference-resolution.hist.ipy

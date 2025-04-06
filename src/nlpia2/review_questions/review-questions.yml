@@ -1,0 +1,25 @@
+Chapter 1:
+  - Why is NLP considered to be a core enabling feature for AGI?
+  - Why do advanced NLP models tend to show significant discriminatory biases?
+  - How is it possible to create a prosocial chatbot using training data from sources that include antisocial examples?
+  - What are 4 different approaches or architectures for building a chatbot?
+  - How is NLP used within a search engine?
+  - Write a regular expression to recognize your name and all the variations on its spelling (including nicknames) that you've seen.
+  - Write a regular expression to try to recognize a sentence boundary (usually a period ("."), question mark "?", or exclamation mark "!")
+Chapter 2:
+  - How does a lemmatizer increase the likelihood that your DuckDuckGo search results contain what you are looking for?
+  - Is there a way to optimally decide the _n_ in the _n_-gram range you use to tokenize your documents?
+  - Does lemmatization, case folding, or stopword removal help or hurt your performance on a model to predict misleading news articles with this Kaggle dataset (https://www.kaggle.com/clmentbisaillon/fake-and-real-news-dataset/download).
+  - How could your find out the best sizes for the word pieces or sentence pieces for your tokenizer?
+  - "Is there a website where you can download the token frequencies for most of the words and n-grams ever published? footnote:[Hint: A company that aspired to "do no evil", but now does, created this massive NLP corpus.]"
+  - What are the risks and possible benefits of pair coding AI assistants built with NLP? What sort of organizations and algorithms do you trust with your mind and your code?
+Chapter 3:
+  - What is the most memory efficient data structure for storing BOW and TF-IDF vectors?
+Chapter 4:
+  - What is the context or neighborhood of words that LSA (PCA on BOW vectors) pays attention to when creating topics?
+Chapter 5:
+  - What are the advantages and disadvantages of using the `torch.nn.functional` interface to PyTorch rather than the `torch.nn.Module` class?
+  - What is the simple AI logic "problem" that Rosenblatt's artifical neurons couldn't?
+  - What minor change to Rosenblatt's architecture "fixed" perceptrons and ended the first "AI Winter"?
+  - What is the equivalent of a PyTorch `model.forward()` function in SciKit-Learn models?
+

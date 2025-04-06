@@ -1,0 +1,350 @@
+>>> import spacy
+... import pandas as pd
+... import numpy as np
+... # spacy.cli.download('en_core_web_md')
+... df = pd.read_csv('../nlpia2/src/nlpia2/data/nlpia_lines.csv.gz')
+... df3 = df[df['filename'] == 'Chapter-03_Math-with-Words-TF-IDF-Vectors.adoc']
+... texts = df3.text[df3.is_text | df3.is_title]
+... nlp = spacy.load('en_core_web_md')
+... embeddings = texts.apply(lambda s: nlp(s).vector)
+... dfe = pd.DataFrame([list(x / np.linalg.norm(x)) for x in embeddings])
+... heatmap = dfe.values.dot(dfe.values.T)
+... heatmap.shape
+... 
+... 
+... import seaborn as sn
+... import matplotlib.pyplot as plt
+... hm = sn.heatmap(data=heatmap,
+...                 vmin=.6,
+...                 vmax=1)
+... plt.tight_layout()
+... plt.show()
+...
+>>> closeones = []
+... for (i1, text1) in enumerate(texts):
+...     for i2, text2 in enumerate(texts[i1+1:]):
+...         if heatmap[i1,i2] > .95:
+...             closeones.append(dict(i1=i1, text1=text2, i2=i2, text2=text2))
+...
+>>> dfclose = pd.DataFrame(closeones)
+>>> dfclose
+      i1                                              text1   i2                                              text2
+0      0                 = Math with words (TF-IDF vectors)    0                 = Math with words (TF-IDF vectors)
+1      1  * Counting words, _n_-grams and _term frequenc...    1  * Counting words, _n_-grams and _term frequenc...
+2      2   * Representing natural language texts as vectors    2   * Representing natural language texts as vectors
+3      3  * Estimating the similarity of pairs of docume...    3  * Estimating the similarity of pairs of docume...
+4      4  Detecting words is useful for simple tasks, li...    4  Detecting words is useful for simple tasks, li...
+..   ...                                                ...  ...                                                ...
+349  411  We're now ready to implement the question-answ...  111  We're now ready to implement the question-answ...
+350  415  To make this book as practical as possible, ev...   95  To make this book as practical as possible, ev...
+351  415  Now that you can convert natural language text...  112  Now that you can convert natural language text...
+352  456  Now you have all you need to do a basic TF-IDF...   13  Now you have all you need to do a basic TF-IDF...
+353  489  So you only need the most basic TF-IDF vectors...   44  So you only need the most basic TF-IDF vectors...
+
+[354 rows x 4 columns]
+>>> len(dfclose)
+354
+>>> closeones = []
+... for (i1, text1) in enumerate(texts):
+...     for i2, text2 in enumerate(texts[i1+1:]):
+...         if heatmap[i1,i2] > .99:
+...             closeones.append(dict(i1=i1, text1=text2, i2=i2, text2=text2))
+...
+>>> dfclose = pd.DataFrame(closeones)
+>>> len(dfclose)
+284
+>>> dfclose
+      i1                                              text1   i2                                              text2
+0      0                 = Math with words (TF-IDF vectors)    0                 = Math with words (TF-IDF vectors)
+1      1  * Counting words, _n_-grams and _term frequenc...    1  * Counting words, _n_-grams and _term frequenc...
+2      2   * Representing natural language texts as vectors    2   * Representing natural language texts as vectors
+3      3  * Estimating the similarity of pairs of docume...    3  * Estimating the similarity of pairs of docume...
+4      4  Detecting words is useful for simple tasks, li...    4  Detecting words is useful for simple tasks, li...
+..   ...                                                ...  ...                                                ...
+279  273  * Cosine distance is the go-to similarity scor...  273  * Cosine distance is the go-to similarity scor...
+280  409                       == Using TF-IDF for your bot   95                       == Using TF-IDF for your bot
+281  409  You'll use the `scikit-learn` TfidfVectorizer ...  112  You'll use the `scikit-learn` TfidfVectorizer ...
+282  415  To make this book as practical as possible, ev...   95  To make this book as practical as possible, ev...
+283  415  Now that you can convert natural language text...  112  Now that you can convert natural language text...
+
+[284 rows x 4 columns]
+>>> closeones = []
+... for (i1, text1) in enumerate(texts):
+...     for i2, text2 in enumerate(texts[i1+2:]):
+...         if heatmap[i1,i2] > .99:
+...             closeones.append(dict(i1=i1, text1=text2, i2=i2, text2=text2))
+...
+>>> dfclose = pd.DataFrame(closeones)
+>>> dfclose
+      i1                                              text1   i2                                              text2
+0      0                                This chapter covers    0                                This chapter covers
+1      1  * Predicting word occurrence probabilities wit...    1  * Predicting word occurrence probabilities wit...
+2      2  * Finding relevant documents in a collection o...    2  * Finding relevant documents in a collection o...
+3      3  Having collected and counted words (tokens), a...    3  Having collected and counted words (tokens), a...
+4      4  So you can use that "importance" value to find...    4  So you can use that "importance" value to find...
+..   ...                                                ...  ...                                                ...
+278  272  * Cosine distance, the amount of "overlap" bet...  272  * Cosine distance, the amount of "overlap" bet...
+279  409  In this chapter, you learned how TF-IDF can be...   95  In this chapter, you learned how TF-IDF can be...
+280  409  We're now ready to implement the question-answ...  112  We're now ready to implement the question-answ...
+281  415  In this chapter, you're going to make your cha...   95  In this chapter, you're going to make your cha...
+282  415  Numbers firmly in hand, in the next chapter yo...  112  Numbers firmly in hand, in the next chapter yo...
+
+[283 rows x 4 columns]
+>>> texts
+3578    = Natural Language Processing in Action, Secon...
+3599                   = Math with words (TF-IDF vectors)
+3601                                  This chapter covers
+3603    * Counting words, _n_-grams and _term frequenc...
+3604    * Predicting word occurrence probabilities wit...
+                              ...                        
+5086    * Term frequencies must be weighted by their i...
+5087    * Bag-of-words / Bag-of-ngrams and TF-IDF are ...
+5088    * Euclidean distance and similarity between pa...
+5089    * Cosine distance, the amount of "overlap" bet...
+5090    * Cosine distance is the go-to similarity scor...
+Name: text, Length: 548, dtype: object
+>>> closeones = []
+... for (i1, text1) in enumerate(texts):
+...     for i2, text2 in enumerate(texts[i1+1:]):
+...         if heatmap[i1,i2+i1+1] > .99:
+...             closeones.append(dict(i1=i1, text1=text2, i2=i2+i1+1, text2=text2))
+...
+>>> dfclose = pd.DataFrame(closeones)
+>>> dfclose
+     i1                                              text1   i2                                              text2
+0    95                                               ____  112                                               ____
+1    95                                               ____  409                                               ____
+2    95                                               ____  415                                               ____
+3   112                                               ____  409                                               ____
+4   112                                               ____  415                                               ____
+5   306                  Rkcyvpvg vf orggre guna vzcyvpvg.  307                  Rkcyvpvg vf orggre guna vzcyvpvg.
+6   306                     Fvzcyr vf orggre guna pbzcyrk.  308                     Fvzcyr vf orggre guna pbzcyrk.
+7   306                Pbzcyrk vf orggre guna pbzcyvpngrq.  309                Pbzcyrk vf orggre guna pbzcyvpngrq.
+8   306                       Fcnefr vf orggre guna qrafr.  311                       Fcnefr vf orggre guna qrafr.
+9   306                          Abj vf orggre guna arire.  320                          Abj vf orggre guna arire.
+10  307                     Fvzcyr vf orggre guna pbzcyrk.  308                     Fvzcyr vf orggre guna pbzcyrk.
+11  307                Pbzcyrk vf orggre guna pbzcyvpngrq.  309                Pbzcyrk vf orggre guna pbzcyvpngrq.
+12  307                       Fcnefr vf orggre guna qrafr.  311                       Fcnefr vf orggre guna qrafr.
+13  307                          Abj vf orggre guna arire.  320                          Abj vf orggre guna arire.
+14  308                Pbzcyrk vf orggre guna pbzcyvpngrq.  309                Pbzcyrk vf orggre guna pbzcyvpngrq.
+15  308                       Fcnefr vf orggre guna qrafr.  311                       Fcnefr vf orggre guna qrafr.
+16  308                          Abj vf orggre guna arire.  320                          Abj vf orggre guna arire.
+17  309                       Fcnefr vf orggre guna qrafr.  311                       Fcnefr vf orggre guna qrafr.
+18  309                          Abj vf orggre guna arire.  320                          Abj vf orggre guna arire.
+19  311                          Abj vf orggre guna arire.  320                          Abj vf orggre guna arire.
+20  312                Nygubhtu cenpgvpnyvgl orngf chevgl.  314                Nygubhtu cenpgvpnyvgl orngf chevgl.
+21  312                 Reebef fubhyq arire cnff fvyragyl.  315                 Reebef fubhyq arire cnff fvyragyl.
+22  312                        Hayrff rkcyvpvgyl fvyraprq.  316                        Hayrff rkcyvpvgyl fvyraprq.
+23  314                 Reebef fubhyq arire cnff fvyragyl.  315                 Reebef fubhyq arire cnff fvyragyl.
+24  314                        Hayrff rkcyvpvgyl fvyraprq.  316                        Hayrff rkcyvpvgyl fvyraprq.
+25  315                        Hayrff rkcyvpvgyl fvyraprq.  316                        Hayrff rkcyvpvgyl fvyraprq.
+26  409                                               ____  415                                               ____
+27  420  Term Frequency of "and" in discrimination chap...  421  Term Frequency of "and" in discrimination chap...
+28  483                                   === Alternatives  492                                   === Alternatives
+29  483                                     === Okapi BM25  498                                     === Okapi BM25
+30  492                                     === Okapi BM25  498                                     === Okapi BM25
+31  492                                         == Summary  540                                         == Summary
+>>> closeones = []
+... for (i1, text1) in enumerate(texts):
+...     for i2, text2 in enumerate(texts[i1+1:]):
+...         i2 = i2 + i1 + 1
+...         if heatmap[i1,i2] > .99:
+...             closeones.append(dict(i1=i1, text1=text2, df.text.iloc[i1], i2=i2, text2=text2, df.text.iloc[i2]))
+...
+>>> closeones = []
+... for (i1, text1) in enumerate(texts):
+...     for i2, text2 in enumerate(texts[i1+1:]):
+...         i2 = i2 + i1 + 1
+...         if heatmap[i1,i2] > .99:
+...             closeones.append(dict(i1=i1, text1=text1, text1b=df.text.iloc[i1], i2=i2, text2=text2, text2b=df.text.iloc[i2]))
+...
+>>> dfclose = pd.DataFrame(closeones)
+>>> dfclose
+     i1  ...                                             text2b
+0    95  ...                                                   
+1    95  ...  Semantic analysis, along with statistics, can ...
+2    95  ...  Could you ever write enough rules to deal with...
+3   112  ...  Semantic analysis, along with statistics, can ...
+4   112  ...  Could you ever write enough rules to deal with...
+5   306  ...  And when you did start typing, you probably wr...
+6   306  ...  You chose your words carefully, discarding som...
+7   306  ...                                                   
+8   306  ...  It helps you gather your thoughts and revise t...
+9   306  ...  Every sentence in this 2nd edition of the book...
+10  307  ...  You chose your words carefully, discarding som...
+11  307  ...                                                   
+12  307  ...  It helps you gather your thoughts and revise t...
+13  307  ...  Every sentence in this 2nd edition of the book...
+14  308  ...                                                   
+15  308  ...  It helps you gather your thoughts and revise t...
+16  308  ...  Every sentence in this 2nd edition of the book...
+17  309  ...  It helps you gather your thoughts and revise t...
+18  309  ...  Every sentence in this 2nd edition of the book...
+19  311  ...  Every sentence in this 2nd edition of the book...
+20  312  ...                                                   
+21  312  ...                So reading and writing is thinking.
+22  312  ...  And words are packets of thought that you can ...
+23  314  ...                So reading and writing is thinking.
+24  314  ...  And words are packets of thought that you can ...
+25  315  ...  And words are packets of thought that you can ...
+26  409  ...  Could you ever write enough rules to deal with...
+27  420  ...  Speakers and writers of natural languages assu...
+28  483  ...                                                   
+29  483  ...                                                   
+30  492  ...                                                   
+31  492  ...                                          //     },
+
+[32 rows x 6 columns]
+>>> dfclose[['text1', 'text2']]
+                                          text1                                              text2
+0                                          ____                                               ____
+1                                          ____                                               ____
+2                                          ____                                               ____
+3                                          ____                                               ____
+4                                          ____                                               ____
+5                Ornhgvshy vf orggre guna htyl.                  Rkcyvpvg vf orggre guna vzcyvpvg.
+6                Ornhgvshy vf orggre guna htyl.                     Fvzcyr vf orggre guna pbzcyrk.
+7                Ornhgvshy vf orggre guna htyl.                Pbzcyrk vf orggre guna pbzcyvpngrq.
+8                Ornhgvshy vf orggre guna htyl.                       Fcnefr vf orggre guna qrafr.
+9                Ornhgvshy vf orggre guna htyl.                          Abj vf orggre guna arire.
+10            Rkcyvpvg vf orggre guna vzcyvpvg.                     Fvzcyr vf orggre guna pbzcyrk.
+11            Rkcyvpvg vf orggre guna vzcyvpvg.                Pbzcyrk vf orggre guna pbzcyvpngrq.
+12            Rkcyvpvg vf orggre guna vzcyvpvg.                       Fcnefr vf orggre guna qrafr.
+13            Rkcyvpvg vf orggre guna vzcyvpvg.                          Abj vf orggre guna arire.
+14               Fvzcyr vf orggre guna pbzcyrk.                Pbzcyrk vf orggre guna pbzcyvpngrq.
+15               Fvzcyr vf orggre guna pbzcyrk.                       Fcnefr vf orggre guna qrafr.
+16               Fvzcyr vf orggre guna pbzcyrk.                          Abj vf orggre guna arire.
+17          Pbzcyrk vf orggre guna pbzcyvpngrq.                       Fcnefr vf orggre guna qrafr.
+18          Pbzcyrk vf orggre guna pbzcyvpngrq.                          Abj vf orggre guna arire.
+19                 Fcnefr vf orggre guna qrafr.                          Abj vf orggre guna arire.
+20                          Ernqnovyvgl pbhagf.                Nygubhtu cenpgvpnyvgl orngf chevgl.
+21                          Ernqnovyvgl pbhagf.                 Reebef fubhyq arire cnff fvyragyl.
+22                          Ernqnovyvgl pbhagf.                        Hayrff rkcyvpvgyl fvyraprq.
+23          Nygubhtu cenpgvpnyvgl orngf chevgl.                 Reebef fubhyq arire cnff fvyragyl.
+24          Nygubhtu cenpgvpnyvgl orngf chevgl.                        Hayrff rkcyvpvgyl fvyraprq.
+25           Reebef fubhyq arire cnff fvyragyl.                        Hayrff rkcyvpvgyl fvyraprq.
+26                                         ____                                               ____
+27  Term Frequency of "and" in intro is: 0.0292  Term Frequency of "and" in discrimination chap...
+28                       === Another vectorizer                                   === Alternatives
+29                       === Another vectorizer                                     === Okapi BM25
+30                             === Alternatives                                     === Okapi BM25
+31                             === Alternatives                                         == Summary
+>>> dfclose[['i1', 'text1', 'i2', 'text2']]
+     i1                                        text1   i2                                              text2
+0    95                                         ____  112                                               ____
+1    95                                         ____  409                                               ____
+2    95                                         ____  415                                               ____
+3   112                                         ____  409                                               ____
+4   112                                         ____  415                                               ____
+5   306               Ornhgvshy vf orggre guna htyl.  307                  Rkcyvpvg vf orggre guna vzcyvpvg.
+6   306               Ornhgvshy vf orggre guna htyl.  308                     Fvzcyr vf orggre guna pbzcyrk.
+7   306               Ornhgvshy vf orggre guna htyl.  309                Pbzcyrk vf orggre guna pbzcyvpngrq.
+8   306               Ornhgvshy vf orggre guna htyl.  311                       Fcnefr vf orggre guna qrafr.
+9   306               Ornhgvshy vf orggre guna htyl.  320                          Abj vf orggre guna arire.
+10  307            Rkcyvpvg vf orggre guna vzcyvpvg.  308                     Fvzcyr vf orggre guna pbzcyrk.
+11  307            Rkcyvpvg vf orggre guna vzcyvpvg.  309                Pbzcyrk vf orggre guna pbzcyvpngrq.
+12  307            Rkcyvpvg vf orggre guna vzcyvpvg.  311                       Fcnefr vf orggre guna qrafr.
+13  307            Rkcyvpvg vf orggre guna vzcyvpvg.  320                          Abj vf orggre guna arire.
+14  308               Fvzcyr vf orggre guna pbzcyrk.  309                Pbzcyrk vf orggre guna pbzcyvpngrq.
+15  308               Fvzcyr vf orggre guna pbzcyrk.  311                       Fcnefr vf orggre guna qrafr.
+16  308               Fvzcyr vf orggre guna pbzcyrk.  320                          Abj vf orggre guna arire.
+17  309          Pbzcyrk vf orggre guna pbzcyvpngrq.  311                       Fcnefr vf orggre guna qrafr.
+18  309          Pbzcyrk vf orggre guna pbzcyvpngrq.  320                          Abj vf orggre guna arire.
+19  311                 Fcnefr vf orggre guna qrafr.  320                          Abj vf orggre guna arire.
+20  312                          Ernqnovyvgl pbhagf.  314                Nygubhtu cenpgvpnyvgl orngf chevgl.
+21  312                          Ernqnovyvgl pbhagf.  315                 Reebef fubhyq arire cnff fvyragyl.
+22  312                          Ernqnovyvgl pbhagf.  316                        Hayrff rkcyvpvgyl fvyraprq.
+23  314          Nygubhtu cenpgvpnyvgl orngf chevgl.  315                 Reebef fubhyq arire cnff fvyragyl.
+24  314          Nygubhtu cenpgvpnyvgl orngf chevgl.  316                        Hayrff rkcyvpvgyl fvyraprq.
+25  315           Reebef fubhyq arire cnff fvyragyl.  316                        Hayrff rkcyvpvgyl fvyraprq.
+26  409                                         ____  415                                               ____
+27  420  Term Frequency of "and" in intro is: 0.0292  421  Term Frequency of "and" in discrimination chap...
+28  483                       === Another vectorizer  492                                   === Alternatives
+29  483                       === Another vectorizer  498                                     === Okapi BM25
+30  492                             === Alternatives  498                                     === Okapi BM25
+31  492                             === Alternatives  540                                         == Summary
+>>> closeones = []
+... for (i1, text1) in enumerate(texts):
+...     for i2, text2 in enumerate(texts[i1+1:]):
+...         i3 = i2 + i1 + 1
+...         if heatmap[i1][i3] > .99:
+...             closeones.append(dict(coord=[i1, i3], text1=text1, text1b=df.text.iloc[i1], text2=text2, text2b=df.text.iloc[i3]))
+...
+>>> dfclose = pd.DataFrame(closeones)
+>>> dfclose[['coord', 'text1', 'text2']]
+         coord                                        text1                                              text2
+0    [95, 112]                                         ____                                               ____
+1    [95, 409]                                         ____                                               ____
+2    [95, 415]                                         ____                                               ____
+3   [112, 409]                                         ____                                               ____
+4   [112, 415]                                         ____                                               ____
+5   [306, 307]               Ornhgvshy vf orggre guna htyl.                  Rkcyvpvg vf orggre guna vzcyvpvg.
+6   [306, 308]               Ornhgvshy vf orggre guna htyl.                     Fvzcyr vf orggre guna pbzcyrk.
+7   [306, 309]               Ornhgvshy vf orggre guna htyl.                Pbzcyrk vf orggre guna pbzcyvpngrq.
+8   [306, 311]               Ornhgvshy vf orggre guna htyl.                       Fcnefr vf orggre guna qrafr.
+9   [306, 320]               Ornhgvshy vf orggre guna htyl.                          Abj vf orggre guna arire.
+10  [307, 308]            Rkcyvpvg vf orggre guna vzcyvpvg.                     Fvzcyr vf orggre guna pbzcyrk.
+11  [307, 309]            Rkcyvpvg vf orggre guna vzcyvpvg.                Pbzcyrk vf orggre guna pbzcyvpngrq.
+12  [307, 311]            Rkcyvpvg vf orggre guna vzcyvpvg.                       Fcnefr vf orggre guna qrafr.
+13  [307, 320]            Rkcyvpvg vf orggre guna vzcyvpvg.                          Abj vf orggre guna arire.
+14  [308, 309]               Fvzcyr vf orggre guna pbzcyrk.                Pbzcyrk vf orggre guna pbzcyvpngrq.
+15  [308, 311]               Fvzcyr vf orggre guna pbzcyrk.                       Fcnefr vf orggre guna qrafr.
+16  [308, 320]               Fvzcyr vf orggre guna pbzcyrk.                          Abj vf orggre guna arire.
+17  [309, 311]          Pbzcyrk vf orggre guna pbzcyvpngrq.                       Fcnefr vf orggre guna qrafr.
+18  [309, 320]          Pbzcyrk vf orggre guna pbzcyvpngrq.                          Abj vf orggre guna arire.
+19  [311, 320]                 Fcnefr vf orggre guna qrafr.                          Abj vf orggre guna arire.
+20  [312, 314]                          Ernqnovyvgl pbhagf.                Nygubhtu cenpgvpnyvgl orngf chevgl.
+21  [312, 315]                          Ernqnovyvgl pbhagf.                 Reebef fubhyq arire cnff fvyragyl.
+22  [312, 316]                          Ernqnovyvgl pbhagf.                        Hayrff rkcyvpvgyl fvyraprq.
+23  [314, 315]          Nygubhtu cenpgvpnyvgl orngf chevgl.                 Reebef fubhyq arire cnff fvyragyl.
+24  [314, 316]          Nygubhtu cenpgvpnyvgl orngf chevgl.                        Hayrff rkcyvpvgyl fvyraprq.
+25  [315, 316]           Reebef fubhyq arire cnff fvyragyl.                        Hayrff rkcyvpvgyl fvyraprq.
+26  [409, 415]                                         ____                                               ____
+27  [420, 421]  Term Frequency of "and" in intro is: 0.0292  Term Frequency of "and" in discrimination chap...
+28  [483, 492]                       === Another vectorizer                                   === Alternatives
+29  [483, 498]                       === Another vectorizer                                     === Okapi BM25
+30  [492, 498]                             === Alternatives                                     === Okapi BM25
+31  [492, 540]                             === Alternatives                                         == Summary
+>>> closeones = []
+... for (i1, text1) in enumerate(texts):
+...     for i2, text2 in enumerate(texts[i1+1:]):
+...         i3 = i2 + i1 + 1
+...         if heatmap[i1][i3] > .95:
+...             closeones.append(dict(coord=[i1, i3], value=heatmapp[i1][i3], text1=text1, text1b=df.text.iloc[i1], text2=text2, text2b=df.text.iloc[i3]))
+...
+>>> closeones = []
+... for (i1, text1) in enumerate(texts):
+...     for i2, text2 in enumerate(texts[i1+1:]):
+...         i3 = i2 + i1 + 1
+...         if heatmap[i1][i3] > .95:
+...             closeones.append(dict(coord=[i1, i3], value=heatmap[i1][i3], text1=text1, text1b=df.text.iloc[i1], text2=text2, text2b=df.text.iloc[i3]))
+...
+>>> dfclose = pd.DataFrame(closeones)
+>>> dfclose[['coord', 'value', 'text1', 'text2']]
+          coord     value                                              text1                                              text2
+0      [9, 161]  0.954555  Detecting words is useful for simple tasks, li...  And if you decide to keep track of additional ...
+1      [9, 396]  0.958263  Detecting words is useful for simple tasks, li...  So given a large corpus, you can use this brea...
+2     [13, 157]  0.954189  If you have an idea about the frequency with w...  For now just know that each element of a vecto...
+3     [13, 290]  0.950690  If you have an idea about the frequency with w...  If you compute the vector of word counts for t...
+4     [13, 399]  0.956149  If you have an idea about the frequency with w...  Word counts and _n_-gram counts are useful, bu...
+..          ...       ...                                                ...                                                ...
+118  [492, 539]  0.985129                                   === Alternatives                                          == Review
+119  [492, 540]  0.992659                                   === Alternatives                                         == Summary
+120  [498, 539]  0.979133                                     === Okapi BM25                                          == Review
+121  [498, 540]  0.989311                                     === Okapi BM25                                         == Summary
+122  [539, 540]  0.988456                                          == Review                                         == Summary
+
+[123 rows x 4 columns]
+>>> dfclose[['coord', 'value', 'text1', 'text2']].iloc[0]
+coord                                             [9, 161]
+value                                             0.954555
+text1    Detecting words is useful for simple tasks, li...
+text2    And if you decide to keep track of additional ...
+Name: 0, dtype: object
+>>> dfclose[['coord', 'value', 'text1', 'text2']].iloc[0].values
+array([list([9, 161]), 0.9545548,
+       'Detecting words is useful for simple tasks, like getting statistics about word usage or doing keyword search. But you would like to know which words are more important to a particular document and across the corpus as a whole.',
+       'And if you decide to keep track of additional linguistic information about each word, such as spelling variations or parts of speech, you might call it a _lexicon_ .'],
+      dtype=object)
+>>> hist
+>>> hist -o -p -f heatmap_sentence_similarity_take2.hist.ipy

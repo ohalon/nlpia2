@@ -1,0 +1,143 @@
+>>> from nlpia2.constants import SRC_DATA_DIR
+>>> import pandas as pd
+>>> df = pd.read_csv(SRC_DATA_DIR / 'ch10_GPT2_token_probabilities_sos_LLMs.csv')
+>>> df
+   Unnamed: 0            LLMs  ...          cancer                  in
+0           0    are (0.12 %)  ...     in (0.22 %)        the (0.19 %)
+1           1      . (0.09 %)  ...      . (0.13 %)      women (0.19 %)
+2           2      , (0.06 %)  ...   that (0.11 %)   children (0.07 %)
+3           3     \n (0.04 %)  ...      , (0.09 %)     adults (0.04 %)
+4           4    and (0.04 %)  ...    and (0.03 %)        men (0.04 %)
+5           5   have (0.04 %)  ...    ous (0.02 %)     humans (0.03 %)
+
+[6 rows x 10 columns]
+>>> df = pd.read_csv(SRC_DATA_DIR / 'ch10_GPT2_token_probabilities_sos_LLMs.csv', index_col=0)
+>>> df
+             LLMs              are   the  ...                 of          cancer                  in
+0    are (0.12 %)     the (0.04 %)   NaN  ...    cancer (0.01 %)     in (0.22 %)        the (0.19 %)
+1      . (0.09 %)       a (0.04 %)   NaN  ...         l (0.01 %)      . (0.13 %)      women (0.19 %)
+2      , (0.06 %)     not (0.03 %)   NaN  ...   medical (0.01 %)   that (0.11 %)   children (0.07 %)
+3     \n (0.04 %)   often (0.01 %)   NaN  ...         L (0.01 %)      , (0.09 %)     adults (0.04 %)
+4    and (0.04 %)    used (0.01 %)   NaN  ...    female (0.01 %)    and (0.03 %)        men (0.04 %)
+5   have (0.04 %)      an (0.01 %)   NaN  ...     micro (0.01 %)    ous (0.02 %)     humans (0.03 %)
+
+[6 rows x 9 columns]
+>>> d['are'] = df['LLMs'].values
+>>> d = {}
+>>> d['are'] = df['LLMs'].values
+>>> d['are'] = df['LLMs'].str.split()
+>>> d
+{'are': 0     [are, (0.12, %)]
+ 1       [., (0.09, %)]
+ 2       [,, (0.06, %)]
+ 3          [(0.04, %)]
+ 4     [and, (0.04, %)]
+ 5    [have, (0.04, %)]
+ Name: LLMs, dtype: object}
+>>> d['are'] = df['LLMs'].str.split().apply(l: [l[0], l[-2]])
+>>> d['are'] = df['LLMs'].str.split().apply(lambda l: [l[0], l[-2]])
+>>> d
+{'are': 0      [are, (0.12]
+ 1        [., (0.09]
+ 2        [,, (0.06]
+ 3    [(0.04, (0.04]
+ 4      [and, (0.04]
+ 5     [have, (0.04]
+ Name: LLMs, dtype: object}
+>>> d['are'] = df['LLMs'].str.split().apply(lambda l: [l[0], l[-2][1:]])
+>>> df2 = pd.DataFrame()
+>>>     d[c] = df[c].str.split().apply(lambda l: [l[0], l[-2][1:]])
+>>> df.columns = list(df.columns[1:]) + ['the']
+>>> df
+              are              the   most  ...             cancer              in                 the
+0    are (0.12 %)     the (0.04 %)    NaN  ...    cancer (0.01 %)     in (0.22 %)        the (0.19 %)
+1      . (0.09 %)       a (0.04 %)    NaN  ...         l (0.01 %)      . (0.13 %)      women (0.19 %)
+2      , (0.06 %)     not (0.03 %)    NaN  ...   medical (0.01 %)   that (0.11 %)   children (0.07 %)
+3     \n (0.04 %)   often (0.01 %)    NaN  ...         L (0.01 %)      , (0.09 %)     adults (0.04 %)
+4    and (0.04 %)    used (0.01 %)    NaN  ...    female (0.01 %)    and (0.03 %)        men (0.04 %)
+5   have (0.04 %)      an (0.01 %)    NaN  ...     micro (0.01 %)    ous (0.02 %)     humans (0.03 %)
+
+[6 rows x 9 columns]
+>>> df
+              are              the   most  ...             cancer              in                 the
+0    are (0.12 %)     the (0.04 %)    NaN  ...    cancer (0.01 %)     in (0.22 %)        the (0.19 %)
+1      . (0.09 %)       a (0.04 %)    NaN  ...         l (0.01 %)      . (0.13 %)      women (0.19 %)
+2      , (0.06 %)     not (0.03 %)    NaN  ...   medical (0.01 %)   that (0.11 %)   children (0.07 %)
+3     \n (0.04 %)   often (0.01 %)    NaN  ...         L (0.01 %)      , (0.09 %)     adults (0.04 %)
+4    and (0.04 %)    used (0.01 %)    NaN  ...    female (0.01 %)    and (0.03 %)        men (0.04 %)
+5   have (0.04 %)      an (0.01 %)    NaN  ...     micro (0.01 %)    ous (0.02 %)     humans (0.03 %)
+
+[6 rows x 9 columns]
+>>> df2 = pd.DataFrame()
+>>> df2['LLMs'] = [''] * 6
+>>> for c in df.columns:
+...     df2[c] = df[c].str.split().apply(lambda l: ' '.join([l[0], l[-2][1:].lstrip('0')]))
+...
+>>> df.fillna('? 0.0% _')
+              are              the      most  ...             cancer              in                 the
+0    are (0.12 %)     the (0.04 %)  ? 0.0% _  ...    cancer (0.01 %)     in (0.22 %)        the (0.19 %)
+1      . (0.09 %)       a (0.04 %)  ? 0.0% _  ...         l (0.01 %)      . (0.13 %)      women (0.19 %)
+2      , (0.06 %)     not (0.03 %)  ? 0.0% _  ...   medical (0.01 %)   that (0.11 %)   children (0.07 %)
+3     \n (0.04 %)   often (0.01 %)  ? 0.0% _  ...         L (0.01 %)      , (0.09 %)     adults (0.04 %)
+4    and (0.04 %)    used (0.01 %)  ? 0.0% _  ...    female (0.01 %)    and (0.03 %)        men (0.04 %)
+5   have (0.04 %)      an (0.01 %)  ? 0.0% _  ...     micro (0.01 %)    ous (0.02 %)     humans (0.03 %)
+
+[6 rows x 9 columns]
+>>> for c in df.columns:
+...     df2[c] = df[c].str.split().apply(lambda l: ' '.join([l[0], l[-2][1:].lstrip('0')]))
+...
+>>> df
+              are              the   most  ...             cancer              in                 the
+0    are (0.12 %)     the (0.04 %)    NaN  ...    cancer (0.01 %)     in (0.22 %)        the (0.19 %)
+1      . (0.09 %)       a (0.04 %)    NaN  ...         l (0.01 %)      . (0.13 %)      women (0.19 %)
+2      , (0.06 %)     not (0.03 %)    NaN  ...   medical (0.01 %)   that (0.11 %)   children (0.07 %)
+3     \n (0.04 %)   often (0.01 %)    NaN  ...         L (0.01 %)      , (0.09 %)     adults (0.04 %)
+4    and (0.04 %)    used (0.01 %)    NaN  ...    female (0.01 %)    and (0.03 %)        men (0.04 %)
+5   have (0.04 %)      an (0.01 %)    NaN  ...     micro (0.01 %)    ous (0.02 %)     humans (0.03 %)
+
+[6 rows x 9 columns]
+>>> df.fillna('? 0.0% _', inplace=True)
+>>> for c in df.columns:
+...     df2[c] = df[c].str.split().apply(lambda l: ' '.join([l[0], l[-2][1:].lstrip('0')]))
+...
+>>> df2
+  LLMs        are        the   most         common       type        of       cancer        in           the
+0         are .12    the .04  ? .0%     common .26   type .15    of .97   cancer .01    in .22       the .19
+1           . .09      a .04  ? .0%  important .05   form .05    in .00        l .01     . .13     women .19
+2           , .06    not .03  ? .0%    popular .03  types .02     , .00  medical .01  that .11  children .07
+3       (0.04 .04  often .01  ? .0%   commonly .03    and .02     . .00        L .01     , .09    adults .04
+4         and .04   used .01  ? .0%   powerful .03  cause .02   and .00   female .01   and .03       men .04
+5        have .04     an .01  ? .0%  expensive .02  forms .01  that .00    micro .01   ous .02    humans .03
+>>> df2['most'] = ['most']+ [''] * 5
+>>> df2
+  LLMs        are        the   most         common       type        of       cancer        in           the  most
+0         are .12    the .04  ? .0%     common .26   type .15    of .97   cancer .01    in .22       the .19  most
+1           . .09      a .04  ? .0%  important .05   form .05    in .00        l .01     . .13     women .19      
+2           , .06    not .03  ? .0%    popular .03  types .02     , .00  medical .01  that .11  children .07      
+3       (0.04 .04  often .01  ? .0%   commonly .03    and .02     . .00        L .01     , .09    adults .04      
+4         and .04   used .01  ? .0%   powerful .03  cause .02   and .00   female .01   and .03       men .04      
+5        have .04     an .01  ? .0%  expensive .02  forms .01  that .00    micro .01   ous .02    humans .03      
+>>> del df2['most']
+>>> df2
+  LLMs        are        the   most         common       type        of       cancer        in           the
+0         are .12    the .04  ? .0%     common .26   type .15    of .97   cancer .01    in .22       the .19
+1           . .09      a .04  ? .0%  important .05   form .05    in .00        l .01     . .13     women .19
+2           , .06    not .03  ? .0%    popular .03  types .02     , .00  medical .01  that .11  children .07
+3       (0.04 .04  often .01  ? .0%   commonly .03    and .02     . .00        L .01     , .09    adults .04
+4         and .04   used .01  ? .0%   powerful .03  cause .02   and .00   female .01   and .03       men .04
+5        have .04     an .01  ? .0%  expensive .02  forms .01  that .00    micro .01   ous .02    humans .03
+>>> df2.columns = [c.strip() for c in df2.columns]
+>>> df2['most'] = ['most'] + [''] * 5
+>>> df2['LLMs'] = ['LLMs'] + [''] * 5
+>>> df2
+   LLMs        are        the  most         common       type        of       cancer        in           the
+0  LLMs    are .12    the .04  most     common .26   type .15    of .97   cancer .01    in .22       the .19
+1            . .09      a .04        important .05   form .05    in .00        l .01     . .13     women .19
+2            , .06    not .03          popular .03  types .02     , .00  medical .01  that .11  children .07
+3        (0.04 .04  often .01         commonly .03    and .02     . .00        L .01     , .09    adults .04
+4          and .04   used .01         powerful .03  cause .02   and .00   female .01   and .03       men .04
+5         have .04     an .01        expensive .02  forms .01  that .00    micro .01   ous .02    humans .03
+>>> df2.to_csv(SRC_DATA_DIR / 'ch10_GPT2_token_probabilities_sos_LLMs.cleaned.csv', index=False)
+>>> pwd
+'/home/hobs/code/tangibleai/nlpia-manuscript'
+>>> hist -o -p -f ../nlpia2/src/nlpia2/ch10/ch10_clean_GPT2_token_probabilities_sos_LLMs.hist.ipy

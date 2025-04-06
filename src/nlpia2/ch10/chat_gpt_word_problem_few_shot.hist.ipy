@@ -1,0 +1,126 @@
+>>> syls = 'eje co fa jek zun be miw rez gir muk ale ci jo '
+>>> syls += 'se ze pa sib wu ka kef em ebu waj mir ase ze nep '
+>>> syls += 'iz nat tep ma ka gef je mun man lom sa mo ika '
+>>> syls += 'he aho be eje le puv le zup cid doj hon be lar zut '
+>>> syls += 'voj cih ni mid vuk ehe nol ki ke pid ic ma ma di '
+>>> syls += 'ceg tej nuk am lo no biz lo iza ece jic tur cir ih '
+>>> syls += 'tak pa kev ad beb ne pav jun ren dal le gep bu ugi '
+>>> syls += 'ugi ji ruh me ze buw di hi lan ku ge wi fi jir '
+>>> syls += 'ce uj ti heb ve del co jof ag dek '
+>>> syls = syls.split()
+
+>>> from nlpia2.chatgpt import *
+>>> from nlpia2.chatgpt import send_prompt
+>>> msg = "Roger has 5 tennis balls. "
+>>> msg += "He buys 2 more cans of tennis balls. "
+>>> msg += "Each can has 3 tennis balls. \n"
+>>> msg += "How many tennis balls does he have now?"
+>>> send_prompt(
+...     context_prompt="You are an honest virtual assistant (bot)",
+...     prompt=msg)
+...
+'Roger originally had 5 tennis balls. \n\nEach can of tennis balls has 3 tennis balls, so 2 cans will have a total of 2 x 3 = 6 tennis balls. \n\nWhen Roger buys the 2 cans of tennis balls, his total number of tennis balls becomes 5 + 6 = 11 tennis balls. \n\nTherefore, Roger now has a total of 11 tennis balls.'
+>>> send_prompt(
+...     context_prompt="You are an LLM",
+...     prompt=prompt)
+...
+'Roger has a total of 11 tennis balls now. \n\nHe starts with 5 tennis balls, then buys 2 cans of tennis balls which adds 2 x 3 = 6 tennis balls. \n\nAdding those 6 tennis balls to his original 5, he now has 11 tennis balls.'
+>>> send_prompt(
+...     context_prompt='',
+...     prompt=prompt)
+...
+'Roger has a total of 11 tennis balls now.\n\nTo break it down: \n\n- He starts with 5 tennis balls \n- He buys 2 cans of tennis balls (2 x 3 = 6 tennis balls) \n- His total number of tennis balls is now 5 + 6 = 11.'
+>>> send_prompt(
+...     context_prompt='You are a concise question answering machine learning model.',
+...     prompt=prompt)
+...
+'Roger bought 2 cans of tennis balls, and each can contains 3 tennis balls. Therefore, he bought a total of 2 x 3 = 6 new tennis balls.\nAdding the new tennis balls to the original ones, Roger now has a total of 5 + 6 = 11 tennis balls.'
+>>> prompt
+'Roger has 5 tennis balls. He buys 2 more cans of tennis balls. Each can has 3 tennis balls. How many tennis balls does he have now?'
+>>> prompt += " Your answer should be a number."
+>>> send_prompt(
+...     context_prompt='',
+...     prompt=prompt)
+...
+'After buying 2 cans of tennis balls, Roger has a total of 11 tennis balls (5 original balls + 2 cans x 3 balls per can).'
+>>> prompt = "Javonka has 5 pickleball balls. She buys 2 more packets of balls. Each packet has 4 balls. How many balls does she have now?"
+>>> prompt += " Your answer should be a single number."
+>>> prompt = "Javonka has 5 pickleball balls. She buys 2 more packets of balls. Each packet has 4 balls. How many balls does she have now?"
+>>> prompt += " Your answer should be a single number."
+>>> send_prompt(
+...     context_prompt='',
+...     prompt=prompt)
+...
+'Javonka now has 13 pickleball balls.'
+>>> prompt = "Javonka has 5 pickleball balls. She buys 2 more packets of balls. Each packet has 4 balls. How many balls does she have now?"
+>>> prompt = f"An animal has 5 {}. She buys 2 more packets of balls. Each packet has 4 balls. How many balls does she have now?"
+>>> plural_object_name = 'ejekofa'
+>>> prompt = f"{agent_first_name} has {num_objects} {plural_object_name}. They obtain {add_num_containers}  more containers of {plural_object_name}. Each container has {num_objects_per_container} {plural_object_name}. How many {plural_object_name} do they have now?"
+>>> agent_first_name = 'Jekzunbe'
+>>> import random
+>>> random.randrange?
+>>> random.randint?
+>>> import numpy as np
+>>> np.random.randint?
+>>> num_objects, add_num_containers, num_objects_per_container = np.random.randint(low=0, high=30, size=3)
+>>> prompt = f"{agent_first_name} has {num_objects} {plural_object_name}. They obtain {add_num_containers}  more containers of {plural_object_name}. Each container has {num_objects_per_container} {plural_object_name}. How many {plural_object_name} do they have now? Your answer should be a single number NOT a sentence."
+>>> send_prompt(
+...     context_prompt=' ',
+...     prompt=prompt)
+...
+'19 + 8 x 0 = 19. \n\nJekzunbe now has 19 ejekofa.'
+>>> num_objects, add_num_containers, num_objects_per_container
+(19, 8, 0)
+>>> prompt
+'Jekzunbe has 19 ejekofa. They obtain 8  more containers of ejekofa. Each container has 0 ejekofa. How many ejekofa do they have now? Your answer should be a single number NOT a sentence.'
+>>> num_objects, add_num_containers, num_objects_per_container = np.random.randint(low=0, high=30, size=3)
+>>> prompt = f"{agent_first_name} has {num_objects} {plural_object_name}. They obtain {add_num_containers} more containers of {plural_object_name}. Each container has {num_objects_per_container} {plural_object_name}. How many {plural_object_name} do they have now? Your answer should be a single number NOT a sentence."
+>>> context_prompt = 'You are ChatGPT-3.5-turbo, a large language model.'
+>>> num_objects, add_num_containers, num_objects_per_container
+(14, 9, 16)
+>>> context_prompt = 'You are ChatGPT-3.5-turbo.'
+>>> prompt
+'Jekzunbe has 14 ejekofa. They obtain 9 more containers of ejekofa. Each container has 16 ejekofa. How many ejekofa do they have now? Your answer should be a single number NOT a sentence.'
+>>> send_prompt(
+...     context_prompt=context_prompt,
+...     prompt=prompt)
+...
+>>> send_prompt(
+...     context_prompt=context_prompt,
+...     prompt=prompt)
+...
+'278'
+>>> hist -o -p -f src/nlpia2/ch10/chat_gpt_word_problem_few_shot.hist.py
+>>> hist -o -p -f src/nlpia2/ch10/chat_gpt_word_problem_few_shot.hist.ipy
+>>> hist -f src/nlpia2/ch10/chat_gpt_word_problem_few_shot.hist.ipy
+>>> hist -f src/nlpia2/ch10/chat_gpt_word_problem_few_shot.hist.py
+>>> agent_first_name = ''
+>>> agent_first_name = 'Roger'
+>>> plural_object_name = 'tennis balls'
+>>> prompt = f"{agent_first_name} has {num_objects} {plural_object_name}. They obtain {add_num_containers} more containers of {plural_object_name}. Each container has {num_objects_per_container} {plural_object_name}. How many {plural_object_name} do they have now? Your answer should be a single number NOT a sentence."
+>>> prompt
+'Roger has 14 tennis balls. They obtain 9 more containers of tennis balls. Each container has 16 tennis balls. How many tennis balls do they have now? Your answer should be a single number NOT a sentence.'
+>>> send_prompt(
+...     context_prompt=context_prompt,
+...     prompt=prompt)
+...
+'158'
+>>> num_objects, add_num_containers, num_objects_per_container = 5, 2, 3
+>>> prompt = f"{agent_first_name} has {num_objects} {plural_object_name}. They obtain {add_num_containers} more containers of {plural_object_name}. Each container has {num_objects_per_container} {plural_object_name}. How many {plural_object_name} do they have now? Your answer should be a single number NOT a sentence."
+>>> prompt
+'Roger has 5 tennis balls. They obtain 2 more containers of tennis balls. Each container has 3 tennis balls. How many tennis balls do they have now? Your answer should be a single number NOT a sentence.'
+>>> 
+... send_prompt(
+...     context_prompt=context_prompt,
+...     prompt=prompt)
+...
+'11'
+>>> prompt = f"{agent_first_name} has {num_objects} {plural_object_name}. They obtain {add_num_containers} more containers of {plural_object_name}. Each container has {num_objects_per_container} {plural_object_name}. How many {plural_object_name} do they have now? Your answer should be a single number."
+>>> 
+... send_prompt(
+...     context_prompt=context_prompt,
+...     prompt=prompt)
+...
+'Roger initially has 5 tennis balls. When they obtain two more containers of tennis balls, they will have a total of 2 x 3 = <<2*3=6>>6 tennis balls.\nTherefore, the total number of tennis balls they have now is 5 + 6 = <<5+6=11>>11.'
+>>> hist -f src/nlpia2/ch10/chat_gpt_word_problem_few_shot.hist.py
+>>> hist -o -p -f src/nlpia2/ch10/chat_gpt_word_problem_few_shot.hist.ipy

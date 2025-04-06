@@ -1,0 +1,62 @@
+== Acknowledgments
+:chapter: FM
+
+Thank you Leo Hepis for all those afternoons hopping around to coworking spaces and improving our understanding of NLP together!
+
+Thank you to all the livebook contributors!
+Your positive sum thinking gives me hope that there are enough smart and effective altruists out there to save humanity from AI:
+* Kiatikun Luangkesorn (chapter 2 & 3 code edits and bug fixes)
+
+// Assembling this book and the software to make it "live" would not have been possible without a supportive network of talented developers, mentors, and friends.
+// These contributors came from a vibrant Portland community sustained by organizations like PDX Python, Hack Oregon, Hack University, Civic U, PDX Data Science, Hopester, PyDX, PyLadies, and Total Good.
+
+// Kudos to Zachary Kent who designed, built, and maintained `openchat` (PyCon Open Spaces Twitter bot) and Riley Rustad who prototyped its data schema as the book and our skills progressed.
+// Santi Adavani implemented named entity recognition using the Stanford CoreNLP library, developed tutorials for SVD and PCA, and supported us with access to his RocketML HPC framework to train a real-time video description model for people who are blind.
+// Eric Miller allocated some of Squishy Media's resources to bootstrap Hobson's NLP visualization skills.
+// Erik Larson and Aleck Landgraf generously gave Hobson and Hannes leeway to experiment with machine learning and NLP at their startup.
+// Anna Ossowski helped design the PyCon Open Spaces Twitter bot and then shepherded it through its early days of learning to help it tweet responsibly.
+// Chick Wells cofounded Total Good, developed a clever and entertaining IQ Test for chatbots, and continuously supported us with his devops expertise.
+// NLP experts, like Kyle Gorman, generously shared his time, NLP expertise, code, and precious datasets with us.
+// Catherine Nikolovski shared her Hack Oregon and Civic U community and resources.
+// Chris Gian contributed his NLP project ideas to the examples in this book, and valiantly took over as instructor for the Civic U Machine Learning class when the teacher *bailed* halfway through the *climb*.
+// You are a Sky Walker.
+// Rachel Kelly gave us the exposure and support we needed during the early stages of material development.
+// Thunder Shiviah provided constant inspiration through his tireless teaching and boundless enthusiasm for machine learning and life.
+// Molly Murphy and Natasha Pettit at Hopester are responsible for giving us a cause, inspiring the concept of a prosocial chatbot.
+// Jeremy Robin and the Talentpair crew provided valuable software engineering feedback and helped to bring some concepts mentioned in this book to life.
+// Dan Fellin helped kickstart our NLP adventures with teaching assistance at the PyCon 2016 tutorial and a Hack University class on Twitter scraping.
+// Aira's Alex Rosengarten, Enrico Casini, Rigoberto Macedo, Charlina Hung, and Ashwin Kanan "mobilized" the chatbot concepts in this book with an efficient, reliable, maintainable dialog engine and microservice.
+// Sujeeth Kanuganti, Bala Sista, Danielle Tobey, Greg Stilson, and Jordan Meyers helped design, build and test Aira's "visual interpreter for the blind," perhaps the only virtual assistant designed solely to assist rather than manipulate humans.
+// Thank you Ella and Wesley Minton for being our guinea pigs as you experimented with our crazy chatbot ideas while learning to write your first Python programs.
+// Suman Kanuganti and Maria MacMullin had the vision to found "Do More Foundation" to make Aira's visual interpreter affordable for students.
+// Thank you Clayton Lewis for keeping me engaged in your cognitive assistant research, even when I had only enthusiasm and hacky code to bring to the table for your workshop at the Coleman Institute.
+
+// San Diego friends and supporters
+
+// Thank you to Leo Hepis for getting our manuscript rendering code in order and providing invaluable insights into conversation design principles.
+// Thank you to Sylvia Lee for providing us with the Chinese language tokenization material
+
+=== Maria Dyshel
+
+I am especially grateful to ...
+
+=== Hobson Lane
+
+I am eternally grateful to my mother and father for filling me with delight at words and math.
+To Larissa Lane, the most intrepid adventurer I know, I am forever in your debt for your help in achieving two lifelong dreams: sailing the world and writing a book.
+To Arzu Karaer, I am forever in debt to you for your grace and patience in helping me pick up the pieces of my broken heart, reaffirming my faith in humanity, and ensuring this book maintained its hopeful message.
+To Maria Dyshel, ...
+To Hannes Hapke and Cole Howard this project would have never escaped the black hole of my procrastinating and antisocial self during the time that your patience endured while we wrote the first edition together.
+
+* Geoff Marshall: Attention chapter
+* Maria Dyshell (@maria_tangibleai): various chatbot and nonprofit business sector workshops
+* Hobson Lane (@hobs): various technical HowTo videos and READMEs
+* Dwayne Negron (@dwayne.negron1): virtually everything you see here!
+* John May (@jmayjr): tutorial videos and software development for qary and tanbot/internbot
+* Jose Robins (@jorobins): qary FactQuest/BlankPage/QuizBot/YesNoBot
+* Jon Sundin (@jonsundin): qary word vector graph diagrams
+* Aditi: helping Vish with his business plan
+* Leo Hepis: organizing `nlpia2` and brainstorming about conversation design
+* Daniel Meiss
+* Benjamin Berg at Manning Publishing
+* Darren Meiss freelance technical writer for the "style transfer" of his best practices for technical writing

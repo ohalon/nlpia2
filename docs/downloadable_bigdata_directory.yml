@@ -1,0 +1,92 @@
+# Directory of information about large files (bigdata files)
+# These are the files that "download_if_necessary()" knows about
+# Source URLs, filenames, and documentation URL
+
+"dropbox urls not in manuscript":
+  - https://www.dropbox.com/s/krvi79fbsryytc2/ubuntu_dialog.csv.gz?dl=1
+"dropbox URLs":
+  -
+    file: ~/code/tangibleai/nlpia-manuscript/manuscript/adoc/Chapter-03_Math-with-Words-TF-IDF-Vectors.adoc:754
+    snippet: It gives you a value for how much the vectors point in the same direction.footnote:[These videos show how to create vectors for words and then compute their cosine similarity to each other using SpaCy and numpy (https://www.dropbox.com/sh/3p2tt55pqsisy7l/AAB4vwH4hV3S9pUO0n4kTZfGa?dl=0)]
+"baby-names-us":
+  url: "https://proai.org/baby-names-us.csv.gz"
+  chapter: 5
+  usage: "Chapter-05_Word-Brain-artificial-neural-networks-for-NLP.adoc:725"
+  snippet: |+
+    >>> np.random.seed(451)
+    >>> df = pd.read_csv(  # <1>
+    ...     'https://proai.org/baby-names-us.csv.gz')
+    >>> df.to_csv(  # <2>
+    ...     'baby-names-us.csv.gz', compression='gzip')
+"baby-names-us-10k.csv.gz":
+  url: "https://gitlab.com/tangibleai/nlpia2/-/raw/main/src/nlpia2/data/baby-names-us-10k.csv.gz"
+  chapter: 5
+  usage: "Chapter-05_Word-Brain-artificial-neural-networks-for-NLP.adoc:732"
+  snippet: |+
+"unused":
+  snippet: |+
+    footnote:[These videos show how to create vectors for words and then compute their cosine similarity to each other using SpaCy and numpy (https://www.dropbox.com/sh/3p2tt55pqsisy7l/AAB4vwH4hV3S9pUO0n4kTZfGa?dl=0)]
+"data/.nlpia2-data/":
+    url: "https://www.dropbox.com/scl/fo/ti1h4rzb287qofwpw8xa0/h?rlkey=tk3pbvz3fmptxgm01f9dl5xaj&dl=0"
+    usage: None
+    files: 
+      - Dropbox/Public/data/.nlpia2-data/fake-news-dataset-fake-small.csv
+      - Dropbox/Public/data/.nlpia2-data/fake-news-dataset-true-small.csv
+      - Dropbox/Public/data/.nlpia2-data/fake-news-dataset-fake.csv
+      - Dropbox/Public/data/.nlpia2-data/fake-news-dataset-true.csv
+".nlpia2-data":
+    url: "https://www.dropbox.com/scl/fo/7brzrit5eur9phy5u2y7e/h?rlkey=aqedpmcfdeir03pej1t6zb910&dl=0"
+"wikipedia-title-vectors":
+    url: "https://tan.sfo2.digitaloceanspaces.com/midata/public/corpora/wikipedia/wikipedia-title-vectors.csv.gz"
+    relative_path: "corpora/wikipedia/wikipedia-title-vectors.csv.gz"
+# monthly wikipedia dump, June, 17M titles
+"wikipedia-titles":
+    url: "https://tan.sfo2.digitaloceanspaces.com/midata/public/corpora/wikipedia/enwiki-latest-all-titles-in-ns0.gz"
+    relative_path: "corpora/wikipedia/enwiki-latest-all-titles-in-ns0.gz"
+# http://paraphrase.org/#/download (18GB)
+# LHS ||| PHRASE ||| PARAPHRASE ||| (FEATURE=VALUE )* ||| ALIGNMENT ||| ENTAILMENT
+"sentence-paraphrasings":
+    url: "https://tan.sfo2.digitaloceanspaces.com/midata/public/labeled_data/nlp/ppdb-2.0-xxl-all.gz"
+    relative_path: "corpora/training_sets/ppdb-2.0-xxl-all.gz"
+"wikipedia-titles-lowered":
+    url: "https://tan.sfo2.digitaloceanspaces.com/midata/public/corpora/wikipedia/wikipedia-titles-lowered.csv.gz"
+    relative_path: "corpora/wikipedia/wikipedia-titles-lowered.csv.gz"
+"wikipedia-titles-alphaonly":
+    url: "https://tan.sfo2.digitaloceanspaces.com/midata/public/corpora/wikipedia/wikipedia-titles-alphaonly.csv.gz"
+    relative_path: "corpora/wikipedia/wikipedia-titles-alphaonly.csv.gz"
+# "wikipedia-titles-alphaonly-hashed":
+#     url: "https://tan.sfo2.digitaloceanspaces.com/midata/public/corpora/wikipedia/wikipedia-titles-alphaonly-hashed.csv.gz"
+#     relative_path: "corpora/wikipedia/wikipedia-titles-alphaonly-hashed.csv.gz"
+"wikipedia-titles-alphaonly-hashed":
+    url: "https://tan.sfo2.digitaloceanspaces.com/midata/public/corpora/wikipedia/wikipedia-titles-alphaonly-hashed.uint64.npy.gz"
+    relative_path: "corpora/wikipedia/wikipedia-titles-alphaonly-hashed.uint64.npy.gz"
+"wikipedia-titles-hashed":
+    url: "https://tan.sfo2.digitaloceanspaces.com/midata/public/corpora/wikipedia/wikipedia-titles-hashed.uint64.npy.gz"
+    relative_path: "corpora/wikipedia/wikipedia-titles-hashed.uint64.npy.gz"
+"squad_dev":
+    url: "https://rajpurkar.github.io/SQuAD-explorer/dataset/dev-v2.0.json"
+    relative_path: "training_sets/squad/dev-v2.0.json"
+"squad":
+    url: "https://rajpurkar.github.io/SQuAD-explorer/dataset/train-v2.0.json"
+    relative_path: "training_sets/squad/train-v2.0.json"
+"floyd":
+    url: "https://tan.sfo2.digitaloceanspaces.com/midata/public/corpora/wikipedia/floyd.pkl"
+    relative_path: "corpora/wikipedia/floyd.pkl"
+"wikipedia_articles":
+    url: "https://tan.sfo2.digitaloceanspaces.com/midata/public/corpora/wikipedia/articles_with_keywords.pkl"
+    relative_path: "corpora/wikipedia/articles_with_keywords.pkl"
+"albert-large-v2":
+    url: "https://tan.sfo2.digitaloceanspaces.com/midata/public/models/qa/albert-large-v2-0.2.0.zip"
+    relative_path: "models/qa/albert-large-v2-0.2.0.zip"
+"bert-base-cased":
+    url: "https://tan.sfo2.digitaloceanspaces.com/midata/public/models/qa/bert-base-cased-0.2.0.zip"
+    relative_path: "models/qa/bert-base-cased-0.2.0.zip"
+"accuracy_report":
+    url: "https://tan.sfo2.digitaloceanspaces.com/midata/public/nlp/qary/accuracy_reports/accuracy_report.gz"
+    relative_path: "testsets/accuracy_report.gz"
+"spelling_corrector_word_count":
+    url: "https://tan.sfo2.digitaloceanspaces.com/midata/public/nlp/spelling_corrector_word_count.gz"
+    relative_path: "corpora/spelling_corrector_word_count.gz"
+"summary_accuracy_report":
+    url: "https://tan.sfo2.digitaloceanspaces.com/midata/public/nlp/qary/accuracy_reports/summary_accuracy_report.gz"
+    relative_path: "testsets/summary_accuracy_report.gz"

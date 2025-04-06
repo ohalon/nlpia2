@@ -1,0 +1,170 @@
+>>> import pandas as pd
+>>> pd.read_html('https://docs.oracle.com/cd/E13214_01/wli/docs92/xref/xqisocodes.html')
+[               Country ISO-3166 Country Code
+ 0          AFGHANISTAN                    AF
+ 1              ALBANIA                    AL
+ 2              ALGERIA                    DZ
+ 3       AMERICAN SAMOA                    AS
+ 4              ANDORRA                    AD
+ ..                 ...                   ...
+ 231  WALLIS AND FUTUNA                    WF
+ 232     WESTERN SAHARA                    EH
+ 233              YEMEN                    YE
+ 234             ZAMBIA                    ZM
+ 235           ZIMBABWE                    ZW
+ 
+ [236 rows x 2 columns],
+       Language ISO-639 Language Code
+ 0    Abkhazian                    ab
+ 1         Afar                    aa
+ 2    Afrikaans                    af
+ 3     Albanian                    sq
+ 4      Amharic                    am
+ ..         ...                   ...
+ 136      Wolof                    wo
+ 137      Xhosa                    xh
+ 138    Yiddish                    yi
+ 139     Yoruba                    yo
+ 140       Zulu                    zu
+ 
+ [141 rows x 2 columns],
+                             0
+ 0  Copyright(); © BEA Systems]
+>>> dfs = _
+>>> dfs[0]
+               Country ISO-3166 Country Code
+0          AFGHANISTAN                    AF
+1              ALBANIA                    AL
+2              ALGERIA                    DZ
+3       AMERICAN SAMOA                    AS
+4              ANDORRA                    AD
+..                 ...                   ...
+231  WALLIS AND FUTUNA                    WF
+232     WESTERN SAHARA                    EH
+233              YEMEN                    YE
+234             ZAMBIA                    ZM
+235           ZIMBABWE                    ZW
+
+[236 rows x 2 columns]
+>>> dfs[0].write_csv('code/tangibleai/community/nlpia2/src/nlpia2/data/iso/country_code.csv', index_col=0)
+>>> dfs[0].to_csv('code/tangibleai/community/nlpia2/src/nlpia2/data/iso/country_code.csv', index_col=0)
+>>> dfs[0].to_csv('code/tangibleai/community/nlpia2/src/nlpia2/data/iso/country_code.csv', index=0)
+>>> mkdir code/tangibleai/community/nlpia2/src/nlpia2/data/iso
+>>> dfs[0].to_csv('code/tangibleai/community/nlpia2/src/nlpia2/data/iso/country_code.csv', index=0)
+>>> df = pd.read_csv('code/tangibleai/community/nlpia2/src/nlpia2/data/iso/country_code.csv')
+>>> df
+               Country ISO-3166 Country Code
+0          AFGHANISTAN                    AF
+1              ALBANIA                    AL
+2              ALGERIA                    DZ
+3       AMERICAN SAMOA                    AS
+4              ANDORRA                    AD
+..                 ...                   ...
+231  WALLIS AND FUTUNA                    WF
+232     WESTERN SAHARA                    EH
+233              YEMEN                    YE
+234             ZAMBIA                    ZM
+235           ZIMBABWE                    ZW
+
+[236 rows x 2 columns]
+>>> df = pd.read_csv('code/tangibleai/community/nlpia2/src/nlpia2/data/iso/country_code.csv', index_col=0)
+>>> df
+                  ISO-3166 Country Code
+Country                                
+AFGHANISTAN                          AF
+ALBANIA                              AL
+ALGERIA                              DZ
+AMERICAN SAMOA                       AS
+ANDORRA                              AD
+...                                 ...
+WALLIS AND FUTUNA                    WF
+WESTERN SAHARA                       EH
+YEMEN                                YE
+ZAMBIA                               ZM
+ZIMBABWE                             ZW
+
+[236 rows x 1 columns]
+>>> df.index
+Index(['AFGHANISTAN', 'ALBANIA', 'ALGERIA', 'AMERICAN SAMOA', 'ANDORRA',
+       'ANGOLA', 'ANTARCTICA', 'ANTIGUA AND BARBUDA', 'ARGENTINA', 'ARMENIA',
+       ...
+       'VANUATU', 'VENEZUELA', 'VIET NAM', 'VIRGIN ISLANDS, BRITISH',
+       'VIRGIN ISLANDS, U.S.', 'WALLIS AND FUTUNA', 'WESTERN SAHARA', 'YEMEN',
+       'ZAMBIA', 'ZIMBABWE'],
+      dtype='object', name='Country', length=236)
+>>> df['US']
+>>> df['UNITED STATES']
+>>> df['UNITED STATES OF AMERICA']
+>>> df.T
+Country               AFGHANISTAN ALBANIA ALGERIA  ... YEMEN ZAMBIA ZIMBABWE
+ISO-3166 Country Code          AF      AL      DZ  ...    YE     ZM       ZW
+
+[1 rows x 236 columns]
+>>> df.T['UNITED STATES OF AMERICA']
+>>> df.T['UNITED STATES']
+ISO-3166 Country Code    US
+Name: UNITED STATES, dtype: object
+>>> df.columns
+Index(['ISO-3166 Country Code'], dtype='object')
+>>> more code/tangibleai/community/nlpia2/src/nlpia2/data/iso/country_code.csv
+>>> dfs[1].to_csv('code/tangibleai/community/nlpia2/src/nlpia2/data/iso/language_code.csv', index=0)
+>>> !whois convohub.com
+>>> more 'code/tangibleai/community/nlpia2/src/nlpia2/data/iso/language_code.csv'
+>>> df
+                  ISO-3166 Country Code
+Country                                
+AFGHANISTAN                          AF
+ALBANIA                              AL
+ALGERIA                              DZ
+AMERICAN SAMOA                       AS
+ANDORRA                              AD
+...                                 ...
+WALLIS AND FUTUNA                    WF
+WESTERN SAHARA                       EH
+YEMEN                                YE
+ZAMBIA                               ZM
+ZIMBABWE                             ZW
+
+[236 rows x 1 columns]
+>>> df.index = [x.title() for x in df.index.values]
+>>> df
+                  ISO-3166 Country Code
+Afghanistan                          AF
+Albania                              AL
+Algeria                              DZ
+American Samoa                       AS
+Andorra                              AD
+...                                 ...
+Wallis And Futuna                    WF
+Western Sahara                       EH
+Yemen                                YE
+Zambia                               ZM
+Zimbabwe                             ZW
+
+[236 rows x 1 columns]
+>>> df.index = [x.replace(' And ', ' and ') for x in df.index.values]
+>>> df.index = [x.replace(' In ', ' in ') for x in df.index.values]
+>>> df.index = [x.replace(' With ', ' with ') for x in df.index.values]
+>>> df.index = [x.replace(' For ', ' for ') for x in df.index.values]
+>>> df.index = [x.replace(' If ', ' if ') for x in df.index.values]
+>>> df.index = [x.replace(' Of ', ' of ') for x in df.index.values]
+>>> df
+                  ISO-3166 Country Code
+Afghanistan                          AF
+Albania                              AL
+Algeria                              DZ
+American Samoa                       AS
+Andorra                              AD
+...                                 ...
+Wallis and Futuna                    WF
+Western Sahara                       EH
+Yemen                                YE
+Zambia                               ZM
+Zimbabwe                             ZW
+
+[236 rows x 1 columns]
+>>> hist -o -p -f code/tangibleai/community/nlpia2/src/nlpia2/ch10/ch10_iso_lang_country_codes.hist.ipy
+>>> hist -f code/tangibleai/community/nlpia2/src/nlpia2/ch10/ch10_iso_lang_country_codes.hist.py
+>>> df.to_csv('code/tangibleai/community/nlpia2/src/nlpia2/data/iso/country_code.csv', index=0)
+>>> hist -f code/tangibleai/community/nlpia2/src/nlpia2/ch10/ch10_iso_lang_country_codes.hist.py
+>>> hist -o -p -f code/tangibleai/community/nlpia2/src/nlpia2/ch10/ch10_iso_lang_country_codes.hist.ipy

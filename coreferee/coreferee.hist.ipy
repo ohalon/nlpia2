@@ -1,0 +1,230 @@
+>>> import spacy
+>>> spacy.__version__
+'3.7.5'
+>>> import coreferee, spacy
+... nlp = spacy.load('en_core_web_trf')
+...
+>>> python -m spacy validate
+>>> spacy.cli.validate
+<function spacy.cli.validate.validate() -> None>
+>>> spacy.cli.validate()
+>>> nlp.add_pipe('coreferee')
+... doc = nlp('Although he was very busy with his work, Peter had had enough of it. He and his wife decided they needed a holiday. They travelled to Spain because they loved the country very much.')
+... doc._.coref_chains
+...
+[0: [1], [6], [9], [16], [18], 1: [7], [14], 2: [16, 19], [21], [26], [31], 3: [29], [34]]
+>>> doc._.coref_chains.print()
+>>> doc._.coref_chains[0].print()
+>>> doc._.coref_chains[0]
+0: [1], [6], [9], [16], [18]
+>>> doc._.coref_chains[0].pretty_representation
+'0: he(1), his(6), Peter(9), He(16), his(18)'
+>>> doc._.coref_chains[1].pretty_representation
+'1: work(7), it(14)'
+>>> doc
+Although he was very busy with his work, Peter had had enough of it. He and his wife decided they needed a holiday. They travelled to Spain because they loved the country very much.
+>>> str(doc._.coref_chains[1])
+'1: [7], [14]'
+>>> doc._.coref_chains[1].repr()
+>>> repr(doc._.coref_chains[1])
+'1: [7], [14]'
+>>> doc._.coref_chains[2].pretty_representation
+'2: [He(16); wife(19)], they(21), They(26), they(31)'
+>>> for i, tok in enumerate(doc):
+...     print(f'{i}:{tok}', end='')
+...
+>>> tok
+.
+>>> dir(tok)
+['_',
+ '__bytes__',
+ '__class__',
+ '__delattr__',
+ '__dir__',
+ '__doc__',
+ '__eq__',
+ '__format__',
+ '__ge__',
+ '__getattribute__',
+ '__gt__',
+ '__hash__',
+ '__init__',
+ '__init_subclass__',
+ '__le__',
+ '__len__',
+ '__lt__',
+ '__ne__',
+ '__new__',
+ '__pyx_vtable__',
+ '__reduce__',
+ '__reduce_ex__',
+ '__repr__',
+ '__setattr__',
+ '__sizeof__',
+ '__str__',
+ '__subclasshook__',
+ '__unicode__',
+ 'ancestors',
+ 'check_flag',
+ 'children',
+ 'cluster',
+ 'conjuncts',
+ 'dep',
+ 'dep_',
+ 'doc',
+ 'ent_id',
+ 'ent_id_',
+ 'ent_iob',
+ 'ent_iob_',
+ 'ent_kb_id',
+ 'ent_kb_id_',
+ 'ent_type',
+ 'ent_type_',
+ 'get_extension',
+ 'has_dep',
+ 'has_extension',
+ 'has_head',
+ 'has_morph',
+ 'has_vector',
+ 'head',
+ 'i',
+ 'idx',
+ 'iob_strings',
+ 'is_alpha',
+ 'is_ancestor',
+ 'is_ascii',
+ 'is_bracket',
+ 'is_currency',
+ 'is_digit',
+ 'is_left_punct',
+ 'is_lower',
+ 'is_oov',
+ 'is_punct',
+ 'is_quote',
+ 'is_right_punct',
+ 'is_sent_end',
+ 'is_sent_start',
+ 'is_space',
+ 'is_stop',
+ 'is_title',
+ 'is_upper',
+ 'lang',
+ 'lang_',
+ 'left_edge',
+ 'lefts',
+ 'lemma',
+ 'lemma_',
+ 'lex',
+ 'lex_id',
+ 'like_email',
+ 'like_num',
+ 'like_url',
+ 'lower',
+ 'lower_',
+ 'morph',
+ 'n_lefts',
+ 'n_rights',
+ 'nbor',
+ 'norm',
+ 'norm_',
+ 'orth',
+ 'orth_',
+ 'pos',
+ 'pos_',
+ 'prefix',
+ 'prefix_',
+ 'prob',
+ 'rank',
+ 'remove_extension',
+ 'right_edge',
+ 'rights',
+ 'sent',
+ 'sent_start',
+ 'sentiment',
+ 'set_extension',
+ 'set_morph',
+ 'shape',
+ 'shape_',
+ 'similarity',
+ 'subtree',
+ 'suffix',
+ 'suffix_',
+ 'tag',
+ 'tag_',
+ 'tensor',
+ 'text',
+ 'text_with_ws',
+ 'vector',
+ 'vector_norm',
+ 'vocab',
+ 'whitespace_']
+>>> for i, tok in enumerate(doc):
+...     print(f'{i}:{tok}{tok.whitespace_}', end='')
+...
+>>> i = 0
+... for sent in doc.sents:
+...     for tok in sent:
+...         print(f'{i}:{tok}{tok.whitespace_}', end='')
+...         i += 1
+...
+>>> hist
+>>> i = 0
+... headers = []
+... sents = []
+... for sent in doc.sents:
+...     headers.append('')
+...     sents.append('')
+...     for t in sent:
+...         tok = f'{t}{t.whitespace_}'
+...         idx = f'{idx}'
+...         if len(idx) >= len(tok):
+...             idx = ''
+...         else:
+...             idx += ' ' * (len(tok) - len(idx))
+...         headers[-1] += idx
+...         sents[-1] += tok
+...         i += 1
+...     print(headers[-1])
+...     print(sents[-1])
+...
+>>> i = 0
+... headers = []
+... sents = []
+... for sent in doc.sents:
+...     headers.append('')
+...     sents.append('')
+...     for t in sent:
+...         tok = t.text + t.whitespace_
+...         idx = str(i)
+...         if len(idx) >= len(tok):
+...             idx = ''
+...         else:
+...             idx += ' ' * (len(tok) - len(idx))
+...         headers[-1] += idx
+...         sents[-1] += tok
+...         i += 1
+...     print(headers[-1])
+...     print(sents[-1])
+...
+>>> i = 0
+... headers = []
+... sents = []
+... for sent in doc.sents:
+...     headers.append('')
+...     sents.append('')
+...     for t in sent:
+...         tok = t.text + t.whitespace_
+...         idx = str(i)
+...         if len(idx) >= len(tok):
+...             idx = ''
+...         else:
+...             idx += ' ' * (len(tok) - len(idx))
+...         headers[-1] += idx
+...         sents[-1] += tok
+...         i += 1
+...     print(headers[-1])
+...     print(sents[-1])
+...     print()
+...
+>>> from spacy.cli import download
+>>> hist -o -p -f coreferee.hist.ipy

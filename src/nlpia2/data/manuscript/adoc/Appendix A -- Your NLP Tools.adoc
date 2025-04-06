@@ -1,0 +1,301 @@
+= Your NLP tools
+:appendix: A
+:chapter: A
+:part: BM
+:imagesdir: .
+:xrefstyle: short
+:figure-caption: Figure {chapter}.
+:listing-caption: Listing {chapter}.
+:table-caption: Table {chapter}.
+:stem: latexmath
+
+You will be able to run all the code examples in this book if you are able to install the `nessvec` package (https://gitlab.com/tangibleai/nessvec).
+We keep the installation instructions in the README file there up to date.
+But if you already have Python 3 installed, and you're feeling lucky (or are just lucky enough to have a Linux environment), you can try:
+
+[source,bash]
+----
+$ git clone https://github.com/tangibleai/nessvec
+$ pip3 install -e nessvec
+----
+
+If that doesn't work for you, you'll probably need to install a package manager and some binary packages for your OS. We have provided some OS-specific instructions in three sections:
+
+* Ubuntu
+* Mac
+* Windows
+
+These sections show you how to install an OS package manager.
+Once you have a package manager installed (or you're on a developer-friendly OS like Ubuntu that already has one), you can install Anaconda3.
+
+== Anaconda3
+
+Python 3 has a lot of performance and expressiveness features that are really handy for NLP.
+And the easiest way to install Python 3 on almost any system is to install Anaconda3 (https://www.anaconda.com/download).
+This has the added benefit of giving you a package and environment manager that can install a lot of problematic packages (such as `matplotlib`) on a wide range of problematic OSes (like Windows).
+
+You can install the latest version of Anaconda and its `conda` package manager programmatically by running the following:
+
+[[install_anaconda3_code]]
+.Install Anaconda3
+[source,bash]
+----
+$ OS=Linux  # or Linux or Windows
+$ BITS=_64  # or '' for 32-bit
+$ curl https://repo.anaconda.com/archive/ > tmp.html
+$ FILENAME=$(grep -o -E -e "Anaconda3-[.0-9]+-$OS-x86$BITS\.(sh|exe)" tmp.html | head -n 1)
+$ curl "https://repo.anaconda.com/archive/$FILENAME" > install_anaconda
+$ chmod +x install_anaconda
+$ ./install_anaconda -b -p ~/anaconda3
+$ export PATH="$HOME/anaconda3/bin:$PATH"
+$ echo 'export PATH="$HOME/anaconda3/bin:$PATH"' >> ~/.bashrc
+$ echo 'export PATH="$HOME/anaconda3/bin:$PATH"' >> ~/.bash_profile
+$ source ~/.bash_profile
+$ rm install_anaconda
+----
+
+Now you can create a virtual environment, not a Python virtualenv but a more complete `conda` environment that isolates all of Python's binary dependencies from your OS Python environment.
+Then you can install the dependencies and source code for NLPIA within that `conda` environment with listing A.2.
+
+== Install NLPIA
+
+We like to install software source code that we're working on in a subdirectory under our user `$HOME` called `code/`, but you can put it wherever you like.
+If this doesn't work, check out the `nessvec` README (https://github.com/tangibleai/nessvec) for updated installation instructions.
+
+[[install_nlpia_source_with_conda_code]]
+.Install nessvec source with conda
+[source,bash]
+----
+$ mkdir -p ~/code
+$ cd ~/code
+$ git clone https://gitlab.com/tangibleai/nessvec.git
+$ cd ~/code/nessvec
+$ conda install -y pip  # <1>
+$ pip install --upgrade pip  # <2>
+$ conda env create -n nessvec -f conda/environment.yml  # <3>
+$ source activate nessvec  # <4>
+$ pip install --upgrade pip  # <5>
+$ pip install -e .  # <6>
+----
+<1> Install the latest conda binary for pip within your `root` conda environment.
+<2> Upgrade `pip` to the latest `pypi.python.org` version -- **P**ip **I**nstalls **P**ip after all ;).
+<3> Create a conda environment, a directory in "$HOME/Anaconda3/envs/nessvec" with binary & source dependencies.
+<4> Activate your Python environment.
+<5> Install the latest `pip` within your `nessvec` environment.
+<6> Install an "editable" source code directory for `nessvec`, so your changes source and data will go "live" whenever you save your edits to disk.
+
+== IDE
+
+Now that you have Python 3 and NLPIA on your machine, you only need a good text editor to round out your integrated development environment (IDE).
+Rather than installing a complete system like PyCharm by JetBrains, we prefer individual tools with small teams (one-man teams in the case of Sublime Text) that do one thing well.
+
+[TIP]
+====
+Built by developers for developers is a real thing, especially if the developer team is a team of one.
+Individual developers often build better tools than corporations because individuals are more open to incorporating code and suggestions by their users.
+An individual developer that builds a tool because she needs it usually build a tool that is optimized for her workflow.
+And her workflow is pretty awesome if she builds tools that are reliable, powerful, and popular enough to compete with.
+Large open source projects like `jupyter` are awesome, too, but in a different way.
+They're usually extremely versatile and full-featured, as long as they don't have a commercially licensed "fork" of the open source project.
+====
+
+Fortunately the tools you need for your Python IDE are all free, extensible, and continuously maintained.
+Most are even open source so you can make them your own:
+
+* Sublime Text 3 (www.sublimetext.com/3) text editor with Package Control (https://packagecontrol.io/installation#st3) and Anaconda (https://packagecontrol.io/packages/Anaconda) "linter" plus auto-corrector
+* `Meld` merge tool for Mac (https://yousseb.github.io/meld) or other OSes (http://meldmerge.org)
+* `ipython` (`jupyter console`) for your **R**ead -> **E**val -> **P**rint -> **L**oop (development workflow)
+* `jupyter notebook` for creating reports, tutorials, and blog posts, or for sharing your results with your boss
+
+[TIP]
+====
+Some phenomenally productive developers use a REPL workflow for Python.footnote:[that's you, Steven "Digital Nomad" Skoczen and Aleck "The Dude" Landgraf]
+The `ipython`, `jupyter console`, and `jupyter notebook` REPL consoles are particularly powerful, with their `help`, `?`, `??`, and `%` magic commands, plus automatic tab-completion of attributes, methods, arguments, file paths, and even `dict` keys.
+Before Googling or overflowing your stack, explore the docstrings and source code Python packages you've imported by trying commands like `>>> sklearn.linear_model.BayesianRidge??`.
+Python's REPLs even allow you to execute shell commands (try `>>> !git pull` or `>>> !find . -name nessvec`) to keep your fingers on the keyboard, minimizing context switching and maximizing productivity.
+====
+
+== Ubuntu package manager
+
+Your Linux distribution already has a full-featured package manager installed.
+And you may not even need it if you use Anaconda's package manager named `conda`.
+This is the recommended approach in the `nessvec` installation instructions (http://gitlab.com/tangibleai/nessvec).
+The package manager for Ubuntu is called `apt`.
+We've suggested some packages to install in <<install_developer_tools_with_apt_code>>.
+You almost certainly will not need all these packages, but this exhaustive list of tools is here just in case you install something with Anaconda and it complains about a missing binary.
+You can start at the top and work your way down, until conda is able to install your Python packages.
+
+[[install_developer_tools_with_apt_code]]
+.Install developer tools with apt
+[source,bash]
+----
+$ sudo apt-get update
+$ sudo apt install -y build-essential libssl-dev g++ cmake swig git
+$ sudo apt install -y python2.7-dev python3.5-dev libopenblas-dev libatlas-base-dev gfortran libgtk-3-dev
+$ sudo apt install -y openjdk-8-jdk python-dev python-numpy python-pip python-virtualenv python-wheel python-nose
+$ sudo apt install -y python3-dev python3-wheel python3-numpy python-scipy python-dev python-pip python3-six python3-pip
+$ sudo apt install -y python3-pyaudio python-pyaudio
+$ sudo apt install -y libcurl3-dev libcupti-dev xauth x11-apps python-qt4
+$ sudo apt install -y python-opencv-dev libxvidcore-dev libx264-dev libjpeg8-dev libtiff5-dev libjasper-dev libpng12-dev
+----
+
+[TIP]
+====
+If the `apt-get update` command fails with an error regarding `bazel`, you've likely added the Google `apt` repository with their build tool for TensorFlow. This should get you back on track again:
+
+[source,bash]
+$ sudo apt-get install curl
+$ curl https://bazel.build/bazel-release.pub.gpg | sudo apt-key add -
+====
+
+== Mac
+
+You need a real package manager (not XCode) before you can install all the tools you need to keep up with other developers.
+
+=== A Mac package manager
+
+Homebrew (https://brew.sh) is probably the most popular command-line package manager for Macs among developers.
+It's easy to install and contains one-step installation packages for most tools that developers use.
+It's equivalent to Ubuntu's `apt` package manager.
+Apple could've ensured their OS would play nice with `apt`, but they didn't want developers to bypass their XCode and App Store "funnels", for obvious "monetization" reasons.
+So some intrepid Ruby developers homebrewed their own package manager.footnote:[See the Homebrew package manager Wikipedia article (https://en.wikipedia.org/wiki/Homebrew_(package_management_software)).]
+And it's almost as good as `apt` or any other OS-specific binary package manager.
+
+[[install_brew_code]]
+.Install brew
+[source,bash]
+----
+$ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+----
+
+You'll be asked to confirm things with the Return key and also enter your root/sudo password.
+So don't walk away to brew your coffee until you've entered your password and the installation script is happily chugging along.
+
+=== Some packages
+
+Once brew is installed, you may want to install some Linux tools that are handy to have around:
+
+[[install_developer_tools_code]]
+.Install developer tools
+[source,bash]
+----
+$ brew install wget htop tree pandoc asciidoctor
+----
+
+== Tuneups
+
+If you are serious about NLP and software development, you'll want to make sure you have your OS tuned up so you can get stuff done.
+
+=== Ubuntu Tuneups
+
+Ubuntu comes with everything you need to develop software and NLP pipeliness efficiently.
+Depending on your preferred workflow, these apps might help you deal with habits developed on other operating systems:
+
+* CopyQ for clipboard management
+* gnome-tweaks for configuring your touchpad and microphone settings
+* `aptitude` to fix package dependencies that `apt` and `apt-get` can't handle automatically.
+* `draw.io` for creating diagrams like you see in this book
+
+=== Mac Tuneups
+
+Here are a couple apps to help improve your Mac productivity:
+
+* Snappy to take screenshots (http://snappy-app.com)
+* CopyClip to manage your clipboard (https://itunes.apple.com/us/app/copyclip-clipboard-history-manager/id595191960)
+
+If you want to share screenshots with other NLP developers you'll need a screen grabber such as Snappy.
+And a clipboard manager, such as CopyClip lets you copy and paste more than one thing at a time and persist your clipboard history between reboots.
+A clipboard manager gives you the power of console history search (`[ctrl]-[R]`) in your GUI copy and paste world.
+
+And you should also increase your bash shell history, add some safer `rm -f` aliases, set your default editor, create colorful text, and add `open` commands for your browser, text editor, and merge tool:
+
+.bash_profile
+[source,bash]
+----
+#!/usr/bin/env bash
+echo "Running customized ~/.bash_profile script: '$0' ......."
+export HISTFILESIZE=10000000
+export HISTSIZE=10000000
+#  append the history file after each session
+shopt -s histappend
+#  allow failed commands to be re-edited with Ctrl-R
+shopt -s histreedit
+#  command substitions are first presented to user before execution
+shopt -s histverify
+# store multiline commands in a single history entry
+shopt -s cmdhist
+# check the window size after each command and, if necessary, update the values of LINES and COLUMNS
+shopt -s checkwinsize
+# grep results are colorized
+export GREP_OPTIONS='--color=always'
+# grep matches are bold purple (magenta)
+export GREP_COLOR='1;35;40'
+# record everything you ever do at the shell in a file that won't be unintentionally cleared or truncated by the OS
+export PROMPT_COMMAND='echo "# cd $PWD" >> ~/.bash_history_forever; '$PROMPT_COMMAND
+export PROMPT_COMMAND="history -a; history -c; history -r; history 1 >> ~/.bash_history_forever; $PROMPT_COMMAND"
+# so it doesn't get changed again
+readonly PROMPT_COMMAND
+# USAGE: subl http://google.com  # opens in a new tab
+if [ ! -f /usr/local/bin/firefox ]; then
+    ln -s /Applications/Firefox.app/Contents/MacOS/firefox /usr/local/bin/firefox
+fi
+alias firefox='open -a Firefox'
+# USAGE: subl file.py
+if [ ! -f /usr/local/bin/subl ]; then
+    ln -s /Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl /usr/local/bin/subl
+fi
+# USAGE: meld file1 file2 file3
+if [ ! -f /usr/local/bin/meld ]; then
+    ln -s /Applications/Meld.app/Contents/MacOS/Meld /usr/local/bin/meld
+fi
+export VISUAL='subl -w'
+export EDITOR="$VISUAL"
+# you can use -f to override these interactive nags for destructive disk writes
+alias rm="rm -i"
+alias mv="mv -i"
+alias ..="cd .."
+alias ...="cd ../.."
+----
+
+You can find others' bash_profile scripts with a GitHubGist search (https://gist.github.com/search?q=%22.bash_profile%22+mac).
+
+== Windows
+
+The command-line tools for package management, such as cygwin on Windows, aren't that great.
+But if you install git-for-windows on a Windows machine, that gets you a bash prompt and a workable `git-bash` terminal that you can use to run your Python REPL console.
+Download and install the `git-for-windows` here: https://gitforwindows.org/ .
+
+The `git` installer comes with a version of the bash shell that should work well within Windows.footnote:[Big thanks to Benjamin Berg and Darren Meiss at Manning Publishing for figuring this out, and for all the hard work they put in to make this book decent.]
+
+Once you have a shell running in a Windows terminal you can install Anaconda and use the conda package manager to install the `nessvec` package just like the rest of us, using the instruction in the github repository README (http://github.com/tangibleai/nessvec).
+
+=== Chocolatey
+
+Chocolatey (https://chocolatey.org/install) is an alternative software package manager for windows PowerShell.
+You may find you prefer it for installing `git`, `bash`, `python`, and `Anaconda`.
+
+=== Get Virtual
+
+If you get frustrated with Windows you can always install VirtualBox or Docker and create a virtual machine with an Ubuntu OS.
+That's the subject of a whole book (or at least a chapter), and there are better people at that than we are:
+
+.VirtualBox
+* Jason Brownlee (https://machinelearningmastery.com/linux-virtual-machine-machine-learning-development-python-3)
+* Jeroen Janssens (http://datasciencetoolbox.org)
+
+.Docker Container
+* Vik Paruchuri (www.dataquest.io/blog/docker-data-science)
+* Jamie Hall (http://blog.kaggle.com/2016/02/05/how-to-get-started-with-data-science-in-containers)
+
+Another way to get Linux into your Windows world is with Microsofts Ubuntu shell app. I've not used it, so I can't vouch for its compatibility with the Python packages you'll need to install. If you try it, share what you learn with us at the `nessvec` repository with a feature or pull request on the documentation (https://gitlab.com/tangibleai/nessvec/issues). The Manning NLPIA forum (https://forums.manning.com/forums/natural-language-processing-in-action) is also a great place to share your knowledge and get assistance.
+
+
+== NLPIA automagic
+
+Fortunately for you, `nessvec` has some automatic environment provisioning procedures that will download the NLTK, Spacy, Word2vec models, and the data you need for this book.
+These downloaders will be triggered whenever you call an `nessvec` wrapper function, like `segment_sentences()` that requires any of these datasets or models.
+But this software is a work in progress, continually maintained and expanded by readers like you.
+So you may want to know how to manually install these packages and download the data you need to make them work for you when the automagic of `nessvec` fails.
+And you may just be curious about some of the datasets that make sentence parsing and part of speech taggers possible.
+So, if you want to customize your environment, the remaining appendices show you how to install and configure the individual pieces you need for a full-featured NLP development environment.
+

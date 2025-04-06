@@ -1,0 +1,73 @@
+question,answer
+What kinds of data can a machine learning model train on?,Machine learning models can only train on numerical data.
+What are the basic variable data types in python?,"`float`, `int`, `str`, and `bool`"
+What is a static model or distribution?,A probability distribution or model whose underlying statistics or behavior do not change over time.
+What is a leverage plot and what should I look for?,I don't know.
+What are replicants in the context of bootstrapping?,I don't know but I imagine they are the duplicates that occur due to random sampling with replacement.
+Is the movie review dataset a good one?,Yes.
+Is SQL required for DS work?,"No, but it's required to get through many interviews."
+What's a good way to learn about the theory behind neural nets?,Find a textbook from a university course.
+Where can I report Medicare FWA violations?,1-800-HHS-TIPS (1-800-447-8477) or HHSTips@olg.hhs.gov or forms.oig.hhs.gov/hotlineoperation/index.aspx
+"In Medicare FWA regulations, what is OIG?","In the Medicare FWA context, OIG is the Office of Inspector General responsible for investigating and prosecuting FWA."
+"Within the medicare and medical field, what is CMS?",Centers for Medicare & Medicaid Services
+What is a static model or distribution?,A probability distribution or model whose underlying statistics or behavior do not change over time.
+What is a leverage plot and what should I look for?,I don't know.
+What are replicants in the context of bootstrapping?,I don't know but I imagine they are the duplicates that occur due to random sampling with replacement.
+Is the movie review dataset a good one?,Yes.
+Is SQL required for DS work?,"No, but it's required to get through many interviews."
+What's a good way to learn about the theory behind neural nets?,Find a textbook from a university course.
+How is the target variable supplied for `flow_from_directory()`?,The target class or value must be encoded in the filename.
+What is Bootstrapping?,You have a sample of measurements and you want to estimate the actually distribution (ECDF).
+How do you tell if a distribution of values is Gaussian?,P-value and T-test score above 0.05.
+How can I minimize overfitting for an XGBoost model?,How do you reduce overfitting for other similar models?
+What are some good questions to ask an interviewer in an informational interview?,As a data scientist what do you want to know about the company or business or people?
+How does correlated feature affect random forest and feature importance?,Design a small experiment to find out?
+How to decrease overfitting in boosting models?,What are some techniques to reduce overfitting in general? Will they work with boosting models?
+Where can I find a corporate e-mail corpus?,"The Enron email dataset has > 100k emails, many of them classified as spam/ham or given other tags and category labels."
+The colors in my legend in my violin plot don't seem to be correct. What should I do?,You can just write the text for the legen in your report or notebook as a label or comment on the plot.
+How do you fix this bug: `ModuleNotFoundError: No module named 'scratch'`?,What does the error message tell you that `scratch` is?
+How do you fix this bug: `ModuleNotFoundError: No module named 'scratch'`?,What does the error message tell you that `scratch` is?
+What sort of hyperparameters should I try?,"You can try different models, and model types, like random forest regressor, linear regression, polynomial regression."
+How do I type the eñe character on a Mac or PC?,On a Mac press [option]-[~] then [n]. On a PC type [ctrl]-[~]-[n] and then [n].
+How do I type the accented e character (as in resumè) on a Mac or PC?,On a Mac type [option]-[`] then [e]. On a PC type [ctrl]-[`]-[e] simultaneously.
+How can I put my Google Slides on GitHub with my code?,"You need to download it as a file that others can use, like an `.odp` Open Office Presentation file."
+What is the difference between a null value in pandas (`df.isnull()`) and a nan value (`df.isna()`)?,Null values include both `np.nan` and empty strings like ''.
+When I try `df.dtype` it returns an AttributeError. How can I find the data type within a DataFrame?,Try: `df.values.dtype`.
+What is a spacy `Doc.vector`?,Spacy `Doc.vector` represents the average of the word2vec vectors for all the words in a document.
+Is a `LogisticRegression` more likely or less likely to overfit to your data when compared to a `DecisionTree`?,A `LogisticRegression` will be less likely to overfit than a `DecisionTree` in most situations.
+What's a good label for my vertical axis when I've taken the home prices in dollars and divided them by 1000000?,I'd suggest 'Home Price ($M)'.
+Is it necessary to know command line `git`?,It helps when you're interacting with developers on a shared software project.
+Is the global happiness index dataset on Kaggle a good data science project to start with?,No. It doesn't have very many records and all of the columns are likely directly used to compute the happiness index.
+How can I delete security credentials and large data files from my git repository history?,Check out the `bfg` package: `conda install bfg`.
+What is Ocam's razor?,The idea that the simplest explanation is usually the correct one.
+What do I need to measure training set accuracy for if I already calculate test set accuracy?,So you can see if your model is overfitting and use regularization hyperparameters appropriately.
+Where can I learn about mechanistic or deterministic models and how they compare to data science models?,http://www.thetalkingmachines.com/episodes/talking-machines-live-and-understanding-modeling-viruses
+How do you use a trained linear regression model to select only the 10 most powerful features in an ML model?,"X[list(pd.Series(model.coef_.abs(), index=X.columns).sort_values().index.values[-10:])]"
+What about python programming. Have you ever written a function definition in python?,"Yes, I took a basic python programming course online."
+What is the python keyword that you use at the start of line of code to define a new function?,def
+Who invented the Perceptron?,Frank Rosenblatt  #wiki/Perceptron
+Where did Frank Rosenblatt go to college?,Cornell University  #wiki/Perceptron
+When was the perceptron invented?,1960  #wiki/Perceptron
+How can I create a test set for a recommendation engine trained on individual movie likes by users?,Segment your data according to user id and treat your entire test set like you would treat a new user on your system.
+"What does `np.array([True, True, False]).mean()` return ?",0.6666...
+What is overfitting?,When your test set accuracy is significantly lower than your training set accuracy.
+What is a good package for doing topic analysis or natural language analytics?,The ldaviz package has good visualizations in addition to the Latent Dirichlet Allocation topic vector analysis.
+How can I compete with big banks in time series forecasting of index funds?,"[""Pay attention to the social impact of your investments. Big banks are run by antisocial people that don't care about  the impact of global warming and social-responsibility. And they don't realize the magnitude of its affect on the markets and their investments."", 'Focus your model on predicting risk-adjusted long term performance of your investments. Make your target variable the value of assets at least 2 years into the future. Most investment bankers and funds focus on the near-term performance of their assets and rely on active trading to manage long term performance. So your model will be better than theirs for predicting long term performance and it will minimize the amount of trading fees you have to pay.']"
+Should I use RandomForestRegressor or RandomForestClassifier for my 911 response time machine learning model?,What is the difference between a _classifier_ and a _regressor_?
+What is a good exercise to get up to speed on Data Science?,Load a DataFrame of home prices and calculate some mean and average prices in various categories of homes.
+When should I use lemmatization on a sentiment analysis or other NLP problem?,When it improves your test set performance metric like F1 score or accuracy.
+I have a model that can predict the authorship of judicial ruling texts with 95% accuracy. What can I do with it?,You can examine the word frequencies that are most important to each judge's authorship prediction.
+What are some good resources for learning how to program in python?,One of my favorites is `learnpython.org`.
+What are some good resources for learning about object oriented programming and how to define classes in python?,"Try the section on ""Objects and Classes"" in [learnpython.org](https://www.learnpython.org/en/Classes_and_Objects)"
+How can I implement a Kalman Filter in python?,The `pykalman` package implements both a linear kalman filter as well as a nonlinear unscented kalman filter.
+When do I do `train_test_split()`?,After data cleaning and before spliting your columns into `X` and `y` to fit a model.
+Where can I find 311 call logs for New York City?,The JSON REST API is located at [](https://data.cityofnewyork.us/resource/erm2-nwe9.json)
+What kind of data science variable is a Amazon store star-rating for products like 5-stars and 2-stars?,"Ordinal, because it's a categorical variable with a natural order to it."
+What is a CDG (clinical decision guidelines)?,An example is the _Schmitt-Thompson Nurse Triage Guidelines_ a manual for
+What's a good way to sample a large CSV file for machine learning?,"Create a skip_rows list of integers that skips 99% of the rows. `skip_rows = np.random.sample(range(1, n + 1))`"
+What is a CDG (clinical decision guidelines)?,An example is the _Schmitt-Thompson Nurse Triage Guidelines_ a manual for nurse triage decisions.
+What do I need to create a natural language pipeline for sentiment analysis like predicting hate-speech?,You need a collection of texts labeled with whether or not each text represents hateful speech.
+Can I use a collection of YouTube comments to build a sentiment analyzer?,Only if you have a numerical or categorical rating for the sentiment for each comment.
+"How can I count the number of records for a particular group of data, like the `country` column in a pandas DataFrame?","`[(country, len(group)) for country, group df.groupby('country')]"
+What is a CDF (Cumulative Distribution Function) used for?,To estimate the probability or confidence interval for a range of values.
+How to reduce overfitting and improve test set accuracy for a LogisticRegression model?,"Decrease the C value, this increases the regularization strength."

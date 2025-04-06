@@ -1,0 +1,55 @@
+
+:toc: left
+:toclevels: 6
+
+++++
+  <style>
+  .first-sentence {
+    text-align: left;
+    margin-left: 0%;
+    margin-right: auto;
+    width: 66%;
+    background: Beige;
+  }
+  .last-sentence {
+    text-align: right;
+    margin-left: auto;
+    margin-right: 0%;
+    width: 66%;
+    background: AliceBlue;
+  }
+  </style>
+++++
+= Getting creative (finding and generating text summaries and paraphrases)
+[.first-sentence]
+This chapter covers
+
+[.last-sentence]
+This chapter covers
+
+[.first-sentence]
+You learned how to extract information from sentences in chapter 11, and you learned how transformers work in chapter 12.
+
+[.last-sentence]
+Summarization and paraphrasing are one of the most useful and advanced features for a chatbot or virtual assistant helping you filter and understand the flood of information flowing into your brain as text.
+
+== Too much information
+[.first-sentence]
+The amount of natural language information on the web is virtually limitless.
+
+[.last-sentence]
+Many more pages are ignored, or hidden (dark web and deep web).
+
+[.first-sentence]
+This amounts to exabytes (10^18+ bytes) of data flowing through the Internet.
+
+[.last-sentence]
+This makes it easier for you to manually skim through a list of 10 most likely pages quickly.
+
+[.first-sentence]
+Summarized natural language text is also a mission-critical feature for NLP pipeline processing medical records where a good summary could save a life.
+
+[.last-sentence]
+A quality summary of political proposals and party platforms can ensure that cities, states, and nations pass voter initiatives that do what voters intend and that accurately represent the policies likely to be implemented by candidates.
+
+== Summary

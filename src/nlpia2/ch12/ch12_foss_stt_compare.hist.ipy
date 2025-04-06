@@ -1,0 +1,729 @@
+>>> import pandas as pd
+>>> pd.read_html('https://deepgram.com/learn/benchmarking-top-open-source-speech-models#evaluating-accuracy')
+[              Domain                                        Description  Avg File Duration [min]
+ 0  Conversational AI  Spontaneous speech from human/chat bot interac...                     0.65
+ 1         Phonecalls  Spontaneous conversational speech from phoneca...                     2.20
+ 2           Meetings  Spontaneous conversational speech from multi-p...                    36.10
+ 3             Videos  Videos from YouTube and other sources covering...                     2.90
+ 4     Earnings Calls  Public earnings calls with generally high-qual...                    39.50,
+              Dataset  Kaldi  wav2vec 2.0  Whisper
+ 0  Conversational AI   64.2         36.3     19.9
+ 1         Phone call   69.9         31.0     16.6
+ 2            Meeting   44.0         27.4     13.9
+ 3      Earnings Call   65.8         28.1      9.7
+ 4              Video   47.6         23.3      8.9,
+              Dataset  Kaldi  wav2vec 2.0  Whisper
+ 0  Conversational AI   63.4         34.5     26.5
+ 1         Phone call   70.0         30.9     20.8
+ 2            Meeting   45.8         28.7     16.1
+ 3      Earnings Call   69.1         35.3     11.2
+ 4              Video   47.5         23.5     11.2,
+              Dataset  Kaldi  wav2vec 2.0  Whisper
+ 0  Conversational AI   68.1         57.1     51.3
+ 1         Phone call   87.9         49.4     46.8
+ 2            Meeting   81.4         64.8     63.7
+ 3      Earnings Call   66.8         28.2      9.8
+ 4              Video   42.1         22.8      9.8,
+              Dataset  Kaldi  wav2vec 2.0  Whisper
+ 0  Conversational AI   62.4         56.8     60.7
+ 1         Phone call   73.9         43.9     54.3
+ 2            Meeting   64.3         46.2     43.4
+ 3      Earnings Call   70.1         35.7     11.2
+ 4              Video   42.1         23.2     12.4,
+              Dataset  Kaldi  wav2vec 2.0  Whisper
+ 0  Conversational AI   65.9         33.3      5.7
+ 1         Phone call   78.1         40.9     20.1
+ 2            Meeting   54.3         38.7     18.6
+ 3      Earnings Call   68.8         26.4      8.9
+ 4              Video   35.4         17.2      5.2,
+              Dataset  Kaldi  wav2vec 2.0  Whisper
+ 0  Conversational AI   63.8         33.3     14.6
+ 1         Phone call   74.4         38.2     29.6
+ 2            Meeting   55.8         40.6     20.8
+ 3      Earnings Call   72.1         34.0     10.6
+ 4              Video   35.6         17.2      8.6,
+           Unnamed: 0 wav2vec 2.0       Unnamed: 2           Unnamed: 3     Whisper       Unnamed: 5           Unnamed: 6
+ 0                NaN  Throughput  GPU Memory [GB]  GPU Utilization [%]  Throughput  GPU Memory [GB]  GPU Utilization [%]
+ 1  Conversational AI       108.2              8.8                 29.2         7.2              6.5                 67.0
+ 2         Phone call       174.8              9.8                 48.1         7.0              6.5                 82.4
+ 3            Meeting       193.5             10.6                 43.0         6.2              6.5                 87.4
+ 4      Earnings Call       238.3             10.9                 92.6         5.7              6.5                 91.3
+ 5              Video       183.5             10.7                 50.4         6.5              6.5                 87.8
+ 6            Overall       222.0             10.1                 52.7         5.8              6.5                 83.2,
+           Unnamed: 0 wav2vec 2.0       Unnamed: 2           Unnamed: 3     Whisper       Unnamed: 5           Unnamed: 6
+ 0                NaN  Throughput  GPU Memory [GB]  GPU Utilization [%]  Throughput  GPU Memory [GB]  GPU Utilization [%]
+ 1  Conversational AI       126.2             19.4                 24.1         9.1              6.9                 78.6
+ 2         Phone call       224.2             20.4                 34.8         8.3              6.9                 85.3
+ 3            Meeting       278.6             20.6                 26.4         7.9              6.9                 88.0
+ 4      Earnings Call       357.6             23.4                 92.4         7.2              6.9                 91.1
+ 5              Video       220.4             20.5                 51.8         8.2              6.9                 90.6
+ 6            Overall       320.6             20.9                 45.9         7.4              6.9                 86.7]
+>>> dfs = _
+>>> for df in dfs
+>>> df = dfs[0]
+>>> df.set_index('0')
+>>> df.columns
+Index(['Domain', 'Description', 'Avg File Duration [min]'], dtype='object')
+>>> df.set_index(df.columns[0])
+                                                         Description  Avg File Duration [min]
+Domain                                                                                       
+Conversational AI  Spontaneous speech from human/chat bot interac...                     0.65
+Phonecalls         Spontaneous conversational speech from phoneca...                     2.20
+Meetings           Spontaneous conversational speech from multi-p...                    36.10
+Videos             Videos from YouTube and other sources covering...                     2.90
+Earnings Calls     Public earnings calls with generally high-qual...                    39.50
+>>> df = df.set_index(df.columns[0])
+>>> 
+... for n, dfi in zip(names, dfs):
+...     if 'Domain' in dfi.columns:
+...         dfi = dfi.set_index['Domain']
+...         for c in dfi.columns:
+...         df[n + '_' + c] = dfi
+...
+>>> 
+... for n, dfi in zip(names, dfs):
+...     if 'Domain' in dfi.columns:
+...         dfi = dfi.set_index['Domain']
+...         for c in dfi.columns:
+...             df[n + '_' + c] = dfi
+...
+>>> names = [str(i) for i in range(1, len(dfs))]
+>>> 
+... for n, dfi in zip(names, dfs[1:]):
+...     if 'Domain' in dfi.columns:
+...         dfi = dfi.set_index['Domain']
+...         for c in dfi.columns:
+...             df[n + '_' + c] = dfi
+...
+>>> df
+                                                         Description  Avg File Duration [min]
+Domain                                                                                       
+Conversational AI  Spontaneous speech from human/chat bot interac...                     0.65
+Phonecalls         Spontaneous conversational speech from phoneca...                     2.20
+Meetings           Spontaneous conversational speech from multi-p...                    36.10
+Videos             Videos from YouTube and other sources covering...                     2.90
+Earnings Calls     Public earnings calls with generally high-qual...                    39.50
+>>> dfs[1]
+             Dataset  Kaldi  wav2vec 2.0  Whisper
+0  Conversational AI   64.2         36.3     19.9
+1         Phone call   69.9         31.0     16.6
+2            Meeting   44.0         27.4     13.9
+3      Earnings Call   65.8         28.1      9.7
+4              Video   47.6         23.3      8.9
+>>> 
+... for n, dfi in zip(names, dfs[1:]):
+...     if 'Dataset' in dfi.columns:
+...         dfi = dfi.set_index['Dataset']
+...         for c in dfi.columns:
+...             df[n + '_' + c] = dfi
+...
+>>> 
+... for n, dfi in zip(names, dfs[1:]):
+...     if 'Dataset' in dfi.columns:
+...         dfi = dfi.set_index('Dataset')
+...         for c in dfi.columns:
+...             df[n + '_' + c] = dfi
+...
+>>> 
+... for n, dfi in zip(names, dfs[1:]):
+...     print(n, dfi.index.name, list(dfi.columns))
+...     if 'Dataset' in dfi.columns:
+...         dfi = dfi.set_index('Dataset')
+...         for c in dfi.columns:
+...             df[n + '_' + c] = dfi
+...
+>>> df.columns
+Index(['Description', 'Avg File Duration [min]'], dtype='object')
+>>> 
+... for n, dfi in zip(names, dfs[1:]):
+...     print(n, dfi.index.name, list(dfi.columns))
+...     if 'Dataset' in dfi.columns:
+...         dfi = dfi.set_index('Dataset')
+...         for c in dfi.columns:
+...             df[n + '_' + c] = dfi[c]
+...
+>>> df
+                                                         Description  Avg File Duration [min]  1_Kaldi  ...  6_Kaldi  6_wav2vec 2.0  6_Whisper
+Domain                                                                                                  ...                                   
+Conversational AI  Spontaneous speech from human/chat bot interac...                     0.65     64.2  ...     63.8           33.3       14.6
+Phonecalls         Spontaneous conversational speech from phoneca...                     2.20      NaN  ...      NaN            NaN        NaN
+Meetings           Spontaneous conversational speech from multi-p...                    36.10      NaN  ...      NaN            NaN        NaN
+Videos             Videos from YouTube and other sources covering...                     2.90      NaN  ...      NaN            NaN        NaN
+Earnings Calls     Public earnings calls with generally high-qual...                    39.50      NaN  ...      NaN            NaN        NaN
+
+[5 rows x 20 columns]
+>>> df.T
+Domain                                                   Conversational AI  ...                                     Earnings Calls
+Description              Spontaneous speech from human/chat bot interac...  ...  Public earnings calls with generally high-qual...
+Avg File Duration [min]                                               0.65  ...                                               39.5
+1_Kaldi                                                               64.2  ...                                                NaN
+1_wav2vec 2.0                                                         36.3  ...                                                NaN
+1_Whisper                                                             19.9  ...                                                NaN
+2_Kaldi                                                               63.4  ...                                                NaN
+2_wav2vec 2.0                                                         34.5  ...                                                NaN
+2_Whisper                                                             26.5  ...                                                NaN
+3_Kaldi                                                               68.1  ...                                                NaN
+3_wav2vec 2.0                                                         57.1  ...                                                NaN
+3_Whisper                                                             51.3  ...                                                NaN
+4_Kaldi                                                               62.4  ...                                                NaN
+4_wav2vec 2.0                                                         56.8  ...                                                NaN
+4_Whisper                                                             60.7  ...                                                NaN
+5_Kaldi                                                               65.9  ...                                                NaN
+5_wav2vec 2.0                                                         33.3  ...                                                NaN
+5_Whisper                                                              5.7  ...                                                NaN
+6_Kaldi                                                               63.8  ...                                                NaN
+6_wav2vec 2.0                                                         33.3  ...                                                NaN
+6_Whisper                                                             14.6  ...                                                NaN
+
+[20 rows x 5 columns]
+>>> df.index
+Index(['Conversational AI', 'Phonecalls', 'Meetings', 'Videos',
+       'Earnings Calls'],
+      dtype='object', name='Domain')
+>>> dfi.colu,ns
+>>> dfi
+          Unnamed: 0 wav2vec 2.0       Unnamed: 2           Unnamed: 3     Whisper       Unnamed: 5           Unnamed: 6
+0                NaN  Throughput  GPU Memory [GB]  GPU Utilization [%]  Throughput  GPU Memory [GB]  GPU Utilization [%]
+1  Conversational AI       126.2             19.4                 24.1         9.1              6.9                 78.6
+2         Phone call       224.2             20.4                 34.8         8.3              6.9                 85.3
+3            Meeting       278.6             20.6                 26.4         7.9              6.9                 88.0
+4      Earnings Call       357.6             23.4                 92.4         7.2              6.9                 91.1
+5              Video       220.4             20.5                 51.8         8.2              6.9                 90.6
+6            Overall       320.6             20.9                 45.9         7.4              6.9                 86.7
+>>> df
+                                                         Description  Avg File Duration [min]  1_Kaldi  ...  6_Kaldi  6_wav2vec 2.0  6_Whisper
+Domain                                                                                                  ...                                   
+Conversational AI  Spontaneous speech from human/chat bot interac...                     0.65     64.2  ...     63.8           33.3       14.6
+Phonecalls         Spontaneous conversational speech from phoneca...                     2.20      NaN  ...      NaN            NaN        NaN
+Meetings           Spontaneous conversational speech from multi-p...                    36.10      NaN  ...      NaN            NaN        NaN
+Videos             Videos from YouTube and other sources covering...                     2.90      NaN  ...      NaN            NaN        NaN
+Earnings Calls     Public earnings calls with generally high-qual...                    39.50      NaN  ...      NaN            NaN        NaN
+
+[5 rows x 20 columns]
+>>> df.T
+Domain                                                   Conversational AI  ...                                     Earnings Calls
+Description              Spontaneous speech from human/chat bot interac...  ...  Public earnings calls with generally high-qual...
+Avg File Duration [min]                                               0.65  ...                                               39.5
+1_Kaldi                                                               64.2  ...                                                NaN
+1_wav2vec 2.0                                                         36.3  ...                                                NaN
+1_Whisper                                                             19.9  ...                                                NaN
+2_Kaldi                                                               63.4  ...                                                NaN
+2_wav2vec 2.0                                                         34.5  ...                                                NaN
+2_Whisper                                                             26.5  ...                                                NaN
+3_Kaldi                                                               68.1  ...                                                NaN
+3_wav2vec 2.0                                                         57.1  ...                                                NaN
+3_Whisper                                                             51.3  ...                                                NaN
+4_Kaldi                                                               62.4  ...                                                NaN
+4_wav2vec 2.0                                                         56.8  ...                                                NaN
+4_Whisper                                                             60.7  ...                                                NaN
+5_Kaldi                                                               65.9  ...                                                NaN
+5_wav2vec 2.0                                                         33.3  ...                                                NaN
+5_Whisper                                                              5.7  ...                                                NaN
+6_Kaldi                                                               63.8  ...                                                NaN
+6_wav2vec 2.0                                                         33.3  ...                                                NaN
+6_Whisper                                                             14.6  ...                                                NaN
+
+[20 rows x 5 columns]
+>>> pd.options.display.max_colwidth = 7
+>>> df.T
+Domain  Conversational AI Phonecalls Meetings  Videos Earnings Calls
+Desc...  Spo...            Spo...     Spo...   Vid...  Pub...       
+Avg ...    0.65               2.2       36.1      2.9    39.5       
+1_Kaldi    64.2               NaN        NaN      NaN     NaN       
+1_wa...    36.3               NaN        NaN      NaN     NaN       
+1_Wh...    19.9               NaN        NaN      NaN     NaN       
+2_Kaldi    63.4               NaN        NaN      NaN     NaN       
+2_wa...    34.5               NaN        NaN      NaN     NaN       
+2_Wh...    26.5               NaN        NaN      NaN     NaN       
+3_Kaldi    68.1               NaN        NaN      NaN     NaN       
+3_wa...    57.1               NaN        NaN      NaN     NaN       
+3_Wh...    51.3               NaN        NaN      NaN     NaN       
+4_Kaldi    62.4               NaN        NaN      NaN     NaN       
+4_wa...    56.8               NaN        NaN      NaN     NaN       
+4_Wh...    60.7               NaN        NaN      NaN     NaN       
+5_Kaldi    65.9               NaN        NaN      NaN     NaN       
+5_wa...    33.3               NaN        NaN      NaN     NaN       
+5_Wh...     5.7               NaN        NaN      NaN     NaN       
+6_Kaldi    63.8               NaN        NaN      NaN     NaN       
+6_wa...    33.3               NaN        NaN      NaN     NaN       
+6_Wh...    14.6               NaN        NaN      NaN     NaN       
+>>> dfi['Dataset']
+>>> df.T
+Domain  Conversational AI Phonecalls Meetings  Videos Earnings Calls
+Desc...  Spo...            Spo...     Spo...   Vid...  Pub...       
+Avg ...    0.65               2.2       36.1      2.9    39.5       
+1_Kaldi    64.2               NaN        NaN      NaN     NaN       
+1_wa...    36.3               NaN        NaN      NaN     NaN       
+1_Wh...    19.9               NaN        NaN      NaN     NaN       
+2_Kaldi    63.4               NaN        NaN      NaN     NaN       
+2_wa...    34.5               NaN        NaN      NaN     NaN       
+2_Wh...    26.5               NaN        NaN      NaN     NaN       
+3_Kaldi    68.1               NaN        NaN      NaN     NaN       
+3_wa...    57.1               NaN        NaN      NaN     NaN       
+3_Wh...    51.3               NaN        NaN      NaN     NaN       
+4_Kaldi    62.4               NaN        NaN      NaN     NaN       
+4_wa...    56.8               NaN        NaN      NaN     NaN       
+4_Wh...    60.7               NaN        NaN      NaN     NaN       
+5_Kaldi    65.9               NaN        NaN      NaN     NaN       
+5_wa...    33.3               NaN        NaN      NaN     NaN       
+5_Wh...     5.7               NaN        NaN      NaN     NaN       
+6_Kaldi    63.8               NaN        NaN      NaN     NaN       
+6_wa...    33.3               NaN        NaN      NaN     NaN       
+6_Wh...    14.6               NaN        NaN      NaN     NaN       
+>>> 
+... for n, dfi in zip(names, dfs[1:]):
+...     print(dfi.index.name)
+...     if 'Dataset' in dfi.columns:
+...         dfi = dfi.set_index('Dataset')
+...         print(n, dfi.index.name, list(dfi.columns))    
+...         for c in dfi.columns:
+...             print('   ' + c)
+...             df[n + '_' + c] = dfi[c]
+...
+>>> pd.concat([d[list(d.columns)[1:]] for d in dfs[1:]], axis=1)
+   Kaldi  wav2vec 2.0  Whisper  Kaldi  wav2vec 2.0  Whisper  Kaldi  ...  Unnamed: 6  wav2vec 2.0  Unnamed: 2  Unnamed: 3  Whisper  Unnamed: 5  Unnamed: 6
+0   64.2    36.3         19.9    63.4    34.5         26.5    68.1  ...  GPU...      Thr...       GPU...      GPU...      Thr...   GPU...      GPU...    
+1   69.9    31.0         16.6    70.0    30.9         20.8    87.9  ...    67.0       126.2         19.4        24.1         9.1      6.9        78.6    
+2   44.0    27.4         13.9    45.8    28.7         16.1    81.4  ...    82.4       224.2         20.4        34.8         8.3      6.9        85.3    
+3   65.8    28.1          9.7    69.1    35.3         11.2    66.8  ...    87.4       278.6         20.6        26.4         7.9      6.9        88.0    
+4   47.6    23.3          8.9    47.5    23.5         11.2    42.1  ...    91.3       357.6         23.4        92.4         7.2      6.9        91.1    
+5    NaN     NaN          NaN     NaN     NaN          NaN     NaN  ...    87.8       220.4         20.5        51.8         8.2      6.9        90.6    
+6    NaN     NaN          NaN     NaN     NaN          NaN     NaN  ...    83.2       320.6         20.9        45.9         7.4      6.9        86.7    
+
+[7 rows x 30 columns]
+>>> pd.concat([d[list(d.columns)[1:]] for d in dfs[1:]], axis=1, ignore_index=True)
+     0     1     2     3     4     5     6     7     8     9   ...      20      21      22      23      24      25      26      27      28      29
+0  64.2  36.3  19.9  63.4  34.5  26.5  68.1  57.1  51.3  62.4  ...  GPU...  Thr...  GPU...  GPU...  Thr...  GPU...  GPU...  Thr...  GPU...  GPU...
+1  69.9  31.0  16.6  70.0  30.9  20.8  87.9  49.4  46.8  73.9  ...    29.2     7.2     6.5    67.0   126.2    19.4    24.1     9.1     6.9    78.6
+2  44.0  27.4  13.9  45.8  28.7  16.1  81.4  64.8  63.7  64.3  ...    48.1     7.0     6.5    82.4   224.2    20.4    34.8     8.3     6.9    85.3
+3  65.8  28.1   9.7  69.1  35.3  11.2  66.8  28.2   9.8  70.1  ...    43.0     6.2     6.5    87.4   278.6    20.6    26.4     7.9     6.9    88.0
+4  47.6  23.3   8.9  47.5  23.5  11.2  42.1  22.8   9.8  42.1  ...    92.6     5.7     6.5    91.3   357.6    23.4    92.4     7.2     6.9    91.1
+5   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN  ...    50.4     6.5     6.5    87.8   220.4    20.5    51.8     8.2     6.9    90.6
+6   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN  ...    52.7     5.8     6.5    83.2   320.6    20.9    45.9     7.4     6.9    86.7
+
+[7 rows x 30 columns]
+>>> pd.concat([d[list(d.columns)[1:]] for d in dfs[1:]], axis=1)
+   Kaldi  wav2vec 2.0  Whisper  Kaldi  wav2vec 2.0  Whisper  Kaldi  ...  Unnamed: 6  wav2vec 2.0  Unnamed: 2  Unnamed: 3  Whisper  Unnamed: 5  Unnamed: 6
+0   64.2    36.3         19.9    63.4    34.5         26.5    68.1  ...  GPU...      Thr...       GPU...      GPU...      Thr...   GPU...      GPU...    
+1   69.9    31.0         16.6    70.0    30.9         20.8    87.9  ...    67.0       126.2         19.4        24.1         9.1      6.9        78.6    
+2   44.0    27.4         13.9    45.8    28.7         16.1    81.4  ...    82.4       224.2         20.4        34.8         8.3      6.9        85.3    
+3   65.8    28.1          9.7    69.1    35.3         11.2    66.8  ...    87.4       278.6         20.6        26.4         7.9      6.9        88.0    
+4   47.6    23.3          8.9    47.5    23.5         11.2    42.1  ...    91.3       357.6         23.4        92.4         7.2      6.9        91.1    
+5    NaN     NaN          NaN     NaN     NaN          NaN     NaN  ...    87.8       220.4         20.5        51.8         8.2      6.9        90.6    
+6    NaN     NaN          NaN     NaN     NaN          NaN     NaN  ...    83.2       320.6         20.9        45.9         7.4      6.9        86.7    
+
+[7 rows x 30 columns]
+>>> pd.options.display.max_colwidth = 5
+>>> pd.concat([d[list(d.columns)[1:]] for d in dfs[1:]], axis=1)
+   Kaldi  wav2vec 2.0  Whisper  Kaldi  wav2vec 2.0  Whisper  Kaldi  ...  Unnamed: 6  wav2vec 2.0  Unnamed: 2  Unnamed: 3  Whisper  Unnamed: 5  Unnamed: 6
+0  64.2   36.3         19.9     63.4   34.5         26.5     68.1   ...  G...        T...         G...        G...        T...     G...        G...      
+1  69.9   31.0         16.6     70.0   30.9         20.8     87.9   ...  67.0        1...         19.4        24.1         9.1      6.9        78.6      
+2  44.0   27.4         13.9     45.8   28.7         16.1     81.4   ...  82.4        2...         20.4        34.8         8.3      6.9        85.3      
+3  65.8   28.1          9.7     69.1   35.3         11.2     66.8   ...  87.4        2...         20.6        26.4         7.9      6.9        88.0      
+4  47.6   23.3          8.9     47.5   23.5         11.2     42.1   ...  91.3        3...         23.4        92.4         7.2      6.9        91.1      
+5   NaN    NaN          NaN      NaN    NaN          NaN      NaN   ...  87.8        2...         20.5        51.8         8.2      6.9        90.6      
+6   NaN    NaN          NaN      NaN    NaN          NaN      NaN   ...  83.2        3...         20.9        45.9         7.4      6.9        86.7      
+
+[7 rows x 30 columns]
+>>> pd.concat([d[list(d.columns)[1:]] for d in dfs[1:]], axis=1).T
+          0     1     2     3     4     5     6
+Kaldi  64.2  69.9  44.0  65.8  47.6   NaN   NaN
+wa...  36.3  31.0  27.4  28.1  23.3   NaN   NaN
+Wh...  19.9  16.6  13.9   9.7   8.9   NaN   NaN
+Kaldi  63.4  70.0  45.8  69.1  47.5   NaN   NaN
+wa...  34.5  30.9  28.7  35.3  23.5   NaN   NaN
+Wh...  26.5  20.8  16.1  11.2  11.2   NaN   NaN
+Kaldi  68.1  87.9  81.4  66.8  42.1   NaN   NaN
+wa...  57.1  49.4  64.8  28.2  22.8   NaN   NaN
+Wh...  51.3  46.8  63.7   9.8   9.8   NaN   NaN
+Kaldi  62.4  73.9  64.3  70.1  42.1   NaN   NaN
+wa...  56.8  43.9  46.2  35.7  23.2   NaN   NaN
+Wh...  60.7  54.3  43.4  11.2  12.4   NaN   NaN
+Kaldi  65.9  78.1  54.3  68.8  35.4   NaN   NaN
+wa...  33.3  40.9  38.7  26.4  17.2   NaN   NaN
+Wh...   5.7  20.1  18.6   8.9   5.2   NaN   NaN
+Kaldi  63.8  74.4  55.8  72.1  35.6   NaN   NaN
+wa...  33.3  38.2  40.6  34.0  17.2   NaN   NaN
+Wh...  14.6  29.6  20.8  10.6   8.6   NaN   NaN
+wa...  T...  1...  1...  1...  2...  1...  2...
+Un...  G...   8.8   9.8  10.6  10.9  10.7  10.1
+Un...  G...  29.2  48.1  43.0  92.6  50.4  52.7
+Wh...  T...   7.2   7.0   6.2   5.7   6.5   5.8
+Un...  G...   6.5   6.5   6.5   6.5   6.5   6.5
+Un...  G...  67.0  82.4  87.4  91.3  87.8  83.2
+wa...  T...  1...  2...  2...  3...  2...  3...
+Un...  G...  19.4  20.4  20.6  23.4  20.5  20.9
+Un...  G...  24.1  34.8  26.4  92.4  51.8  45.9
+Wh...  T...   9.1   8.3   7.9   7.2   8.2   7.4
+Un...  G...   6.9   6.9   6.9   6.9   6.9   6.9
+Un...  G...  78.6  85.3  88.0  91.1  90.6  86.7
+>>> pd.options.display.max_colwidth = 10
+>>> pd.concat([d[list(d.columns)[1:]] for d in dfs[1:]], axis=1).T
+                    0      1      2      3      4      5      6
+Kaldi            64.2   69.9   44.0   65.8   47.6    NaN    NaN
+wav2vec...       36.3   31.0   27.4   28.1   23.3    NaN    NaN
+Whisper          19.9   16.6   13.9    9.7    8.9    NaN    NaN
+Kaldi            63.4   70.0   45.8   69.1   47.5    NaN    NaN
+wav2vec...       34.5   30.9   28.7   35.3   23.5    NaN    NaN
+Whisper          26.5   20.8   16.1   11.2   11.2    NaN    NaN
+Kaldi            68.1   87.9   81.4   66.8   42.1    NaN    NaN
+wav2vec...       57.1   49.4   64.8   28.2   22.8    NaN    NaN
+Whisper          51.3   46.8   63.7    9.8    9.8    NaN    NaN
+Kaldi            62.4   73.9   64.3   70.1   42.1    NaN    NaN
+wav2vec...       56.8   43.9   46.2   35.7   23.2    NaN    NaN
+Whisper          60.7   54.3   43.4   11.2   12.4    NaN    NaN
+Kaldi            65.9   78.1   54.3   68.8   35.4    NaN    NaN
+wav2vec...       33.3   40.9   38.7   26.4   17.2    NaN    NaN
+Whisper           5.7   20.1   18.6    8.9    5.2    NaN    NaN
+Kaldi            63.8   74.4   55.8   72.1   35.6    NaN    NaN
+wav2vec...       33.3   38.2   40.6   34.0   17.2    NaN    NaN
+Whisper          14.6   29.6   20.8   10.6    8.6    NaN    NaN
+wav2vec...  Throug...  108.2  174.8  193.5  238.3  183.5  222.0
+Unnamed: 2  GPU Me...    8.8    9.8   10.6   10.9   10.7   10.1
+Unnamed: 3  GPU Ut...   29.2   48.1   43.0   92.6   50.4   52.7
+Whisper     Throug...    7.2    7.0    6.2    5.7    6.5    5.8
+Unnamed: 5  GPU Me...    6.5    6.5    6.5    6.5    6.5    6.5
+Unnamed: 6  GPU Ut...   67.0   82.4   87.4   91.3   87.8   83.2
+wav2vec...  Throug...  126.2  224.2  278.6  357.6  220.4  320.6
+Unnamed: 2  GPU Me...   19.4   20.4   20.6   23.4   20.5   20.9
+Unnamed: 3  GPU Ut...   24.1   34.8   26.4   92.4   51.8   45.9
+Whisper     Throug...    9.1    8.3    7.9    7.2    8.2    7.4
+Unnamed: 5  GPU Me...    6.9    6.9    6.9    6.9    6.9    6.9
+Unnamed: 6  GPU Ut...   78.6   85.3   88.0   91.1   90.6   86.7
+>>> pd.concat([d[list(d.columns)[1:]] for d in dfs[1:-3]], axis=1).T
+               0     1     2     3     4
+Kaldi       64.2  69.9  44.0  65.8  47.6
+wav2vec...  36.3  31.0  27.4  28.1  23.3
+Whisper     19.9  16.6  13.9   9.7   8.9
+Kaldi       63.4  70.0  45.8  69.1  47.5
+wav2vec...  34.5  30.9  28.7  35.3  23.5
+Whisper     26.5  20.8  16.1  11.2  11.2
+Kaldi       68.1  87.9  81.4  66.8  42.1
+wav2vec...  57.1  49.4  64.8  28.2  22.8
+Whisper     51.3  46.8  63.7   9.8   9.8
+Kaldi       62.4  73.9  64.3  70.1  42.1
+wav2vec...  56.8  43.9  46.2  35.7  23.2
+Whisper     60.7  54.3  43.4  11.2  12.4
+Kaldi       65.9  78.1  54.3  68.8  35.4
+wav2vec...  33.3  40.9  38.7  26.4  17.2
+Whisper      5.7  20.1  18.6   8.9   5.2
+>>> df2 = pd.concat([d[list(d.columns)[1:]] for d in dfs[1:-3]], axis=1)
+>>> df2.index = df.index
+>>> df2
+            Kaldi  wav2vec 2.0  Whisper  Kaldi  wav2vec 2.0  Whisper  Kaldi  ...  Whisper  Kaldi  wav2vec 2.0  Whisper  Kaldi  wav2vec 2.0  Whisper
+Domain                                                                       ...                                                                   
+Convers...   64.2       36.3       19.9   63.4       34.5       26.5   68.1  ...     51.3   62.4       56.8       60.7   65.9       33.3        5.7
+Phonecalls   69.9       31.0       16.6   70.0       30.9       20.8   87.9  ...     46.8   73.9       43.9       54.3   78.1       40.9       20.1
+Meetings     44.0       27.4       13.9   45.8       28.7       16.1   81.4  ...     63.7   64.3       46.2       43.4   54.3       38.7       18.6
+Videos       65.8       28.1        9.7   69.1       35.3       11.2   66.8  ...      9.8   70.1       35.7       11.2   68.8       26.4        8.9
+Earning...   47.6       23.3        8.9   47.5       23.5       11.2   42.1  ...      9.8   42.1       23.2       12.4   35.4       17.2        5.2
+
+[5 rows x 15 columns]
+>>> df2.T
+Domain      Conversational AI  Phonecalls  Meetings  Videos  Earnings Calls
+Kaldi            64.2               69.9       44.0    65.8       47.6     
+wav2vec...       36.3               31.0       27.4    28.1       23.3     
+Whisper          19.9               16.6       13.9     9.7        8.9     
+Kaldi            63.4               70.0       45.8    69.1       47.5     
+wav2vec...       34.5               30.9       28.7    35.3       23.5     
+Whisper          26.5               20.8       16.1    11.2       11.2     
+Kaldi            68.1               87.9       81.4    66.8       42.1     
+wav2vec...       57.1               49.4       64.8    28.2       22.8     
+Whisper          51.3               46.8       63.7     9.8        9.8     
+Kaldi            62.4               73.9       64.3    70.1       42.1     
+wav2vec...       56.8               43.9       46.2    35.7       23.2     
+Whisper          60.7               54.3       43.4    11.2       12.4     
+Kaldi            65.9               78.1       54.3    68.8       35.4     
+wav2vec...       33.3               40.9       38.7    26.4       17.2     
+Whisper           5.7               20.1       18.6     8.9        5.2     
+>>> df2.index = 'Converstion Phone Meeting Video Finance'.split()
+>>> df2
+            Kaldi  wav2vec 2.0  Whisper  Kaldi  wav2vec 2.0  Whisper  Kaldi  ...  Whisper  Kaldi  wav2vec 2.0  Whisper  Kaldi  wav2vec 2.0  Whisper
+Convers...   64.2       36.3       19.9   63.4       34.5       26.5   68.1  ...     51.3   62.4       56.8       60.7   65.9       33.3        5.7
+Phone        69.9       31.0       16.6   70.0       30.9       20.8   87.9  ...     46.8   73.9       43.9       54.3   78.1       40.9       20.1
+Meeting      44.0       27.4       13.9   45.8       28.7       16.1   81.4  ...     63.7   64.3       46.2       43.4   54.3       38.7       18.6
+Video        65.8       28.1        9.7   69.1       35.3       11.2   66.8  ...      9.8   70.1       35.7       11.2   68.8       26.4        8.9
+Finance      47.6       23.3        8.9   47.5       23.5       11.2   42.1  ...      9.8   42.1       23.2       12.4   35.4       17.2        5.2
+
+[5 rows x 15 columns]
+>>> df2.T
+            Converstion  Phone  Meeting  Video  Finance
+Kaldi            64.2     69.9     44.0   65.8     47.6
+wav2vec...       36.3     31.0     27.4   28.1     23.3
+Whisper          19.9     16.6     13.9    9.7      8.9
+Kaldi            63.4     70.0     45.8   69.1     47.5
+wav2vec...       34.5     30.9     28.7   35.3     23.5
+Whisper          26.5     20.8     16.1   11.2     11.2
+Kaldi            68.1     87.9     81.4   66.8     42.1
+wav2vec...       57.1     49.4     64.8   28.2     22.8
+Whisper          51.3     46.8     63.7    9.8      9.8
+Kaldi            62.4     73.9     64.3   70.1     42.1
+wav2vec...       56.8     43.9     46.2   35.7     23.2
+Whisper          60.7     54.3     43.4   11.2     12.4
+Kaldi            65.9     78.1     54.3   68.8     35.4
+wav2vec...       33.3     40.9     38.7   26.4     17.2
+Whisper           5.7     20.1     18.6    8.9      5.2
+>>> df.index = 'Converstion Phone Meeting Video Finance'.split()
+>>> pd.concat([df, df2], axis=1)
+           Description  Avg File Duration [min]  1_Kaldi  1_wav2vec 2.0  1_Whisper  ...  wav2vec 2.0  Whisper  Kaldi  wav2vec 2.0  Whisper
+Convers...  Sponta...        0.65                   64.2       36.3           19.9  ...       56.8       60.7   65.9       33.3        5.7
+Phone       Sponta...        2.20                    NaN        NaN            NaN  ...       43.9       54.3   78.1       40.9       20.1
+Meeting     Sponta...       36.10                    NaN        NaN            NaN  ...       46.2       43.4   54.3       38.7       18.6
+Video       Videos...        2.90                    NaN        NaN            NaN  ...       35.7       11.2   68.8       26.4        8.9
+Finance     Public...       39.50                    NaN        NaN            NaN  ...       23.2       12.4   35.4       17.2        5.2
+
+[5 rows x 35 columns]
+>>> df
+           Description  Avg File Duration [min]  1_Kaldi  1_wav2vec 2.0  1_Whisper  ...  5_wav2vec 2.0  5_Whisper  6_Kaldi  6_wav2vec 2.0  6_Whisper
+Convers...  Sponta...        0.65                   64.2       36.3           19.9  ...       33.3            5.7     63.8       33.3           14.6
+Phone       Sponta...        2.20                    NaN        NaN            NaN  ...        NaN            NaN      NaN        NaN            NaN
+Meeting     Sponta...       36.10                    NaN        NaN            NaN  ...        NaN            NaN      NaN        NaN            NaN
+Video       Videos...        2.90                    NaN        NaN            NaN  ...        NaN            NaN      NaN        NaN            NaN
+Finance     Public...       39.50                    NaN        NaN            NaN  ...        NaN            NaN      NaN        NaN            NaN
+
+[5 rows x 20 columns]
+>>> dfs[0]
+      Domain Description  Avg File Duration [min]
+0  Conver...  Sponta...        0.65              
+1  Phonec...  Sponta...        2.20              
+2   Meetings  Sponta...       36.10              
+3     Videos  Videos...        2.90              
+4  Earnin...  Public...       39.50              
+>>> df0 = dfs[0]
+>>> df0.index = 'Converstion Phone Meeting Video Finance'.split()
+>>> df0
+               Domain Description  Avg File Duration [min]
+Convers...  Conver...  Sponta...        0.65              
+Phone       Phonec...  Sponta...        2.20              
+Meeting      Meetings  Sponta...       36.10              
+Video          Videos  Videos...        2.90              
+Finance     Earnin...  Public...       39.50              
+>>> df0.drop('Domain')
+>>> df0.drop('Domain', axis=1)
+           Description  Avg File Duration [min]
+Convers...  Sponta...        0.65              
+Phone       Sponta...        2.20              
+Meeting     Sponta...       36.10              
+Video       Videos...        2.90              
+Finance     Public...       39.50              
+>>> df0 = df0.drop('Domain', axis=1)
+>>> df0
+           Description  Avg File Duration [min]
+Convers...  Sponta...        0.65              
+Phone       Sponta...        2.20              
+Meeting     Sponta...       36.10              
+Video       Videos...        2.90              
+Finance     Public...       39.50              
+>>> df2['Description'] = df0[df0.columns[0]]
+>>> df2
+            Kaldi  wav2vec 2.0  Whisper  Kaldi  wav2vec 2.0  Whisper  Kaldi  ...  Kaldi  wav2vec 2.0  Whisper  Kaldi  wav2vec 2.0  Whisper  Description
+Convers...   64.2       36.3       19.9   63.4       34.5       26.5   68.1  ...   62.4       56.8       60.7   65.9       33.3        5.7  Sponta...  
+Phone        69.9       31.0       16.6   70.0       30.9       20.8   87.9  ...   73.9       43.9       54.3   78.1       40.9       20.1  Sponta...  
+Meeting      44.0       27.4       13.9   45.8       28.7       16.1   81.4  ...   64.3       46.2       43.4   54.3       38.7       18.6  Sponta...  
+Video        65.8       28.1        9.7   69.1       35.3       11.2   66.8  ...   70.1       35.7       11.2   68.8       26.4        8.9  Videos...  
+Finance      47.6       23.3        8.9   47.5       23.5       11.2   42.1  ...   42.1       23.2       12.4   35.4       17.2        5.2  Public...  
+
+[5 rows x 16 columns]
+>>> df2.T
+           Converstion      Phone    Meeting      Video    Finance
+Kaldi            64.2        69.9       44.0       65.8       47.6
+wav2vec...       36.3        31.0       27.4       28.1       23.3
+Whisper          19.9        16.6       13.9        9.7        8.9
+Kaldi            63.4        70.0       45.8       69.1       47.5
+wav2vec...       34.5        30.9       28.7       35.3       23.5
+Whisper          26.5        20.8       16.1       11.2       11.2
+Kaldi            68.1        87.9       81.4       66.8       42.1
+wav2vec...       57.1        49.4       64.8       28.2       22.8
+Whisper          51.3        46.8       63.7        9.8        9.8
+Kaldi            62.4        73.9       64.3       70.1       42.1
+wav2vec...       56.8        43.9       46.2       35.7       23.2
+Whisper          60.7        54.3       43.4       11.2       12.4
+Kaldi            65.9        78.1       54.3       68.8       35.4
+wav2vec...       33.3        40.9       38.7       26.4       17.2
+Whisper           5.7        20.1       18.6        8.9        5.2
+Descrip...  Sponta...   Sponta...  Sponta...  Videos...  Public...
+>>> df2.index = 'AI Phone Meeting Video Finance'.split()
+>>> df2.T
+                   AI      Phone    Meeting      Video    Finance
+Kaldi            64.2       69.9       44.0       65.8       47.6
+wav2vec...       36.3       31.0       27.4       28.1       23.3
+Whisper          19.9       16.6       13.9        9.7        8.9
+Kaldi            63.4       70.0       45.8       69.1       47.5
+wav2vec...       34.5       30.9       28.7       35.3       23.5
+Whisper          26.5       20.8       16.1       11.2       11.2
+Kaldi            68.1       87.9       81.4       66.8       42.1
+wav2vec...       57.1       49.4       64.8       28.2       22.8
+Whisper          51.3       46.8       63.7        9.8        9.8
+Kaldi            62.4       73.9       64.3       70.1       42.1
+wav2vec...       56.8       43.9       46.2       35.7       23.2
+Whisper          60.7       54.3       43.4       11.2       12.4
+Kaldi            65.9       78.1       54.3       68.8       35.4
+wav2vec...       33.3       40.9       38.7       26.4       17.2
+Whisper           5.7       20.1       18.6        8.9        5.2
+Descrip...  Sponta...  Sponta...  Sponta...  Videos...  Public...
+>>> ls -hal
+>>> hist -o -p -f ~/code/tangibleai/community/nlpia2/src/nlpia2/ch12/ch12_foss_stt_compare.hist.ipy
+>>> hist -f ~/code/tangibleai/community/nlpia2/src/nlpia2/ch12/ch12_foss_stt_compare.hist.py
+>>> dfs[4]
+     Dataset  Kaldi  wav2vec 2.0  Whisper
+0  Conver...   62.4       56.8       60.7
+1  Phone ...   73.9       43.9       54.3
+2    Meeting   64.3       46.2       43.4
+3  Earnin...   70.1       35.7       11.2
+4      Video   42.1       23.2       12.4
+>>> dfs[5]
+     Dataset  Kaldi  wav2vec 2.0  Whisper
+0  Conver...   65.9       33.3        5.7
+1  Phone ...   78.1       40.9       20.1
+2    Meeting   54.3       38.7       18.6
+3  Earnin...   68.8       26.4        8.9
+4      Video   35.4       17.2        5.2
+>>> dfs[6]
+     Dataset  Kaldi  wav2vec 2.0  Whisper
+0  Conver...   63.8       33.3       14.6
+1  Phone ...   74.4       38.2       29.6
+2    Meeting   55.8       40.6       20.8
+3  Earnin...   72.1       34.0       10.6
+4      Video   35.6       17.2        8.6
+>>> dfs[7]
+  Unnamed: 0 wav2vec 2.0 Unnamed: 2 Unnamed: 3    Whisper Unnamed: 5 Unnamed: 6
+0        NaN  Throug...   GPU Me...  GPU Ut...  Throug...  GPU Me...  GPU Ut...
+1  Conver...      108.2         8.8       29.2        7.2        6.5       67.0
+2  Phone ...      174.8         9.8       48.1        7.0        6.5       82.4
+3    Meeting      193.5        10.6       43.0        6.2        6.5       87.4
+4  Earnin...      238.3        10.9       92.6        5.7        6.5       91.3
+5      Video      183.5        10.7       50.4        6.5        6.5       87.8
+6    Overall      222.0        10.1       52.7        5.8        6.5       83.2
+>>> dfs[5]
+     Dataset  Kaldi  wav2vec 2.0  Whisper
+0  Conver...   65.9       33.3        5.7
+1  Phone ...   78.1       40.9       20.1
+2    Meeting   54.3       38.7       18.6
+3  Earnin...   68.8       26.4        8.9
+4      Video   35.4       17.2        5.2
+>>> [d['Whisper'].iloc[0] for d in dfs]
+>>> [d['Whisper'].iloc[0] for d in dfs if 'Whisper' in d.columns]
+[19.9, 26.5, 51.3, 60.7, 5.7, 14.6, 'Throughput', 'Throughput']
+>>> dfs[5] = dfs[5].set_index('Dataset')
+>>> df_ = dfs[5]
+>>> df_
+            Kaldi  wav2vec 2.0  Whisper
+Dataset                                
+Convers...   65.9       33.3        5.7
+Phone call   78.1       40.9       20.1
+Meeting      54.3       38.7       18.6
+Earning...   68.8       26.4        8.9
+Video        35.4       17.2        5.2
+>>> df_.to_markdown()
+'| Dataset           |   Kaldi |   wav2vec 2.0 |   Whisper |\n|:------------------|--------:|--------------:|----------:|\n| Conversational AI |    65.9 |          33.3 |       5.7 |\n| Phone call        |    78.1 |          40.9 |      20.1 |\n| Meeting           |    54.3 |          38.7 |      18.6 |\n| Earnings Call     |    68.8 |          26.4 |       8.9 |\n| Video             |    35.4 |          17.2 |       5.2 |'
+>>> df_.to_markdown?
+>>> with open('~/code/tangibleai/community/nlpia2/src/nlpia2/ch12/ch12_foss_stt_compare_table5.md') as fout:
+...     fout.write(df_.to_markdown())
+...
+>>> with open('/home/hobs/code/tangibleai/community/nlpia2/src/nlpia2/ch12/ch12_foss_stt_compare_table5.md') as fout:
+...     fout.write(df_.to_markdown())
+...
+>>> with open('/home/hobs/code/tangibleai/community/nlpia2/src/nlpia2/ch12/ch12_foss_stt_compare_table5.md', 'r+') as fout:
+...     fout.write(df_.to_markdown())
+...
+>>> with open('/home/hobs/code/tangibleai/community/nlpia2/src/nlpia2/ch12/ch12_foss_stt_compare_table5.md', 'w+') as fout:
+...     fout.write(df_.to_markdown())
+...
+>>> more /home/hobs/code/tangibleai/community/nlpia2/src/nlpia2/ch12/ch12_foss_stt_compare_table5.md
+>>> df_.index = 'AI Phone Meeting Video Finance'.split()
+>>> print(df_.to_markdown())
+>>> df_.index.name='Domain'
+>>> print(df_.to_markdown())
+>>> print(df_.round(0).to_markdown())
+>>> print(df_.T.round(0).to_markdown())
+>>> df_['Ave'] = df_.mean(axis=1)
+>>> df_
+         Kaldi  wav2vec 2.0  Whisper        Ave
+Domain                                         
+AI        65.9       33.3        5.7  34.966667
+Phone     78.1       40.9       20.1  46.366667
+Meeting   54.3       38.7       18.6  37.200000
+Video     68.8       26.4        8.9  34.700000
+Finance   35.4       17.2        5.2  19.266667
+>>> df_['Ave']
+Domain
+AI         34.966667
+Phone      46.366667
+Meeting    37.200000
+Video      34.700000
+Finance    19.266667
+Name: Ave, dtype: float64
+>>> df_.drop('Ave')
+>>> df_ = df_.drop('Ave', axis=1)
+>>> df_
+         Kaldi  wav2vec 2.0  Whisper
+Domain                              
+AI        65.9       33.3        5.7
+Phone     78.1       40.9       20.1
+Meeting   54.3       38.7       18.6
+Video     68.8       26.4        8.9
+Finance   35.4       17.2        5.2
+>>> df_['Mean'] = df_.T.mean()
+>>> df_
+         Kaldi  wav2vec 2.0  Whisper       Mean
+Domain                                         
+AI        65.9       33.3        5.7  34.966667
+Phone     78.1       40.9       20.1  46.366667
+Meeting   54.3       38.7       18.6  37.200000
+Video     68.8       26.4        8.9  34.700000
+Finance   35.4       17.2        5.2  19.266667
+>>> print(df_.T.round(0).to_markdown())
+>>> df_ = df_.drop('Mean', axis=1)
+>>> df = df_.T
+>>> df.mean(axis=1)
+Kaldi          60.5
+wav2vec 2.0    31.3
+Whisper        11.7
+dtype: float64
+>>> df['Mean'] = df.mean(axis=1)
+>>> df
+Domain        AI  Phone  Meeting  Video  Finance  Mean
+Kaldi       65.9   78.1     54.3   68.8     35.4  60.5
+wav2vec...  33.3   40.9     38.7   26.4     17.2  31.3
+Whisper      5.7   20.1     18.6    8.9      5.2  11.7
+>>> df.to_markdown()
+'|             |   AI |   Phone |   Meeting |   Video |   Finance |   Mean |\n|:------------|-----:|--------:|----------:|--------:|----------:|-------:|\n| Kaldi       | 65.9 |    78.1 |      54.3 |    68.8 |      35.4 |   60.5 |\n| wav2vec 2.0 | 33.3 |    40.9 |      38.7 |    26.4 |      17.2 |   31.3 |\n| Whisper     |  5.7 |    20.1 |      18.6 |     8.9 |       5.2 |   11.7 |'
+>>> print(df.to_markdown())
+>>> print(df.round().to_markdown())
+>>> df
+Domain        AI  Phone  Meeting  Video  Finance  Mean
+Kaldi       65.9   78.1     54.3   68.8     35.4  60.5
+wav2vec...  33.3   40.9     38.7   26.4     17.2  31.3
+Whisper      5.7   20.1     18.6    8.9      5.2  11.7
+>>> print(df.round().to_markdown())
+>>> df = df.round()
+>>> df.apply(lambda x: f'{x}%')
+Domain
+AI         Kaldi ...
+Phone      Kaldi ...
+Meeting    Kaldi ...
+Video      Kaldi ...
+Finance    Kaldi ...
+Mean       Kaldi ...
+dtype: object
+>>> df
+Domain        AI  Phone  Meeting  Video  Finance  Mean
+Kaldi       66.0   78.0     54.0   69.0     35.0  60.0
+wav2vec...  33.0   41.0     39.0   26.0     17.0  31.0
+Whisper      6.0   20.0     19.0    9.0      5.0  12.0
+>>> df[c] = df[c].apply(lambda x: f'{x}%')
+>>> for c in df.columns: df[c] = df[c].apply(lambda x: f'{x}%')
+>>> df
+Domain         AI  Phone Meeting  Video Finance   Mean
+Kaldi       66.0%  78.0%   54.0%  69.0%   35.0%  60.0%
+wav2vec...  33.0%  41.0%   39.0%  26.0%   17.0%  31.0%
+Whisper      6.0%  20.0%   19.0%   9.0%    5.0%  12.0%
+>>> for c in df.columns: df[c] = df[c].apply(lambda x: x[:-3]+'%')
+>>> df
+Domain       AI Phone Meeting Video Finance Mean
+Kaldi       66%   78%     54%   69%     35%  60%
+wav2vec...  33%   41%     39%   26%     17%  31%
+Whisper      6%   20%     19%    9%      5%  12%
+>>> print(df.to_markdown())
+>>> hist -f ~/code/tangibleai/community/nlpia2/src/nlpia2/ch12/ch12_foss_stt_compare.hist.py
+>>> hist -o -p -f ~/code/tangibleai/community/nlpia2/src/nlpia2/ch12/ch12_foss_stt_compare.hist.ipy

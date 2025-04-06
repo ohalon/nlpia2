@@ -1,0 +1,28 @@
+>>> import wikipedia
+>>> titles = wikipedia.search(
+...     'prosocial Artificial Intelligence', results=100)
+>>> titles += wikipedia.search(
+...     'positive sum game agent', results=100)
+>>> titles += wikipedia.search(
+...     'beneficial Artificial Intelligence', results=100)
+>>> pd.Series(titles)
+>>> from pathlib import Path
+>>> DATA_DIR = Path('~').expanduser().absolute() / 'nessvec-data'
+>>> DATA_DIR
+>>> import wikipedia
+>>> titles = wikipedia.search(
+...     'prosocial Artificial Intelligence', results=100)
+>>> titles += wikipedia.search(
+...     'positive sum game agent', results=100)
+>>> titles += wikipedia.search(
+...     'beneficial Artificial Intelligence', results=100)
+>>> pd.Series(titles)
+>>> from tqdm import tqdm
+>>> import time
+
+>>> filepath = DATA_DIR / 'wikipedia-prosocial-AI.txt'
+>>> with open(filepath, 'wt') as fout:
+...     for title in tqdm(titles):
+...         fout.write(f'\n\n# {title}\n')
+...         fout.write(wikipedia.page(title).content)
+...         time.sleep(.350)

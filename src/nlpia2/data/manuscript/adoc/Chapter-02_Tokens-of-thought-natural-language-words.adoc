@@ -1,0 +1,2910 @@
+= Natural Language Processing in Action, Second Edition
+:chapter: 2
+:part: 1
+:sectnumoffset: 1
+:sectnums:
+:imagesdir: .
+:xrefstyle: short
+:figure-caption: Figure {chapter}.
+:listing-caption: Listing {chapter}.
+:table-caption: Table {chapter}.
+:leveloffset: 1
+// :icons!:
+:stem: latexmath
+:toc:
+:source-highlighter: coderay
+:bibliography-database: dl4nlp.bib
+:bibliography-style: ieee
+:index::[]
+
+
+= Tokens of thought (natural language words)
+
+This chapter covers
+
+* Parsing your text into words and _n_-grams (tokens)
+* Tokenizing punctuation, emoticons, and even Chinese characters
+* Consolidating your vocabulary with stemming, lemmatization, and case folding
+* Building a structured numerical representation of natural language text
+* Scoring text for sentiment and prosocial intent
+* Using character frequency analysis to optimize your token vocabulary
+* Dealing with variable length sequences of words and tokens
+
+
+So you want to help save the world with the power of natural language processing (NLP)?
+First your NLP pipeline will need to compute something about text, and for that you'll need a way to represent text in a numerical data structure.
+The part of an NLP pipeline that breaks up your text to create this structured numerical data is called a _parser_.
+For many NLP applications, you only need to convert your text to a sequence of words, and that can be enough for searching and classifying text.
+
+You will now learn how to split a document, any string, into discrete tokens of meaning.
+You will be able to parse text documents as small as a single word and as large as an entire Encyclopedia.
+And they will all produce a consistent representation that you can use to compare them.
+For this chapter your tokens will be words, punctuation marks, and even pictograms such as Chinese characters, emojis and emoticons.
+
+Later in the book you will see that you can use these same techniques to find packets of meaning in any discrete sequence.
+For example, your tokens could be the ASCII characters represented by a sequence of bytes, perhaps with ASCII emoticons.
+Or they could be Unicode emojis, mathematical symbols, Egyption, hieroglyphics, pictographs from languages like Kanji  and Cantonese.
+You could even define the tokens for DNA and RNA sequences with letters for each of the five base nucleotides: adenine (A), guanine (G), cytosine \(C), thymine (T), and uracil (U).
+Natural language sequences of tokens are all around you ... and even inside you.
+
+Is there something you can do with tokens that doesn't require a lot of complicated deep learning?
+If you have a good tokenizer you can use it to identify statistics about the occurrence of tokens in a set of documents, such as your blog posts or a business website.
+Then you can build a search engine in pure Python with just a dictionary to represent to record links to the set of documents where those words occur.
+That Python dictionary that maps words to document links or pages is called a reverse index.
+It's just like the index at the back of this book.
+This is called _information retrieval_ -- a really powerful tool in your NLP toolbox.
+
+Statistics about tokens are often all you need for keyword detection, full-text search, and information retrieval.
+You can even build customer support chatbots using text search to find answers to customers' questions in your documentation or FAQ (frequently asked question) lists.
+A chatbot can't answer your questions until it knows where to look for the answer.
+Search is the foundation of many state of the art applications such as conversational AI and open domain question answering.
+A tokenizer forms the foundation for almost all NLP pipelines.
+
+=== Tokens of emotion
+
+Another practical use for your tokenizer is called _sentiment analysis_, or analysis of text to estimate emotion.
+You'll see an example of a sentiment analysis pipeline later in this chapter.
+For now you just need to know how to build a tokenizer.
+And your tokenizer will almost certainly need to handle the tokens of emotion called _emoticons_ and _emojis_.
+
+_Emoticons_ are a textual representations of a writer's mood or facial expression, such as the _smiley_ emoticon: `:-)`.
+They are kind-of like a modern hieroglyph or picture-word for computer users that only have access to an ASCII terminal for communication.
+_Emojis_ are the graphical representation of these characters.
+For example, the smilie emoji has a small yellow circle with two black dots for eyes and a U shaped curve for a mouth.
+The smiley emoji is a graphical representation of the `:-)` smiley emoticon.
+
+Both emojis and emoticons have evolved into their own language.
+There are hundreds of popular emojis.
+People have created emojis for everything from company logos to memes and innuendo.
+Noncommercial social media networks such Mastodon even allow you to create your own custom emojis.footnote:[Mastodon servers you can join (https://proai.org/mastoserv)] footnote:[Mastodon custom emoji documentation (https://docs.joinmastodon.org/methods/custom_emojis/)]
+
+.Emojis and Emoticons
+[NOTE]
+====
+_Emoticons_ were first typed into an ASCII text message in 1972 when Carnegie Mellon researchers mistakenly understood a text message about a mercury spill to be a joke.
+The professor, Dr. Scott E. Fahlman, suggested that `:-)` should be appended to messages that were jokes, and  `:-(` emoticons should be used for serious warning messages.
+Gosh, how far we've come.
+====
+
+The plural of "emoji" is either "emoji" (like "sushi") or "emojis" (like "Tsunamis"), however the the Atlantic and NY Times style editors prefer "emojis" to avoid ambiguity.
+Your NLP pipeline will learn what you mean no matter how you type it.
+
+image::../images/ch02/wikipedia-smiley-icon.png[alt="Smiley icon from wikipedia article en.wikipedia.org/wiki/Smiley",align="center",width=30%,link="../images/ch02/wikipedia-smiley-icon.svg"]
+
+== What is a token?
+
+A token can be almost any chunk of text that you want to treat as a packet of thought and emotion.
+So you need to break your text into chunks that capture individual thoughts.
+You may be thinking that _words_ are the obvious choice for tokens.
+So that's what you will start with here.
+You'll also learn how to include punctuation marks, emojis, numbers, and other word-like things in your vocabulary of words.
+Later you'll see that you can use these same techniques to find packets of meaning in any discrete sequence.
+And later you will learn some even more powerful ways to split discrete sequences into meaningful packets.
+Your tokenizers will be soon able to analyze and structure any text document or string, from a single word, to a sentence, to an entire book.
+
+Think about a collection of documents, called a _corpus_, that you want to process with NLP.
+Think about the _vocabulary_ that would be important to your NLP algorithm -- the set of tokens you will need to keep track of.
+For example your tokens could be the characters for ASCII emoticons, if this is what is important in your NLP pipeline for a particular corpus.
+Or your tokens could be Unicode emojis, mathematical symbols, hieroglyphics, even pictographs like Kanji and Cantonese characters.
+Your tokenizer and your NLP pipeline would even be useful for the nucleotide sequences of DNA and RNA where your tokens might be A, C, T, G, U, and so on.
+And neuroscientists sometimes create sequences of discrete symbols to represent neurons firing in your brain when you read text like this sentence.
+Natural language sequences of tokens are inside you, all around you, and flowing through you.
+Soon you'll be flowing streams of tokens through your machine learning NLP pipeline.
+
+Retrieving tokens from a document will require some string manipulation beyond just the `str.split()` method employed in chapter 1.
+You'll probably want to split contractions like "you'll" into the words that were combined to form them, perhaps "you" and "'ll", or perhaps "you" and "will."
+You'll want to separate punctuation from words, like quotes at the beginning and end of quoted statements or words, such as those in the previous sentence.
+And you need to treat some punctuation such as dashes ("-") as part of singly-hyphenated compound words such as "singly-hyphenated."
+
+Once you have identified the tokens in a document that you would like to include in your vocabulary, you will return to the regular expression toolbox to build a tokenizer.
+And you can use regular expressions combine different forms of a word into a single token in your vocabulary -- a process called _stemming_.
+Then you will assemble a vector representation of your documents called a _bag of words_.
+Finally, you will try to use this bag of words vector to see if it can help you improve upon the basic greeting recognizer at the end of chapter 1.
+
+=== Alternative tokens
+
+Words aren't the only packets of meaning we could use for our tokens.
+Think for a moment about what a word or token represents to you.
+Does it represent a single concept, or some blurry cloud of concepts?
+Could you always be sure to recognize where a word begins and ends?
+Are natural language words like programming language keywords that have precise spellings, definitions and grammatical rules for how to use them?
+Could you write software that reliably recognizes a word?
+
+Do you think of "ice cream" as one word or two?
+Or maybe even three?
+Aren't there at least two entries in your mental dictionary for "ice" and "cream" that are separate from your entry for the compound word "ice cream"?
+What about the contraction "don't"?
+Should that string of characters be split into one, or two, or even three packets of meaning?
+
+You might even want to divide words into even smaller meaningful parts.
+Word pieces such as the prefix "pre", the suffix "fix", or the interior syllable "la" all have meaning.
+You can use these word pieces to transfer what you learn about the meaning of one word to another similar word in your vocabulary.
+Your NLU pipeline can even use these pieces to understand new words.
+And your NLG pipeline can use the pieces to create new words that succinctly capture ideas or memes circulating in the collective consciousness.
+
+Your pipeline could break words into even smaller pieces.
+Letters, characters, or graphemes footnote:[(https://en.wikipedia.org/wiki/Grapheme)] carry sentiment and meaning too!footnote:[Suzi Park and Hyopil Shin _Grapheme-level Awareness in Word Embeddings for Morphologically Rich Languages_ (https://www.aclweb.org/anthology/L18-1471.pdf)]
+We haven't yet found the perfect encoding for packets of thought.
+And machines compute differently than brains.
+We explain language and concepts to each other in terms of words or terms.
+But machines can often see patterns in the use of characters that we miss.
+And for machines to be able to squeeze huge vocabularies into their limited RAM there are more efficient encodings for natural language.
+
+The optimal tokens for efficient computation are different from the packets of thought (words) that we humans use.
+Byte Pair Encoding (BPE), Word Piece Encoding, and Sentence Piece Encoding, each can help machines use natural language more efficiently.
+BPE finds the optimal groupings of characters (bytes) for your particular set of documents and strings.
+If you want an *explainable* encoding, use the word tokenizers of the previous sections.
+If you want more flexible and accurate predictions and generation of text, then BPE, WPE, or SPE may be better for your application.
+Like the bias variance trade-off, there's often a explainability/accuracy trade-off in NLP.
+
+What about invisible or implied words?
+Can you think of additional words that are implied by the single-word command "Don't!"?
+If you can force yourself to think like a machine and then switch back to thinking like a human, you might realize that there are three invisible words in that command.
+The single statement "Don't!" means "Don't you do that!" or "You, do not do that!"
+That's at least three hidden packets of meaning for a total of five tokens you'd like your machine to know about.
+
+But don't worry about invisible words for now.
+All you need for this chapter is a tokenizer that can recognize words that are spelled out.
+You will worry about implied words and connotation and even meaning itself in chapter 4 and beyond.footnote:[If you want to learn more about exactly what a "word" really is, check out the introduction to _The Morphology of Chinese_ by Jerome Packard where he discusses the concept of a "word" in detail. The concept of a "word" did not exist at all in the Chinese language until the 20th century when it was translated from English grammar into Chinese.]
+
+Your NLP pipeline can start with one of these five options as your tokens:
+
+1. **Bytes** - ASCII characters
+2. **Characters** - multi-byte Unicode characters
+3. **Subwords** (Word pieces) - syllables and common character clusters
+4. **Words** - dictionary words or their roots (stems, lemmas)
+5. **Sentence pieces** - short, common word and multi-word pieces
+
+As you work your way down this list your vocabulary size increases and your NLP pipeline will need more and more data to train.
+Character-based NLP pipelines are often used in translation problems or NLG tasks that need to generalize from a modest number of examples.
+The number of possible words that your pipeline can deal with is called its _vocabulary_.
+A character-based NLP pipeline typically needs fewer than 200 possible tokens to process many Latin-based languages.
+That small vocabulary ensures that byte- and character-based NLP pipelines can handle new unseen test examples without too many meaningless OOV (out of vocabulary) tokens.
+
+For word-based NLP pipelines your pipeline will need to start paying attention to how often tokens are used before deciding whether to "count it."
+You don't want you pipeline to do anything meaningful with junk words such `asdf` - the
+But even if you make sure your pipeline on pays attention to words that occur a lot, you could end up with a vocabulary that's as large as a typical dictionary - 20 to 50 thousand words.
+
+Subwords are the optimal token to use for most Deep Learning NLP pipelines.
+Subword (Word piece) tokenizers are built into many state of the art transformer pipelines.
+Words are the token of choice for any linguistics project or academic research where your results need to be interpretable and explainable.
+
+Sentence pieces take the subword algorithm to the extreme.
+The sentence piece tokenizer allows your algorithm to combine multiple word pieces together into a single token that can sometimes span multiple words.
+The only hard limit on sentence pieces is that they do not extend past the end of a sentence.
+This ensures that the meaning of a token is associated with only a single coherent thought and is useful on single sentences as well as longer documents.W
+
+==== _N_-grams
+
+No matter which kind of token you use for your pipeline, you will likely extract pairs, triplets, quadruplets, and even quintuplets of tokens.
+These are called _n_-grams_.footnote:[Pairs of adjacent words are called 2-grams or bigrams. Three words in sequency are called 3-grams or trigrams. Four words in a row are called 4-grams.  5-grams are probably the longest _n_-grams you'll find in an NLP pipeline. Google counts all the 1 to 5-grams in nearly all the books ever written (https://books.google.com/ngrams).]
+Using _n_-grams enables your machine to know about the token "ice cream" as well as the individual tokens "ice" and "cream" that make it up.
+Another 2-gram that you'd like to keep together is "Mr. Smith".
+Your tokens and your vector representation of a document will likely want to have a place for "Mr. Smith" along with "Mr." and "Smith."
+
+You will start with a short list of keywords as your vocabulary.
+This helps to keep your data structures small and understandable and can make it easier to explain your results.
+Explainable models create insights that you can use to help your stakeholders, hopefully the users themselves (rather than investors), accomplish their goals.
+
+For now, you can just keep track of all the short _n_-grams of words in your vocabulary.
+But in chapter 3, you will learn how to estimate the importance of words based on their document frequency, or how often they occur.
+That way you can filter out pairs and triplets of words that rarely occur together.
+You will find that the approaches we show are not perfect.
+Feature extraction can rarely retain all the information content of the input data in any machine learning pipeline.
+That is part of the art of NLP, learning when your tokenizer needs to be adjusted to extract more or different information from your text for your particular applications.
+
+In natural language processing, composing a numerical vector from text is a particularly "lossy" feature extraction process.
+Nonetheless the bag-of-words (BOW) vectors retain enough of the information content of the text to produce useful and interesting machine learning models.
+The techniques for sentiment analyzers at the end of this chapter are the exact same techniques Google used to save email technology from a flood of spam that almost made it useless.
+
+== Challenges (a preview of stemming)
+
+As an example of why feature extraction from text is hard, consider _stemming_ -- grouping the various inflections of a word into the same "bucket" or cluster.
+Very smart people spent their careers developing algorithms for grouping inflected forms of words together based only on their spelling.
+Imagine how difficult that is.
+Imagine trying to remove verb endings like "ing" from "ending" so you would have a stem called "end" to represent both words.
+And you would like to stem the word "running" to "run," so those two words are treated the same.
+And that is tricky because you have removed not only the "ing" but also the extra "n."
+But you want the word "sing" to stay whole.
+You would not want to remove the "ing" ending from "sing" or you would end up with a single-letter "s."
+
+Or imagine trying to discriminate between a pluralizing "s" at the end of a word like "words" and a normal "s" at the end of words like "bus" and "lens."
+Do isolated individual letters in a word or parts of a word provide any information at all about that word's meaning?
+Can the letters be misleading?
+Yes and yes.
+
+In this chapter we show you how to make your NLP pipeline a bit smarter by dealing with these word spelling challenges using conventional stemming approaches.
+Later, in chapter 5, we show you statistical clustering approaches that only require you to amass a collection of natural language text containing the words you are interested in.
+From that collection of text, the statistics of word usage will reveal "semantic stems" (actually, more useful clusters of words like lemmas or synonyms), without any hand-crafted regular expressions or stemming rules.
+
+=== Tokenization
+
+In NLP, _tokenization_ is a particular kind of document _segmentation_.
+Segmentation breaks up text into smaller chunks or segments.
+The segments of text have less information than the whole.
+Documents can be segmented into paragraphs, paragraphs into sentences, sentences into phrases, and phrases into tokens (usually words and punctuation).
+In this chapter, we focus on segmenting text into _tokens_ with a _tokenizer_.
+
+You may have heard of tokenizers before.
+If you took a computer science class you likely learned about how programming language compilers work.
+A tokenizer that is used to compile computer languages is called a _scanner_ or _lexer_.
+In some cases your computer language parser can work directly on the computer code and doesn't need a tokenizer at all.
+And for natural language processing, the only parser typically outputs a vector representation, //putting these sentances together might need some work// rather than  if the tokenizer functionality is not separated from the compiler, the parser is often called a scannerless _parser_.
+
+The set of valid tokens for a particular computer language is called the _vocabulary_ for that language, or more formally its _lexicon_.
+Linguistics and NLP researchers use the term "lexicon" to refer to a set of natural language tokens.
+The term "vocabulary" is the more natural way to refer to a set of natural language words or tokens.
+So that's what you will use here.
+
+The natural language equivalent of a computer language compiler is a natural language parser.
+A natural language tokenizer is called a _scanner_, or _lexer_, or _lexical analyzer_ in the computer language world.
+Modern computer language compilers combine the _lexer_ and _parser_ into a single lexer-parser algorithm.
+The vocabulary of a computer language is usually called a _lexicon_.
+And computer language compilers sometimes refer to tokens as _symbols_.
+
+Here are five important NLP terms.
+Along side them are some roughly equivalent terms used in computer science when talking about programming language compilers:
+
+* _tokenizer_ -- scanner, lexer, lexical analyzer
+* _vocabulary_ -- lexicon
+* _parser_ -- compiler
+* _token_, _term_, _word_, or _n-gram_ -- token or symbol
+* _statement_ -- statement or expression
+
+Tokenization is the first step in an NLP pipeline, so it can have a big impact on the rest of your pipeline.
+A tokenizer breaks unstructured data, natural language text, into chunks of information which can be counted as discrete elements.
+These counts of token occurrences in a document can be used directly as a vector representing that document.
+This immediately turns an unstructured string (text document) into a numerical data structure suitable for machine learning.
+These counts can be used directly by a computer to trigger useful actions and responses.
+Or they might also be used in a machine learning pipeline as features that trigger more complex decisions or behavior.
+The most common use for bag-of-words vectors created this way is for document retrieval, or search.
+
+== Your tokenizer toolbox
+
+So each application you encounter you will want to think about which kind of tokenizer is appropriate for your application.
+And once you decide which kinds of tokens you want to try, you'll need to configure a python package for accomplishing that goal.
+
+You can chose from several tokenizer implementations: footnote:[Lysandre explains the various tokenizer options in the Huggingface documentation (https://huggingface.co/transformers/tokenizer_summary.html)]
+
+. Python: `str.split`, `re.split`
+. NLTK: `PennTreebankTokenizer`, `TweetTokenizer`
+. spaCy: state of the art tokenization is its reason for being
+. Stanford CoreNLP: linguistically accurate, requires Java interpreter
+. Huggingface: `BertTokenizer`, a `WordPiece` tokenizer
+
+=== The simplest tokenizer
+
+The simplest way to tokenize a sentence is to use whitespace within a string as the "delimiter" of words. In Python, this can be accomplished with the standard library method `split`, which is available on all `str` object instances as well as on the `str` built-in class itself.
+
+Let's say your NLP pipeline needs to parse quotes from WikiQuote.org, and it's having trouble with one titled _The Book Thief_.footnote:[Markus Zusak, _The Book Thief_, p. 85 (https://en.wikiquote.org/wiki/The_Book_Thief)]
+
+
+[[book_thief_sentence_split_py]]
+.Example quote from _The Book Thief_ split into tokens
+[source,python]
+----
+>>> text = ("Trust me, though, the words were on their way, and when "
+...         "they arrived, Liesel would hold them in her hands like "
+...         "the clouds, and she would wring them out, like the rain.")
+>>> tokens = text.split()  # <1>
+>>> tokens[:8]
+['Trust', 'me,', 'though,', 'the', 'words', 'were', 'on', 'their']
+----
+<1> `str.split()` is your quick-and-dirty tokenizer.
+
+.Tokenized phrase
+image::../images/ch02/book-thief-split.png[alt="Trust|me,|though,|the|words|were|on|their",align="center",width=100%,link="../images/ch02/book-thief-split.png"]
+
+As you can see, this built-in Python method does an OK job of tokenizing this sentence.
+Its only "mistake" is to include commas within the tokens.
+This would prevent your keyword detector from detecting quite a few important tokens: `['me', 'though', 'way', 'arrived', 'clouds', 'out', "rain"]`.
+Those words "clouds" and "rain" are pretty important to the meaning of this text.
+So you'll need to do a bit better with your tokenizer to ensure you can catch all the important words and "hold" them like Liesel.
+
+=== Rule-based tokenization
+
+It turns out there is a simple fix to the challenge of splitting punctuation from words.
+You can use a regular expression tokenizer to create rules to deal with common punctuation patterns.
+Here's just one particular regular expression you could use to deal with punctuation "hanger-ons."
+And while we're at it, this regular expression will be smart about words that have internal punctuation, such as possessive words and contractions that contain apostrophes.
+
+You'll use a regular expression to tokenize some text from the book _Blindsight_ by Peter Watts.
+The text describes how the most _adequate_ humans tend to survive natural selection (and alien invasions).footnote:[Peter Watts, Blindsight, (https://rifters.com/real/Blindsight.htm)]
+The same goes for your tokenizer.
+You want to find an _adequate_ tokenizer that solves your problem, not the perfect tokenizer.
+You probably can't even guess what the _right_ or _fittest_ token is.
+You will need an accuracy number to evaluate your NLP pipeline with and that will tell you which tokenizer should survive your selection process.
+The example here should help you start to develop your intuition about applications for regular expression tokenizers.
+
+[source,python]
+----
+>>> import re
+>>> pattern = r'\w+(?:\'\w+)?|[^\w\s]'  # <1>
+>>> texts = [text]
+>>> texts.append("There's no such thing as survival of the fittest. "
+...              "Survival of the most adequate, maybe.")
+>>> tokens = list(re.findall(pattern, texts[-1]))
+>>> tokens[:8]
+["There's", 'no', 'such', 'thing', 'as', 'survival', 'of', 'the']
+>>> tokens[8:16]
+['fittest', '.', 'Survival', 'of', 'the', 'most', 'adequate', ',']
+>>> tokens[16:]
+['maybe', '.']
+----
+<1> The _look-ahead_ pattern `(?:\'\w+)?` detects whether or not the word contains a single apostrophe followed by 1 or more letters.footnote:[Thank you Wiktor Stribiżew (https://stackoverflow.com/a/43094210/623735).]
+
+Much better.
+Now the tokenizer separates punctuation from the end of a word, but doesn't break up words that contain internal punctuation such as the apostrophe within the token "There's."
+So all of these words were tokenized the way you wanted: "There's", "fittest", "maybe".
+And this regular expression tokenizer will work fine on contractions even if they have more than one letter after the apostrophe such as "can't", "she'll", "what've".
+It will work even typos such as 'can"t' and "she,ll", and "what`ve".
+But this liberal matching of internal punctuation probably isn't what you want if your text contains rare double contractions such as "couldn't've", "ya'll'll", and "y'ain't"
+
+[TIP]
+====
+Pro tip: You can accommodate double-contractions with the regular expression `r'\w+(?:\'\w+){0,2}|[^\w\s]'`
+====
+
+This is the main idea to keep in mind.
+No matter how carefully you craft your tokenizer, it will likely destroy some amount of information in your raw text.
+As you are cutting up text, you just want to make sure the information you leave on the cutting room floor isn't necessary for your pipeline to do a good job.
+Also, it helps to think about your downstream NLP algorithms.
+Later you may configure a case folding, stemming, lemmatizing, synonym substitution, or count vectorizing algorithm.
+When you do, you'll have to think about what your tokenizer is doing, so your whole pipeline works together to accomplish your desired output.
+
+
+////
+// too much regex detail?
+
+==== How regular expressions work
+
+Here is how the regular expression in listing <<listing_2_7>> works.
+
+The square brackets (`[` and `]`) are used to indicate a _character class_, a set of characters.
+The plus sign after the closing square bracket (`]`) means that a match must contain one or more of the characters inside the square brackets.
+The `\s` within the character class is a shortcut to a predefined character class that includes all whitespace characters like those created when you press the `[space]`, `[tab]`, and `[return]` keys.
+The character class `r'[\s]'` is equivalent to `r'[ \t\r\n\f]'`.
+The six whitespace characters are space (`' '`), tab (`'\t'`), return (`'\r'`), newline  (`'\n'`), and form-feed (`'\f'`).
+
+You did not use any character ranges here, but you may want to later.
+A character range is a special kind of character class indicated within square brackets and a hyphen like `r'[a-z]'` to match all lowercase letters.
+The character range `r'[0-9]'` matches any digit 0 through 9 and is equivalent to `r'[0123456789]'`).
+The regular expression `r'[\_a-zA-Z]'` would match any underscore character (`r'\_'`) or letter of the English alphabet (upper or lower case).
+
+The hyphen (`-`) right after the opening square bracket is a bit of quirk of regexes.
+You cannot put a hyphen just anywhere inside your square brackets because the regex parser may think you mean a character range like `r'[0-9]'`.
+So whenever you want to indicate an actual hyphen (dash) character in your character class, you need to make sure it is the first character after the open square bracket, or you need to escape it with a backslash (`\`).
+
+The `re.split` function goes through each character in the input string (the second argument, `sentence`) left to right looking for any matches based on the "program" or "pattern" in the regular expression (the first argument, `r'[-\s.,;!?]+'`).
+When it finds a match, it breaks the string right before that matched character and right after it, skipping over the matched character or characters.
+So the `re.split` line will work just like `str.split`, but it will work for any kind of character or multicharacter sequence that matches your regular expression.
+
+The parentheses (`(` and `)`) are used to group regular expressions just like they are used to group mathematical, Python, and most other programming language expressions.
+These parentheses force the regular expression to match the entire expression within the parentheses before moving on to try to match the characters that follow the parentheses.
+
+// TODO: TMI?
+////
+
+Take a look at the first few tokens in your lexographically sorted vocabulary for this short text:
+
+[source,python]
+----
+>>> import numpy as np
+>>> vocab = sorted(set(tokens))  # <1>
+>>> ' '.join(vocab[:12])  # <2>
+", . Survival There's adequate as fittest maybe most no of such"
+>>> num_tokens = len(tokens)
+>>> num_tokens
+18
+>>> vocab_size = len(vocab)
+>>> vocab_size
+15
+----
+<1> Coerce the `list` into a `set` so that your vocabulary contains only *unique* tokens (no duplicates)
+<2> Sort lexographically so punctuation comes before letters, and capitalized letters come before lowercase
+
+You can see how you may want to consider lowercasing all your tokens so that "Survival" is recognized as the same word as "survival".
+And you may want to have a synonym substitution algorithm to replace "There's" with "There is" for similar reasons.
+However, this would only work if your tokenizer kept contraction and possessive apostrophes attached to their parent token.
+
+[TIP]
+====
+Make sure you take a look at your vocabulary whenever it seems your pipeline isn't working well for a particular text.
+You may need to revise your tokenizer to make sure it can "see" all the tokens it needs to do well for your NLP task.
+====
+
+
+=== SpaCy
+
+Maybe you don't want your regular expression tokenizer to keep contractions together.
+Perhaps you'd like to recognize the word "isn't" as two separate words, "is" and "n't".
+That way you could consolidate the synonyms "n't" and "not" into a single token.
+This way your NLP pipeline would understand "the ice cream isn't bad" to mean the same thing as "the ice cream is not bad".
+For some applications, such as full-text search, intent recognition, and sentiment analysis, you want to be able to *uncontract* or expand contractions like this.
+By splitting contractions, you can use synonym substitution or contraction expansion to improve the recall of your search engine and the accuracy of your sentiment analysis.
+
+[IMPORTANT]
+====
+We'll discuss case folding, stemming, lemmatization, and synonym substitution later in this chapter.
+Be careful about using these techniques for applications such as authorship attribution, style transfer, or text fingerprinting.
+You want your authorship attribution or style-transfer pipeline to stay true to the author's writing style and the exact spelling of words that they use.
+====
+
+SpaCy integrates a tokenizer directly into its state-of-the-art NLU pipeline.
+In fact the name "spaCy" is based on the word "space", as in the separator used in Western languages to separate words.
+And spaCy adds a lot of additional _tags_ to tokens at the same time that it is applying rules to split tokens apart.
+So spaCy is often the first and last tokenizer you'll ever need to use.
+
+Let's see how spaCy handles our collection of deep thinker quotes:
+
+[source,python]
+----
+>>> import spacy  # <1>
+>>> spacy.cli.download('en_core_web_sm')  # <2>
+>>> nlp = spacy.load('en_core_web_sm')  # <3>
+>>> doc = nlp(texts[-1])
+>>> type(doc)
+spacy.tokens.doc.Doc
+
+>>> tokens = [tok.text for tok in doc]
+>>> tokens[:9]
+['There', "'s", 'no', 'such', 'thing', 'as', 'survival', 'of', 'the']
+
+>>> tokens[9:17]
+['fittest', '.', 'Survival', 'of', 'the', 'most', 'adequate', ',']
+----
+<1> If this is your first time to use spacy you should download the small language model with `spacy.cli.download('en_core_web_sm')`
+<2> To avoid unnecessarily re-downloading the language model use `from spacy_language_model import nlp`
+<3> `sm` stands for "small" (17 MB), `md` is medium (45 MB), `lg` is "large" (780 MB)
+
+That tokenization may be more useful to you if you're comparing your results to academic papers or colleagues at work.
+Spacy is doing a lot more under the hood.
+That small language model you downloaded is also identifying sentence breaks with some *sentence boundary detection* rules.
+A language model is a collection of regular expressions and finite state automata (rules).
+These rules are a lot like the grammar and spelling rules you learned in English class.
+They are used in the algorithms that tokenize and label your words with useful things like their part of speech and their position in a syntax tree of relationships between words.
+
+[source,python]
+----
+>>> from spacy import displacy
+>>> sentence = list(doc.sents)[0] # <1>
+>>> displacy.serve(sentence, style="dep")
+>>> !firefox 127.0.0.1:5000
+
+----
+<1> The first sentence begins with "There's no such thing..."
+
+If you browse to your `localhost` on port 5000 you should see a sentence diagram that may be even more correct than what you could produce in school:
+
+image::../images/ch02/there-such-thing.png[alt="NOUN Survival -> ADV maybe. ADJ adequate -> ADV most",align="center",width=100%,link="../images/ch02/there-such-thing.png"]
+
+////
+the image generated at localhost:5000 for me was a bit different--missing the middle line of words
+////
+
+You can see that spaCy does a lot more than simply separate text into tokens.
+It identifies sentence boundaries to automatically segment your text into sentences.
+And it tags tokens with various attributes like their part of speech (PoS) and even their role within the syntax of a sentence.
+You can see the lemmas displayed by `displacy`  beneath the literal text for each token.footnote:[nlpia2 source code for chapter 2 (https://proai.org/nlpia2-ch2) has additional spaCy and displacy options and examples.]
+Later in the chapter we'll explain how lemmatization and case folding and other vocabulary *compression* approaches can be helpful for some applications.
+
+So spaCy seems pretty great in terms of accuracy and some "batteries included" features, such as all those token tags for lemmas and dependencies.
+What about speed?
+
+=== Tokenizer race
+
+SpaCy can parse the AsciiDoc text for a chapter in this book in about 5 seconds.
+First download the AsciiDoc text file for this chapter:
+
+[source,python]
+----
+>>> import requests
+>>> text = requests.get('https://proai.org/nlpia2-ch2.adoc').text
+>>> f'{round(len(text) / 10_000)}0k'  # <1>
+'60k'
+----
+
+<1> I divided by 10,000 and rounded it, so that Doctests would continue to pass as I revise this text.
+
+There were about 160 thousand ASCII characters in this AsciiDoc file where I wrote this sentence that you are reading right now.
+What does that mean in terms of words-per-second, the standard benchmark for tokenizer speed?
+
+[source,python]
+----
+>>> import spacy
+>>> nlp = spacy.load('en_core_web_sm')
+>>> %timeit nlp(text)  # <1>
+4.67 s ± 45.3 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+>>> f'{round(len(text) / 10_000)}0k'
+'160k'
+>>> doc = nlp(text)
+>>> f'{round(len(list(doc)) / 10_000)}0k'
+'30k'
+>>> f'{round(len(doc) / 1_000 / 4.67)}kWPS'  # <2>
+'7kWPS'
+----
+////
+1.59 s ± 19.8 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+I got 826 ms ± 5.3 ms per loop (mean ± std. dev. of 7 runs, 1 loop each), is it ok if it is different?
+////
+<1> `%timeit` is a magic function within `jupyter notebook`, `jupyter console` or `ipython`
+<2> kWPS is for thousands of words (tokens) per second
+
+That's nearly 5 seconds for about 150,000 characters or 34,000 words of English and Python text or about 7000 words per second.
+
+That may seem fast enough for you on your personal projects.
+But on a medical records summarization project we needed to process thousands of large documents with a comparable amount of text as you find in this entire book.
+And the latency in our medical record summarization pipeline was a critical metric for the project.
+So this, full-featured spaCy pipeline would require at least 5 days to process 10,000 books such as NLPIA or typical medical records for 10,000 patients.
+
+If that's not fast enough for your application you can disable any of the tagging features of the spaCy pipeline that you do not need.
+
+[source,python]
+----
+>>> nlp.pipe_names  # <1>
+['tok2vec', 'tagger', 'parser', 'attribute_ruler', 'lemmatizer', 'ner']
+>>> nlp = spacy.load('en_core_web_sm', disable=nlp.pipe_names)
+>>> %timeit nlp(text)
+199 ms ± 6.63 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+----
+////
+82.6 ms ± 1e+03 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)
+48.3 ms ± 842 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)
+////
+<1> The `pipe_names` lists all the currently enabled elements of your spaCy `nlp` pipeline
+
+You can disable the pipeline elements you don't need to speed up the tokenizer:
+
+- `tok2vec`: word embeddings
+- `tagger`: part-of-speech (`.pos` and `.pos_`)
+- `parser`: syntax tree role
+- `attribute_ruler`: fine-grained POS and other tags
+- `lemmatizer`: lemma tagger
+- `ner`: named entity recognition tagger
+
+NLTK's `word_tokenize` method is often used as the pace setter in tokenizer benchmark speed comparisons:
+
+[source,python]
+----
+>>> import nltk
+>>> nltk.download('punkt')
+True
+>>> from nltk.tokenize import word_tokenize
+>>> %timeit word_tokenize(text)
+156 ms ± 1.01 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
+>>> tokens = word_tokenize(text)
+>>> f'{round(len(tokens) / 10_000)}0k'
+'10k'
+----
+////
+33.7 ms ± 269 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)
+'1Ok'
+20.5 ms ± 942 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+'10k'
+////
+Could it be that you found a winner for the tokenizer race?
+Not so fast.
+Your regular expression tokenizer has some pretty simple rules, so it should run pretty fast as well:
+
+[source,python]
+----
+>>> pattern = r'\w+(?:\'\w+)?|[^\w\s]'
+>>> tokens = re.findall(pattern, text)  # <1>
+>>> f'{round(len(tokens) / 10_000)}0k'
+'20k'
+>>> %timeit re.findall(pattern, text)
+8.77 ms ± 29.8 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+----
+////
+'20k'
+5.14 ms ± 43.7 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+'20k'
+2.98 ms ± 55.5 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+////
+<1> Try precompiling with `re.compile` to learn something about how smart the core Python developers are
+
+Now that's not surprising.
+Regular expressions can be compiled and run very efficiently within low level C routines in Python.
+
+[TIP]
+====
+Use a regular expression tokenizer when speed is more import than accuracy.
+If you do not need the additional linguistic tags that spaCy and other pipelines provide your tokenizer doesn't need to waste time trying to figure out those tags.footnote:[Andrew Long, "Benchmarking Python NLP Tokenizers" (https://towardsdatascience.com/benchmarking-python-nlp-tokenizers-3ac4735100c5)]
+And each time you use a regular expression in the `re` or `regex` packages, a compiled and optimized version of it is cached in RAM.
+So there's usually no need to _precompile_ (using `re.compile()`) your regexes.
+====
+
+== Wordpiece tokenizers
+
+It probably felt natural to think of words as indivisible atomic chunks of meaning and thought.
+However, you did find some words that didn't clearly split on spaces or punctuation.
+And many compound words or named entities that you'd like to keep together have spaces within them.
+So it can help to dig a little deeper and think about the statistics of what makes a word.
+Think about how we can build up words from neighboring characters instead of cleaving text at separators such as spaces and punctuation.
+
+=== Clumping characters into sentence pieces
+
+Instead of thinking about breaking strings up into tokens, your tokenizer can look for characters that are used a lot right next to each other, such as "i" before "e".
+You can pair up characters and sequences of characters that belong together.footnote:[In many applications the term "_n_-gram" refers to character _n_-grams rather than word n-grams. For example the leading relational database PostgreSQL has a Trigram index which tokenizes your text into character 3-grams not word 3-grams. In this book, we use "_n_-gram" to refer to sequences of word grams and "character _n_-grams" when talking about sequences of characters.]
+These clumps of characters can become your tokens.
+An NLP pipeline only pays attention to the statistics of tokens.
+And hopefully these statistics will line up with our expectations for what a word is.
+
+Many of these character sequences will be whole words, or even compound words, but many will be pieces of words.
+In fact, all _subword tokenizers_ maintain a token within the vocabulary for every individual character in your vocabulary.
+This means it never needs to use an OOV (Out-of-Vocabulary) token, as long as any new text doesn't contain any new characters it hasn't seen before.
+Subword tokenizers attempt to optimally clump characters together to create tokens.
+Using the statistics of character n-gram counts it's possible for these algorithms to identify wordpieces and even sentence pieces that make good tokens.
+
+It may seem odd to identify words by clumping characters.
+But to a machine, the only obvious, consistent division between elements of meaning in a text is the boundary between bytes or characters.
+And the frequency with which characters are used together can help the machine identify the meaning associated with subword tokens such as individual syllables or parts of compound words.
+
+In English, even individual letters have subtle emotion (sentiment) and meaning (semantics) associated with them.
+However, there are only 26 unique letters in the English language.
+That doesn't leave room for individual letters to _specialize_ on any one topic or emotion.
+Nonetheless savvy marketers know that some letters are cooler than others.
+Brands will try to portray themselves as technologically advanced by choosing names with exotic letters like "Q" and "X" or "Z".
+This also helps with SEO (Search Engine Optimization) because rarer letters are more easily found among the sea of possible company and product names.
+Your NLP pipeline will pick up all these hints of meaning, connotation, and intent.
+Your token counters will provide the machine with the statistics it needs to infer the meaning of clumps of letters that are used together often.
+
+The only disadvantage for subword tokenizers is the fact that they must pass through your corpus of text many times before converging on an optimal vocabulary and tokenizer.
+A subword tokenizer has to be trained or fit to your text just like a CountVectorizer.
+In fact you'll use a CountVectorizer in the next section to see how subword tokenizers work.
+
+There are two main approaches to subword tokenization: BPE (Byte-Pair Encoding) and Wordpiece tokenization.
+
+==== BPE
+
+In the previous edition of the book we insisted that words were the smallest unit of meaning in English that you need consider.
+With the rise of Transformers and other deep learning models that use BPE and similar techniques, we've changed our minds.footnote:[Hannes and Cole are probably screaming "We told you so!" as they read this.]
+Character-based subword tokenizers have proven to be more versatile and robust for most NLP problems.
+By building up a vocabulary from building blocks of Unicode multi-byte characters you can construct a vocabulary that can handle every possible natural language string you'll ever see, all with a vocabulary of as few as 50,000 tokens.
+
+You may think that Unicode characters are the smallest packet of meaning in natural language text.
+To a human, maybe, but to a machine, no way.
+Just as the BPE name suggests, characters don't have to be your fundamental atom of meaning for your _base vocabulary_.
+You can split characters into 8-bit bytes.
+GPT-2 uses a byte-level BPE tokenizer to naturally compose all the unicode characters you need from the bytes that make them up.
+Though some special rules are required to handle unicode punctuation within a byte-based vocabulary, no other adjustment to the character-based BPE algorithm is required.
+A byte-level BPE tokenizer allows you to represent all possible texts with a base (minimum) vocabulary size of 256 tokens.
+The GPT-2 model can achieve state-of-the-art performance with it's default BPE vocabulary of only 50,000 multibyte _merge tokens_ plus 256 individual byte tokens.
+
+You can think of the BPE (Byte Pair Encoding) tokenizer algorithm as a matchmaker in a social network of friends.
+BPE pairs up characters that appear next to each other a lot and appear to be "friends."
+It then creates a new token for these character combinations.
+BPE can then pair up the multi-character tokens whenever those token pairings are common in your text.
+And it keeps doing this until it has a many frequently used character sequences as you've allowed in your vocabulary size limit.
+
+
+BPE is transforming the way we think about natural language tokens.
+NLP engineers are finally letting the data do the talking.
+Statistical thinking is better than human intuition when building an NLP pipeline.
+A machine can see how _most_ people use language.
+You are only familiar with what _you_ mean when you use particular words or syllables.
+Transformers have now surpassed human readers and writers at some natural language understanding and generation tasks, including finding meaning in subword tokens.
+
+One complication you have not yet encountered is the dilemma of what to do when you encounter a new word.
+In the previous examples, we just keep adding new words to our vocabulary.
+But in the real world your pipeline will have been trained on an initial corpus of documents that may or may not represent all the kinds of tokens it will ever see.
+If your initial corpus is missing some of the words that you encounter later on, you will not have a slot in your vocabulary to put your counts of that new word.
+So when you train you initial pipeline, you will always reserve a slot (dimension) to hold the counts of your _out-of-vocabulary_ (OOV) tokens.
+So if your original set of documents did not contain the girl's name "Aphra", all counts of the name Aphra would be lumped into the OOV dimension as counts of Amandine and other rare words.
+
+To give Aphra equal representation in your vector space, you can use BPE.
+BPE breaks down rare words into smaller pieces to create a _periodic table_ of the elements for natural language in your corpus.
+So, because "aphr" is a common english prefix, your BPE tokenizer would probably give Aphra *two* slots for her counts in your vocabulary: one for "aphr" and one for "a".
+Actually, you might actually discover that the vobcabulary slots are for " aphr" and "a ", because BPE keeps track of spaces no differently than any other character in your alphabet.footnote:[Actually, the string representation of tokens used for BPE and Wordpiece tokenizer place marker characters at the beginning or end of the token string indicate the absence of a word boundary (typically a space or punctuation). So you may see the "aphr##" token in your BPE vocabulary for the prefix "aphr" in aphrodesiac (https://stackoverflow.com/a/55416944/623735)]
+
+BPE gives you multilingual flexibility to deal with Hebrew names like Aphra.
+And it give your pipeline robustness against common misspellings and typos, such as "aphradesiac."
+Every word, including minority 2-grams such as "African American", have representation in the voting system of BPE.footnote:[Discriminatory voting restriction laws have recently been passed in US: (https://proai.org/apnews-wisconsin-restricts-blacks)]
+Gone are the days of using the kluge of OOV (Out-of-Vocabulary) tokens to handle the rare quirks of human communication.
+Because of this, state of the art deep learning NLP pipelines such as transformers all use word piece tokenization similar to BPE.footnote:[See chapter 12 for information about another similar tokenizer -- sentence piece tokenizer]
+
+BPE preserves some of the meaning of new words by using character tokens and word-piece tokens to spell out any unknown words or parts of words.
+For example, if "syzygy" is not in our vocabulary, we could represent it as the six tokens "s", "y", "z", "y", "g", and "y".
+Perhaps "smartz" could be represented as the two tokens "smart" and "z".
+
+That sounds smart.
+Let's see how it works on our text corpus:
+
+[source,python]
+----
+>>> import pandas as pd
+>>> from sklearn.feature_extraction.text import CountVectorizer
+>>> vectorizer = CountVectorizer(ngram_range=(1, 2), analyzer='char')
+>>> vectorizer.fit(texts)
+CountVectorizer(analyzer='char', ngram_range=(1, 2))
+----
+
+You've created a `CountVectorizer` class that will tokenize the text into characters instead of words.
+And it will count token pairs (character 2-grams) in addition to single character tokens. 
+These are the byte pairs in BPE encoding.
+Now you can examine your vocabulary to see what they look like.
+
+[source,python]
+----
+>>> bpevocab_list = [
+...    sorted((i, s) for s, i in vectorizer.vocabulary_.items())]
+>>> bpevocab_dict = dict(bpevocab_list[0])
+>>> list(bpevocab_dict.values())[:7]
+['  ', ' a', ' c', ' f', ' h', ' i', ' l']
+----
+
+We configured the `CountVectorizer` to split the text into all the possible character 1-grams and 2-grams found in the texts.
+And `CountVectorizer` organizes the vocabulary in lexical order, so n-grams that start with a space character (`' '`) come first.
+Once the vectorizer knows what tokens it needs to be able to count, it can transform text strings into vectors, with one dimension for every token in your character n-gram vocabulary.
+
+[source,python]
+----
+>>> vectors = vectorizer.transform(texts)
+>>> df = pd.DataFrame(
+...     vectors.todense(), 
+...     columns=vectorizer.vocabulary_)
+>>> df.index = [t[:8] + '...' for t in texts]
+>>> df = df.T
+>>> df['total'] = df.T.sum()
+>>> df
+    Trust me...  There's ...  total
+ t           31      14          45
+ r            3       2           5
+ u            1       0           1
+ s            0       1           1
+              3       0           3
+..           ...     ...        ...
+at            1       0           1
+ma            2       1           3
+yb            1       0           1
+be            1       0           1
+e.            0       1           1
+<BLANKLINE>
+[148 rows x 3 columns]
+----
+
+The DataFrame contains a column for each sentence and a row for each character 2-gram.
+Check out the top four rows where the byte pair (character 2-gram) of " a" is seen to occur five times in these two sentences.
+So even spaces count as "characters" when you're building a BPE tokenizer.
+This is one of the advantages of BPE, it will figure out what your token delimiters are, so it will work even in languages where there is no whitespace between words.
+And BPE will work on substitution cypher text like ROT13, a toy cypher that rotates the alphabet 13 characters forward.
+
+[source,python]
+----
+>>> df.sort_values('total').tail()
+        Trust me...  There's ...  total
+    en        10           3       13
+    an        14           5       19
+    uc        11           9       20
+    e         18           8       26
+    t         31          14       45
+----
+
+A BPE tokenizer then finds the most frequent 2-grams and adds them to the permanent vocabulary.
+Over time it deletes the less frequent character pairs as it gets less and less likely that they won't come up a lot more later in your text.
+
+----
+>>> df['n'] = [len(tok) for tok in vectorizer.vocabulary_]
+>>> df[df['n'] > 1].sort_values('total').tail()
+    Trust me...  There's ...      total  n
+ur           8          4            12  2
+en          10          3            13  2
+an          14          5            19  2
+uc          11          9            20  2
+e           18          8            26  2
+----
+
+So the next round of preprocessing in the BPE tokenizer would retain the character 2-grams "en" and "an" and even " t" and "e ".
+Then the BPE algorithm would make another pass through the text with this smaller character bigram vocabulary.
+It would look for frequent pairings of these character bigrams with each other and individual characters.
+This process would continue until the maximum number of tokens is reached and the longest possible character sequences have been incorporated into the vocabulary.
+
+[NOTE]
+====
+You may see mention of _wordpiece_ tokenizers which are used within some advanced language models such as `BERT` and its derivatives.footnote:[Lysandre Debut explains all the variations on subword tokenizers in the Hugging Face transformers documentation (https://huggingface.co/transformers/tokenizer_summary.html)]
+It works the same as BPE, but it actually uses the underlying language model to predict the neighboring characters in string.
+It eliminates the characters from its vocabulary that hurt the accuracy of this language model the least.
+The math is subtly different and it produces subtly different token vocabularies, but you don't need to select this tokenizer intentionally.
+The models that use it will come with it built into their pipelines.
+====
+
+One big challenge of BPE-based tokenizers is that they must be trained on your individual corpus.
+So BPE tokenizers are usually only used for Transformers and Large Language Models (LLMs) which you will learn about in chapter 9.
+
+Another challenge of BPE tokenizers is all the book keeping you need to do to keep track of which trained tokenizer goes with each of your trained models.
+This was one of the big innovations of Huggingface.
+They made it easy to store and share all the preprocessing data, such as the tokenizer vocabulary, along side the language model.
+This makes it easier to reuse and share BPE tokenizers.
+If you want to become an NLP expert, you may want to imitate what they've done at HuggingFace with your own NLP preprocessing pipelines.footnote:[Huggingface documentation on tokenizers (https://huggingface.co/docs/transformers/tokenizer_summary)]
+
+== Vectors of tokens
+
+Now that you have broken your text into tokens of meaning, what do you do with them?
+How can you convert them to numbers that will be meaningful to the machine?
+The simplest most basic thing to do would be to detect whether a particular token you are interested in was present or not.
+You could hard-code the logic to check for important tokens, called a _keywords_.
+
+This might work well for your greeting intent recognizer in chapter 1.
+Our greeting intent recognizer at the end of chapter 1 looked for words like "Hi" and "Hello" at the beginning of a text string.
+Your new tokenized text would help you detect the presence or absence of words such as "Hi" and "Hello" without getting confused by words like "Hiking" and "Hell."
+With your new tokenizer in place, your NLP pipeline wouldn't misinterpret the word "Hiking" as the greeting "Hi king":
+
+[source,python]
+----
+>>> hi_text = 'Hiking home now'
+>>> hi_text.startswith('Hi')
+True
+>>> pattern = r'\w+(?:\'\w+)?|[^\w\s]'  # <1>
+>>> 'Hi' in re.findall(pattern, hi_text)  # <2>
+False
+>>> 'Hi' == re.findall(pattern, hi_text)[0]  # <3>
+False
+----
+<1> You can reuse the regular expression pattern from earlier to create a one-line tokenizer
+<2> 'Hi' is not among the 3 words (tokens) in this phrase
+<3> 'Hi' is definitely not the first word in this phrase
+
+So tokenization can help you reduce the number of false positives in your simple intent recognition pipeline that looks for the presence of greeting words.
+This is often called keyword detection, because your vocabulary of words is limited to a set of words you think are important.
+However, it's quite cumbersome to have to think of all the words that might appear in a greeting in order to recognize them all, including slang, misspellngs and typoos.
+And creating a for loop to iterate through them all would be inefficient.
+We can use the math of linear algebra and the vectorized operations of `numpy` to speed this process up.
+
+In order to detect tokens efficiently you will want to use three new tricks:
+
+. matrix and vector representations of documents
+. vectorized operations in numpy
+. indexing of discrete vectors
+
+You'll first learn the most basic, direct, raw and lossless way to represent words as a matrix, one-hot encoding.
+
+=== One-hot Vectors
+
+Now that you've successfully split your document into the kinds of words you want, you're ready to create vectors out of them.
+Vectors of numbers are what we need to do the math or processing of NL*P* on natural language text.
+
+[source,python]
+----
+>>> import pandas as pd
+>>> onehot_vectors = np.zeros(
+...     (len(tokens), vocab_size), int)  # <1>
+>>> for i, tok in enumerate(tokens):
+...     if tok not in vocab:
+...         continue
+...     onehot_vectors[i, vocab.index(tok)] = 1  # <2>
+>>> df_onehot = pd.DataFrame(onehot_vectors, columns=vocab)
+>>> df_onehot.shape
+(18, 15)
+>>> df_onehot.iloc[:,:8].replace(0, '')  # <3>
+    ,  .  Survival  There's  adequate  as  fittest  maybe
+0                       1
+1
+2
+3
+4                                   1
+5
+6
+7
+8                                           1
+9      1
+10              1
+11
+12
+13
+14                               1
+15  1
+16                                                1
+17     1
+----
+<1> The table is as wide as your count of unique vocabulary terms and as tall as the length of your document: 18 rows, 15 columns
+<2> For each token in the sentence, mark the column for it with a `1`.
+<3> For brevity we're only showing the first 8 columns of the DataFrame and replaced 0's with ''.
+
+In this representation of this two-sentence quote, each row is a vector representation of a single word from the text.
+The table has the 15 columns because this is the number of unique words in your vocabulary.
+The table has 18 rows, one for each word in the document.
+A "1" in a column indicates a vocabulary word that was present at that position in the document.
+
+You can "read" a one-hot encoded (vectorized) text from top to bottom.
+You can tell that the first word in the text was the word "There's", because the `1` on the first row is positioned under the column label "There's".
+The next three rows (row indexes 1, 2, and 3) are blank, because we've truncated the table on the right to help it fit on the page.
+The fifth row of the text, with the 0-offset index number of `4` shows us that the fifth word in the text was the word "adequate", because there's a `1` in that column.
+
+One-hot vectors are super-sparse, containing only one nonzero value in each row vector.
+For display, this code replaces the `0`'s with empty strings (`''`), to make it easier to read.
+But the code did not actually alter the `DataFrame` of data you are processing in your NLP pipeline.
+The Python code above was just to to make it easier to read, so you can see that it looks a bit like a player piano paper roll, or maybe a music box drum.
+
+The Pandas `DataFrame` made this output a little easier to read and interpret.
+The `DataFrame.columns` keep track of labels for each column.
+This allows you to label each column in your table with a string, such as the token or word it represents.
+A `DataFrame` can also keep track of labels for each row in an the `DataFrame.index`, for speedy lookup.
+
+[IMPORTANT]
+====
+Don't add strings to any `DataFrame` you intend to use in your machine learning pipeline.
+The purpose of a tokenizer and vectorizer, like this one-hot vectorizer, is to create a numerical array that your NLP pipeline can do math on.
+You can't do math on strings.
+====
+
+Each row of the table is a binary row vector, and you can see why it's also called a one-hot vector: all but one of the positions (columns) in a row are `0` or blank.
+Only one column, or position in the vector is "hot" ("1").
+A one (`1`) means on, or hot.
+A zero (`0`) mean off, or absent.
+
+One nice feature of this vector representation of words and tabular representation of documents is that no information is lost.
+The exact sequence of tokens is encoded in the order of the one-hot vectors in the table representing a document.
+As long as you keep track of which words are indicated by which column, you can reconstruct the original sequence of tokens from this table of one-hot vectors perfectly.
+And this reconstruction process is 100% accurate even though your tokenizer was only 90% accurate at generating the tokens you thought would be useful.
+As a result, one-hot word vectors like this are typically used in neural nets, sequence-to-sequence language models, and generative language models.
+They are a good choice for any model or NLP pipeline that needs to retain all the meaning inherent in the original text.
+
+[TIP]
+====
+The one-hot encoder (vectorizer) did not discard any information from the text, but our tokenizer did.
+Our regular expression tokenizer discarded the whitespace characters (`\s`) that sometimes occur between words.
+So you could not perfectly reconstruct the original text with a _detokenizer_.
+Tokenizers like spaCy, however, keep track of these whitespace characters and can in fact detokenize a sequence of tokens perfectly.
+SpaCy was named for this feature of accurately accounting for white-*space* efficiently and accurately.
+====
+
+This sequence of one-hot vectors is like a digital recording of the original text.
+If you squint hard enough you might be able to imagine that the matrix of ones and zeros above is a player piano roll.footnote:[See the "Player piano" article on Wikipedia (https://en.wikipedia.org/wiki/Player_piano).].
+Or maybe it's the bumps on the metal drum of a music box.footnote:[See the web page titled "Music box - Wikipedia" (https://en.wikipedia.org/wiki/Music_box).]
+The vocabulary key at the top tells the machine which "note" or word to play for each row in the sequence of words or piano music like in figure <<figure-player-piano-roll>>.
+
+[#figure-player-piano-roll, reftext={chapter}.{counter:figure}]
+.Player piano roll
+image::../images/ch02/piano_roll.jpg[Player piano music roll with parallel sequences of holes running vertically down the paper. The holes meander left and right to indicate the rising and falling of the tones in the melody of a song. Image licensed from Wikimedia CC BY-SA 3.0 (https://commons.wikimedia.org/wiki/File:Weltereproduktionsklavier.jpg),width=100%,align="center",link="https://commons.wikimedia.org/wiki/File:Weltereproduktionsklavier.jpg"]
+
+Unlike a player-piano or a music box, your mechanical word recorder and player is only allowed to use one "finger" at a time.
+It can only play one "note" or word at a time.
+It's one-hot.
+And there is no variation in the spacing of the words.
+
+The important thing is that you've turned a sentence of natural language words into a sequence of numbers, or vectors.
+Now you can have the computer read and do math on the vectors just like any other vector or list of numbers.
+This allows your vectors to be input into any natural language processing pipeline that requires this kind of vector.
+The Deep Learning pipelines of chapter 5 through 10 typically require this representation, because they can be designed to extract "features" of meaning from these raw representations of text.
+And Deep Learning pipelines can generate text from numerical representations of meaning.
+So the stream of words emanating from your NLG pipelines in later chapters will often be represented by streams of one-hot encoded vectors, just like a player piano might play a song for a less artificial audience in West World.footnote:[West World is a television series about particularly malevolent humans and human-like robots, including one that plays a piano in the main bar.]
+
+Now all you need to do is figure out how to build a "player piano" that can _understand_ and combine those word vectors in new ways.
+Ultimately, you'd like your chatbot or NLP pipeline to play us a song, or say something, you haven't heard before.
+You'll get to do that in chapters 9 and 10 when you learn about recurrent neural networks that are effective for sequences of one-hot encoded tokens like this.
+
+This representation of a sentence in one-hot word vectors retains all the detail, grammar, and order of the original sentence.
+And you have successfully turned words into numbers that a computer can "understand."
+They are also a particular kind of number that computers like a lot: binary numbers.
+But this is a big table for a short sentence.
+If you think about it, you have expanded the file size that would be required to store your document.
+For a long document this might not be practical.
+
+How big is this *lossless* numerical representation of your collection of documents?
+Your vocabulary size (the length of the vectors) would get huge.
+The English language contains at least 20,000 common words, millions if you include names and other proper nouns.
+And your one-hot vector representation requires a new table (matrix) for every document you want to process.
+This is almost like a raw "image" of your document.
+If you have done any image processing, you know that you need to do dimension reduction if you want to extract useful information from the data.
+
+Let's run through the math to give you an appreciation for just how big and unwieldy these "piano rolls" are.
+In most cases, the vocabulary of tokens you'll use in an NLP pipeline will be much more than 10,000 or 20,000 tokens.
+Sometimes it can be hundreds of thousands or even millions of tokens.
+Let's assume you have a million tokens in your NLP pipeline vocabulary.
+And let's say you have a meager 3000 books with 3500 sentences each and 15 words per sentence -- reasonable averages for short books.
+That's a whole lot of big tables (matrices), one for each book.
+That would use 157.5 terabytes.
+You probably couldn't even store that on disk.
+
+That is more than a million million bytes, even if you are super-efficient and use only one byte for each number in your matrix.
+At one byte per cell, you would need nearly 20 terabytes of storage for a small bookshelf of books processed this way.
+Fortunately you do not ever use this data structure for storing documents.
+You only use it temporarily, in RAM, while you are processing documents one word at a time.
+
+So storing all those zeros, and recording the order of the words in all your documents does not make much sense.
+It is not practical.
+And it's not very useful.
+Your data structure hasn't abstracted or generalized from the natural language text.
+An NLP pipeline like this doesn't yet do any real feature extraction or dimension reduction to help your machine learning work well in the real world.
+
+What you really want to do is compress the meaning of a document down to its essence.
+You would like to compress your document down to a single vector rather than a big table.
+And you are willing to give up perfect "recall."
+You just want to capture most of the meaning (information) in a document, not all of it.
+
+Your regular expression tokenizer and one-hot vectors are great for creating _reverse indexes_.
+Just like the index at the end of a textbook, your matrix of one-hot vectors can be used to quickly find all the strings or documents where a particular word was used at least once.
+So the tools you've learned so far can be used as a foundation for a personalized search engine.
+However, you saw that search and information retrieval was only one of many many applications of NLP.
+To solve the more advanced problems you will need a more advanced tokenizer and more sophisticated vector representations of text.
+The Python package `spaCy` is that state-of-the-art tokenizer you are looking for.
+
+=== SpaCy
+
+Maybe you don't want your regular expression tokenizer to keep contractions together.
+Perhaps you'd like to recognize the word "isn't" as two separate words, "is" and "n't".
+That way you could consolidate the synonyms "n't" and "not" into a single token.
+This way your NLP pipeline would understand "the ice cream isn't bad" to mean the same thing as "the ice cream is not bad".
+For some applications, such as full-text search, intent recognition, and sentiment analysis, you want to be able to *uncontract* or expand contractions like this.
+By splitting contractions, you can use synonym substitution or contraction expansion to improve the recall of your search engine and the accuracy of your sentiment analysis.
+
+[IMPORTANT]
+====
+We'll discuss case folding, stemming, lemmatization, and synonym substitution later in this chapter.
+Be careful about using these techniques for applications such as authorship attribution, style transfer, or text fingerprinting.
+You want your authorship attribution or style-transfer pipeline to stay true to the author's writing style and the exact spelling of words that they use.
+====
+
+SpaCy integrates a tokenizer directly into its state-of-the-art NLU pipeline.
+In fact the name "spaCy" is based on the word "space", as in the separator used in Western languages to separate words.
+And spaCy adds a lot of additional _tags_ to tokens at the same time that it is applying rules to split tokens apart.
+So spaCy is often the first and last tokenizer you'll ever need to use.
+
+Let's see how spaCy handles our collection of deep thinker quotes.
+First you're going to use a thin wrapper for the spacy.load function so that your NLP pipeline is _idempotent_.
+An idempotent pipeline can be run multiple times and achieve the same results each time:
+
+[source,python]
+----
+>>> import spacy  # <1>
+>>> from nlpia2.spacy_language_model import load  # <2>
+>>> nlp = load('en_core_web_sm')  # <3>
+>>> nlp
+<spacy.lang.en.English...>
+----
+<1> If this is your first time to use spacy you should download the small language model with `spacy.cli.download('en_core_web_sm')`
+<2> To avoid unnecessarily re-downloading the SpaCy language model, use `nlpia2.spacy_language_model.load` rather than `spacy.load`
+<3> `sm` stands for "small" (17 MB), `md` is medium (45 MB), `lg` is "large" (780 MB)
+
+Now that you've downloaded the small SpaCy language model and loaded it into memory (RAM), you can use it to tokenize and tag any text string.
+This will create a new SpaCy `Doc` object that contains whatever SpaCy was able to understand about the text using that language model.
+
+[source,python]
+----
+[source,python]
+>>> doc = nlp(texts[-1])
+>>> type(doc)
+<class 'spacy.tokens.doc.Doc'>
+----
+
+SpaCy has read and parsed your text to split it into tokens.
+The `Doc` object contains a sequence of `Token` objects which should each be a small packet of thought or meaning (typically words).
+See if these tokens are what you expected:
+
+----
+>>> tokens = [tok.text for tok in doc]  # <1>
+>>> tokens[:9]  # <2>
+['There', "'s", 'no', 'such', 'thing', 'as', 'survival', 'of', 'the']
+
+>>> tokens[9:17]
+['fittest', '.', 'Survival', 'of', 'the', 'most', 'adequate', ',']
+----
+<1> The text or spelling is only one attribute the `Token` objects within a `Doc`.
+
+Spacy is doing a lot more under the hood than just splitting your text into tokens.
+That small language model you downloaded is also identifying sentence breaks with some *sentence boundary detection* rules.
+A language model is a collection of regular expressions and finite state automata (rules).
+These rules are a lot like the grammar and spelling rules you learned in English class.
+They are used in the algorithms that tokenize and label your words with useful things like their part of speech and their position in a syntax tree of relationships between words.
+
+[source,python]
+----
+>>> from spacy import displacy
+>>> sentence = list(doc.sents)[0] # <1>
+>>> displacy.serve(sentence, style="dep")
+>>> !firefox 127.0.0.1:5000
+
+----
+<1> The first sentence begins with "There's no such thing..."
+
+If you browse to your `localhost` on port 5000 you should see a sentence diagram that may be even more correct than what you could produce in school:
+
+image::../images/ch02/there-such-thing.png[alt="NOUN Survival -> ADV maybe. ADJ adequate -> ADV most",align="center",width=100%,link="../images/ch02/there-such-thing.png"]
+
+You can see that spaCy does a lot more than simply separate text into tokens.
+It identifies sentence boundaries to automatically segment your text into sentences.
+And it tags tokens with various attributes like their part of speech (PoS) and even their role within the syntax of a sentence.
+You can see the lemmas displayed by `displacy`  beneath the literal text for each token.footnote:[nlpia2 source code for chapter 2 (https://proai.org/nlpia2-ch2) has additional spaCy and displacy options and examples.]
+Later in the chapter you'll learn how lemmatization and case folding and other vocabulary *compression* approaches can be helpful for some applications.
+
+So spaCy seems pretty great in terms of accuracy and some "batteries included" features, such as all those token tags for lemmas and dependencies.
+What about speed?
+
+=== Tokenizer race
+
+SpaCy can parse the AsciiDoc text for a chapter in this book in about 5 seconds.
+First download the AsciiDoc text file for this chapter:
+
+[source,python]
+----
+>>> import requests
+>>> text = requests.get('https://proai.org/nlpia2-ch2.adoc').text
+>>> f'{round(len(text) / 10_000)}0k'  # <1>
+'170k'
+----
+<1> Divided by 10,000 and rounded, so that Doctests will pass as this text is revised.
+
+There were about 170 thousand unicode characters in this AsciiDoc text file where I wrote this sentence that you are reading right now.
+What does that mean in terms of words-per-second, the standard benchmark for tokenizer speed?
+
+[source,python]
+----
+>>> from nlpia2.spacy_language_model import load
+>>> nlp = load('en_core_web_sm')
+>>> %timeit nlp(text)  # <1>
+4.67 s ± 45.3 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+>>> f'{round(len(text) / 10_000)}0k'
+'170k'
+>>> doc = nlp(text)
+>>> f'{round(len(list(doc)) / 10_000)}0k'
+'40k'
+>>> f'{round(len(doc) / 1_000 / 4.67)}kWPS'  # <2>
+'8kWPS'
+----
+////
+1.59 s ± 19.8 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+////
+<1> `%timeit` is a magic function within `jupyter notebook`, `jupyter console` or `ipython`
+<2> kWPS is for thousands of words (tokens) per second
+
+That's nearly 5 seconds for about 150,000 characters or 34,000 words of English and Python text or about 7000 words per second.
+
+That may seem fast enough for you on your personal projects.
+But on a typical medical records summarization project for a commercial business you might need to process hundreds of large documents per minute.
+That's a couple documents per second.
+And if each document contains the amount of text that you find in this book (nearly half a million tokens), that's almost a million tokens per second.
+Latency on a medical record summarization pipeline can be a critical metric for the project.
+For example, on one project it took 5 days to process 10,000 patient medical records using SpaCy as the tokenizer.
+
+If you need to speed up your tokenzer, one option is to disable the tagging features of the spaCy pipeline that you do not need for your application:
+
+[source,python]
+----
+>>> nlp.pipe_names  # <1>
+['tok2vec', 'tagger', 'parser', 'attribute_ruler', 'lemmatizer', 'ner']
+>>> nlp = load('en_core_web_sm', disable=['tok2vec', 'tagger', 'parser'])
+>>> nlp.pipe_names
+['attribute_ruler', 'lemmatizer', 'ner']
+>>> %timeit nlp(text)
+199 ms ± 6.63 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+----
+////
+82.6 ms ± 1e+03 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)
+////
+<1> The `pipe_names` lists all the currently enabled elements of your spaCy `nlp` pipeline
+
+You can disable the pipeline elements you don't need to speed up the tokenizer:
+
+- `tok2vec`: word embeddings
+- `tagger`: part-of-speech (`.pos` and `.pos_`)
+- `parser`: syntax tree role
+- `attribute_ruler`: fine-grained POS and other tags
+- `lemmatizer`: lemma tagger
+- `ner`: named entity recognition tagger
+
+NLTK's `word_tokenize` method is often used as the pace setter in tokenizer benchmark speed comparisons:
+
+[source,python]
+----
+>>> import nltk
+>>> nltk.download('punkt')
+True
+>>> from nltk.tokenize import word_tokenize
+>>> %timeit word_tokenize(text)
+156 ms ± 1.01 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
+>>> tokens = word_tokenize(text)
+>>> f'{round(len(tokens) / 10_000)}0k'
+'30k'
+----
+
+Could it be that you found a winner for the tokenizer race?
+Not so fast.
+Your regular expression tokenizer has some pretty simple rules, so it should run pretty fast as well:
+
+[source,python]
+----
+>>> pattern = r'\w+(?:\'\w+)?|[^\w\s]'
+>>> tokens = re.findall(pattern, text)  # <1>
+>>> f'{round(len(tokens) / 10_000)}0k'
+'40k'
+>>> %timeit re.findall(pattern, text)
+8.77 ms ± 29.8 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+----
+<1> Try precompiling with `re.compile` to learn something about how smart the core Python developers are
+
+Now that's not too surprising.
+Python compiles and runs regular expressions very efficiently within low level C routines.
+In addition to speed, regular expressions and the NLTK tokenizer are often used in academic papers.
+That help others like you reproduce their results exactly.
+So if you're just trying to reproduce someone else's work, make sure you use their tokenizer, whether it's NLTK, regular expressions, or a particular version of spaCy.
+In this book you are just trying to learn how things work, so we haven't bothered to keep track of the particular versions of spaCy and NLTK that we used.
+But you may need to do this for yourself if you are sharing your results with others doing NLP research.
+
+
+[TIP]
+====
+Use a regular expression tokenizer when speed is more import than accuracy or when others will try to reproduce your results. footnote:["Don’t use NLTK’s wordtokenize use NLTK’s regexptokenize" (blog with code) by Michael Bryan  "Benchmarking Python NLP Tokenizers" (https://morioh.com/p/e2cfb73c8e86)]
+If you do not need the additional tags that spaCy provides, your tokenizer doesn't need to waste time trying to process the grammar and meaning of the words to create those tags.
+And each time you use a regular expression in the `re` or `regex` packages, a compiled and optimized version of it is cached in RAM.
+So there's usually no need to _precompile_ (using `re.compile()`) your regexes.
+====
+
+== Wordpiece tokenizers
+
+It probably felt natural to think of words as indivisible atomic chunks of meaning and thought.
+However, you did find some words that didn't clearly split on spaces or punctuation.
+And many compound words or named entities that you'd like to keep together have spaces within them.
+So it can help to dig a little deeper and think about the statistics of what makes a word.
+Think about how we can build up words from neighboring characters instead of cleaving text at separators such as spaces and punctuation.
+
+=== Clumping characters into sentence pieces
+
+Instead of thinking about breaking strings up into tokens, your tokenizer can look for characters that are used a lot right next to each other, such as "i" before "e".
+You can pair up characters and sequences of characters that belong together.footnote:[In many applications the term "_n_-gram" refers to character _n_-grams rather than word n-grams. For example the leading relational database PostgreSQL has a Trigram index which tokenizes your text into character 3-grams not word 3-grams. In this book, we use "_n_-gram" to refer to sequences of word grams and "character _n_-grams" when talking about sequences of characters.]
+These clumps of characters can become your tokens.
+An NLP pipeline only pays attention to the statistics of tokens.
+And hopefully these statistics will line up with our expectations for what a word is.
+
+Many of these character sequences will be whole words, or even compound words, but many will be pieces of words.
+In fact, all _subword tokenizers_ maintain a token within the vocabulary for every individual character in your vocabulary.
+This means it never needs to use an OOV (Out-of-Vocabulary) token, as long as any new text doesn't contain any new characters it hasn't seen before.
+Subword tokenizers attempt to optimally clump characters together to create tokens.
+Using the statistics of character n-gram counts it's possible for these algorithms to identify wordpieces and even sentence pieces that make good tokens.
+
+It may seem odd to identify words by clumping characters.
+But to a machine, the only obvious, consistent division between elements of meaning in a text is the boundary between bytes or characters.
+And the frequency with which characters are used together can help the machine identify the meaning associated with subword tokens such as individual syllables or parts of compound words.
+
+In English, even individual letters have subtle emotion (sentiment) and meaning (semantics) associated with them.
+However, there are only 26 unique letters in the English language.
+That doesn't leave room for individual letters to _specialize_ on any one topic or emotion.
+Nonetheless savvy marketers know that some letters are cooler than others.
+Brands will try to portray themselves as technologically advanced by choosing names with exotic letters like "Q" and "X" or "Z".
+This also helps with SEO (Search Engine Optimization) because rarer letters are more easily found among the sea of possible company and product names.
+Your NLP pipeline will pick up all these hints of meaning, connotation, and intent.
+Your token counters will provide the machine with the statistics it needs to infer the meaning of clumps of letters that are used together often.
+
+The only disadvantage for subword tokenizers is the fact that they must pass through your corpus of text many times before converging on an optimal vocabulary and tokenizer.
+A subword tokenizer has to be trained or fit to your text just like a CountVectorizer.
+In fact you'll use a CountVectorizer in the next section to see how subword tokenizers work.
+
+There are two main approaches to subword tokenization: BPE (Byte-Pair Encoding) and Wordpiece tokenization.
+
+==== BPE
+
+In the previous edition of the book we insisted that words were the smallest unit of meaning in English that you need consider.
+With the rise of Transformers and other deep learning models that use BPE and similar techniques, we've changed our minds.footnote:[Hannes and Cole are probably screaming "We told you so!" as they read this.]
+Character-based subword tokenizers have proven to be more versatile and robust for most NLP problems.
+By building up a vocabulary from building blocks of Unicode multi-byte characters you can construct a vocabulary that can handle every possible natural language string you'll ever see, all with a vocabulary of as few as 50,000 tokens.
+
+You may think that Unicode characters are the smallest packet of meaning in natural language text.
+To a human, maybe, but to a machine, no way.
+Just as the BPE name suggests, characters don't have to be your fundamental atom of meaning for your _base vocabulary_.
+You can split characters into 8-bit bytes.
+GPT-2 uses a byte-level BPE tokenizer to naturally compose all the unicode characters you need from the bytes that make them up.
+Though some special rules are required to handle unicode punctuation within a byte-based vocabulary, no other adjustment to the character-based BPE algorithm is required.
+A byte-level BPE tokenizer allows you to represent all possible texts with a base (minimum) vocabulary size of 256 tokens.
+The GPT-2 model can achieve state-of-the-art performance with it's default BPE vocabulary of only 50,000 multibyte _merge tokens_ plus 256 individual byte tokens.
+
+You can think of the BPE (Byte Pair Encoding) tokenizer algorithm as a matchmaker in a social network of friends.
+BPE pairs up characters that appear next to each other a lot and appear to be "friends."
+It then creates a new token for these character combinations.
+BPE can then pair up the multi-character tokens whenever those token pairings are common in your text.
+And it keeps doing this until it has a many frequently used character sequences as you've allowed in your vocabulary size limit.
+
+
+BPE is transforming the way we think about natural language tokens.
+NLP engineers are finally letting the data do the talking.
+Statistical thinking is better than human intuition when building an NLP pipeline.
+A machine can see how _most_ people use language.
+You are only familiar with what _you_ mean when you use particular words or syllables.
+Transformers have now surpassed human readers and writers at some natural language understanding and generation tasks, including finding meaning in subword tokens.
+
+One complication you have not yet encountered is the dilemma of what to do when you encounter a new word.
+In the previous examples, we just keep adding new words to our vocabulary.
+But in the real world your pipeline will have been trained on an initial corpus of documents that may or may not represent all the kinds of tokens it will ever see.
+If your initial corpus is missing some of the words that you encounter later on, you will not have a slot in your vocabulary to put your counts of that new word.
+So when you train you initial pipeline, you will always reserve a slot (dimension) to hold the counts of your _out-of-vocabulary_ (OOV) tokens.
+So if your original set of documents did not contain the girl's name "Aphra", all counts of the name Aphra would be lumped into the OOV dimension as counts of Amandine and other rare words.
+
+To give Aphra equal representation in your vector space, you can use BPE.
+BPE breaks down rare words into smaller pieces to create a _periodic table_ of the elements for natural language in your corpus.
+So, because "aphr" is a common english prefix, your BPE tokenizer would probably give Aphra *two* slots for her counts in your vocabulary: one for "aphr" and one for "a".
+Actually, you might actually discover that the vobcabulary slots are for " aphr" and "a ", because BPE keeps track of spaces no differently than any other character in your alphabet.footnote:[Actually, the string representation of tokens used for BPE and Wordpiece tokenizer place marker characters at the beginning or end of the token string indicate the absence of a word boundary (typically a space or punctuation). So you may see the "aphr##" token in your BPE vocabulary for the prefix "aphr" in aphrodesiac (https://stackoverflow.com/a/55416944/623735)]
+
+BPE gives you multilingual flexibility to deal with Hebrew names like Aphra.
+And it give your pipeline robustness against common misspellings and typos, such as "aphradesiac."
+Every word, including minority 2-grams such as "African American", have representation in the voting system of BPE.footnote:[Discriminatory voting restriction laws have recently been passed in US: (https://proai.org/apnews-wisconsin-restricts-blacks)]
+Gone are the days of using the kluge of OOV (Out-of-Vocabulary) tokens to handle the rare quirks of human communication.
+Because of this, state of the art deep learning NLP pipelines such as transformers all use word piece tokenization similar to BPE.footnote:[See chapter 12 for information about another similar tokenizer -- sentence piece tokenizer]
+
+BPE preserves some of the meaning of new words by using character tokens and word-piece tokens to spell out any unknown words or parts of words.
+For example, if "syzygy" is not in our vocabulary, we could represent it as the six tokens "s", "y", "z", "y", "g", and "y".
+Perhaps "smartz" could be represented as the two tokens "smart" and "z".
+
+That sounds smart.
+Let's see how it works on our text corpus:
+
+[source,python]
+----
+>>> import pandas as pd
+>>> from sklearn.feature_extraction.text import CountVectorizer
+>>> vectorizer = CountVectorizer(ngram_range=(1, 2), analyzer='char')
+>>> vectorizer.fit(texts)
+CountVectorizer(analyzer='char', ngram_range=(1, 2))
+----
+
+You've created a `CountVectorizer` class that will tokenize the text into characters instead of words.
+And it will count token pairs (character 2-grams) in addition to single character tokens.
+These are the byte pairs in BPE encoding.
+Now you can examine your vocabulary to see what they look like.
+
+[source,python]
+----
+>>> bpevocab_list = [
+...    sorted((i, s) for s, i in vectorizer.vocabulary_.items())]
+>>> bpevocab_dict = dict(bpevocab_list[0])
+>>> list(bpevocab_dict.values())[:7]
+['  ', ' a', ' c', ' f', ' h', ' i', ' l']
+----
+
+We configured the `CountVectorizer` to split the text into all the possible character 1-grams and 2-grams found in the texts.
+And `CountVectorizer` organizes the vocabulary in lexical order, so n-grams that start with a space character (`' '`) come first.
+Once the vectorizer knows what tokens it needs to be able to count, it can transform text strings into vectors, with one dimension for every token in your character n-gram vocabulary.
+
+[source,python]
+----
+>>> vectors = vectorizer.transform(texts)
+>>> df = pd.DataFrame(
+...     vectors.todense(),
+...     columns=vectorizer.vocabulary_)
+>>> df.index = [t[:8] + '...' for t in texts]
+>>> df = df.T
+>>> df['total'] = df.T.sum()
+>>> df
+        Trust me...  There's ...  total
+    t            31           14     45
+    r             3            2      5
+    u             1            0      1
+    s             0            1      1
+                  3            0      3
+    ..          ...          ...    ...
+    at            1            0      1
+    ma            2            1      3
+    yb            1            0      1
+    ...
+----
+
+The DataFrame contains a column for each sentence and a row for each character 2-gram.
+Check out the top four rows where the byte pair (character 2-gram) of " a" is seen to occur five times in these two sentences.
+So even spaces count as "characters" when you're building a BPE tokenizer.
+This is one of the advantages of BPE, it will figure out what your token delimiters are, so it will work even in languages where there is no whitespace between words.
+And BPE will work on substitution cypher text like ROT13, a toy cypher that rotates the alphabet 13 characters forward.
+
+[source,python]
+----
+>>> df.sort_values('total').tail(3)
+        Trust me...  There's ...  total
+    uc           11            9     20
+    e            18            8     26
+    t            31           14     45
+----
+
+A BPE tokenizer then finds the most frequent 2-grams and adds them to the permanent vocabulary.
+Over time it deletes the less frequent character pairs, because the further it reads into your text, the less less likely that those rare character pairs will come up before the end of the text.
+For those familiar with statistics, it models your text with a Baysean model, continuously updating prior predictions of token frequencies.
+
+----
+>>> df['n'] = [len(tok) for tok in vectorizer.vocabulary_]
+>>> df[df['n'] > 1].sort_values('total').tail()
+        Trust me...  There's ...  total  n
+     c            8            4     12  2
+    en           10            3     13  2
+    an           14            5     19  2
+    uc           11            9     20  2
+    e            18            8     26  2
+----
+
+So the next round of preprocessing in the BPE tokenizer would retain the character 2-grams "en" and "an" and even " c" and "e ".
+Then the BPE algorithm would make another pass through the text with this smaller character bigram vocabulary.
+It would look for frequent pairings of these character bigrams with each other and individual characters.
+This process would continue until the maximum number of tokens is reached and the longest possible character sequences have been incorporated into the vocabulary.
+
+[NOTE]
+====
+You may see mention of _wordpiece_ tokenizers which are used within some advanced language models such as `BERT` and its derivatives.footnote:[Lysandre Debut explains all the variations on subword tokenizers in the Hugging Face transformers documentation (https://huggingface.co/transformers/tokenizer_summary.html)]
+It works the same as BPE, but it actually uses the underlying language model to predict the neighboring characters in string.
+It eliminates the characters from its vocabulary that hurt the accuracy of this language model the least.
+The math is subtly different and it produces subtly different token vocabularies, but you don't need to select this tokenizer intentionally.
+The models that use it will come with it built into their pipelines.
+====
+
+One big challenge of BPE-based tokenizers is that they must be trained on your individual corpus.
+So BPE tokenizers are usually only used for Transformers and Large Language Models (LLMs) which you will learn about in chapter 9.
+
+Another challenge of BPE tokenizers is all the book keeping you need to do to keep track of which trained tokenizer goes with each of your trained models.
+This was one of the big innovations of Huggingface.
+They made it easy to store and share all the preprocessing data, such as the tokenizer vocabulary, along side the language model.
+This makes it easier to reuse and share BPE tokenizers.
+If you want to become an NLP expert, you may want to imitate what they've done at HuggingFace with your own NLP preprocessing pipelines.footnote:[Huggingface documentation on tokenizers (https://huggingface.co/docs/transformers/tokenizer_summary)]
+
+== Vectors of tokens
+
+Now that you have broken your text into tokens of meaning, what do you do with them?
+How can you convert them to numbers that will be meaningful to the machine?
+The simplest most basic thing to do would be to detect whether a particular token you are interested in was present or not.
+You could hard-code the logic to check for important tokens, called a _keywords_.
+
+This might work well for your greeting intent recognizer in chapter 1.
+Our greeting intent recognizer at the end of chapter 1 looked for words like "Hi" and "Hello" at the beginning of a text string.
+Your new tokenized text would help you detect the presence or absence of words such as "Hi" and "Hello" without getting confused by words like "Hiking" and "Hell."
+With your new tokenizer in place, your NLP pipeline wouldn't misinterpret the word "Hiking" as the greeting "Hi king":
+
+[source,python]
+----
+>>> hi_text = 'Hiking home now'
+>>> hi_text.startswith('Hi')
+True
+>>> pattern = r'\w+(?:\'\w+)?|[^\w\s]'  # <1>
+>>> 'Hi' in re.findall(pattern, hi_text)  # <2>
+False
+>>> 'Hi' == re.findall(pattern, hi_text)[0]  # <3>
+False
+----
+<1> You can reuse the regular expression pattern from earlier to create a one-line tokenizer
+<2> 'Hi' is not among the 3 words (tokens) in this phrase
+<3> 'Hi' is definitely not the first word in this phrase
+
+So tokenization can help you reduce the number of false positives in your simple intent recognition pipeline that looks for the presence of greeting words.
+This is often called keyword detection, because your vocabulary of words is limited to a set of words you think are important.
+However, it's quite cumbersome to have to think of all the words that might appear in a greeting in order to recognize them all, including slang, misspellngs and typoos.
+And creating a for loop to iterate through them all would be inefficient.
+We can use the math of linear algebra and the vectorized operations of `numpy` to speed this process up.
+
+In order to detect tokens efficiently you will want to use three new tricks:
+
+. matrix and vector representations of documents
+. vectorized operations in numpy
+. indexing of discrete vectors
+
+You'll first learn the most basic, direct, raw and lossless way to represent words as a matrix, one-hot encoding.
+
+=== BOW (Bag-of-Words) Vectors
+// HL: for the code examples in this section to work it should be placed after the one-hot vector section, before SpaCy and BPE tokenizer sections
+
+Is there any way to squeeze all those _player piano music rolls_ into a single vector?
+Vectors are a great way to represent any object.
+With vectors we could compare documents to each other just by checking the Euclidian distance between them.
+Vectors allow us to use all your linear algebra tools on natural language.
+And that's really the goal of NLP, doing math on text.
+
+Let us assume you can ignore the order of the words in our texts.
+For this first cut at a vector representation of text you can just jumble them all up together into a "bag," one bag for each sentence or short document.
+It turns out just knowing what words are present in a document can give your NLU pipeline a lot of information about what's in it.
+This is in fact the representation that power big Internet search engine companies.
+Even for documents several pages long, a bag-of-words vector is useful for summarizing the essence of a document.
+
+Let's see what happens when we jumble and count the words in our text from _The Book Thief_:
+
+[source,python]
+----
+>>> bow = sorted(set(re.findall(pattern, text)))
+>>> bow[:9]
+ [',', '.', 'Liesel', 'Trust', 'and', 'arrived', 'clouds', 'hands', 'her']
+>>> bow[9:19]
+['hold', 'in', 'like', 'me', 'on', 'out', 'rain', 'she', 'the', 'their']
+>>> bow[19:27]
+['them', 'they', 'though', 'way', 'were', 'when', 'words', 'would']
+----
+
+Even with this jumbled up bag of words, you can get a general sense that this sentence is about:  "Trust", "words", "clouds", "rain", and someone named "Liesel".
+One thing you might notice is that Python's `sorted()` puts punctuation before characters, and capitalized words before lowercase words.
+This is the ordering of characters in the ASCII and Unicode character sets.
+However, the order of your vocabulary is unimportant.
+As long as you are consistent across all the documents you tokenize this way, a machine learning pipeline will work equally well with any vocabulary order.
+
+You can use this new bag-of-words vector approach to compress the information content for each document into a data structure that is easier to work with.
+For keyword search, you could **OR** your one-hot word vectors from the player piano roll representation into a binary bag-of-words vector.
+In the play piano analogy this is like playing several notes of a melody all at once, to create a "chord".
+Rather than "replaying" them one at a time in your NLU pipeline, you would create a single bag-of-words vector for each document.
+
+You could use this single vector to represent the whole document in a single vector.
+Because vectors all need to be the same length, your BOW vector would need to be as long your vocabulary size which is the number of unique tokens in your documents.
+And you could ignore a lot of words that would not be interesting as search terms or keywords.
+This is why stop words are often ignored when doing BOW tokenization.
+This is an extremely efficient representation for a search engine index or the first filter for an information retrieval system.
+Search indexes only need to know the presence or absence of each word in each document to help you find those documents later.
+
+This approach turns out to be critical to helping a machine "understand" a collection of words as a single mathematical object.
+And if you limit your tokens to the 10,000 most important words, you can compress your numerical representation of your imaginary 3500 sentence book down to 10 kilobytes, or about 30 megabytes for your imaginary 3000-book corpus.
+One-hot vector sequences for such a modest-sized corpus would require hundreds of gigabytes.
+
+Another advantage of the BOW representation of text is that it allows you to find similar documents in your corpus in constant time (`O(1)`).
+You can't get any faster than this.
+BOW vectors are the precursor to a reverse index which is what makes this speed possible.
+In computer science and software engineering, you are always on the lookout for data structures that enable this kind of speed.
+All major full-text search tools use BOW vectors to find what you're looking for fast.
+You can see this numerical representation of natural language in EllasticSearch, Solr,footnote:[Apache Solr home page and Java source code (https://solr.apache.org/)] PostgreSQL, and even state of the art web search engines such as Qwant,footnote:[Qwant web search engine based in Europe (https://www.qwant.com/)], SearX,footnote:[SearX git repository (https://github.com/searx/searx) and web search (https://searx.thegpm.org/)], and Wolfram Alpha footnote:[(https://www.wolframalpha.com/)].
+
+Fortunately, the words in your vocabulary are sparsely utilized in any given text.
+And for most bag-of-words applications, we keep the documents short, sometimes just a sentence will do.
+So rather than hitting all the notes on a piano at once, your bag-of-words vector is more like a broad and pleasant piano chord, a combination of notes (words) that work well together and contain meaning.
+Your NLG pipeline or chatbot can handle these chords even if there is a lot of "dissonance" from words in the same statement that are not normally used together.
+Even dissonance (odd word usage) is useful information about a statement that a machine learning pipeline can make use of.
+
+Here is how you can put the tokens into a binary vector indicating the presence or absence of a particular word in a particular sentence.
+This vector representation of a set of sentences could be "indexed" to indicate which words were used in which document.
+This index is equivalent to the index you find at the end of many textbooks, except that instead of keeping track of which page a word occurs on, you can keep track of the sentence (or the associated vector) where it occurred.
+Whereas a textbook index generally only cares about important words relevant to the subject of the book, you keep track of every single word (at least for now).
+
+==== Sparse representations
+
+You might be thinking that if you process a huge corpus you'll probably end up with thousands or even millions of unique tokens in your vocabulary.
+This would mean you would have to store a lot of zeros in your vector representation of our 20-token sentence about Liesel.
+A `dict` would use much less memory than a vector.
+Any paired mapping of words to their 0/1 values would be more efficient than a vector.
+But you can't do math on `dict`'s.
+So this is why CountVectorizer uses a sparse numpy array to hold the counts of words in a word fequency vector.
+Using a dictionary or sparse array for your vector ensures that it only has to store a 1 when any one of the millions of possible words in your dictionary appear in a particular document.
+
+But if you want to look at an individual vector to make sure everything is working correctly, a Pandas `Series` is the way to go.
+And you will wrap that up in a Pandas DataFrame so you can add more sentences to your binary vector "corpus" of quotes.
+
+=== Dot product
+
+// TODO: some of this may belong in the discussion of keyword matching and one-hot vectors?
+You'll use the dot product a lot in NLP, so make sure you understand what it is.
+Skip this section if you can already do dot products in your head.
+
+The dot product is also called the _inner product_ because the "inner" dimension of the two vectors (the number of elements in each vector) or matrices (the rows of the first matrix and the columns of the second matrix) must be the same because that is where the products happen.
+This is analogous to an "inner join" on two relational database tables.
+
+The dot product is also called the _scalar product_ because it produces a single scalar value as its output.
+This helps distinguish it from the _cross product_, which produces a vector as its output.
+Obviously, these names reflect the shape of the symbols used to indicate the dot product (latexmath:[\cdot]) and cross product (latexmath:[\times]) in formal mathematical notation.
+The scalar value output by the scalar product can be calculated by multiplying all the elements of one vector by all the elements of a second vector and then adding up those normal multiplication products.
+
+Here is a Python snippet you can run in your Pythonic head to make sure you understand what a dot product is:
+
+[[example_dot_product_code]]
+.Example dot product calculation
+[source,python]
+----
+>>> v1 = np.array([1, 2, 3])
+>>> v2 = np.array([2, 3, 4])
+>>> v1.dot(v2)
+20
+>>> (v1 * v2).sum()  # <1>
+20
+>>> sum([x1 * x2 for x1, x2 in zip(v1, v2)])  # <2>
+20
+----
+<1> Multiplication of NumPy arrays is a "vectorized" operation that is very efficient.
+<2> You should not iterate through vectors this way unless you want to slow down your pipeline.
+
+[TIP]
+====
+The dot product is equivalent to the _matrix product_, which can be accomplished in NumPy with the `np.matmul()` function or the `@` operator. Since all vectors can be turned into Nx1 or 1xN matrices, you can use this shorthand operator on two column vectors (Nx1) by transposing the first one so their inner dimensions line up, like this: `v1.reshape((-1, 1)).T @ v2.reshape((-1, 1))`, which outputs your scalar product within a 1x1 matrix: `array([[20]])`
+====
+
+// IDEA: Consider talking about BOW overlap to explain cosine similarity
+
+This is your first vector space model of natural language documents (sentences).
+Not only are dot products possible, but other vector operations are defined for these bag-of-word vectors: addition, subtraction, OR, AND, and so on.
+You can even compute things such as Euclidean distance or the angle between these vectors. This representation of a document as a binary vector has a lot of power.
+It was a mainstay for document retrieval and search for many years.
+All modern CPUs have hardwired memory addressing instructions that can efficiently hash, index, and search a large set of binary vectors like this.
+Though these instructions were built for another purpose (indexing memory locations to retrieve data from RAM), they are equally efficient at binary vector operations for search and retrieval of text.
+
+
+
+NLTK and Stanford CoreNLP have been around the longest and are the most widely used for comparison of NLP algorithms in academic papers.
+Even though the Stanford CoreNLP has a Python API, it relies on the Java 8 CoreNLP backend, which must be installed and configured separately.
+So if you want to publish the results of your work in an academic paper and compare it to what other researchers are doing, you may need to use NLTK.
+The most common tokenizer used in academia is the PennTreebank tokenizer:
+
+[source,python]
+----
+>>> from nltk.tokenize import TreebankWordTokenizer
+>>> texts.append(
+...   "If conscience and empathy were impediments to the advancement of "
+...   "self-interest, then we would have evolved to be amoral sociopaths."
+...   )  # <1>
+>>> tokenizer = TreebankWordTokenizer()
+>>> tokens = tokenizer.tokenize(texts[-1])[:6]
+>>> tokens[:8]
+['If', 'conscience', 'and', 'empathy', 'were', 'impediments', 'to', 'the']
+>>> tokens[8:16]
+['advancement', 'of', 'self-interest', ',', 'then', 'we', 'would', 'have']
+>>> tokens[16:]
+['evolved', 'to', 'be', 'amoral', 'sociopaths', '.']
+----
+<1> Martin A. Nowak & Roger Highfield in _SuperCooperators_.footnote:[excerpt from Martin A. Nowak and Roger Highfield in _SuperCooperators_: Altruism, Evolution, and Why We Need Each Other to Succeed. New York: Free Press, 2011.]
+
+// IDEA: Diagram of Nowak quote with vertical bars breaking up sent into words
+
+The spaCy Python library contains a natural language processing pipeline that includes a tokenizer.
+In fact, the name of the package comes from the words "space" and "Cython".
+SpaCy was built using the Cython package to speed the tokenization of text, often using the *space* character (" ") as the delimmiter.
+SpaCy has become the *multitool* of NLP, because of its versatility and the elegance of its API.
+To use spaCy, you can start by creating an callable parser object, typically named `nlp`.
+You can customize your NLP pipeline by modifying the Pipeline elements within that parser object.
+
+And spaCy has "batteries included."
+So even with the default smallest spaCy language model loaded, you can do tokenization and sentence segementation, plus *part-of-speech* and *abstract-syntax-tree* tagging -- all with a single function call.
+When you call `nlp()` on a string, spaCy tokenizes the text and returns a `Doc` (document) object.
+A `Doc` object is a container for the sequence of sentences and tokens that it found in the text.
+
+
+// IDEA: example spacy code for tokenization
+
+The spaCy package tags each token with their linguistic function to provide you with information about the text's grammatical structure.
+Each token object within a `Doc` object has attributes that provide these tags.
+
+For example:
+* `token.text` the original text of the word
+* `token.pos_` grammatical part of speech tag as a human-readable string
+* `token.pos`  integer for the grammar part of speech tag
+* `token.dep_` indicates the tokens role in the syntactic dependency tree
+* `token.dep`  integer corresponding to the syntactic dependency tree location
+
+The `.text` attribute provides the original text for the token.
+This is what is provided when you request the __str__ representation of a token.
+A spaCy `Doc` object is allowing you to detokenize a document object to recreate the entire input text. i.e., the relation between tokens
+You can use these functions to examine the text in more depth.
+
+[source,python]
+----
+>>> import spacy
+>>> nlp = spacy.load("en_core_web_sm")
+>>> text = "Nice guys finish first."  # <1>
+>>> doc = nlp(text)
+>>> for token in doc:
+>>>     print(f"{token.text:<11}{token.pos_:<10}{token.dep:<10}")
+Nice       ADJ       402
+guys       NOUN      429
+finish     VERB      8206900633647566924
+first      ADV       400
+.          PUNCT     445
+----
+<1> Martin A. Nowak & Roger Highfield in _SuperCooperators_.footnote:[excerpt from Martin A. Nowak and Roger Highfield SuperCooperators: Altruism, Evolution, and Why We Need Each Other to Succeed. New York: Free Press, 2011.]
+
+== Challenging tokens
+
+Chinese, Japanese, and other pictograph languages aren't limited to a small small number letters in alphabets used to compose tokens or words.
+Characters in these traditional languages look more like drawings and are called "pictographs."
+There are many thousands of unique characters in the Chinese and Japanese languages.
+And these characters are used much like we use words in alphabet-based languages such as English.
+But each Chinese character is usually not a complete word on its own.
+A character's meaning depends on the characters to either side.
+And words are not delimited with spaces.
+This makes it challenging to tokenize Chinese text into words or other packets of thought and meaning.
+
+The `jieba` package is a Python package you can use to segment traditional Chinese text into words.
+It supports three segmentation modes: 1) "full mode" for retrieving all possible words from a sentence, 2) "accurate mode" for cutting the sentence into the most accurate segments, 3) "search engine mode" for splitting long words into shorter ones, sort-of like splitting compound words or finding the roots of words in English.
+In the example below, the Chinese sentence "西安是一座举世闻名的文化古城" translates into "Xi'an is a city famous world-wide for it's ancient culture."
+Or, a more compact and literal translation might be "Xi'an is a world-famous city for her ancient culture."
+
+From a grammatical perspective, you can split the sentence into: 西安 (Xi'an), 是 (is), 一座 (a), 举世闻名 (world-famous), 的 (adjective suffix), 文化 (culture), 古城 (ancient city).
+The character "座" is the quantifier meaning "ancient" that is normally used to modify the word "city."
+The `accurate mode` in `jieba` causes it to segment the sentence this way so that you can correctly extract a precise interpretation of the text.
+
+.Jieba in accurate mode
+[source,python]
+----
+>>> import jieba
+>>> seg_list = jieba.cut("西安是一座举世闻名的文化古城")  # <1>
+>>> list(seg_list)
+['西安', '是', '一座', '举世闻名', '的', '文化', '古城']
+----
+<1> the default mode for jieba is accurate or precise mode
+
+Jieba's accurate mode minimizes the total number of tokens or words.
+This gave you 7 tokens for this short
+Jieba attempts to keep as many possible characters together.
+This will reduce the false positive rate or type 1 errors for detecting boundaries between words.
+
+In full mode, jieba will attempt to split the text into smaller words, and more of them.
+
+.Jieba in full mode
+[source,python]
+----
+>>> import jieba
+... seg_list = jieba.cut("西安是一座举世闻名的文化古城", cut_all=True)  # <1>
+>>> list(seg_list)
+['西安', '是', '一座', '举世', '举世闻名', '闻名', '的', '文化', '古城']
+----
+<1> `cut_all==True` means "full mode"
+
+Now you can try search engine mode to see if it's possible to break up these tokens even further:
+
+.Jieba in search engine mode
+[source,python]
+----
+>>> seg_list = jieba.cut_for_search("西安是一座举世闻名的文化古城")  # <1>
+>>> list(seg_list)
+['西安', '是', '一座', '举世', '闻名', '举世闻名', '的', '文化', '古城']
+----
+<1> Accurate mode is the default mode.
+
+Unfortunately later versions of Python (3.5+) aren't supported by Jieba's part-of-speech tagging model.
+
+[source,python]
+----
+>>> import jieba
+>>> from jieba import posseg
+>>> words = posseg.cut("西安是一座举世闻名的文化古城")
+>>> jieba.enable_paddle()  # <1>
+>>> words = posseg.cut("西安是一座举世闻名的文化古城", use_paddle=True)
+>>> list(words)
+[pair('西安', 'ns'),
+ pair('是', 'v'),
+ pair('一座', 'm'),
+ pair('举世闻名', 'i'),
+ pair('的', 'uj'),
+ pair('文化', 'n'),
+ pair('古城', 'ns')]
+----
+<1> Activate paddle mode
+
+You can find more information about jieba at (https://github.com/fxsjy/jieba).
+SpaCy also contains Chinese language models that do a decent job of segmenting and tagging Chinese text.
+
+[source,python]
+----
+>>> import spacy
+>>> spacy.cli.download("zh_core_web_sm")  # <1>
+>>> nlpzh = spacy.load("zh_core_web_sm")
+>>> doc = nlpzh("西安是一座举世闻名的文化古城")
+>>> [(tok.text, tok.pos_) for tok in doc]
+[('西安', 'PROPN'),
+ ('是', 'VERB'),
+ ('一', 'NUM'),
+ ('座', 'NUM'),
+ ('举世闻名', 'VERB'),
+ ('的', 'PART'),
+ ('文化', 'NOUN'),
+ ('古城', 'NOUN')]
+----
+<1> Only need download the Chinese (zh) language model if this is your first time processing Chinese text
+
+As you may notice, spaCy provides slightly different tokenization and tagging, which is more attached to the original meaning of each word rather than the context of this sentence.
+
+=== A complicated picture
+
+Unlike English, there is no concept of stemming or lemmatization in pictographic languages such as Chinese and Japanese (Kanji).
+However, there’s a related concept.
+The most essential building blocks of Chinese characters are called _radicals_.
+To better understand _radicals_, you must first see how Chinese characters are constructed.
+There are six types of Chinese characters: 1) pictographs, 2) pictophonetic characters, 3) associative compounds, 4) self-explanatory characters, 5) phonetic loan characters, and 6) mutually explanatory characters.
+The top four categories are the most important and encompass most Chinese characters.
+
+1. Pictographs (象形字)
+2. Pictophonetic characters (形声字)
+3. Associative compounds (会意字)
+
+==== 1. Pictographs (象形字)
+
+_Pictographs_ were created from images of real objects, such as the characters for 口 (mouth) and 门 (door).
+
+
+==== 2. Pictophonetic characters (形声字)
+
+_Pictophonetic characters_ were created from a radical and a single Chinese character.
+One part represents its meaning and the other indicates its pronunciation.
+For example, 妈 (mā, mother) = 女 (female) + 马 (mǎ, horse).
+Squeezing 女 into 马 gives 妈.
+The character 女 is the semantic radical that indicates the meaning of the character (female).
+马 is a single character that has a similar pronunciation (mǎ).
+You can see that the character for mother (妈) is a combination of the characters for female an
+This is comparable to the English concept of homophones -- words that sound alike but mean completely different things.
+But in Chinese use additional characters to disambiguate homophones.
+The character for female
+
+==== 3. Associative compounds (会意字)
+
+Associative compounds can be divided into two parts: one symbolizes the image, the other indicates the meaning.
+
+For example, 旦 (dawn), the upper part (日) is the sun and the lower part (一) is like the horizon line.
+
+
+==== Self-explanatory characters (指事字)
+
+
+Self-explanatory characters cannot be easily represented by an image, so they are shown by a single abstract symbol.
+For example, 上 (up), 下 (down).
+
+As you can see, procedures like stemming and lemmatization are harder or impossible for many Chinese characters.
+Separating the parts of a character may radically ;) change its meaning.
+And there's not prescribed order or rule for combining radicals to create Chinese characters.
+
+Nonetheless, some kinds of stemming are harder in English than they are in Chinese
+For example, automatically removing the pluralization from words like "we", "us", "they" and "them" is hard in English but straightforward in Chinese.
+Chinese uses inflection to construct the plural form of characters, similar to adding s to the end of English words.
+In Chinese the pluralization suffix character is 们.
+The character 朋友 (friend) becomes 朋友们 (friends).
+
+Even the characters for "we/us", "they/them", and "y'all" use the same pluralization suffix: 我们 (we/us), 他们 (they/them), 你们 (you).
+But in in English, you can remove the 'ing' or 'ed' from many verbs to get the root word.
+However, in Chinese, verb conjugation uses an additional character in the front or the end to indicate tense.
+There's no prescribed rule for verb conjugation.
+For example, examine the character 学 (learn), 在学 (learning), and 学过 (learned).
+In Chinese, you can also use a suffix 学 to denote an academic discipline, such as 心理学 (psychology) or 社会学 (sociology).
+In most cases, you want to keep the integrated Chinese character together rather than reducing it to its components.
+
+It turns out this is a good rule of thumb for all languages.
+Let the data do the talking.
+Do not stem or lemmatize unless the statistics indicate that it will help your NLP pipeline perform better.
+Is there not a small amount of meaning that is lost when "smarter" and "smartest" reduce to "smart"?
+Make sure stemming does not leave your NLP pipeline dumb.
+
+Let the statistics of how of how characters and words are used together help you decide how, or if, to decompose any particular word or n-gram.
+In the next chapter we'll show you some tools like Scikit-Learn's `TfidfVectorizer` that handle all the tedious account required to get this right.
+
+
+==== Contractions
+
+// TODO: clean this up
+You might be wondering why you would want to split the contraction `wasn't` into `was` and `n't`.
+For some applications, like grammar-based NLP models that use syntax trees, it is important to separate the words `was` and `not` to allow the syntax tree parser to have a consistent, predictable set of tokens with known grammar rules as its input.
+There are a variety of standard and nonstandard ways to contract words, by reducing contractions to their constituent words, a dependency tree parser or syntax parser only need to be programmed to anticipate the various spellings of individual words rather than all possible contractions.
+
+
+[TIP]
+.Tokenize informal text from social networks such as Twitter and Facebook
+====
+The NLTK library includes a rule-based tokenizer to deal with short, informal, emoji-laced texts from social networks: `casual_tokenize`
+
+It handles emojis, emoticons, and usernames.
+The `reduce_len` option deletes less meaningful character repetitions.
+The `reduce_len` algorithm retains three repetitions, to approximate the intent and sentiment of the original text.
+
+[source,python]
+----
+>>> from nltk.tokenize.casual import casual_tokenize
+>>> texts.append("@rickrau mind BLOOOOOOOOWWWWWN by latest lex :*) !!!!!!!!")
+>>> casual_tokenize(texts[-1], reduce_len=True)
+['@rickrau', 'mind', 'BLOOOWWWN', 'by', 'latest', 'lex', ':*)', '!', '!', '!']
+----
+
+====
+
+=== Extending your vocabulary with _n_-grams
+
+Let's revisit that "ice cream" problem from the beginning of the chapter.
+Remember we talked about trying to keep "ice" and "cream" together.
+
+____
+I scream, you scream, we all scream for ice cream.
+____
+
+But I do not know many people that scream for "cream".
+And nobody screams for "ice", unless they're about to slip and fall on it.
+So you need a way for your word-vectors to keep "ice" and "cream" together.
+
+==== We all gram for _n_-grams
+
+An _n_-gram is a sequence containing up to _n_ elements that have been extracted from a sequence of those elements, usually a string.
+In general the "elements" of an _n_-gram can be characters, syllables, words, or even symbols like "A", "D", and "G" used to represent the chemical amino acid markers in a DNA or RNA sequence.footnote:[Linguistic and NLP techniques are often used to glean information from DNA and RNA, this site provides a list of amino acid symbols that can help you translate amino acid language into a human-readable language: "Amino Acid - Wikipedia" (https://en.wikipedia.org/wiki/Amino_acid#Table_of_standard_amino_acid_abbreviations_and_properties).]
+
+In this book, we're only interested in _n_-grams of words, not characters.footnote:[You may have learned about trigram indexes in your database class or the documentation for PostgreSQL (`postgres`). But these are triplets of characters. They help you quickly retrieve fuzzy matches for strings in a massive database of strings using the `%` and `~*` SQL full-text search queries.]
+So in this book, when we say 2-gram, we mean a pair of words, like "ice cream".
+When we say 3-gram, we mean a triplet of words like "beyond the pale" or "Johann Sebastian Bach" or "riddle me this".
+_n_-grams do not have to mean something special together, like compound words.
+They have to be frequent enough together to catch the attention of your token counters.
+
+Why bother with _n_-grams?
+As you saw earlier, when a sequence of tokens is vectorized into a bag-of-words vector, it loses a lot of the meaning inherent in the order of those words.
+By extending your concept of a token to include multiword tokens, _n_-grams, your NLP pipeline can retain much of the meaning inherent in the order of words in your statements.
+For example, the meaning-inverting word "not" will remain attached to its neighboring words, where it belongs.
+Without _n_-gram tokenization, it would be free floating.
+Its meaning would be associated with the entire sentence or document rather than its neighboring words.
+The 2-gram "was not" retains much more of the meaning of the individual words "not" and "was" than those 1-grams alone in a bag-of-words vector.
+A bit of the context of a word is retained when you tie it to its neighbor(s) in your pipeline.
+
+In the next chapter, we show you how to recognize which of these _n_-grams contain the most information relative to the others, which you can use to reduce the number of tokens (_n_-grams) your NLP pipeline has to keep track of.
+Otherwise it would have to store and maintain a list of every single word sequence it came across.
+This prioritization of _n_-grams will help it recognize "Three Body Problem" and "ice cream", without paying particular attention to "three bodies" or "ice shattered".
+In chapter 4, we associate word pairs, and even longer sequences, with their actual meaning, independent of the meaning of their individual words.
+But for now, you need your tokenizer to generate these sequences, these _n_-grams.
+
+==== Stop words
+
+Stop words are common words in any language that occur with a high frequency but carry much less substantive information about the meaning of a phrase.
+Examples of some common stop words include footnote:[A more comprehensive list of stop words for various languages can be found in NLTK's corpora (https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/corpora/stopwords.zip).]
+
+* a, an
+* the, this
+* and, or
+* of, on
+
+Historically stop words have been excluded from NLP pipelines in order to reduce the computational effort to extract information from a text.
+Even though the words themselves carry little information, the stop words can provide important relational information as part of an _n_-gram.
+Consider these two examples:
+
+* `Mark reported to the CEO`
+* `Suzanne reported as the CEO to the board`
+
+In your NLP pipeline, you might create 4-grams such as `reported to the CEO` and `reported as the CEO`.
+If you remove the stop words from the 4-grams, both examples would be reduced to `reported CEO`, and you would lack the information about the professional hierarchy.
+In the first example, Mark could have been an assistant to the CEO, whereas in the second example Suzanne was the CEO reporting to the board.
+Unfortunately, retaining the stop words within your pipeline creates another problem: It increases the length of the _n_-grams required to make use of these connections formed by the otherwise meaningless stop words.
+This issue forces us to retain at least 4-grams if you want to avoid the ambiguity of the human resources example.
+
+Designing a filter for stop words depends on your particular application.
+Vocabulary size will drive the computational complexity and memory requirements of all subsequent steps in the NLP pipeline.
+But stop words are only a small portion of your total vocabulary size.
+A typical stop word list has only 100 or so frequent and unimportant words listed in it.
+But a vocabulary size of 20,000 words would be required to keep track of 95% of the words seen in a large corpus of tweets, blog posts, and news articles.footnote:[See the web page titled "Analysis of text data and Natural Language Processing" (http://rstudio-pubs-static.s3.amazonaws.com/41251_4c55dff8747c4850a7fb26fb9a969c8f.html).]
+And that is just for 1-grams or single-word tokens.
+A 2-gram vocabulary designed to catch 95% of the 2-grams in a large English corpus will generally have more than 1 million unique 2-gram tokens in it.
+
+You may be worried that vocabulary size drives the required size of any training set you must acquire to avoid overfitting to any particular word or combination of words.
+And you know that the size of your training set drives the amount of processing required to process it all.
+However, getting rid of 100 stop words out of 20,000 is not going to significantly speed up your work.
+And for a 2-gram vocabulary, the savings you would achieve by removing stop words is minuscule.
+In addition, for 2-grams you lose a lot more information when you get rid of stop words arbitrarily, without checking for the frequency of the 2-grams that use those stop words in your text.
+For example, you might miss mentions of "The Shining" as a unique title and instead treat texts about that violent, disturbing movie the same as you treat documents that mention "Shining Light" or "shoe shining".
+
+So if you have sufficient memory and processing bandwidth to run all the NLP steps in your pipeline on the larger vocabulary, you probably do not want to worry about ignoring a few unimportant words here and there.
+And if you are worried about overfitting a small training set with a large vocabulary, there are better ways to select your vocabulary or reduce your dimensionality than ignoring stop words.
+Including stop words in your vocabulary allows the document frequency filters (discussed in chapter 3) to more accurately identify and ignore the words and _n_-grams with the least information content within your particular domain.
+
+The spaCy and NLTK packages include a variety of predefined sets of stop words for various use cases. footnote:[The spaCy package contains a list of stop words that you can customize using this Stack Overflow answer (https://stackoverflow.com/a/51627002/623735)]
+You probably won't need a broad list of stopwords like the one in listing <<listing-broad-stop-words>>, but if you do you'll want to check out both the spaCy and NLTK stopwords lists.
+And if you need an even broader set of stopwords you can `SearX`
+footnote:[If you want to help others find SearX you can get in the habbit of saying "SearX" (pronounced "see Ricks") when talking or writing about doing a web search. You can shift the meaning of words in your world to make it a better place!]
+footnote:[The NLTK package (https://pypi.org/project/nltk) contains the list of stop words you'll see in many online tutorials]
+for SEO companies that maintain lists of stopwords in many languages.
+
+If your NLP pipeline relies on a fine-tuned list of stop words to achieve high accuracy, it can be a significant maintenance headache.
+Humans and machines (search engines) are constantly changing which words they ignore.
+footnote:[For marketing and SEO Damien Doyle maintains a list of search engine stopwords ranked by popularity here (https://www.ranks.nl/stopwords)]
+footnote:[Vadi Kumar maintained some stop words lists here (https://github.com/Vadi/stop-words)]
+If you can find the list of stopwords used by advertisers you can use them to detect manipulative web pages and SEO (Search Engine Optimization) content.
+If a web page or article doesn't use stop words very often, it may have been "optimized" to deceive you. 
+Listing <<listing-broad-stop-words>> uses an exhaustive list of stopwords created from several of these sources.
+By filtering out this broad set of words from example text, you can see the amount of meaning "lost in translation."
+In most cases, you'll find that ignoring stop words does not improve your NLP pipeline accuracy.
+
+[#listing-broad-stop-words, reftext={chapter}.{counter:listing}]
+.Broad list of stop words
+[source,python]
+----
+>>> import requests
+>>> url = ("https://gitlab.com/tangibleai/nlpia/-/raw/master/"
+...        "src/nlpia/data/stopword_lists.json")
+>>> response = requests.get(url)
+>>> stopwords = response.json()['exhaustive']  # <1>
+>>> tokens = 'the words were just as I remembered them'.split()  # <2>
+>>> tokens_without_stopwords = [x for x in tokens if x not in stopwords]
+>>> print(tokens_without_stopwords)
+['I', 'remembered']
+----
+<1> This exhaustive list of stop words was compiled from SEO (search engine optimization) lists, spaCy and NLTK.
+<2> Sentence punctuation and capitalization removed to simplify this example
+
+This is a meaningful sentence from a short story by Ted Chiang about machines helping us remember our statements so we don't have to rely on flawed memories.footnote:[from Ted Chiang, _Exhalation_, "Truth of Fact, Truth of Fiction"]
+In this phrase you lost two thirds of the words and only retained some of the meaning sentence's meaning.
+However you can see that an important token "words" was discarded by using this particularly exhaustive set of stop words.
+You can sometimes get your point across without articles, prepositions, or even forms of the verb "to be."
+But it will reduce the precision and accuracy of your NLP pipeline, but at least some small amount of meaning will be lost.
+
+You can see that some words carry more meaning than others.
+Imagine someone doing sign language or in a hurry to write a note to themselves.
+Which words would they choose to skip when they are in a hurry?
+That is the way linguists decide on lists of stop words.
+But if you're in a hurry, and your NLP isn't rushed for time like you are, you probably don't want to waste your time creating and maintaining lists of stop words.
+
+Here's another common stop words list that isn't quite as exhaustive:
+
+[[nltk_stop_words_code]]
+.NLTK list of stop words
+[source,python]
+----
+>>> import nltk
+>>> nltk.download('stopwords')
+>>> stop_words = nltk.corpus.stopwords.words('english')
+>>> len(stop_words)
+179
+>>> stop_words[:7]
+['i', 'me', 'my', 'myself', 'we', 'our', 'ours']
+>>> [sw for sw in stopwords if len(sw) == 1]
+['i', 'a', 's', 't', 'd', 'm', 'o', 'y']
+----
+
+A document that dwells on the first person is pretty boring, and more importantly for you, has low information content.
+The NLTK package includes pronouns (not just first person ones) in its list of stop words.
+And these one-letter stop words are even more curious, but they make sense if you have used the NLTK tokenizer and Porter stemmer a lot.
+These single-letter tokens pop up a lot when contractions are split and stemmed using NLTK tokenizers and stemmers.
+
+[WARNING]
+====
+The set of English stop words in `sklearn`, `spacy`, `nltk`, and SEO tools are very different, and they are constantly evolving.
+At the time of this writing, `sklearn` has 318 stop words, NLTK has 179 stop words, spaCy has 326, and our 'exhaustive' SEO list includes 667 stop words.
+
+This is a good reason to consider *not* filtering stop words.
+If you do, others may not be able to reproduce your results.
+====
+
+Depending on how much natural language information you want to discard ;), you can take the union or the intersection of multiple stop word lists for your pipeline.
+Here are some stop_words lists we found, though we rarely use any of them in production:
+
+[[collection_of_stop_words_lists_code]]
+.Collection of stop words lists
+[source,python]
+----
+>>> resp = requests.get(url)
+>>> len(resp.json()['exhaustive'])
+667
+>>> len(resp.json()['sklearn'])
+318
+>>> len(resp.json()['spacy'])
+326
+>>> len(resp.json()['nltk'])
+179
+>>> len(resp.json()['reuters'])
+28
+----
+
+=== Normalizing your vocabulary
+
+So you have seen how important vocabulary size is to the performance of an NLP pipeline. Another vocabulary reduction technique is to normalize your vocabulary so that tokens that mean similar things are combined into a single, normalized form. Doing so reduces the number of tokens you need to retain in your vocabulary and also improves the association of meaning across those different "spellings" of a token or _n_-gram in your corpus. And as we mentioned before, reducing your vocabulary can reduce the likelihood of overfitting.
+
+==== Case folding
+
+Case folding is when you consolidate multiple "spellings" of a word that differ only in their capitalization.
+So why would we use case folding at all?
+Words can become case "denormalized" when they are capitalized because of their presence at the beginning of a sentence, or when they're written in `ALL CAPS` for emphasis.
+// TODO: Discuss _ normalization, Unicode normalization, and asciification, diacritics, accented e in resume', etc
+Undoing this denormalization is called _case normalization_, or more commonly, _case folding_.
+Normalizing word and character capitalization is one way to reduce your vocabulary size and generalize your NLP pipeline.
+It helps you consolidate words that are intended to mean (and be spelled) the same thing under a single token.
+
+However, some information is often communicated by capitalization of a word -- for example,  'doctor' and 'Doctor' often have different meanings.
+Often capitalization is used to indicate that a word is a proper noun, the name of a person, place, or thing.
+You will want to be able to recognize proper nouns as distinct from other words, if named entity recognition is important to your pipeline.
+However, if tokens are not case normalized, your vocabulary will be approximately twice as large, consume twice as much memory and processing time, and might increase the amount of training data you need to have labeled for your machine learning pipeline to converge to an accurate, general solution.
+Just as in any other machine learning pipeline, your labeled dataset used for training must be "representative" of the space of all possible feature vectors your model must deal with, including variations in capitalization.
+For 100000-D bag-of-words vectors, you usually must have 100000 labeled examples, and sometimes even more than that, to train a supervised machine learning pipeline without overfitting.
+In some situations, cutting your vocabulary size by half can sometimes be worth the loss of information content.
+
+In Python, you can easily normalize the capitalization of your tokens with a list comprehension.
+
+[source,python]
+----
+>>> tokens = ['House', 'Visitor', 'Center']
+>>> normalized_tokens = [x.lower() for x in tokens]
+>>> print(normalized_tokens)
+['house', 'visitor', 'center']
+----
+
+And if you are certain that you want to normalize the case for an entire document, you can `lower()` the text string in one operation, before tokenization.
+But this will prevent advanced tokenizers that can split _camel case_ words like "WordPerfect", "FedEx", or "stringVariableName."footnote:[See the web page titled "Camel case case - Wikipedia" (https://en.wikipedia.org/wiki/Camel_case_case).]]
+Maybe you want WordPerfect to be its own unique thing (token), or maybe you want to reminisce about a more perfect word processing era.
+It is up to you to decide when and how to apply case folding.
+
+With case normalization, you are attempting to return these tokens to their "normal" state before grammar rules and their position in a sentence affected their capitalization.
+The simplest and most common way to normalize the case of a text string is to lowercase all the characters with a function like Python's built-in `str.lower()`.footnote:[We're assuming the behavior of str.lower() in Python 3. In Python 2, bytes (strings) could be lowercased by just shifting all alpha characters in the ASCII number (`ord`) space, but in Python 3 `str.lower` properly translates characters so it can handle embellished English characters (like the "acute accent" diactric mark over the e in resumé) as well as the particulars of capitalization in non-English languages.]
+Unfortunately this approach will also "normalize" away a lot of meaningful capitalization in addition to the less meaningful first-word-in-sentence capitalization you intended to normalize away.
+A better approach for case normalization is to lowercase only the first word of a sentence and allow all other words to retain their capitalization.
+
+Lowercasing on the first word in a sentence preserves the meaning of a proper nouns in the middle of a sentence, like "Joe" and "Smith" in "Joe Smith".
+And it properly groups words together that belong together, because they are only capitalized when they are at the beginning of a sentence, since they are not proper nouns.
+This prevents "Joe" from being confused with "coffee" ("joe")footnote:[The trigram "cup of joe" (https://en.wiktionary.org/wiki/cup_of_joe) is slang for "cup of coffee."] during tokenization.
+And this approach prevents the blacksmith connotation of "smith" being confused the the proper name "Smith" in a sentence like "A word smith had a cup of joe."
+Even with this careful approach to case normalization, where you lowercase words only at the start of a sentence, you will still need to introduce capitalization errors for the rare proper nouns that start a sentence.
+"Joe Smith, the word smith, with a cup of joe." will produce a different set of tokens than "Smith the word with a cup of joe, Joe Smith."
+And you may not  want that.
+In addition, case normalization is useless for languages that do not have a concept of capitalization, like Arabic or Hindi.
+
+To avoid this potential loss of information, many NLP pipelines do not normalize for case at all.
+For many applications, the efficiency gain (in storage and processing) for reducing one's vocabulary size by about half is outweighed by the loss of information for proper nouns.
+But some information may be "lost" even without case normalization.
+If you do not identify the word "The" at the start of a sentence as a stop word, that can be a problem for some applications.
+Really sophisticated pipelines will detect proper nouns before selectively normalizing the case for words at the beginning of sentences that are clearly not proper nouns.
+You should implement whatever case normalization approach makes sense for your application.
+If you do not have a lot of "Smith"s and "word smiths" in your corpus, and you do not care if they get assigned to the the same tokens, you can just lowercase everything.
+The best way to find out what works is to try several different approaches, and see which approach gives you the best performance for the objectives of your NLP project.
+
+By generalizing your model to work with text that has odd capitalization, case normalization can reduce overfitting for your machine learning pipeline.
+Case normalization is particularly useful for a search engine.
+For search, normalization increases the number of matches found for a particular query.
+This is often called the "recall" performance metric for a search engine (or any other classification model).footnote:[Check our Appendix D to learn more about _precision_ and _recall_. Here's a comparison of the recall of various search engines on the Webology site (http://www.webology.org/2005/v2n2/a12.html).]
+
+For a search engine without normalization if you searched for "Age" you will get a different set of documents than if you searched for "age."
+"Age" would likely occur in phrases like "New Age" or "Age of Reason".
+In contrast, "age" would be more likely to occur in phrases like "at the age of" in your sentence about Thomas Jefferson.
+By normalizing the vocabulary in your search index (as well as the query), you can ensure that both kinds of documents about "age" are returned regardless of the capitalization in the query from the user.
+
+However, this additional recall accuracy comes at the cost of precision, returning many documents that the user may not be interested in. Because of this issue, modern search engines allow users to turn off normalization with each query, typically by quoting those words for which they want only exact matches returned. If you are building such a search engine pipeline, in order to accommodate both types of queries you will have to build two indexes for your documents: one with case-normalized _n_-grams, and another with the original capitalization.
+
+==== Stemming
+
+Another common vocabulary normalization technique is to eliminate the small meaning differences of pluralization or possessive endings of words, or even various verb forms.
+This normalization, identifying a common stem among various forms of a word, is called stemming.
+For example, the words `housing` and `houses` share the same stem, `house`.
+Stemming removes suffixes from words in an attempt to combine words with similar meanings together under their common stem.
+A stem is not required to be a properly spelled word, but merely a token, or label, representing several possible spellings of a word.
+
+A human can easily see that "house" and "houses" are the singular and plural forms of the same noun.
+However, you need some way to provide this information to the machine. One of its main benefits is in the compression of the number of words whose meaning your software or language model needs to keep track of.
+It reduces the size of your vocabulary while limiting the loss of information and meaning, as much as possible.
+In machine learning this is referred to as dimension reduction.
+It helps generalize your language model, enabling the model to behave identically for all the words included in a stem.
+So, as long as your application does not require your machine to distinguish between "house" and "houses", this stem will reduce your programming or dataset size by half or even more, depending on the aggressiveness of the stemmer you chose.
+
+Stemming is important for keyword search or information retrieval.
+It allows you to search for "developing houses in Portland" and get web pages or documents that use both the word "house" and "houses" and even the word "housing" because these words are all stemmed to the "hous" token.
+Likewise you might receive pages with the words "developer" and "development" rather than "developing" because all these words typically reduce to the stem "develop".
+As you can see, this is a "broadening" of your search, ensuring that you are less likely to miss a relevant document or web page.
+This broadening of your search results would be a big improvement in the "recall" score for how well your search engine is doing its job at returning all the relevant documents.footnote:[Review Appendix D if you have forgotten how to measure recall or visit the wikipedia page to learn more (https://en.wikipedia.org/wiki/Precision_and_recall).]
+
+But stemming could greatly reduce the "precision" score for your search engine because it might return many more irrelevant documents along with the relevant ones.
+In some applications this "false-positive rate" (proportion of the pages returned that you do not find useful) can be a problem.
+So most search engines allow you to turn off stemming and even case normalization by putting quotes around a word or phrase.
+Quoting indicates that you only want pages containing the exact spelling of a phrase such as "'Portland Housing Development software'."
+That would return a different sort of document than one that talks about a "'a Portland software developer's house'."
+And there are times when you want to search for "Dr. House's calls" and not "dr house call", which might be the effective query if you used a stemmer on that query.
+
+Here's a simple stemmer implementation in pure Python that can handle trailing S's.
+
+[source,python]
+----
+>>> def stem(phrase):
+...     return ' '.join([re.findall('^(.*ss|.*?)(s)?$',
+...         word)[0][0].strip("'") for word in phrase.lower().split()])
+>>> stem('houses')
+'house'
+>>> stem("Doctor House's calls")
+'doctor house call'
+----
+
+The preceding stemmer function follows a few simple rules within that one short regular expression:
+
+* If a word ends with more than one `s`, the stem is the word and the suffix is a blank string.
+* If a word ends with a single `s`, the stem is the word without the `s` and the suffix is the `s`.
+* If a word does not end on an `s`, the stem is the word and no suffix is returned.
+
+The strip method ensures that some possessive words can be stemmed along with plurals.
+
+This function works well for regular cases, but is unable to address more complex cases. For example, the rules would fail with words like `dishes` or `heroes`. For more complex cases like these, the NLTK package provides other stemmers.
+
+It also does not handle the "housing" example from your "Portland Housing" search.
+
+Two of the most popular stemming algorithms are the Porter and Snowball stemmers.
+The Porter stemmer is named for the computer scientist Martin Porter who spent most of the 80's and 90's fine tuning this hard-coded algorithm.footnote:[See "An algorithm for suffix stripping", 1980 (http://www.cs.toronto.edu/~frank/csc2501/Readings/R2_Porter/Porter-1980.pdf) by M.F. Porter.]
+Porter is also also responsible for enhancing the Porter stemmer to create the Snowball stemmer.footnote:[See the web page titled "Snowball: A language for stemming algorithms" (http://snowball.tartarus.org/texts/introduction.html).]
+Porter dedicated much of his lengthy career to documenting and improving stemmers, due to their value in information retrieval (keyword search).
+These stemmers implement more complex rules than our simple regular expression.
+This enables the stemmer to handle the complexities of English spelling and word ending rules.
+
+[source,python]
+----
+>>> from nltk.stem.porter import PorterStemmer
+>>> stemmer = PorterStemmer()
+>>> ' '.join([stemmer.stem(w).strip("'") for w in
+...   "dish washer's fairly washed dishes".split()])
+'dish washer fairli wash dish'
+----
+
+Notice that the Porter stemmer, like the regular expression stemmer, retains the trailing apostrophe (unless you explicitly strip it), which ensures that possessive words will be distinguishable from nonpossessive words.
+Possessive words are often proper nouns, so this feature can be important for applications where you want to treat names differently than other nouns.
+
+.More on the Porter stemmer
+****
+Julia Menchavez has graciously shared her translation of Porter's original stemmer algorithm into pure python (https://github.com/jedijulia/porter-stemmer/blob/master/stemmer.py). If you are ever tempted to develop your own stemmer, consider these 300 lines of code and the lifetime of refinement that Porter put into them.
+
+There are eight steps to the Porter stemmer algorithm: 1a, 1b, 1c, 2, 3, 4, 5a, and 5b.
+Step 1a is a bit like your regular expression for dealing with trailing "S"es:footnote:[This is a trivially abbreviated version of Julia Menchavez's implementation `porter-stemmer` on GitHub (https://github.com/jedijulia/porter-stemmer/blob/master/stemmer.py).]
+
+[source,python]
+----
+def step1a(self, word):
+    if word.endswith('sses'):
+        word = self.replace(word, 'sses', 'ss')  # <1>
+    elif word.endswith('ies'):
+        word = self.replace(word, 'ies', 'i')
+    elif word.endswith('ss'):
+        word = self.replace(word, 'ss', 'ss')
+    elif word.endswith('s'):
+        word = self.replace(word, 's', '')
+    return word
+----
+<1> This is not at all like `str.replace()`. Julia's `self.replace()` modifies only the ending of a word.
+
+The remainining seven steps are much more complicated because they have to deal with the complicated English spelling rules for the following:
+
+* *Step 1a*: "s" and "es" endings
+* *Step 1b*: "ed", "ing", and "at" endings
+* *Step 1c*: "y" endings
+* *Step 2*: "nounifying" endings such as "ational", "tional", "ence", and "able"
+* *Step 3*: adjective endings such as "icate",footnote:[Sorry Chick, Porter doesn't like your `obsfucate` username ;)], "ful", and "alize"
+* *Step 4*: adjective and noun endings such as "ive", "ible", "ent", and "ism"
+* *Step 5a*: stubborn "e" endings, still hanging around
+* *Step 5b*: trailing double-consonants for which the stem will end in a single "l"
+****
+
+Snowball stemmer is more aggressive than the Porter stemmer.
+Notice that it stems 'fairly' to 'fair', which is more accurate than the Porter stemmer.
+
+[source,python]
+----
+>>> from nltk.stem.snowball import SnowballStemmer
+>>> stemmer = SnowballStemmer(language='english')
+>>> ' '.join([stemmer.stem(w).strip("'") for w in
+...   "dish washer's fairly washed dishes".split()])
+'dish washer fair wash dish'
+----
+
+==== Lemmatization
+
+If you have access to information about connections between the meanings of various words, you might be able to associate several words together even if their spelling is quite different.
+This more extensive normalization down to the semantic root of a word -- its lemma -- is called lemmatization.
+
+In chapter 12, we show how you can use lemmatization to reduce the complexity of the logic required to respond to a statement with a chatbot.
+Any NLP pipeline that wants to "react" the same for multiple different spellings of the same basic root word can benefit from a lemmatizer.
+It reduces the number of words you have to respond to, the dimensionality of your language model.
+Using it can make your model more general, but it can also make your model less precise, because it will treat all spelling variations of a given root word the same.
+For example "chat", "chatter", "chatty", "chatting", and perhaps even "chatbot" would all be treated the same in an NLP pipeline with lemmatization, even though they have different meanings.
+Likewise "bank", "banked", and "banking" would be treated the same by a stemming pipeline despite the river meaning of "bank", the motorcycle meaning of "banked" and the finance meaning of "banking."
+
+As you work through this section, think about words where lemmatization would drastically alter the meaning of a word, perhaps even inverting its meaning and producing the opposite of the intended response from your pipeline.
+This scenario is called _spoofing_ -- when you try to elicit the wrong response from a machine learning pipeline by cleverly constructing a difficult input.
+
+Sometimes lemmatization will be a better way to normalize the words in your vocabulary.
+You may find that for your application stemming and case folding create stems and tokens that do not take into account a word's meaning.
+A lemmatizer uses a knowledge base of word synonyms and word endings to ensure that only words that mean similar things are consolidated into a single token.
+
+Some lemmatizers use the word's part of speech (POS) tag in addition to its spelling to help improve accuracy.
+The POS tag for a word indicates its role in the grammar of a phrase or sentence.
+For example, the noun POS is for words that refer to "people, places, or things" within a phrase.
+An adjective POS is for a word that modifies or describes a noun.
+A verb refers to an action.
+The POS of a word in isolation cannot be determined.
+The context of a word must be known for its POS to be identified.
+So some advanced lemmatizers cannot be run on words in isolation.
+
+Can you think of ways you can use the part of speech to identify a better "root" of a word than stemming could?
+Consider the word `better`.
+Stemmers would strip the "er" ending from "better" and return the stem "bett" or "bet".
+However, this would lump the word "better" with words like "betting", "bets", and "Bet's", rather than more similar words like "betterment", "best", or even "good" and "goods".
+
+So lemmatizers are better than stemmers for most applications.
+Stemmers are only really used in large scale information retrieval applications (keyword search).
+And if you really want the dimension reduction and recall improvement of a stemmer in your information retrieval pipeline, you should probably also use a lemmatizer right before the stemmer.
+Because the lemma of a word is a valid English word, stemmers work well on the output of a lemmatizer.
+This trick will reduce your dimensionality and increase your information retrieval recall even more than a stemmer alone.footnote:[Thank you Kyle Gorman for pointing this out]
+
+How can you identify word lemmas in Python?
+The NLTK package provides functions for this.
+Notice that you must tell the WordNetLemmatizer which part of speech you are interested in, if you want to find the most accurate lemma:
+
+[source,python]
+----
+>>> nltk.download('wordnet')
+True
+>>> nltk.download('omw-1.4')
+True
+>>> from nltk.stem import WordNetLemmatizer
+>>> lemmatizer = WordNetLemmatizer()
+>>> lemmatizer.lemmatize("better")  # <1>
+'better'
+>>> lemmatizer.lemmatize("better", pos="a")  # <2>
+'good'
+>>> lemmatizer.lemmatize("good", pos="a")
+'good'
+>>> lemmatizer.lemmatize("goods", pos="a")
+'goods'
+>>> lemmatizer.lemmatize("goods", pos="n")
+'good'
+>>> lemmatizer.lemmatize("goodness", pos="n")
+'goodness'
+>>> lemmatizer.lemmatize("best", pos="a")
+'best'
+----
+<1> The default part of speech is "n" for "noun"
+<2> "a" indicates the "adjective" part of speech
+
+You might be surprised that the first attempt to lemmatize the word "better" did not change it at all. This is because the part of speech of a word can have a big effect on its meaning. If a POS is not specified for a word, then the NLTK lemmatizer assumes it is a noun. Once you specify the correct POS, 'a' for adjective, the lemmatizer returns the correct lemma. Unfortunately, the NLTK lemmatizer is restricted to the connections within the Princeton WordNet graph of word meanings. So the word "best" does not lemmatize to the same root as "better". This graph is also missing the connection between "goodness" and "good". A Porter stemmer, on the other hand, would make this connection by blindly stripping off the "ness" ending of all words.
+
+[source,python]
+----
+>>> stemmer.stem('goodness')
+'good'
+----
+
+You can easily implement lemmatization in spaCy by the following:
+
+[source,python]
+----
+>>> import spacy
+>>> nlp = spacy.load("en_core_web_sm")
+>>> doc = nlp("better good goods goodness best")
+>>> for token in doc:
+>>>     print(token.text, token.lemma_)
+better well
+good good
+goods good
+goodness goodness
+best good
+----
+Unlike NLTK, spaCy lemmatizes "better" to "well" by assuming it is an adverb and returns the correct lemma for "best" ("good").
+
+==== Synonym substitution
+
+There are five kinds of "synonyms" that are sometime helpful in creating a consistent smaller vocabulary to help your NLP pipeline generalize well.
+
+. Typo correction
+. Spelling correction
+. Synonym substitution
+. Contraction expansion
+. Emoji expansion
+
+Each of these synonym substitution algorithms can be designed to be more or less agressive.
+And you will want to think about the language used by your users in your domain.
+For example, in the legal, technical, or medical fields, it's rarely a good idea to substitute synonyms.
+A doctor wouldn't want a chatbot telling his patient their "heart is broken" because of some synonym substitutions on the heart emoticon ("<3").
+
+Nonetheless, the use cases for lemmatization and stemming apply to synonym substitution.
+
+==== Use cases
+
+When should you use a lemmatizer, stemmer, or synonym substitution?
+Stemmers are generally faster to compute and require less-complex code and datasets.
+But stemmers will make more errors and stem a far greater number of words, reducing the information content or meaning of your text much more than a lemmatizer would.
+Both stemmers and lemmatizers will reduce your vocabulary size and increase the ambiguity of the text.
+But lemmatizers do a better job retaining as much of the information content as possible based on how the word was used within the text and its intended meaning.
+As a result, some state of the art NLP packages, such as spaCy, do not provide stemming functions and only offer lemmatization methods.
+
+If your application involves search, stemming and lemmatization will improve the recall of your searches by associating more documents with the same query words.
+However, stemming, lemmatization, and even case folding will usually reduce the precision and accuracy of your search results.
+These vocabulary compression approaches may cause your information retrieval system (search engine) to return many documents not relevant to the words' original meanings.
+These are called "false positives", a incorrect matches to your search query.
+Sometimes "false positives" are less important than false negatives.
+A false negative for a search engine is when it fails to list the document you are looking for at all.
+
+Because search results can be ranked according to relevance, search engines and document indexes typically use lemmatization when they process your query and index your documents.
+Because search results can be ranked according to relevance, search engines and document indexes typically use lemmatization in their NLP pipeline.
+This means a search engine will use lemmatization when they tokenize your search text as well as when they index their collection of documents, such as the web pages they crawl.
+
+But they combine search results for unstemmed versions of words to rank the search results that they present to you.footnote:[Additional metadata is also used to adjust the ranking of search results.
+Duck Duck Go and other popular web search engines combine more than 400 independent algorithms (including user-contributed algorithms) to rank your search results (https://duck.co/help/results/sources).]
+
+For a search-based chatbot, precision is usually more important than recall.
+A false positive match can cause your chatbot says something inappropriate.
+False negatives just cause your chatbot to have to humbly admit that it cannot find anything appropriate to say.
+Your chatbot will sound better if your NLP pipeline first searches for matches to your user's questions using unstemmed, unnormalized words.
+Your search algorithm can fall back to normalized token matches if it cannot find anything else to say.
+And you can rank these *fallback* matches for normalized tokens lower than the unnormalized token matches.
+You can even give your bot humility and transparency by introducing lower ranked responses with a caveat, such as "I haven't heard a phrase like that before, but using my stemmer I found..."
+In a modern world crowded with blowhard chatbots, your humbler chatbot can make a name for itself and win out!footnote:["Nice guys finish first!" -- M.A. Nowak author of _SuperCooperators_"]
+
+There are 4 situations when synonym substitution of some sort may make sense.
+
+. Search engines
+. Data augmentation
+. Scoring the robustness of your NLP
+. Adversarial NLP
+
+Search engines can improve their recall for rare terms by using synonym substitution.
+When you have limited labeled data, you can often expand your dataset 10 fold (10x) with synonym substitution alone.
+If you want to find a lower bound on the accuracy of your model you can aggressively substitute synonyms in your test set to see how robust your model is to these changes.
+And if you are searching for ways to poison or evade detection by an NLP algorithm, synonyms can give you a large number of probing texts to try.
+You can imagine that substituting the "currency" for the word "cash", "dollars", or "$$$$" might help evade a spam detector.
+
+[IMPORTANT]
+Bottom line, try to avoid stemming, lemmatization, case folding, or synonym substitution, unless you have a limited amount of text with contains usages and capitalizations of the words you are interested in.
+And with the explosion of NLP datasets, this is rarely the case for English documents, unless your documents use a lot of jargon or are from a very small subfield of science, technology, or literature.
+Nonetheless, for languages other than English, you may still find uses for lemmatization.
+The Stanford information retrieval course dismisses stemming and lemmatization entirely, due to the negligible recall accuracy improvement and the significant reduction in precision.footnote:[See the Stanford NLP Information Retrieval (IR) book section titled "Stemming and lemmatization" (https://nlp.stanford.edu/IR-book/html/htmledition/stemming-and-lemmatization-1.html).]
+
+
+
+== Sentiment
+
+Whether you use raw single-word tokens, _n_-grams, stems, or lemmas in your NLP pipeline, each of those tokens contains some information.
+An important part of this information is the word's sentiment -- the overall feeling or emotion that word invokes.
+This _sentiment analysis_ -- measuring the sentiment of phrases or chunks of text -- is a common application of NLP.
+In many companies it is the main thing an NLP engineer is asked to do.
+
+Companies like to know what users think of their products.
+So they often will provide some way for you to give feedback.
+A star rating on Amazon or Rotten Tomatoes is one way to get quantitative data about how people feel about products they've purchased.
+But a more natural way is to use natural language comments.
+Giving your user a blank slate (an empty text box) to fill up with comments about your product can produce more detailed feedback.
+
+In the past you would have to read all that feedback.
+Only a human can understand something like emotion and sentiment in natural language text, right?
+However, if you had to read thousands of reviews you would see how tedious and error-prone a human reader can be.
+Humans are remarkably bad at reading feedback, especially criticism or negative feedback.
+And customers are not generally very good at communicating feedback in a way that can get past your natural human triggers and filters.
+
+But machines do not have those biases and emotional triggers.
+And humans are not the only things that can process natural language text and extract information, even meaning from it.
+An NLP pipeline can process a large quantity of user feedback quickly and objectively, with less chance for bias.
+And an NLP pipeline can output a numerical rating of the positivity or negativity or any other emotional quality of the text.
+
+Another common application of sentiment analysis is junk mail and troll message filtering.
+You would like your chatbot to be able to measure the sentiment in the chat messages it processes so it can respond appropriately.
+And even more importantly, you want your chatbot to measure its own sentiment of the statements it is about to send out, which you can use to steer your bot to be kind and pro-social with the statements it makes.
+The simplest way to do this might be to do what Moms told us to do: If you cannot say something nice, do not say anything at all.
+So you need your bot to measure the niceness of everything you are about to say and use that to decide whether to respond.
+
+What kind of pipeline would you create to measure the sentiment of a block of text and produce this sentiment positivity number?
+Say you just want to measure the positivity or favorability of a text -- how much someone likes a product or service that they are writing about.
+Say you want your NLP pipeline and sentiment analysis algorithm to output a single floating point number between -1 and +1.
+Your algorithm would output +1 for text with positive sentiment like "Absolutely perfect! Love it! :-) :-) :-)".
+And your algorithm should output -1 for text with negative sentiment like "Horrible! Completely useless. :(".
+Your NLP pipeline could use values near 0, like say +0.1, for a statement like "It was OK. Some good and some bad things".
+
+There are two approaches to sentiment analysis:
+
+* A rule-based algorithm composed by a human
+* A _machine learning_ model learned from data by a machine
+
+The first approach to sentiment analysis uses human-designed rules, sometimes called heuristics, to measure sentiment.
+A common rule-based approach to sentiment analysis is to find keywords in the text and map each one to numerical scores or weights in a dictionary or "mapping" -- a Python `dict`, for example.
+Now that you know how to do tokenization, you can use stems, lemmas, or _n_-gram tokens in your dictionary, rather than just words.
+The "rule" in your algorithm would be to add up these scores for each keyword in a document that you can find in your dictionary of sentiment scores.
+Of course you need to hand-compose this dictionary of keywords and their sentiment scores before you can run this algorithm on a body of text.
+We show you how to do this using the VADER algorithm (in `sklearn`) in the upcoming listing.
+
+The second approach, machine learning, relies on a labeled set of statements or documents to train a machine learning model to create those rules.
+A machine learning sentiment model is trained to process input text and output a numerical value for the sentiment you are trying to measure, like positivity or spamminess or trolliness.
+For the machine learning approach, you need a lot of data, text labeled with the "right" sentiment score.
+Twitter feeds are often used for this approach because the hash tags, such as `\#awesome` or `\#happy` or `\#sarcasm`, can often be used to create a "self-labeled" dataset.
+Your company may have product reviews with five-star ratings that you could associate with reviewer comments.
+You can use the star ratings as a numerical score for the positivity of each text.
+We show you shortly how to process a dataset like this and train a token-based machine learning algorithm called _Naive Bayes_ to measure the positivity of the sentiment in a set of reviews after you are done with VADER.
+
+=== VADER -- A rule-based sentiment analyzer
+
+Hutto and Gilbert at GA Tech came up with one of the first successful rule-based sentiment analysis algorithms.
+They called their algorithm VADER, for **V**alence **A**ware **D**ictionary for
+s**E**ntiment **R**easoning.footnote:["VADER: A Parsimonious Rule-based Model for Sentiment Analysis of Social Media Text" by Hutto and Gilbert (http://comp.social.gatech.edu/papers/icwsm14.vader.hutto.pdf).]
+Many NLP packages implement some form of this algorithm.
+The NLTK package has an implementation of the VADER algorithm in `nltk.sentiment.vader`.
+Hutto himself maintains the Python package `vaderSentiment`.
+You will go straight to the source and use `vaderSentiment` here.
+
+You will need to `pip install vaderSentiment` to run the following example.footnote:[You can find more detailed installation instructions with the package source code on github (https://github.com/cjhutto/vaderSentiment).]
+You have not included it in the `nlpia` package.
+
+[source,python]
+----
+>>> from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+>>> sa = SentimentIntensityAnalyzer()
+>>> sa.lexicon  # <1>
+{ ...
+':(': -1.9,  # <2>
+':)': 2.0,
+...
+'pls': 0.3,  # <3>
+'plz': 0.3,
+...
+'great': 3.1,
+... }
+>>> [(tok, score) for tok, score in sa.lexicon.items()
+...   if " " in tok]  # <4>
+[("( '}{' )", 1.6),
+ ("can't stand", -2.0),
+ ('fed up', -1.8),
+ ('screwed up', -1.5)]
+>>> sa.polarity_scores(text=\
+...   "Python is very readable and it's great for NLP.")
+{'compound': 0.6249, 'neg': 0.0, 'neu': 0.661,
+'pos': 0.339}  # <5>
+>>> sa.polarity_scores(text=\
+...   "Python is not a bad choice for most applications.")
+{'compound': 0.431, 'neg': 0.0, 'neu': 0.711,
+'pos': 0.289}  # <6>
+----
+<1> SentimentIntensityAnalyzer.lexicon contains that dictionary of tokens and their scores that we talked about.
+<2> A tokenizer better be good at dealing with punctuation and emoticons (emojis) for VADER to work well. After all, emoticons are designed to convey a lot of sentiment (emotion).
+<3> If you use a stemmer (or lemmatizer) in your pipeline, you would need to apply that stemmer to the VADER lexicon, too, combining the scores for all the words that go together in a single stem or lemma.
+<4> Out of 7500 tokens defined in VADER, only 3 contain spaces, and only 2 of those are actually _n_-grams; the other is an emoticon for "kiss".
+<5> The VADER algorithm considers the intensity of sentiment polarity in three separate scores (positive, negative, and neutral) and then combines them together into a compound positivity sentiment.
+<6> Notice that VADER handles negation pretty well -- "great" has a slightly more positive sentiment than "not bad". VADER's built-in tokenizer ignores any words that aren't in its lexicon, and it does not consider _n_-grams at all.
+
+Let us see how well this rule-based approach does for the example statements we mentioned earlier.
+
+[source,python]
+----
+>>> corpus = ["Absolutely perfect! Love it! :-) :-) :-)",
+...           "Horrible! Completely useless. :(",
+...           "It was OK. Some good and some bad things."]
+>>> for doc in corpus:
+...     scores = sa.polarity_scores(doc)
+...     print('{:+}: {}'.format(scores['compound'], doc))
++0.9428: Absolutely perfect! Love it! :-) :-) :-)
+-0.8768: Horrible! Completely useless. :(
+-0.1531: It was OK. Some good and some bad things.
+----
+
+This looks a lot like what you wanted.
+So the only drawback is that VADER does not look at all the words in a document.
+VADER only "knows" about the 7,500 words or so that were hard-coded into its algorithm.
+What if you want all the words to help add to the sentiment score?
+And what if you do not want to have to code your own understanding of the words in a dictionary of thousands of words or add a bunch of custom words to the dictionary in `SentimentIntensityAnalyzer.lexicon`?
+The rule-based approach might be impossible if you do not understand the language because you would not know what scores to put in the dictionary (lexicon)!
+
+That is what machine learning sentiment analyzers are for.
+
+=== Closeness of vectors
+
+Why do we use bags of words rather than bags of characters to represent natural language text?
+For a cryptographer trying to decrypt an unknown message, frequency analysis of the characters in the text would be a good way to go.
+But for natural language text in your native language, words turn out to be a better representation.
+You can see this if you think about what we are using these BOW vectors for.
+
+If you think about it, you have a lot of different ways to measure the closeness of things.
+You probably have a good feel for what a close family relative would be.
+Or the closeness of the cafes where you can meet your friend to collaborate on writing a book about AI.
+For cafes your brain probably uses Euclidean distance on the 2D position of the cafes you know about.
+Or maybe Manhattan or taxi-cab distance.
+
+But do you know how to measure the closeness of two pieces of text?
+In chapter 4 you'll learn about edit distances that check the similarity of two strings of characters.
+But that doesn't really capture the essence of what you care about.
+
+How close are these sentences to each other, in your mind?
+
+> I am now coming over to see you.
+
+> I am not coming over to see you.
+
+Do you see the difference?
+Which one would you prefer to receive an email from your friend.
+The words "now" and "not" are very far apart in meaning.
+But they are very close in spelling.
+This is an example about how a single character can change the meaning of an entire sentence.
+
+If you just counted up the characters that were different you'd get a distance of 1.
+And then you could divide by the length of the longest sentence to make sure your distance value is between 0 and 1.
+So your character difference or distance calculation would be 1 divided by 32 which gives 0.03125, or about 3%.
+Then, to turn a distance into a closeness you just subtract it from 1.
+So do you think these two sentences are 0.96875, or about 97% the same?
+They mean the opposite.
+So we'd like a better measure than that.
+
+What if you compared words instead of characters?
+In that case you would have one word out of seven that was changed.
+That is a little better than one character out of 32.
+The sentences would now have a closeness score of six divided by seven or about 85%.
+That's a little lower, which is what we want.
+
+For natural language you don't want your closeness or distance measure to rely only on a count of the differences in individual characters.
+This is one reason why you want to use words as your tokens of meaning when processing natural language text.
+
+What about these two sentences?
+
+> She and I will come over to your place at 3:00.
+
+> At 3:00, she and I will stop by your apartment.
+
+Are these two sentences close to each other in meaning?
+They have the exact same length in characters.
+And they use some of the same words, or at least synonyms.
+But those words and characters are not in the same order.
+So we need to make sure that our representation of the sentences does not rely on the precise position of words in a sentence.
+
+Bag of words vectors accomplish this by creating a position or slot in a vector for every word you've seen in your vocabulary.
+You may have learned of a few measures of closeness in geometry and linear algebra.
+
+As an example of why feature extraction from text is hard, consider _stemming_ -- grouping the various inflections of a word into the same "bucket" or cluster.
+Very smart people spent their careers developing algorithms for grouping inflected forms of words together based only on their spelling.
+Imagine how difficult that is.
+Imagine trying to remove verb endings like "ing" from "ending" so you'd have a stem called "end" to represent both words.
+And you'd like to stem the word "running" to "run," so those two words are treated the same.
+And that's tricky, because you have remove not only the "ing" but also the extra "n".
+But you want the word "sing" to stay whole.
+You wouldn't want to remove the "ing" ending from "sing" or you'd end up with a single-letter "s".
+
+Or imagine trying to discriminate between a pluralizing "s" at the end of a word like "words" and a normal "s" at the end of words like "bus" and "lens".
+Do isolated individual letters in a word or parts of a word provide any information at all about that word's meaning?
+Can the letters be misleading?
+Yes and yes.
+
+In this chapter we show you how to make your NLP pipeline a bit smarter by dealing with these word spelling challenges using conventional stemming approaches.
+Later, in chapter 5, we show you statistical clustering approaches that only require you to amass a collection of natural language text containing the words you're interested in.
+From that collection of text, the statistics of word usage will reveal "semantic stems" (actually, more useful clusters of words like lemmas or synonyms), without any hand-crafted regular expressions or stemming rules.
+
+=== Count vectorizing
+
+In the previous sections you've only been concerned with keyword detection.
+Your vectors indicated the presence or absence of words.
+In order to handle longer documents and improve the accuracy of your NLP pipeline, you're going to start counting the occurrences of words in your documents.
+
+You can put these counts into a sort-of histogram.
+Just like before you will create a vector for each document in your pipeline.
+Only instead of 0's and 1's in your vectors there will be counts.
+This will improve the accuracy of all the similarity and distance calculations you are doing with these counts.
+And just like normalizing histograms can improve your ability to compare two histograms, normalizing your word counts is also a good idea.
+Otherwise a really short wikipedia article that use Barak Obama's name only once along side all the other presidents might get as much "Barack Obama" credit as a much longer page about Barack Obama that uses his name many times.
+Users and Question Answering bots like `qary` trying to answer questions about Obama might get distracted by pages listing all the presidents and might miss the main Barack Obama page entirely.
+So it's a good idea to normalize your count vectors by dividing the counts by the total length of the document.
+This more fairly represents the distribution of tokens in the document and will create better similarity scores with other documents, including the text from a search query from `qary`.footnote:[Qary is an open source virtual assistant that actually assists you instead of manipulating and misinforming you (https://docs.qary.ai).]
+
+Each position in your vector represents the count for one of your keywords.
+And having a small vocabulary keeps this vector small, low-dimensional, and easy to reason about.
+And you can use this _count vectorizing_ approach even for large vocabularies.
+
+And you can organize these counts of those keywords into
+You need to organize the counts into a vector.
+This opens up a whole range of powerful tools for doing vector algebra.
+
+In natural language processing, composing a numerical vector from text is a particularly "lossy" feature extraction process.
+Nonetheless the bag-of-words (BOW) vectors retain enough of the information content of the text to produce useful and interesting machine learning models.
+The techniques for sentiment analyzers at the end of this chapter are the exact same techniques Google used to save email from a flood of spam that almost made it useless.
+
+
+=== Naive Bayes
+
+A Naive Bayes model tries to find keywords in a set of documents that are predictive of your target (output) variable.
+When your target variable is the sentiment you are trying to predict, the model will find words that predict that sentiment.
+The nice thing about a Naive Bayes model is that the internal coefficients will map words or tokens to scores just like VADER does.
+Only this time you will not have to be limited to just what an individual human decided those scores should be.
+The machine will find the "best" scores for any problem.
+
+For any machine learning algorithm, you first need to find a dataset.
+You need a bunch of text documents that have labels for their positive emotional content (positivity sentiment).
+Hutto compiled four different sentiment datasets for us when he and his collaborators built VADER.
+You will load them from the `nlpia` package.footnote:[If you have not already installed `nlpia`, check out the installation instructions at http://gitlab.com/tangibleai/nlpia2.]
+
+[source,python]
+----
+>>> movies = pd.read_csv('https://proai.org/movie-reviews.csv.gz', \
+...     index_col=0)
+>>> movies.head().round(2)
+    sentiment                                               text
+id
+1        2.27  The Rock is destined to be the 21st Century's ...
+2        3.53  The gorgeously elaborate continuation of ''The...
+3       -0.60                     Effective but too tepid biopic
+4        1.47  If you sometimes like to go to the movies to h...
+5        1.73  Emerges as something rare, an issue movie that...
+
+>>> movies.describe().round(2)
+       sentiment
+count   10605.00
+mean        0.00  # <1>
+std         1.92
+min        -3.88  # <2>
+...
+max         3.94  # <3>
+----
+<1> Sentiment scores (movie ratings) have been "centered" (mean is zero)
+<2> It looks like the scale starts around -4 for the worst movies
+<3> Seems like +4 is the maximum rating for the best movies
+
+It looks like the movie reviews have been _centered_: normalized by subtracting the mean so that the new mean will be zero and they aren't biased to one side or the other.
+And it seems the range of movie ratings allowed was -4 to +4.
+
+Now you can tokenize all those movie review texts to create a bag of words for each one.
+If you put them all into a Pandas DataFrame that will make them easier to work with.
+
+[source,python]
+----
+>>> import pandas as pd
+>>> pd.options.display.width = 75  # <1>
+>>> from nltk.tokenize import casual_tokenize  # <2>
+>>> bows = []
+>>> from collections import Counter  # <3>
+>>> for text in movies.text:
+...     bows.append(Counter(casual_tokenize(text)))
+>>> df_movies = pd.DataFrame.from_records(bows)  # <4>
+>>> df_movies = df_movies.fillna(0).astype(int)  # <5>
+>>> df_movies.shape  # <6>
+(10605, 20756)
+
+>>> df_movies.head()
+   !  "  #  $  %  &  ' ...  zone  zoning  zzzzzzzzz  ½  élan  –  ’
+0  0  0  0  0  0  0  4 ...     0       0          0  0     0  0  0
+1  0  0  0  0  0  0  4 ...     0       0          0  0     0  0  0
+2  0  0  0  0  0  0  0 ...     0       0          0  0     0  0  0
+3  0  0  0  0  0  0  0 ...     0       0          0  0     0  0  0
+4  0  0  0  0  0  0  0 ...     0       0          0  0     0  0  0
+
+>>> df_movies.head()[list(bows[0].keys())]
+   The  Rock  is  destined  to  be ...  Van  Damme  or  Steven  Segal  .
+0    1     1   1         1   2   1 ...    1      1   1       1      1  1
+1    2     0   1         0   0   0 ...    0      0   0       0      0  4
+2    0     0   0         0   0   0 ...    0      0   0       0      0  0
+3    0     0   1         0   4   0 ...    0      0   0       0      0  1
+4    0     0   0         0   0   0 ...    0      0   0       0      0  1
+
+[5 rows x 33 columns]
+----
+<1> This prints a wide `DataFrame` in the console so they look prettier.
+<2> NLTK's `casual_tokenize` can handle emoticons, unusual punctuation, and slang better than `TreebankWordTokenizer`
+<3> `Counter` takes a list (or iterable) of objects and counts them up, returning a `dict` where the keys are the objects (tokens in your case) and the values are the counts.
+<4> The `from_records()` DataFrame constructor takes a sequence of `dict` objects. The `dict` keys become columns, and the values for missing keys are set to `NaN`.
+<5> NumPy and Pandas can only represent NaNs within a float dtype. So fill NaNs with zeros before converting to integers.
+<6> A BOW table can get really big if you don't do dimension reduction or feature selection.
+
+//
+for ">>> df_movies.head()" i got:
+   The  Rock  is  destined  to  be  ...  Bearable  Staggeringly  ’  ve  muttering  dissing
+0    1     1   1         1   2   1  ...         0             0  0   0          0        0
+1    2     0   1         0   0   0  ...         0             0  0   0          0        0
+2    0     0   0         0   0   0  ...         0             0  0   0          0        0
+3    0     0   1         0   4   0  ...         0             0  0   0          0        0
+4    0     0   0         0   0   0  ...         0             0  0   0          0        0
+
+[5 rows x 20756 columns]
+//
+
+When you do not use case normalization, stop word filters, stemming, or lemmatization your vocabulary can be quite huge because you are keeping track of every little difference in spelling or capitalization of words.
+Try inserting some dimension reduction steps into your pipeline to see how they affect your pipeline's accuracy and the amount of memory required to store all these BOWs.
+
+Now you have all the data that a Naive Bayes model needs to find the keywords that predict sentiment from natural language text.
+
+[source,python]
+----
+>>> from sklearn.naive_bayes import MultinomialNB
+>>> nb = MultinomialNB()
+>>> nb = nb.fit(df_movies, movies.sentiment > 0)  # <1>
+>>> movies['pred_senti'] = (
+...   nb.predict_proba(df_movies))[:, 1] * 8 - 4  # <2>
+>>> movies['error'] = movies.pred_senti - movies.sentiment
+>>> mae = movies['error'].abs().mean().round(1)  # <3>
+>>> mae
+1.9
+----
+<1> Naive Bayes models are classifiers, so you need to convert your output variable (sentiment float) to a discrete label (integer, string, or bool).
+<2> Convert your discrete classification variable back to a real value between -4 and +4 so you can compare it to the "ground truth" sentiment.
+<3> Average absolute value of the prediction error or mean absolute error (MAE)
+
+To create a binary classification label you can use the fact that the centered movie ratings (sentiment labels) are positive (greater than zero) when the sentiment of the review is positive.
+
+[source,python]
+----
+>>> movies['senti_ispos'] = (movies['sentiment'] > 0).astype(int)
+>>> movies['pred_ispos'] = (movies['pred_senti'] > 0).astype(int)
+>>> columns = [c for c in movies.columns if 'senti' in c or 'pred' in c]
+>>> movies[columns].head(8)
+    sentiment  pred_senti  senti_ispos  pred_ispos
+id
+1    2.266667    2.511515            1           1
+2    3.533333    3.999904            1           1
+3   -0.600000   -3.655976            0           0
+4    1.466667    1.940954            1           1
+5    1.733333    3.910373            1           1
+6    2.533333    3.995188            1           1
+7    2.466667    3.960466            1           1
+8    1.266667   -1.918701            1           0
+
+>>> (movies.pred_ispos ==
+...   movies.senti_ispos).sum() / len(movies)
+0.9344648750589345  # <1>
+----
+<1> You got the "thumbs up" rating correct 93% of the time.
+
+This is a pretty good start at building a sentiment analyzer with only a few lines of code (and a lot of data).
+You did not have to guess at the sentiment associated with a list of 7500 words and hard code them into an algorithm such as VADER.
+Instead, you told the machine the sentiment ratings for whole text snippets.
+And then the machine did all the work to figure out the sentiment associated with each word in those texts.
+That is the power of machine learning and NLP!
+
+How well do you think this model will generalize to a completely different set of text examples such as product reviews?
+Do people use the same words to describe things they like in movie and product reviews such as electronics and household goods?
+Probably not.
+But it's a good idea to check the robustness of your language models by running it against challenging text from a different domain.
+And by testing your model on new domains, you can get ideas for more examples and datasets to use in your training and test sets.
+
+First, you need to load the product reviews.
+And take a look at the content's of the file you loaded to make sure you understand what is in the dataset.
+
+[source,python]
+----
+>>> products = pd.read_csv('https://proai.org/product-reviews.csv.gz')
+>>> products.columns
+Index(['id', 'sentiment', 'text'], dtype='object')
+>>> products.head()
+    id  sentiment                                               text
+0  1_1      -0.90  troubleshooting ad-2500 and ad-2600 no picture...
+1  1_2      -0.15  repost from january 13, 2004 with a better fit...
+2  1_3      -0.20  does your apex dvd player only play dvd audio ...
+3  1_4      -0.10  or does it play audio and video but scrolling ...
+4  1_5      -0.50  before you try to return the player or waste h...
+----
+
+Next, we'll you need to load the product reviews.
+
+[source,python]
+----
+>>> bows = []
+>>> for text in products['text']:
+...     bows.append(Counter(casual_tokenize(text)))
+>>> df_products = pd.DataFrame.from_records(bows)
+>>> df_products = df_products.fillna(0).astype(int)
+>>> df_products.shape # <1>
+----
+<1> The bags of words for product reviews has a different vocabulary than the movie reviews.
+
+
+What happens when you combine one dataframe of BOW vectors with another?
+
+[source,python]
+----
+>>> df_all_bows = pd.concat([df_movies, df_products])
+>>> df_all_bows.columns  # <1>
+Index(['!', '"',
+       ...
+       'zoomed', 'zooming', 'zooms', 'zx', 'zzzzzzzzz', ...],
+      dtype='object', length=23302)
+----
+<1> Your combined DataFrame of bags of words has tokens that were not in the movie reviews (23302 now, 20756 before).
+
+[source,python]
+----
+>>> df_products = df_all_bows.iloc[len(movies):][df_movies.columns]  # <2>
+>>> df_products.shape
+(3546, 20756)
+
+>>> df_movies.shape  # <3>
+(10605, 20756)
+----
+<2> You need to make sure your new product DataFrame of bags of words has the same columns (tokens) in the exact same order as the original one used to train your Naive Bayes model.
+<3> The movie bags of words have the same size vocabulary (columns) as for products.
+
+Now you need to convert the labels to mimic the binary classification data that you trained your model on.
+
+[source,python]
+----
+>>> products['senti_ispos'] = (products['sentiment'] > 0).astype(int)
+>>> products['pred_ispos'] = nb.predict(df_products).astype(int)
+
+>>> tp = products['pred_ispos'] == products['senti_ispos']  # <1>
+>>> tp.sum() / len(products)
+0.5572476029328821
+----
+<1> True positive predictions are when both the predicted and true sentiment are positive
+
+
+So your Naive Bayes model does a  poor job of predicting whether a product review is positive (thumbs up).
+One reason for this subpar performance is that your vocabulary from the `casual_tokenize` product texts has 2546 tokens that were not in the movie reviews.
+That is about 10% of the tokens in your original movie review tokenization, which means that all those words will not have any weights or scores in your Naive Bayes model.
+Also, the Naive Bayes model does not deal with negation as well as VADER does.
+You would need to incorporate _n_-grams into your tokenizer to connect negation words (such as "not" or "never") to the positive words they might be used to qualify.
+
+We leave it to you to continue the NLP action by improving on this machine learning model.
+And you can check your progress relative to VADER at each step of the way to see if you think machine learning is a better approach than hard-coding algorithms for NLP.
+
+== Test yourself
+
+. What is the difference between a lemmatizer and a stemmer? Which one is better (in most cases)?
+. How does a lemmatizer increase the likelihood that a search engine (such as You.com) returns search results that contain what you are looking for?
+. Will case folding, lemmatizing or stopword removal improve the accuracy of your typical NLP pipeline? What about for a problem like detecting misleading news article titles (clickbait)?footnote:[Hint: When in doubt do an experiment. This is called _hyperparameter tuning_. Here's a fake news dataset you can experiment with: (https://www.kaggle.com/clmentbisaillon/fake-and-real-news-dataset/download)]
+. Are there statistics in your token counts that you can use to decide what `n` to use in NLP pipeline?
+. Is there a website where you can download the token frequencies for most of the words and n-grams ever published?footnote:[Hint: A company that aspired to "do no evil", but now does, created this massive NLP corpus.]
+. What are the risks and possible benefits of pair coding AI assistants built with NLP? What sort of organizations and algorithms do you trust with your mind and your code?
+
+== Summary
+
+* You implemented tokenization and configured a tokenizer for your application.
+* _n_-gram tokenization helps retain some of the "word order" information in a document.
+* Normalization and stemming consolidate words into groups that improve the "recall" for search engines but reduce precision.
+* Lemmatization and customized tokenizers like `casual_tokenize()` can improve precision and reduce information loss.
+* Stop words can contain useful information, and discarding them is not always helpful.

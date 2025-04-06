@@ -1,0 +1,135 @@
+>>> %run src/nessvec/hypervec
+>>> %run src/nessvec/hypervec
+>>> idx.w2v['seattle']
+array([-2.7303e-01,  8.5872e-01,  1.3546e-01,  8.3849e-01, -2.2363e-02,
+       -4.1724e-01, -2.1974e+00,  2.7838e-01, -3.5161e-01,  3.9205e-01,
+       -3.4437e-01, -3.2687e-01, -4.3923e-01,  6.5528e-01, -2.3978e-04,
+       -8.0586e-01, -5.6114e-01, -1.9440e-02, -1.0856e+00,  4.4888e-01,
+       -1.7763e-01,  1.1756e-01, -5.8001e-01,  1.3595e-01, -4.5596e-01,
+       -9.4512e-01,  3.4022e-01, -1.3418e-01,  6.6036e-01, -1.1015e+00,
+        1.7347e+00,  2.9407e-01,  3.4572e-01, -6.2959e-01,  2.7845e-02,
+       -6.5935e-01,  4.0791e-04,  9.3474e-02,  1.0007e+00,  6.1746e-01,
+       -6.4467e-01, -2.6920e-01, -2.6631e-02,  1.0327e-01, -1.6960e-01,
+        1.0302e+00, -5.4987e-01,  6.0371e-02, -5.4905e-01,  1.0027e+00])
+>>> idx.w2v['san diego']
+>>> idx.w2v['diego']
+array([ 0.54827  ,  0.089022 , -0.13864  ,  0.79238  , -0.22621  ,
+       -1.0709   , -2.1124   ,  0.016975 , -0.18628  ,  0.38992  ,
+        0.10722  ,  0.024515 , -0.033734 ,  0.063648 ,  0.20649  ,
+       -1.7243   , -0.6598   , -0.086411 , -1.3227   ,  0.42525  ,
+       -1.2971   ,  0.025812 , -0.52925  , -0.017238 , -0.53247  ,
+       -0.94083  ,  1.4471   , -0.099531 ,  0.0361   , -1.0961   ,
+        1.7624   , -0.13516  , -0.48672  , -1.25     , -0.29812  ,
+       -0.078701 , -0.36612  ,  0.54858  ,  1.0777   , -0.25936  ,
+       -0.16023  ,  0.15488  ,  0.35277  , -0.19078  , -0.60044  ,
+        0.41307  ,  0.0036392, -0.73122  ,  0.27855  ,  0.71029  ])
+>>> idx.find_similar('seattle')
+['seattle',
+ 'houston',
+ 'chicago',
+ 'dallas',
+ 'philadelphia',
+ 'phoenix',
+ 'cleveland',
+ 'baltimore',
+ 'cincinnati',
+ 'oakland']
+>>> idx.find_similar('diego')
+['seattle',
+ 'houston',
+ 'chicago',
+ 'dallas',
+ 'philadelphia',
+ 'phoenix',
+ 'cleveland',
+ 'baltimore',
+ 'cincinnati',
+ 'oakland']
+>>> %run src/nessvec/hypervec
+>>> idx.find_similar('diego')
+['diego',
+ 'san',
+ 'francisco',
+ 'antonio',
+ 'oakland',
+ 'orlando',
+ 'miami',
+ 'tampa',
+ 'jose',
+ 'angeles']
+>>> idx.find_similar('weird')
+['weird',
+ 'strange',
+ 'scary',
+ 'funny',
+ 'silly',
+ 'wacky',
+ 'sounds',
+ 'joke',
+ 'creepy',
+ 'amusing']
+>>> idx.w2v['weird']
+array([-0.0069764, -0.039964 , -0.95762  ,  0.20733  ,  0.38407  ,
+        0.045188 , -0.091869 , -0.34785  , -0.59525  ,  0.77679  ,
+       -0.51561  ,  0.2968   , -0.42737  ,  0.62364  ,  0.73371  ,
+        0.069557 ,  0.19404  ,  0.43451  , -0.36336  , -0.33058  ,
+       -0.48507  ,  0.76325  ,  0.73144  ,  0.82597  ,  1.0669   ,
+       -0.47322  , -1.9491   ,  0.90091  ,  1.5731   , -0.77767  ,
+        1.2146   , -0.37272  ,  0.37517  , -0.52715  , -0.20865  ,
+        0.062087 , -0.28321  , -0.093029 , -0.074614 , -0.044982 ,
+       -0.26965  ,  0.075268 , -0.15683  ,  0.6645   ,  0.18923  ,
+        0.3801   ,  0.69384  , -0.14236  ,  0.19992  ,  0.80458  ])
+>>> idx.w2v['weird'].dot(idx.w2v['portland'])
+2.9329269157619993
+>>> cosine_similarity(idx.w2v['weird'], idx.w2v['portland']
+... )
+...
+>>> who
+>>> %run src/nessvec/util
+>>> cosine_similarity(idx.w2v['weird'], idx.w2v['portland'])
+0.15107705482761857
+>>> cosine_similarity(idx.w2v['weird'] + idx.w2v['city'], idx.w2v['portland'])
+0.5399347891156773
+>>> cosine_similarity(idx.w2v['weird'] + idx.w2v['city'], idx.w2v['diego'])
+0.45007825382980254
+>>> cosine_similarity(idx.w2v['weird'] + idx.w2v['city'], idx.w2v['franciso'])
+-0.05118593432925622
+>>> cosine_similarity(idx.w2v['weird'] + idx.w2v['city'], idx.w2v['nyc'])
+0.33321972089117435
+>>> cosine_similarity(idx.w2v['weird'] + idx.w2v['city'], idx.w2v['atlanta'])
+0.5138047510811188
+>>> cosine_similarity(idx.w2v['weird'] + idx.w2v['city'], idx.w2v['la'])
+0.4654172561066631
+>>> cosine_similarity(idx.w2v['weird'] + idx.w2v['city'], idx.w2v['san'] + idx.w2v['diego'])
+0.5238799622024901
+>>> cosine_similarity(idx.w2v['weird'] + idx.w2v['city'], idx.w2v['los'] + idx.w2v['angeles'])
+0.6521979129685879
+>>> cosine_similarity(idx.w2v['weird'] + idx.w2v['city'], idx.w2v['portland'] + idx.w2v['pdx'])
+0.3417668959276829
+>>> cosine_similarity(idx.w2v['weird'] + idx.w2v['city'], idx.w2v['portland'] + idx.w2v['city'])
+0.7824062068710752
+>>> cosine_similarity(idx.w2v['weird'] + idx.w2v['city'], idx.w2v['portland'] + idx.w2v['oregon'])
+0.5444916915385449
+>>> cosine_similarity(idx.w2v['weird'] + idx.w2v['city'], idx.w2v['portland'])
+0.5399347891156773
+>>> cosine_similarity(idx.w2v['weird'] + idx.w2v['city'], idx.w2v['new'] + idx.w2v['york'])
+0.6927973156358951
+>>> cosine_similarity(idx.w2v['weird'], idx.w2v['new'] + idx.w2v['york'])
+0.28370147138052904
+>>> cosine_similarity(idx.w2v['weird'], idx.w2v['portland'] + idx.w2v['oregon'])
+0.13416491197462957
+>>> cosine_similarity(idx.w2v['weird'], idx.w2v['portland'])
+0.15107705482761857
+>>> cosine_similarity(idx.w2v['weird'], idx.w2v['new'] + idx.w2v['york'])
+0.28370147138052904
+>>> cosine_similarity(idx.w2v['weird'], idx.w2v['york'])
+0.27054690164607526
+>>> cosine_similarity(idx.w2v['weird'], idx.w2v['seattle'])
+0.26591765507487164
+>>> cosine_similarity(idx.w2v['weird'] + idx.w2v['people'], idx.w2v['seattle'])
+0.37340137810287416
+>>> cosine_similarity(idx.w2v['weird'] + idx.w2v['people'], idx.w2v['portland'])
+0.20996448507720036
+>>> cosine_similarity(idx.w2v['weird'], idx.w2v['portland'])
+0.15107705482761857
+>>> history -o -p -f examples/cosine_similarity_unweird_portland_50D_glove.ipy

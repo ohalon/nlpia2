@@ -1,0 +1,165 @@
+>>> import spacy
+>>> nlp = spacy.load('en')
+>>> nlp = spacy.load('en_core_web_sm')
+>>> nlp = spacy.cli.download('en_core_web_med')
+>>> spacy.cli.download('en_core_web_md')
+>>> spacy.cli.download('en_core_web_sm')
+>>> nlp = spacy.load('en_core_web_sm')
+>>> docs = [nlp(txt) for txt in texts]
+>>> history
+>>> >>> text = ("Trust me, though, the words were on their way, and when "
+... ...         "they arrived, Liesel would hold them in her hands like "
+... ...         "the clouds, and she would wring them out, like the rain.")
+... >>> tokens = text.split()
+... >>> tokens[:8]
+... ['Trust', 'me,', 'though,', 'the', 'words', 'were', 'on', 'their']
+... >>> import re
+... >>> pattern = r'\w+(?:\'\w+)?|[^\w\s]'  # <1>
+... >>> texts = [text]
+... >>> texts.append("There's no such thing as survival of the fittest."
+... ...              "Survival of the most adequate, maybe.")
+... >>> tokens = list(re.findall(pattern, texts[-1]))
+... >>> tokens[:8]
+... ["There's", 'no', 'such', 'thing', 'as', 'survival', 'of', 'the']
+... >>> tokens[8:16]
+... ['fittest', '.', 'Survival', 'of', 'the', 'most', 'adequate', ',']
+... >>> tokens[16:]
+... ['maybe', '.']
+... >>> import numpy as np  # <1>
+... >>> vocab = sorted(set(tokens))  # <2>
+... >>> ' '.join(vocab[:12])  # <3>
+... ", . Survival There's adequate as fittest maybe most no of such"
+... >>> num_tokens = len(tokens)
+... >>> num_tokens
+... 18
+... >>> vocab_size = len(vocab)
+... >>> vocab_size
+... 15
+... texts
+... >>> import re
+... >>> pattern = r'\w+(?:\'\w+)?|[^\w\s]'  # <1>
+... >>> texts = [text]
+... >>> texts.append("There's no such thing as survival of the fittest. "
+... ...              "Survival of the most adequate, maybe.")
+... >>> tokens = list(re.findall(pattern, texts[-1]))
+... >>> tokens[:8]
+... ["There's", 'no', 'such', 'thing', 'as', 'survival', 'of', 'the']
+... >>> tokens[8:16]
+... ['fittest', '.', 'Survival', 'of', 'the', 'most', 'adequate', ',']
+... >>> tokens[16:]
+... ['maybe', '.']
+... texts
+...
+['Trust me, though, the words were on their way, and when they arrived, Liesel would hold them in her hands like the clouds, and she would wring them out, like the rain.',
+ "There's no such thing as survival of the fittest. Survival of the most adequate, maybe."]
+>>> docs = [nlp(txt) for txt in texts]
+>>> docs
+[Trust me, though, the words were on their way, and when they arrived, Liesel would hold them in her hands like the clouds, and she would wring them out, like the rain.,
+ There's no such thing as survival of the fittest. Survival of the most adequate, maybe.]
+>>> docs[-1]
+There's no such thing as survival of the fittest. Survival of the most adequate, maybe.
+>>> [tok.text for tok in docs[-1]]
+['There',
+ "'s",
+ 'no',
+ 'such',
+ 'thing',
+ 'as',
+ 'survival',
+ 'of',
+ 'the',
+ 'fittest',
+ '.',
+ 'Survival',
+ 'of',
+ 'the',
+ 'most',
+ 'adequate',
+ ',',
+ 'maybe',
+ '.']
+>>> [tok.text for tok in docs[-1][:8]
+... ]
+...
+['There', "'s", 'no', 'such', 'thing', 'as', 'survival', 'of']
+>>> hist -o -p
+>>> type(docs)
+list
+>>> >>> doc = nlp(texts[0])
+... >>> type(doc)
+...
+spacy.tokens.doc.Doc
+>>> tokens[8:]
+['fittest',
+ '.',
+ 'Survival',
+ 'of',
+ 'the',
+ 'most',
+ 'adequate',
+ ',',
+ 'maybe',
+ '.']
+>>> tokens[8:16]
+['fittest', '.', 'Survival', 'of', 'the', 'most', 'adequate', ',']
+>>> hist -o -p
+>>> tokens[:8]
+["There's", 'no', 'such', 'thing', 'as', 'survival', 'of', 'the']
+>>> tokens[8:16]
+['fittest', '.', 'Survival', 'of', 'the', 'most', 'adequate', ',']
+>>> tokens[9:]
+['.', 'Survival', 'of', 'the', 'most', 'adequate', ',', 'maybe', '.']
+>>> tokens[:9]
+["There's", 'no', 'such', 'thing', 'as', 'survival', 'of', 'the', 'fittest']
+>>> hist -o -p
+>>> >>> tokens = [tok.text for tok in doc]
+>>> tokens[:9]
+['Trust', 'me', ',', 'though', ',', 'the', 'words', 'were', 'on']
+>>> >>> doc = nlp(texts[-1])
+... >>> type(doc)]
+...
+>>> doc = nlp(texts[-1])
+... type(doc)
+...
+spacy.tokens.doc.Doc
+>>> >>> tokens = [tok.text for tok in doc]
+... >>> tokens[:9]
+...
+['There', "'s", 'no', 'such', 'thing', 'as', 'survival', 'of', 'the']
+>>> hist -o -p
+>>> tokens[9:]
+['fittest',
+ '.',
+ 'Survival',
+ 'of',
+ 'the',
+ 'most',
+ 'adequate',
+ ',',
+ 'maybe',
+ '.']
+>>> tokens[9:-1]
+['fittest', '.', 'Survival', 'of', 'the', 'most', 'adequate', ',', 'maybe']
+>>> history
+>>> history -o -p
+>>> spacy.cli.download('en_core_web_lg')
+>>> from spacy import displacy
+>>> sentence_spans = list(doc.sents)
+>>> displacy.serve(sentence_spans, style="dep")
+>>> sentences = list(doc.sents)
+>>> displacy.render(sentences[-1], style="dep")
+'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:lang="en" id="a22b1a69d7aa4e969f131b7c319ac3a9-0" class="displacy" width="1100" height="487.0" direction="ltr" style="max-width: none; height: 487.0px; color: #000000; background: #ffffff; font-family: Arial; direction: ltr">\n<text class="displacy-token" fill="currentColor" text-anchor="middle" y="397.0">\n    <tspan class="displacy-word" fill="currentColor" x="50">Survival</tspan>\n    <tspan class="displacy-tag" dy="2em" fill="currentColor" x="50">NOUN</tspan>\n</text>\n\n<text class="displacy-token" fill="currentColor" text-anchor="middle" y="397.0">\n    <tspan class="displacy-word" fill="currentColor" x="225">of</tspan>\n    <tspan class="displacy-tag" dy="2em" fill="currentColor" x="225">ADP</tspan>\n</text>\n\n<text class="displacy-token" fill="currentColor" text-anchor="middle" y="397.0">\n    <tspan class="displacy-word" fill="currentColor" x="400">the</tspan>\n    <tspan class="displacy-tag" dy="2em" fill="currentColor" x="400">DET</tspan>\n</text>\n\n<text class="displacy-token" fill="currentColor" text-anchor="middle" y="397.0">\n    <tspan class="displacy-word" fill="currentColor" x="575">most</tspan>\n    <tspan class="displacy-tag" dy="2em" fill="currentColor" x="575">ADV</tspan>\n</text>\n\n<text class="displacy-token" fill="currentColor" text-anchor="middle" y="397.0">\n    <tspan class="displacy-word" fill="currentColor" x="750">adequate,</tspan>\n    <tspan class="displacy-tag" dy="2em" fill="currentColor" x="750">ADJ</tspan>\n</text>\n\n<text class="displacy-token" fill="currentColor" text-anchor="middle" y="397.0">\n    <tspan class="displacy-word" fill="currentColor" x="925">maybe.</tspan>\n    <tspan class="displacy-tag" dy="2em" fill="currentColor" x="925">ADV</tspan>\n</text>\n\n<g class="displacy-arrow">\n    <path class="displacy-arc" id="arrow-a22b1a69d7aa4e969f131b7c319ac3a9-0-0" stroke-width="2px" d="M70,352.0 C70,264.5 210.0,264.5 210.0,352.0" fill="none" stroke="currentColor"/>\n    <text dy="1.25em" style="font-size: 0.8em; letter-spacing: 1px">\n        <textPath xlink:href="#arrow-a22b1a69d7aa4e969f131b7c319ac3a9-0-0" class="displacy-label" startOffset="50%" side="left" fill="currentColor" text-anchor="middle">prep</textPath>\n    </text>\n    <path class="displacy-arrowhead" d="M210.0,354.0 L218.0,342.0 202.0,342.0" fill="currentColor"/>\n</g>\n\n<g class="displacy-arrow">\n    <path class="displacy-arc" id="arrow-a22b1a69d7aa4e969f131b7c319ac3a9-0-1" stroke-width="2px" d="M420,352.0 C420,177.0 740.0,177.0 740.0,352.0" fill="none" stroke="currentColor"/>\n    <text dy="1.25em" style="font-size: 0.8em; letter-spacing: 1px">\n        <textPath xlink:href="#arrow-a22b1a69d7aa4e969f131b7c319ac3a9-0-1" class="displacy-label" startOffset="50%" side="left" fill="currentColor" text-anchor="middle">det</textPath>\n    </text>\n    <path class="displacy-arrowhead" d="M420,354.0 L412,342.0 428,342.0" fill="currentColor"/>\n</g>\n\n<g class="displacy-arrow">\n    <path class="displacy-arc" id="arrow-a22b1a69d7aa4e969f131b7c319ac3a9-0-2" stroke-width="2px" d="M595,352.0 C595,264.5 735.0,264.5 735.0,352.0" fill="none" stroke="currentColor"/>\n    <text dy="1.25em" style="font-size: 0.8em; letter-spacing: 1px">\n        <textPath xlink:href="#arrow-a22b1a69d7aa4e969f131b7c319ac3a9-0-2" class="displacy-label" startOffset="50%" side="left" fill="currentColor" text-anchor="middle">advmod</textPath>\n    </text>\n    <path class="displacy-arrowhead" d="M595,354.0 L587,342.0 603,342.0" fill="currentColor"/>\n</g>\n\n<g class="displacy-arrow">\n    <path class="displacy-arc" id="arrow-a22b1a69d7aa4e969f131b7c319ac3a9-0-3" stroke-width="2px" d="M245,352.0 C245,89.5 745.0,89.5 745.0,352.0" fill="none" stroke="currentColor"/>\n    <text dy="1.25em" style="font-size: 0.8em; letter-spacing: 1px">\n        <textPath xlink:href="#arrow-a22b1a69d7aa4e969f131b7c319ac3a9-0-3" class="displacy-label" startOffset="50%" side="left" fill="currentColor" text-anchor="middle">pobj</textPath>\n    </text>\n    <path class="displacy-arrowhead" d="M745.0,354.0 L753.0,342.0 737.0,342.0" fill="currentColor"/>\n</g>\n\n<g class="displacy-arrow">\n    <path class="displacy-arc" id="arrow-a22b1a69d7aa4e969f131b7c319ac3a9-0-4" stroke-width="2px" d="M70,352.0 C70,2.0 925.0,2.0 925.0,352.0" fill="none" stroke="currentColor"/>\n    <text dy="1.25em" style="font-size: 0.8em; letter-spacing: 1px">\n        <textPath xlink:href="#arrow-a22b1a69d7aa4e969f131b7c319ac3a9-0-4" class="displacy-label" startOffset="50%" side="left" fill="currentColor" text-anchor="middle">advmod</textPath>\n    </text>\n    <path class="displacy-arrowhead" d="M925.0,354.0 L933.0,342.0 917.0,342.0" fill="currentColor"/>\n</g>\n</svg>'
+>>> displacy.render?
+>>> svg = displacy.render(sentences[-1], style="dep")
+>>> with open('survival-of-adequate-sentence-diagram.svg', 'w') as f
+>>> with open('survival-of-adequate-sentence-diagram.svg', 'w') as f:
+...     f.write(svg)
+...
+>>> with open('survival-of-adequate-sentence-diagram.html', 'w') as f:
+...     f.write(html)
+...
+>>> html = displacy.render(sentences[-1], style="dep", page=True)
+>>> with open('survival-of-adequate-sentence-diagram.html', 'w') as f:
+...     f.write(html)
+...
+>>> hist -o -p -f spacy_tokenizer.ipy

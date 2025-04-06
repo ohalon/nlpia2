@@ -1,0 +1,50 @@
+name: qaryenv
+channels:
+  # - spacy
+  - huggingface
+  - pytorch
+  - conda-forge  # conda==forge is higher priority than defaults in nlpia package
+  - defaults  # top priority: https://docs.conda.io/projects/conda/en/latest/user==guide/tasks/manage==channels.html#managing==channels
+  # - anaconda  # bad idea: https://github.com/conda/conda/issues/9462
+dependencies:
+  - asciidoctor
+  - beautifulsoup4
+  - configargparse
+  - django
+  - elasticsearch
+  - ffmpeg
+  - graphviz
+  - huggingface_hub
+  - jinja2=3.0.3
+  - joblib=1.1.0
+  - m2r==0.2.1  # [required by Sphinx](https://github.com/CrossNox/m2r2/issues/40)
+  - matplotlib-base
+  - mistune==0.8.4  # [required by Sphinx](https://github.com/CrossNox/m2r2/issues/40)
+  - nltk
+  - numpy
+  - pandas
+  - pip
+  - protobuf=3.16.0
+  - pytest-cov
+  - python=3.9.7
+  - pytorch-cpu
+  - regex
+  - ruby=2.6.6
+  - scipy
+  - scikit-learn
+  - scikit-image
+  - seaborn
+  - sentence-transformers
+  - sentencepiece=0.1.95
+  - spacy=3.1.1
+  - spacy-legacy=3.0.8
+  - sphinx==4.4.0
+  - torchtext
+  - torchvision
+  - urllib3=1.26.7
+  - transformers
+  - wikipedia
+  - xmltodict
+  # - pip:
+  #   - --editable .
+  #   - --requirement scripts/requirements.txt

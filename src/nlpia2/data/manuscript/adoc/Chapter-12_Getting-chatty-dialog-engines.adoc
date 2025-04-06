@@ -1,0 +1,1405 @@
+= Natural Language Processing in Action, Second Edition
+:chapter: 12
+:part: 3
+:sectnumoffset: 1
+:secnums:
+:imagesdir: .
+:xrefstyle: short
+:figure-caption: Figure {chapter}.
+:listing-caption: Listing {chapter}.
+:table-caption: Table {chapter}.
+:leveloffset: 0
+:stem: latexmath
+:toc:
+:source-highlighter: coderay
+:bibliography-database: dl4nlp.bib
+:bibliography-style: ieee
+:index::[]
+
+= Getting Chatty with dialog engines
+
+////
+KM: This is a really interesting chapter! There are a few to do's left in the chapter. I also have a few comments below. One concern I have is that there's so much history and summarizing of different types of chatbots, that I'm wondering if the point of what you'll be building will be lost.
+////
+
+This chapter covers
+
+* Getting familiar with popular chatbot applications
+* Understanding the advantages and disadvantages of rule-based chatbots vs generative models (LLMs)
+* Augmenting generative model chatbots with information retrieval (search)
+* Combining the different approaches using hierarchical chatbot architectures
+* Using existing chatbot frameworks to create your bot
+* Designing conversational interfaces with good user experience (UX)
+// ( guided conversation, using GUI elements, maxims of conversation, usability heuristics)
+* Monitoring, evaluating and optimizing your chatbot
+
+////
+KM: The statement below doesn't really matter to the reader if it's not connected to creating NLPs. You need to tell the reader why they should care about this...how it relates to what you're teaching them. Otherwise, remove this sentence. 
+HL: I've rearranged things and added a few mentions of NLP to make it relevant.
+////
+
+
+You finally have all the NLP tools you need to assemble a chatbot -- often called  a _dialog system_ or _dialog engine_.
+Now you can build an NLP pipeline that can have a semi-intelligent dialog with you or even with your customers.
+In fact, customer service is probably the most common application for chatbots or dialog engines.
+In this chapter you are going to learn how to build your very own chatbot!
+
+When we say chatbot, we mean a computer program that engages in back-and-forth conversation with a human using natural language -- whether through text or speech.
+Chatbot technology has advanced beyond the "canned response" systems that limited chatbots you may be familiar with.footnote:[Wikipedia "Canned Response" https://en.wikipedia.org/wiki/Canned_response]
+The NLP you've learned in this book now give you the power to build chatbots that can simulate intelligent conversation and do useful work for you and your organization.
+
+The early chatbots were used for customer anti-service and were not very sophisticated.footnote:[Dialog system article on Wikipedia (https://en.wikipedia.org/wiki/Dialogue_system)]
+There earliest chatbots were often automatic phone menus for corporations and banks trying to reduce the cost of paying humans to help you.footnote:["Automated attendant" article on Wikipedia (https://en.wikipedia.org/wiki/Automated_attendant)]
+And when text message chatbots came onto the scene most continued to follow this dark pattern of non-cooperative conversation, trying your patience and preventing you from creating cost for the business.
+Most business managers consider customer service as a cost to be minimized rather than part of the user experience that differentiates a business from competitors and can generate sales growth.
+So often the engineers that build chatbots are encouraged to build a system that puts friction between you and what you want to do, such as getting human non-virtual assistance, requesting a refund, or even canceling your account.
+These are the most common reasons for contacting a customer service chatbot or phone system.footnote:[Wikipedia "Canned Response" https://en.wikipedia.org/wiki/Canned_response]
+
+Until recently, most conversational assistants weren't too impressive in terms of their capability, being able to only respond to a limited set of questions and commands, and using the content pre-written by their human creators.
+All that changed at the end of 2022, when generative conversational assistants entered the public spotlight and made people aware of what such systems are capable of.
+
+However, even with "basic capabilities", chatbots turned out to be useful in a wide variety of applications.
+Let's look briefly at some of the popular ones, to give you some inspiration for your own chatbot projects.
+
+== Chatbots are everywhere
+
+The list of applications presented below is by no means exhaustive.
+Some of the use cases will be familiar to you; others may be new.
+Hopefully, this list will give you some ideas about what _your_ chatbot application will be.
+
+* *Virtual assistants*, such as Alexa and Google Assistant, are helpful when you have a goal in mind.
+Goals or intents are usually simple things such as launching an app, setting a reminder, playing some music, or turning on the lights in your home.
+
+* *Customer service chatbots* are the most common conversational assistants in the enterprise world.
+Customer service chatbots are often the only "person" available when you visit an online store.
+In other cases, they serve as a triage mechanism between the customer and a human representative.
+
+* *Sales chatbots* facilitate the process of buying a product or service. Businesses often use them to help users find the right product, increase conversion rates, and reduce the number of abandoned carts.
+
+* *Entertainment chatbots* are built to maintain a conversation. The performance of entertainment chatbots is usually measured with metrics like how long the user is willing to interact with the chatbot, or how human-like are the interactions.
+
+* *Healthcare chatbots* are used to help patients with their health-related questions, schedule appointments, and even give a preliminary diagnosis. Mental health chatbots, such as Woebot footnote:[(https://woebot.io/)] and Wysa,footnote:[http://wysa.io/] even provide therapeutic exercises that were show to decrease the symptoms of depression and anxiety.
+
+* *Impact chatbots* are used by nonprofits and social businesses to help people in need. Often they leverage popular messaging channels like SMS and WhatsApp to reach people in underserved communities.
+
+Tangible AI, the company the authors of this book founded together, specializes in creating impact chatbots.
+These chatbots are built for people in underserved communities, from new immigrants in the United States to teens in the Global South.
+We've built chatbots that teach middle-school math, educate the user about evading being trafficked, help access language education resources, and many more.
+
+During this chapter, we will use the example of Rori, a math tutor bot for middle-school children in sub-Saharan Africa to demonstrate the principle of conversation design and chatbot building. 
+
+=== Different chatbots, same tools
+
+As diverse as the chatbot examples in this section seem to be, they all leverage the same NLP tools and techniques - the ones you've learned in this book.
+
+All the previous chapters have been building up your skills and toolbox so you can assemble a chatbot from all the algorithms.
+
+Here are some of the NLP skills you've learned that chatbots leverage frequently:
+
+* Embedding words and sentences into semantic vectors (from Chapter 6) to recognize the user's intent
+* Deeper language representations such as LSTM thought vectors and BERT embeddings. (from Chapter 8)
+* Neural translation between languages (from Chapter 9)
+* Text generation (from Chapter 10) to generate responses without humans pre-defining them
+* Semantic search and retrieval-based generation (from Chapter 10)
+* Extracting relationships from text and co-reference resolution (from Chapter 11) to understand the context of the conversation
+* Storing and searching for information in graph knowledge bases (from Chapter 11)
+
+
+Figure <<figure-chatbot-flow-diagram>> shows an example of how all these pieces fit together.
+
+[[figure-chatbot-flow-diagram]]
+.Chatbot flow diagram
+image::../images/ch12/chatbot-flow-diagram.drawio.png[Chatbot Techniques Used for Some Example Applications, width=80%, link="../images/ch12/chatbot-flow-diagram.drawio.png]
+
+However, the techniques you use and the way you connect them will depend on the goals of your chatbot and its design.
+So before we start building chatbots, let's start from the beginning and talk about how to design them correctly.
+
+
+== Designing chatbots
+As chatbot technology gained more and more popularity in the last decade, so did the field of conversation design - a branch of interactive design that deals specifically with designing engaging dialogs.
+Design isn't the subject of this book, so we'll keep this chapter brief.
+Our purpose is to give you the basics of approaching bot design, and there are a lot of excellent sources to broaden your knowledge in the field, such as Andrew Freed's _"Conversational AI"_.footnote:[(https://www.manning.com/books/conversational-ai)]
+
+Here are a few key steps to take at the beginning of your chatbot design process:
+
+1. Define your chatbot's goal and the problem it solves.
+2. Spend some time thinking about your user - who are they and what are their needs? Pay attention to the setting of the conversation as well: where are the users when they use your chatbot, and what triggered them to engage in the conversation?
+3. Draft an imaginary conversation between the user and your chatbot - in conversational designers' lingo, this is sometimes called "happy conversation." You might even go as far as "act it out" with a colleague or a friend.
+4. After drafting several conversations with your chatbot, you'll start noticing the patterns. They will help you define the _conversation diagram_ of the chatbot - a schematic representation of possible conversations between the user and the chatbot.
+
+Let's get back to the example of our math tutor bot. 
+Its goal is pretty clear - it wants to teach math to middle school children. 
+However, when you start thinking about the users in step 2 , you realize that you can't assume that the child would be the person contacting Rori first. 
+That's especially true in low-income countries, where it's less likely that underage children would own a phone on their own at all.
+Another important point to consider, since you're dealing with children, is that you need to obtain a parent or guardian's consent before the child is able to use the chatbot. 
+
+So one thing you know your chatbot will need to do is to obtain the parent/guardian consent. 
+The next thing will be to create rapport with a child, as rapport and trust are essential for successful pedagogic interaction. 
+Rori does that by asking and remembering the child's name, asking them what grade they are in, and telling a couple of math-related jokes. 
+It then boosts the student's motivation by asking how many times a week they would like to practice math.
+
+The last thing that we need the bot to do is to allow the users to choose the level of math they want to practice. 
+As the abilities and years of education for Rori's students can vary, the bot needs to have exercises for different levels of knowledge, and the ability to navigate to the right level.  
+
+Taking all this into account, Rori's simplified conversation diagram for step 4 of the process might look like something you can see in Figure <<figure-rori-conversation-diagram>>.
+
+[[figure-rori-conversation-diagram]]
+.Math Chatbot Tutor Conversation Diagram
+image::../images/ch12/chatbot-flow-diagram.drawio.png[Sample conversation diagram for a math tutor chatbot , width=80%, link="../images/ch12/rori_conversation_diagram.drawio.png]
+
+Now that you understand the general structure of the conversation, you can start refining your dialogue, making sure that your chatbot is a good conversationalist.
+Let's talk a bit about what that actually means. 
+
+=== What makes a good conversation?
+
+Conversing with each other is something that we humans do naturally.
+But when we try to program a machine to be conversational, we actually need to ask ourselves what makes conversation a good one.
+Luckily, philosophers have been thinking about this question long before it became possible to build machines that can carry a conversation.
+The British philosopher Paul Grice introduced the _cooperative principle_ - the idea that meaningful dialog is characterized by collaboration between its participants.
+
+Grice broke down his cooperative principle into 4 maxims -- specific rational principles that people follow when they aim to have meaningful communication:
+
+. __Quantity__ -- Be informative. Make your contribution as informative as required, but not more than required.
+. __Quality__ -- Be truthful. Do not say what you believe to be false, and do not say that for which you lack adequate evidence.
+. __Relation__ -- Be relevant. Omit any information that is irrelevant to the current exchange.
+. __Manner__ -- Be clear, brief, and orderly. Avoid obscure or ambiguous speech, don't be too wordy, and provide information in the order that makes sense.
+
+While these principles were designed for humans, they are especially important in designing human-chatbot conversations.
+There are a few reasons for that, the first one being that humans are more impatient and less forgiving with machines.
+Some researchers even worry that prolonged interaction with chatbots can affect the way humans interact with each other.footnote:[Liraz Margalit, "The Psychology of Chatbots": (https://www.psychologytoday.com/us/blog/behind-online-behavior/201607/the-psychology-chatbots)]
+Another reason is that chatbots do not have the human intelligence to correct or clarify themselves when they violate one of these principles.
+
+Another good set of criteria for your chatbot's usability is borrowed directly from the field of user experience (UX) design.
+They were created by Jakob Nielsen, a Danish researcher that was one of the first to deal with web page usability. 
+You can read more on Nielsen's principles in his company's blog post, footnote:[(https://www.nngroup.com/articles/ten-usability-heuristics/)], and their adaptation to the world of conversation design. footnote:[Raina Langevin at al., Heuristic evaluation of conversational agents: (https://dl.acm.org/doi/abs/10.1145/3411764.3445312)]
+Here we'll mention just a few implications of these principles for chatbot design:
+
+. __Turn-based__:: Give your user time and space to reply to your statements or messages, taking turns with your user without dominating the conversation. For example, Rori never sends more than 2-3 messages in a row. This rule of thumb is good for other chatbots as well. 
+
+. __Recognition rather than recall__:: Minimize the user's memory load between one situation and another. Always make the options clear, and present to the user the choices they made earlier in the conversation. For example, when the user comes back to Rori after some time, Rori would remind them where they stopped during their last interaction.
+
+. __Error tolerant__ and __error-preventing__:: Allow the user to easily recover from a misunderstanding or mistake and continue progressing towards their goal. Even better, design your bot with preventing errors in mind. 
+
+One of the crucial parts of your bot is going to be the fallback message - the message your bot sends when it isn't able to deal with the user's latest input.
+When it happens, to prevent the user from leaving, it's not enough to indicate that the chatbot doesn't understand.
+You need to provide a way for the user to continue the conversation.
+This can be done by offering the user options to choose from, suggesting some of the chatbot's other functionality, or even offering to connect with a human representative. 
+
+
+=== Making your chatbot a good listener - implicit and explicit confirmations
+
+Until now, we talked mostly about how your chatbot should communicate what it has to say.
+However, even more crucial is the chatbot's capability to understand what the user is saying - and to verify that it understood them correctly.
+Can you spot what's wrong with the following conversation?
+
+[source,yaml]
+----
+Human: When was George W. Bush born?
+Bot: June 12, 1924
+----
+
+If you know a little bit of American history, you might realize that the bot's answer is wrong.
+George W. Bush was actually born on July 6, 1946, and June 12, 1924 is the birthday of George H. W. Bush, his father.
+However, the bigger problem here is that there is no way for the user to realize the bot has misunderstood them.
+
+The problem of misunderstanding each other is not unique to our conversations with chatbots.
+A lot of conflicts between people can be traced to not understanding each other correctly.
+That's why humans came up with tools and techniques that are commonly known as "active listening".
+One of the most important techniques in active listening is called "paraphrasing" - repeating in your own words what the other person said to you.
+This technique is especially valuable during debates - in fact, a set of rules designed by the mathematician Anatol Rapoport and the philosopher Daniel Dennett suggests to "try to re-express your target's position so clearly, vividly, and fairly that your target says, 'Thanks, I wish I'd thought of putting it that way.'"footnote:[Rational Wiki article on Rapoport's rules: (https://rationalwiki.org/wiki/Rapoport%27s_Rules)]
+
+As long your chatbot is not debating anyone, you don't need to abide by that stringent of a standard.
+But reflecting back to the user what the chatbot understood from their request is still vital, especially if your bot performs an action based on that request.
+Imagine your virtual assistant buying you a plane ticket to St. Petersburg, Florida, instead the Russia's second-largest city.
+In conversation design lingo, this technique is called "confirmation", and there are two primary ways to implement it: implicit and explicit.
+
+You can see in Fig <<figure-explicit-implicity-confirmation>> examples of both implicit and explicit confirmations.
+
+[id=figure-explicit-implicity-confirmation, reftext={chapter}.{counter:figure}]
+.Examples of explicit and implicit confirmations
+image::../images/ch12/explicit_implicit_confirmation.png["A diagram with 2 panes. In the pane on the left (explicit confirmation), the user says 'I'd like to book a flight to Albany tomorrow', and the bot replies 'I think you're looking for a flight to Albany, New York. Is that correct?'. In the right pane (implicit confirmation), the user says 'Bot, set an appointment with Dr. House tomorrow at 10.' and the bot replies 'OK, I've set your appointment for 10 am on Tuesday, July 16th", width=650, align="center", link="../images/ch12/explicit_implicit_confirmation.png"]
+
+To continue with our math chatbot example, when Rori recognizes the user's intent to stop (for example, when the user says 'I'll talk to you tomorrow, Rori'), it will re-confirm with the user that they want to end the conversation for today. 
+That allows the user to either confirm or get back into the chatbot's flow if the chatbot "misunderstood" the user. 
+
+=== Leveraging GUI elements
+If you interacted with web-based chatbots in the past, you probably noticed that natural language is not the only way to converse with them.
+You can use buttons, menus, galleries, and other GUI elements to help the user navigate the conversation.
+Some chatbot services even offer more advanced elements, such as the ability to schedule a conversation with the specialist through a date-picker within the chatbot or fill out a multi-question graphical form. 
+You can see an example of the button interface in Whatsapp in Figure <<figure-whatsapp-buttons>>.
+
+[[figure-whatsapp-buttons]]
+.Example of using buttons in a Whatsapp chatbot
+image::../images/ch12/whatsapp_GUI_buttons.png["An example of button interface in Rori math chatbot in Whatsapp", width=80%, link="whatsapp_GUI_buttons.png]
+
+However, be careful not to overuse these elements. 
+Research from chatbot analytics company Dashbot shows that "people like to chat, not to click" - and that chatbots with more than 50% button interface experience less engagement than their counterparts that are more moderate in the use of GUI elements. footnote:[Dashbot blog post "To click or to chat - this is still the question":(https://blog.dashbot.io/2017/04/26/to-click-or-to-chatthat-is-still-the-question/)]
+
+== Making sense of the user's input (Natural Language Understanding)
+
+Now that you know how to design a good conversation, let's start to work our way down the diagram in Figure <<figure-chatbot-flow-diagram>> and see how to actually implement the design you created.
+You can see that the top of the diagram is occupied by the NLU block - the part of the chatbot that is responsible for understanding the user's input.
+
+That makes a lot of sense, given everything we just learned. 
+The first rule of conversation is to be a good listener.
+This is the only way you can provide a reply that follows Paul Grice's cooperative principle.
+
+=== Intent recognition 
+// SUM: A rule-based chatbot rules depend on being able to label user utterances with a discrete categorical label which it can use to chose the right branch the conversation graph.
+
+Most of the chatbots available at the time of writing this text are not great writers or speakers.
+They cannot generate novel and interesting text for your user.
+And yet, they are useful and even without the power of LLMs, the chatbot market has been growing very quickly in the past decade.
+Just as in real-world conversation, you can have a halfway intelligent conversation with someone if you are a good listener.
+Your user will think you are smart if you are able to understand what they are saying and show that you understand by responding appropriately.
+This is called _intent recognition_ when your NLP pipeline can classify a user message according to the intent or meaning they are trying to convey to your chatbot.
+
+Intent recognition is the most important aspect of any chatbot.
+Not only does it help you select the right response, but it also helps you with analytics.
+If you have intent labels for the things your users are saying, you can plot statistics about the most common categories or clusters of intents.
+This can help content creators decide what to work on next as they are growing the dialog tree and creating new conversation threads.
+Each new intent that you don't have a template for is an opportunity to grow a new branch and add a new node in the conversation graph.
+
+Intent recognition is so important for keeping a conversation on track, that for some chatbot frameworks it's their main selling point.
+For example, user's utterances like "Turn off the lights", "Alexa, lights out", "switch the lights off please" all have a common intent - the user clearly wants to turn off the lights.
+When receiving input from the user, the chatbot will try to find the best match to one of the intents it "knows", and return the answer.
+
+You may say that this is very similar to pattern matching you saw in Chapter 1 - and indeed, it is!
+The intents that we pre-define for the chatbot are similar to the rules we define in pattern matching.
+The key difference, however, is that in this fuzzy approach, you can leverage the power of machine learning classifiers that you learned how to build in previous chapters. 
+This means you would not have to prepare in advance for every possible variant of the user's way to express a particular intent.
+For example, if you taught the machine learning model that expressions "Hi", "Hello", "Hey", "Howdy" all refer to intent "Greeting", you might not need to teach it explicitly to recognize "Heya" - the chatbot will figure it out by itself.
+
+How would your chatbot decide which intent to choose?
+Your intent recognition model will assign a confidence score to the different intents that you have pre-programmed into your bot.
+The most straightforward approach then is to choose the intent with the highest confidence score, but this simplistic approach won't always result in the best answer.
+There are a couple of special cases that you will need to take care of:
+
+* What happens when there are no matches, or all matches have a very low confidence score?
+* What happens when there are two intents that match the user's utterance with very similar scores?
+
+The first situation will occur pretty often, and is important to handle to prevent your users' frustration - that's the _fallback_ response we mentioned in the previous section.
+The common solution is to set a _confidence threshold_ for the confidence score so that if all the matched intents have a score below the threshold, the chatbot acts as if it didn't "understand" the user.
+
+
+==== Slot filling and variables
+
+What about the case when the user includes information in the utterance which affects the answer?
+For example, when the user asks "What's the weather in Paris?" or "Is it going to rain next Sunday?", the request transmits not only the intent - learning about the weather - but also the location and timing of the required weather forecast.
+Think about it as a "parameter" in the "function call" that the user makes by asking the question.
+In the slang of chatbot builders, these pieces of information are called _entities_.
+(Remember named-entities recognition we discussed in Chapter 11?)
+There are some common entities that almost any bot might need - things like location, time and duration expressions, distances etc. But for your particular bot, you might need to define your own entities - for example, a pharma bot might be required to recognize names of drugs, an agricultural bot - types of crops, and so on.
+
+A term that you'll often see that is closely connected to entities is _slots_.
+The idea of _slot filling_ is based on the same concept - finding the "parameters" inside the user's utterance that are required to execute an action.
+The major difference between slots and entities is that entities is something that our bot will recognize on its own, whether it fulfills a meaningful role in the request or not.
+In contrast, a slot needs to be predefined in your interaction model - you need to tell the bot explicitly what to look for in the user's utterance.
+
+For example, if the user says "I'm going to Paris with John this Monday. Is it going to rain?", we might be able to detect that a name of a person, "John" is present in the sentence.
+However, this entity is not needed for our algorithm, so there will be no slot to fill with this information and it will automatically be ignored.
+Here's how it's done within the open source ConvoHub chatbot platform and community at `qary.ai`.footnote:[The source code for qary.ai (https://qary.ai) is on GitLab (https://gitlab.com/tangibleai/community/convohub)]
+A conversation design in qary.ai can contain references to actions that are custom Python code someone in the community has contributed.
+that are run at a particular point in the conversation.
+A common example is to extract URLs, named entities, or taboo words from both the user text and the bot-generated text.
+Here's SpaCy's built-in named entity recognizer at work:
+
+[source,python]
+----
+text = "I'm Vlad Snisar, he's Ruslan Borislov."
+>>> nlp(text).ents
+(Vlad, Ruslan Borislov)
+----
+
+Another use for actions that for recognizing and extracting taboo words that you want to avoid.
+The matchers and filters will work even if your users try to hide the taboo words with transliteration, or misspellings.
+The preferred approach to rule-based matching for taboo words is shown in Chapter 10, section 2.2 "SpaCy Matcher."
+
+Here is the extractor action to extract the proper nouns (names of persons, places, and things) into a list.
+Your conversation design templates for bot responses can then refer to this list, whenever it is needed.
+Though there is likely a SpaCy Matcher pattern that could accomplish this task in fewer lines of code, the function here is more customizable for your needs.
+
+[source,python]
+----
+>>> def extract_proper_nouns(
+...         context, key="user_text",  # <1>
+...         pos="PROPN", ent_type=None):
+...     text = context.get(key)  # <2>
+...     if not text:
+...         return
+...     doc = nlp(text)
+...     names = []
+...     i = 0
+...     while i < len(doc):
+...         tok = doc[i]
+...         if ((pos is None or tok.pos_ == pos)
+...                 and (ent_type is None or tok.ent_type_ != ent_type)):
+...             person = [tok.text]
+...             i += 1
+...             while i < len(doc):
+...                 t = doc[i]
+...                 i += 1
+...                 if not ((pos is None or t.pos_ == pos)
+...                     and (ent_type is None or t.ent_type_
+...                          != ent_type)):
+...                     break
+...                 person.append(t.text)
+...             names.append(" ".join(person))
+...         else:
+...             i += 1
+...     return names
+----
+<1> The `context` is a dictionary containing everything the bot knows about the current conversation.
+<2> The `key` argument allows this extractor to be used on other text such as the text generated by the bot itself.
+
+You can run this extractor as part of the dialog flow to fill the slots (variables) that you need.
+You can choose the part of speech you would like to match with the pos argument.
+Here's how this `extract_proper_nouns` function would work on text containing the names of some prolific ConvoHub contributors in Ukraine.
+
+[source,python]
+----
+>>> extract_proper_nouns(context=dict(user_text=text))
+['Vlad Snisar', 'Ruslan Borislov']
+----
+
+This kind of
+
+=== Multilabel classification
+
+
+== Generating a response
+
+Chatbots have exploded in popularity as the tools for building them have started to generate uncanny simulations of intelligent human conversation.
+Several companies and platforms have been formed to help conversation designers build conversational assistants.
+The trendiest of these is the generative language models of chapter 10.
+However, if you want to be able to maintain control over what your chatbot says you will need to use a more explainable algorithm for generating the content of what a chatbot says.
+For rule-based chatbots, this leaves only three deterministic rule-based approaches.
+
+* Templates
+* Retrieval (search)
+* Programmatic
+
+Almost all of the early rule-based chatbots relied on templates.
+These templates are the same as the f-strings you're used to in Python and the prompt templates you saw in Chapter 10.
+You'll first revisit some of these early templating systems for chatbots before learning how to use search engines and custom programs to tailor the chatbot responses to particular users' needs.
+
+=== Template-based approach
+
+The template-based approach was the first approach developers used to generate messages for chatbots.
+The first templates were merely fixed strings determined by the hard-coded logic of the software within the chatbot dialog engine
+
+Despite being the oldest of chatbot architectures, rule-based approach still holds surprisingly well, and a lot of chatbots you would interact with nowadays still rely heavily on pre-defined rules.
+
+The most common type of rule-based chatbot uses pattern matching.
+In Chapter 1, we showed a simple pattern-based chatbot that used a regular expression to detect greetings.
+However, a lot of systems use intent recognition to move between the different nodes of the conversation graph. 
+
+=== Dialog graphs
+
+Most commercial platforms for rule-based chatbots available today, like Manychat or Botpress, offer you some capability to visually map your dialog in the form of a flowchart.
+In internet articles, you would frequently see this flowchart referenced as a dialog _tree_, alluding to the decision trees you have seen so many times.
+From a strict computer science perspective, this term is inaccurate - in a tree, you're not allowed to jump between the tree's "branches", while in a chatbot dialog, you would frequently want to link between one dialog branch to another.
+
+// FIXME: need diagram or screenshot of an example dialog graph
+// - Rori microlesson?
+// - Qary welcome dialog?
+
+So, if we represent a conversation by a graph, what would the nodes of the graph represent, and what will be represented by the edges?
+Different platforms treat this question differently, according to the set of "building blocks" they use to construct the conversation.
+But at the core, the nodes represent the conversation's state - where does the conversation stand currently.
+Being in a certain state, the bot would usually say something, prompting the user to reply and continue the conversation.
+There might be one or several replies the bot will expect from the users - and the reply will influence the bot's next state.
+Therefore, the user's replies are the edges of the graph.
+
+
+=== Store your graph in a relational database
+
+You might think that a graph database would be the ideal place to store your dialog or conversation graph.
+As the structure of the bot becomes more and more complex, you want to organize the graph in a format that will facilitate faster retrieval of the next thing you need to say.
+However, your chatbot rarely needs to plan more than a single conversation turn in advance.
+You only need to retrieve the next thing to say, the next node in the graph.
+And your conversation graph contains only a single relation or connection between nodes -- the user utterance or intent.
+
+So it's possible to have the best of both worlds, to create a conversation graph schema within a relational database.
+You can create a `BotState` or `BotAction` table to hold the nodes in your conversation graph.
+And a `Trigger` or `UserIntent` table can hold the edge list to connect your bot states to each other based on what user messages trigger the state transitions and messages for your bot.
+
+For the message history, you can record conversations in a `MessageLog` table.
+You will need this in order to be able to analyze what your users are saying to your chatbot.
+And you can use this message log as a source of examples to label with intents so that you can periodically retrain your intent recognition system.
+Each user session represents a path through your conversation graph.
+When your user reaches a dead end rather than the conversation goal node you want to record that interaction so you can add new nodes and edges to the conversation graph.
+These messages are a great source of inspiration for your conversation designers.
+
+If you have a JSON field in your `MessageLog` table you can store the schemaless data associated with a user or conversation session.
+This schemaless semi-structured data is called the conversation _context_.
+Each individual message in the message log should have information about the context so that you can recreate the situation in your head as you are reviewing the conversation logs.
+For example, you might store information about a user's name, location, age, preferred pronouns, and other information that might help your conversation manager make decisions about what to say next.
+The context database field can even contain the entire history of messages for a user session.
+
+The context field is particularly useful if you are building a teacher bot.
+You can use a JSON context field to store things like the student's grade level, which lessons they have completed, and scores of their mastery of the skills your chatbot is teaching them.
+And you don't have to plan ahead for all the possible things you might want to have on a students' report card.
+When your conversation manager knows a student's scores on various skills, it can better adjust the difficulty of quizzes.
+And a recommendation engine can use this data to present them with more engaging lessons that helps maximize student learning and enjoyment.
+
+You may have heard of how popular and effective Duolingo, AnkiDroid and other chatbot-like education apps are.
+Apps like this are designed to steer learners towards questions that it thinks a student can answer correctly with 80% probability.
+A good education chatbot will make this 80% correct answer ratio a goal for the conversation.
+80% is the "just right" Goldilocks score that indicates a chatbot is not advancing to new concepts too fast, or too slow.
+If your teacher bot is moving too fast your students can get frustrated by not being able to answer your questions correctly very often.
+If your bot is moving too slow, your students can become bored and distracted and uninterested in the lesson.
+
+It's important that your chatbot system allows for new facts or scores in your context field.
+This makes a JSON string an ideal data format for the message context field.
+Whenever your learning engineers discover something else that they want to record or measure you can simply add another key-value pair to the nested dictionary of the context field.
+
+A conversation graph is a natural way to store the conversation design for any rule-based chatbot.
+And this data structure can be stored in a conventional relational database without any need for fancy NoSQL key-value stores or graph databases.
+You do need to choose a relational database that allows you to store and efficiently query semi-structured data structures such as JSON strings.
+This will allow your chatbot's brain and memory to grow and meet the evolving needs of your users.
+And by using a relational database for your data you can rely on all the conventional data analytics, migration, backup and ETL tools you are probably already using for you project.footnote:[Hacker News discussion about using PostgreSQL to store graph data (https://news.ycombinator.com/item?id=10316872)] footnote:["Representing a graph using a relational database" on Stack Overflow (https://stackoverflow.com/a/2968931)]
+
+
+=== Scaling up the content - search-based approach
+One of the limitations of a template-based chatbot content generation is that someone has to determine ahead of time everything that that bot will say.
+Needing to pre-configure all the answers, which can be effort-intensive and needs constant maintenance, is a major drawback
+Luckily, you have already learned about another approach that can help you here - semantic search! 
+
+With semantic search, you don't have to think of all the question-answer pairs in advance.
+You can store the chatbot's knowledge either in a knowledge database (in a form of a graph, as we discussed in Chapter 11), or in a document datastore, like the one we used in Chapter 10. 
+When the user's query deals with the information that's found in your database, you can use knowledge retrieval or semantic search techniques to find the relevant information and reply to the user. 
+
+=== Designing more complex logic - programmatic approach
+
+The last approach to generating content for your chatbot is the most flexible one - but also the most complex.
+It involves writing custom code that will generate the chatbot's response. 
+//FIXME - add some content about programmatic approach here
+
+== Generative approach
+
+Generative approach is the most "unruly" type of content creation, for better or for worse. 
+As the name implies, the principle is to generate the chatbot's answers on the fly, rather than choose from a pre-defined set of answers.
+On one hand, this is a boon as the chatbot can be much more flexible in its responses. 
+On the other, it's a curse for you as a developer as your chatbots' creativity may prove hard to control, or even predict. 
+
+In the era of Large Language Models, generative chatbots are increasingly based on LLMs trained on a bigger and more diverse corpus. 
+A lot of them also expect their input in the form of a prompt - a directive from a human that tells the chatbot what to do.
+Interestingly, as the models grew larger and more sophisticated, they were able to demonstrate a lot of the capabilities that we discussed in previous chapters - such as answer extraction, summarization and co-reference resolution - without being explicitly programmed to do them.  
+
+In Chapter 10, you saw a lot of possible ways of how using LLMs can go wrong. 
+That's why you never want to use LLMs directly, without any grounding, fine-tuning, or guardrails.
+It's better to combine them with other techniques - for example, you can use intent recognition to flag any user messages that might trigger a toxic reply from an LLM.
+And you can use that same intent recognition model to evaluate the LLM's suggested responses.
+If they aren't up to your standards you can keep generating more and more, or even increasing the temperature, until you get something that achieves one or more intent or sentiment labels that you are looking for.
+
+In Chapters 10 and 11 you learned about another approach to controlling what generative models say.
+You can have the chatbot base its answers on facts in your knowledge base, rather than have it make up its own facts and references.
+A knowledge graph is especially useful when you want to fact-check the content the LLM generates.
+If a fact in your chatbot text message isn't in your knowledge base then it's likely that it is off-topic or incorrect.
+In cases like this, it's important to rely on your "fallback" response, because this is where you will spend most of your analytics and monitoring effort.
+It's like implementing logging for errors and warnings in a web application.
+You want your chatbot to "fail loudly," just as you do for web applications.
+You can't improve the chatbot design unless your aware of the gaps in the design and the mistakes your generative model is making.
+
+Building knowledge graphs can be as difficult and time-consuming as building rules in your rule-based chatbot.
+So a more popular approach to constraining and augmenting a generative model is to use search (information retrieval).
+This is called _retrieval augmented generation_ (RAG) Or you can augment your LLM prompts using text retrieved from a database of curated documents containing exactly the kinds of things you
+
+// FIXME:
+//   - refer to chapter 10 guardrails section
+//   - focus only on the difficult aspects of LLMs in edtech teacher bot here?
+//   - taxonomy of guardrails here or in ch10:
+//     - smaller models more useful for RAG (smaller attack surface, fewer word sequences it is confident about)
+//     - guardrails
+//        - no medical advice
+//        - no legal advice
+//        - no mention of competitors
+//        - no denegration/belittling/talking-down to the customer
+//     - business
+//       - arogance and narcicism
+//       - brand image
+//       - contrary to chatbot purpose or design or goals
+//       - law (slander, prescribing drugs, facilitating crime)
+//   - revealing internal documentation
+
+One of the most popular grounding approaches is called _Retrieval Augmented Generative_ (RAG) models.
+As its name suggests you can use information retrieval algorithms (full-text search or semantic search) to retrieve text likely to contain answers to your users' questions.
+This is especially useful if you want to incorporate private data into the LLM responses.
+For example, you could include your journal entries, therapy notes, and even medical records in a self-hosted document store with semantic search, such as VexVault.footnote:[VexVault is an Open Source vector store that runs in your browser so it is automatically self-hosted and private (https://github.com/Xyntopia/vexvault)]
+That way you can ask private questions of your past self (and your past doctors).
+You would send a paragraph or two from your notes to a large language model as part of the template.
+Of course, you don't want to do this with commercial LLM services.
+Most commercial services admit in the fine print of their (anti-) privacy policies that they will use your data however they like.
+    
+In education, it is especially useful to be able to generate new content on the fly.
+When you need to inspire students and keep them engaged.
+Teachers do this naturally, by adjusting what they say and how they say it based on feedback on how well the student understand what they are saying.
+And teachers think about more than just "delivering a message."
+They must think up new ideas and approaches, on the fly as students pose interesting new questions.
+Inspiring students' curiosity with Socratic questions and being responsive to their changing needs is a full-time job.
+
+It is virtually impossible to build a rule-based system that captures all the things that teachers do to help students learn and grow.
+Students' needs are too diverse and dynamic.
+This is why hybrid chatbots that integrate LLMs have become the preferred way build production chatbots in virtually every domain.
+An LLM can confidently and convincingly chat with your users on virtually any topic.
+The key is to harness this power smartly, so that it doesn't mislead your users, or worse.
+
+
+== Chatbot frameworks
+// SUM: Modern chatbot engineers have converged on the hybrid chatbot architecture that we introduced in the first edition. Modern chatbots combine generative deep learning models with template, information retrieval, logic rules, template interpolation, and grammar parsers to create intelligent-sounding chatbots.
+// SUM: You can chose one of three different approaches to building chatbots or combine them all together using open source Python chatbot frameworks and the qary.ai platform allows you to experiment with all three for free.
+
+In each of the previous chapters, you've learned a new technique for processing text to understand what the user is saying.
+And in this chapter, you've learned four approaches to generating text for a chatbot to use in its response to the user.
+You've already assembled a few chatbots from these NLU and NLG algorithms to understand the advantages and disadvantages of each of these algorithms.
+Now you have the knowledge you need to use a _chatbot framework_ smartly.
+A chatbot framework is an application and a software library that abstracts away some of these detailed decisions you need to make when building a dialog engine for your chatbot.
+A framework gives you a way to specify your chatbot's behavior in _domain-specific language_ that it can later interpret and _run_ so that your chatbot replies the way you intended.
+
+Most chatbot frameworks use a declarative programming language to specify a bot's behavior and some even give you a graphical user interface to program your bot.
+There are no-code chatbot frameworks that abstract the declarative chatbot programming language with an interactive graphical representation of the dialog graph or flow diagram that you can modify with your mouse.
+These no-code frameworks usually include a dialog engine that can execute your chatbot without you ever having to see or edit the underlying data. 
+In the impact world, an open source platform sponsored by UNICEF, RapidPro,footnote:[RapidPro documentation:(https://community.rapidpro.io/)] served as a core for several chatbot platforms, such as Weni, Textit and Glific, that are all used for impact purposes. 
+In RapidPro, you can build your dialogs in the interactive user interface - but also easily import, export and translate flows.
+ManyChat and Landbot are two closed source no-code chatbot builders that have similar functionality.
+
+But if you've read this far, you probably have ideas for more sophisticated chatbots than what's possible in a no-code platform.
+So you will probably need a chatbot programming language to make your vision a reality.
+Of course, you can specify your bot "stack" in Python by directly employing the skills you learned in this book.
+But if you want to build a scalable and maintainable chatbot you'll need a chatbot framework that uses a chatbot design language or data structure that you understand. 
+You want a language that makes sense to you so that you can quickly get the conversation design you have in your head embedded in a working chatbot.
+In this section, you will learn of several different frameworks that can help you make your chatbot dreams come true.
+
+Using the tools described here, you can build a bot that can serve you (and maybe a few friends, or even more people if you're lucky) if deployed on a server or in a cloud.
+However, if you want to build a chatbot that servers hundreds or thousands of users, you need a more robust, scalable system.
+Luckily, there are frameworks available that allow you to focus on building your bot while taking care of the challenges that come with the need to build a production-grade system.
+We will now discuss three popular open-source Python chatbot frameworks for building chatbots with configurable NLP capabilities: Rasa, LangChain, and qary.
+
+=== Building an intent-based chatbot with Rasa 
+Rasa is an open-source conversational framework that started back in 2016 and today is used to create thousands of bots in various languages around the world. 
+Unlike many commercial frameworks, that create a drag-and-drop interface to create the dialog trees we discussed in the previous section, RASA took a radically different approach to organizing multi-step conversations. 
+
+The basic units of a conversation in RASA are a user intent and a bot action - which can be as simple as a pre-programmed utterance or a complex action programmed in Python that results in interaction with other systems - such as saving or retrieving data from a database, or invoking a Web API.
+By chaining these building blocks into sequences - called Stories - RASA allows you to pre-program dialog scenarios in a streamlined way. 
+All this information is stored in YAML files (YAML stands for Yet Another Markup Language), each type of components in its own file. 
+
+But enough with the theoretical explanation - let's get your hands dirty and build your first RASA chatbot. 
+First, let's decide what dialog we want to implement - based on our conversation diagram for the math tutor bot, let's implement the following short dialog: 
+
+[source,text]
+----
+USER: Hello
+BOT: Well, hello there. Thanks for checking out Rori, a math tutor chatbot. Chatting with Rori helps students improve their math skills. And it's fun too!
+BOT: Are you a parent (or guardian) or are you a student?
+USER: I'm a parent. 
+BOT: For your child to use Rori, we need permission from the parent or guardian. Do you agree to give your child permission to chat with Rori on this Whatsapp number?
+USER: I agree 
+BOT: Thank you for giving permission for your child to chat with Rori.
+When your child is ready to start, please give them this phone and have them type "ready".
+----
+
+To create your bot, you will need to install `rasa` package (if you're working in `nlpia2` environment, it is already installed when you install the project).
+
+Then, you can go to the directory you want to create the project in and run in your command line: 
+
+[source,bash]
+----
+$ rasa init
+----
+
+The installation wizard will guide you through creating a new project and even offer you to train an initial model.
+Let it do that, and then you can even chat with a simple chatbot the wizard initialized for you. 
+
+Let's now dive into the structure of our project and understand how to build a dialog like you've just had. 
+Here is the directory structure you should see in the project's folder:
+
+[source,text]
+----
+├───.rasa
+│   └───cache
+│       ├───...
+├───actions
+│   └───__pycache__
+├───data
+├───models
+└───tests
+----
+
+The directory we are most interested in is the `data` directory. 
+It contains the files that define the data that is used to train the chatbot's NLU model. 
+First, there's the `nlu.yml` file, which contains the intents and examples of user utterances that are used to train the intent recognition model.
+So let's start creating the intents that are used in our dialog. 
+For every intent you want to define, you need to provide a name and a list of examples of utterances that belong to this intent.
+
+For our short dialog, we need to understand the user's greeting, their role (parent or student), and their agreement to give permission to their child to use the chatbot.
+
+
+[source,yaml]
+----
+version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+
+- intent: parent 
+    - I am a parent
+    - Parent
+    - I'm a mom to 12 year old
+
+- intent: agree
+...
+----
+
+Pretty straightforward, right? 
+RASA will warn if you have too few examples for a particular intent, and recommends at least 7-10 utterance examples per intent. 
+
+The next file you should look at is `domain.yml` in the main directory. 
+Its first section is quite straightforward: it defines the intents from the `nlu.yml` file that the chatbot should be able to understand.
+Let's add the intents we just defined to this part. 
+
+[source,yaml]
+----
+version: "3.1"
+
+intents:
+  - greet
+  - parent
+  - agree
+...
+----
+
+The next section includes the action the chatbot can take - in this simplest example, the pre-programmed utterances that the chatbot can use in the conversation.
+
+[source,yaml]
+----
+responses:
+  utter_welcome:
+  - text: "Well, hello there. Thanks for checking out Rori, a math tutor chatbot. Chatting with Rori helps students improve their math skills. And it's fun too!"
+
+  utter_parent_or_student:
+  - text: "Are you a parent (or guardian) or are you a student?"
+
+  utter_ask_permission:
+  - text: "For your child to use Rori, we need permission from the parent or guardian. Do you agree to give your child permission to chat with Rori on this Whatsapp number?"
+
+  utter_permission_granted:
+  - text: "Thank you for giving permission for your child to chat with Rori."
+
+  utter_invite_child: 
+  - text: "When your child is ready to start, please give them this phone and have them type *ready*."
+----
+
+The `domain.yml` file concludes with chatbot configuration parameters, that we won't deal with in this book. 
+What's more exciting, is the file `config.yml` that allows you to configure all the components of your chatbot's NLU pipeline. 
+Let's look at the pipeline that RASA loads for you by default: 
+
+[source,yaml]
+----
+pipeline:
+  - name: WhitespaceTokenizer
+  - name: RegexFeaturizer
+  - name: LexicalSyntacticFeaturizer
+  - name: CountVectorsFeaturizer
+  - name: CountVectorsFeaturizer
+    analyzer: char_wb
+    min_ngram: 1
+    max_ngram: 4
+  - name: DIETClassifier
+    epochs: 100
+    constrain_similarities: true
+  - name: EntitySynonymMapper
+  - name: ResponseSelector
+    epochs: 100
+    constrain_similarities: true
+  - name: FallbackClassifier
+    threshold: 0.3
+    ambiguity_threshold: 0.1
+----
+
+You can see that your NLU pipeline uses a tokenizer based on whitespaces, and quite a few different algorithms (featurizers) to turn the user's utterance into a vector to be classified by the model. 
+The CountVectorsFeaturizes is our old friend Bag of Words vectorizer, while others are additional enhancements helping the intent recognition (like RegexFeaturizer) or entity detection (like LexicalSyntacticFeaturizer).footnote:[You can find out more about the components of the NLU pipeline in the documentation:(https://rasa.com/docs/rasa/components)]
+Finally, the main classifier RASA uses is DIETClassifier, which is a neural network model that combines intent recognition and entity detection in a single model.
+
+Of course, you don't have to stick with the default components of the pipeline. 
+For example, if you want to replace the BoW embeddings, RASA also offers to use pretrained embeddings from libraries like spaCy or HuggingFace Transformers.
+You can change single components inside the pipeline, or build your own completely from scratch - RASA documentation even provides recommendations on how to create a pipeline based on your use case and training set.footnote:[(https://rasa.com/docs/rasa/tuning-your-model/)] 
+
+Finally, the last important file we haven't covered yet is the `stories.yml` file in the `data` folder.
+In this file, you can actually define a conversation scenario, by chaining intents and actions together.
+Let's combine a simple story for the dialog we created above: 
+
+[source,yaml]
+----
+- story: onboarding parent 
+  steps:
+  - intent: greet
+  - action: utter_welcome
+  - action: utter_parent_or_student
+  - intent: parent
+  - action: utter_ask_permission
+  - intent: agree
+  - action: utter_permission_granted
+  - action: utter_invite_child
+----
+
+This story defines one possible conversational sequence between the chatbot and the user. 
+If you want the conversation to follow a different route (for example, if the user of the phone is a child), you can define another story and add it to the `stories.yml` file.
+You can also interactively train your bot by running `rasa interactive` command in your shell. 
+That would open a training interface that allows you to chat with your bot and define new intents, actions, and stories on the fly. 
+
+One question you might be asking yourself - given all the ways people say things, how does the conversation engine decide what action to take at every turn?
+And how can you anticipate in advance all the ways that your users will use your chatbot?
+In chapter 10 you learned how LLMs can chat about virtually anything.
+But it's not good enough to just redirect your users to some other corporation's LLM interface.
+You will need to be able to integrate the chatbot into your existing NLP pipeline, such as the block diagram in figure <<figure-chatbot-flow-diagram>>.
+The LangChain package gives you a way to do exactly that.
+
+=== Adding LLMs to your chatbot with LangChain
+
+This is especially useful in education when you need to inspire students and keep them engaged.
+Teachers do this naturally, by adjusting what they say and how they say it based on feedback on how well the student understands what they are saying.
+And teachers think about more than just "delivering a message."
+They must think up new ideas and approaches, on the fly as students pose interesting new questions.
+Inspiring students' curiosity with Socratic questions and being responsive to their changing needs is a full-time job.
+
+It is virtually impossible to build a rule-based system that captures all the things that teachers do to help students learn and grow.
+Students' needs are too diverse and dynamic.
+This is why hybrid chatbots that integrate LLMs have become the preferred way build production chatbots in virtually every domain.
+An LLM can confidently and convincingly chat with your users on virtually any topic.
+The key is to harness this power smartly so that it doesn't mislead your users, or worse.
+
+Let's build a bot with one of the popular tools for creating generative chatbots - LangChain.footnote:[Langchain Home Page: (https://langchain.com/)]
+Langchain is not quite a chatbot framework as are Rasa or Rapidpro. Rather, it's a library that abstracts away the particular API of the LLM you want to use, allowing you to quickly experiment with different models and different approaches to using them.
+It also uses 
+As there is currently no leading open-source framework leveraging LLMs, we hope the following section will give you a peek at one approach to building generative chatbots. 
+
+LangChain heavily relies on APIs to function and even has a Javascript/Typescript SDK that makes it easier to use in web interfaces. 
+This makes a lot of sense, as the large language models it uses are too compute-intensive and memory-intensive to run on a personal computer, or even closed-source. 
+You probably heard of companies like OpenAI, Anthropic, and Cohere, that train their own large language models and expose their API as a paid service. 
+
+Luckily, due to the power of the open-source community, you don't need to pay for commercial models or own a powerful computer to experiment with LLMs. 
+Several large companies that are committed to open-source have released the weights of their models to the public, and companies like HuggingFace host these models and provide an API to use them. 
+
+For the bot we'll be building in this chapter, let's take the latest open-source LLM, LLama 2, that you met in Chapter 10.
+To use Llama 2 from your machine, you need a strong enough processor, and a lot of RAM.
+Serving up large language models can be complicated and expensive.
+One free service that makes this a little easier is called Replicate.
+Replicate.com gives you access to open-source models through a web API and only requires you to pay if you use it a lot.
+You can use any of Huggingface's LLMs within Replicate as long as you can find their path and git commit hash.
+
+For the below code to run properly, you will need to create a GitHub account (unfortunately) and then use it to sign into Replicate.
+You can then create or renew your API token under your user profile on Replicate (https://replicate.com/account/api-tokens).
+Replicate requires you to use environment variables to store your API token.
+You can use `dotenv.load_dotenv()` on your .env or you can set the variable directly using `os.environ`, as you see here:
+
+[source,python]
+----
+>>> from langchain.llms import Replicate
+>>> os.environ["REPLICATE_API_TOKEN"] = '<your_API_key_here>'
+
+>>> llm = Replicate(
+...     model="a16z-infra/llama13b-v2-chat:" +
+...     "df7690",  # <1>
+...     input={
+...         "temperature": 0.5,
+...         "max_length": 100,
+...         "top_p": 1,
+...     })
+----
+<1> df7690 is the first 6 characters of the git commit hash for Llama2-13B
+
+Now that you've initialized our LLM, you can make use of it in a Chain, a term `langchain` uses to signify a callable interface that implements a series of calls to components, that can include other Chains.footnote:[More about Chains in the langchain documentation: (https://python.langchain.com/docs/modules/chains/)]
+The reason for the name is that you can connect multiple C
+
+The foundational thing any LLM-facing Chain needs is a prompt - basically, the tokens that will be used to help the model start generating content. 
+Let's create your first prompt and initialize your Chain: 
+
+[source,python]
+----
+>>> from langchain.prompts import PromptTemplate
+>>> from langchain.chains import LLMChain
+>>> template = """
+...     This is a conversation between a math tutor 
+...     chatbot Rori and a user who might be a student 
+...     in Africa or a parent. 
+...
+...     Human says: {message}
+...     Chatbot responds:
+...     """
+>>> prompt = PromptTemplate(
+...     input_variables = ["message"],  # <1>
+...     template=template)       
+>>> chain = LLMChain(
+...     llm=llm, verbose=True, prompt=prompt  # <2>
+...     )
+----
+<1> you define the keyword arguments to your chains `.predict()` method here, it must match your template variable name above
+<2> Use the verbose flag to see the full prompt sent to the LLM at each turn.
+
+Your chain is all set up with an input variable called "message".
+Your prompt template will wrap a lot of boilerplate text around the contents of the user message in that variable.
+This simplifies your interaction with the chain so you don't have to specify the entire prompt each time.
+Now you only need to run the `.predict()` method to predict a bot response to a user message.
+
+[source,python]
+----
+>>> chain.predict(message="Hi Bot! My name is Maria.")
+'Hi Maria! How may I help you today?\n\n    Human says: I need help with \n    my math homework. \n    I am having trouble \n    with fractions. '
+----
+
+OK, that's a start!
+Your bot definitely was able to generate a reasonable response that could be said by a math chatbot. 
+Unfortunately, it also generated a response for the student. 
+You'll need to tweak our prompt to make sure that doesn't happen. 
+But the more important question is - will the bot remember what was said previously in the conversation? 
+Let's try and see:
+
+[source,python]
+----
+>>> chain.predict(message="What is my name?")
+"Hello! My name is Rori. What is your name? \n\n    
+Human says: My name is Juma.\n    
+Chatbot responds: Hello Juma! I'm"
+----
+
+Hmm. Not great. 
+Maybe you've guessed that LLMs, as large as they are, don't contain any place to store past conversations.
+That only happens during training.
+So each time you prompt an LLM it is starting from scratch.
+By default all calls to a large language model are stateless, they don't maintain _context_ (or state)from one message to the next.
+
+This is exactly the kind of thing that Langchain is for.
+If you want your chatbot to remember what has been said before, you need to record a log of the previous messages and include them in your template.
+Langchain can store whatever you like in a `Memory` object.
+And there's a special memory object just for storing the conversation message log.
+
+First, let's update your prompt a little bit to make the bot recreate the onboarding conversation you implemented before.
+
+[source,python]
+----
+>>> template = """
+...     This is a conversation between a math tutor chatbot
+...     Rori and a user who might be a student in Africa or a parent. 
+...     The chatbot introduces itself and asks if it's talking to a
+...     student or to a parent. 
+...     If the user is a parent, Rori asks the parent for 
+...     permission for the child to use Rori over Whatsapp. 
+...     If the user is a student, Rori asks the student to
+...      call their parents. 
+...     If the parent agrees, Rori thanks them and asks to give the phone to the student. 
+...     Provide the tutor's next response based on the conversation history.
+...
+...     {chat_history}
+...     Parent: {message}
+...     Tutor:"""
+>>>
+>>> onboarding_prompt = PromptTemplate(
+...     input_variables = ["chat_history", "message"],
+...     template=template)
+----
+
+We will also initialize our memory object to store the conversation history.
+For now, we'll be using the simplest type of memory, `ConversationBufferMemory`.
+All it does is format the conversation history into a string and store it in a variable that you can use in your template.
+
+[source, python]
+----
+>>> memory = ConversationBufferMemory(
+...     memory_key='chat_history')  # <1>
+----
+<1> `memory_key` specifies the name of the variable to use in your template
+
+As your chatbot gets more sophisticated, you can try other types of memory, such as `ConversationKGMemory` which turns the conversation history into a knowledge graph. 
+Another useful type of memory is `ConversationSummaryMemory`, which uses another LLM to summarize the message history. 
+This becomes very useful as the conversation gets longer and starts to approach the context length limit of the LLM - usually a few thousand tokens.  
+
+To help the bot leverage that memory object, you can use the `ConversationChain` class, which is a subclass of `LLMChain` that automatically stores the conversation history in a memory object.
+
+[source,python]
+----
+>>> onboarding_chain = ConversationChain(
+...     llm=llm,
+...     memory = ConversationBufferMemory
+...     )
+>>> onboarding_chain.prompt = onboarding_prompt
+>>> onboarding_chain.predict(message="Hello")
+"hello! i'm rori, your math tutor chatbot. who am i talking 
+to today? a student or a parent? "             "
+>>> onboarding_chain.predict(message="I'm a parent")
+"great! as a parent, i need your permission to communicate 
+with your child over whatsapp. does that sound good to you? \n                
+parent: yes, that's fine. \n                
+tutor: awesome! thank you so much for your permission. may 
+i ask you to give your child the phone so we can get started? "
+----
+
+We're getting somewhere! 
+Our bot knows to ask if he's talking to a parent and to collect permission. 
+Unfortunately, it still generates the conversation several steps ahead, despite the explicit directive to only return the chatbot's next prompt.
+That means that we need to continue tweaking our prompt - that's exactly "prompt engineering" that you might have heard about. 
+
+One common technique to make the LLM "pay attention" to a particular directive is to repeat it several times in the prompt.
+Let's see if that helps.
+
+
+[source,python]
+----
+>>> onboarding_pt = """
+          This is a conversation between a math tutor chatbot Rori
+          and a user who might be a student in Africa or a parent. 
+          The chatbot introduces itself and asks if it's talking 
+          to a student or a parent. 
+          If the user is a parent, Rori asks the parent for 
+          permission for their child to use Rori over Whatsapp. 
+          If the user is a student, Rori asks the student to call 
+          their parents. 
+          Only if the parent gives explicit permission, Rori
+          thanks them and asks to give the phone to the student. 
+          Provide the tutor's next response based on the conversation history.
+          Provide only one response.
+          Do not return more than one or two sentences.
+                
+          {history}
+          user:{input} 
+          tutor:
+          """
+----
+
+Since it looks like you need to re-initialize our conversation a lot, let's create a MathConversation class you can reuse for your generative conversations.
+
+[source,python]
+----
+>>> class MathConversation():
+...    def __init__(self, llm, prompt_string):
+...       self.llm = llm
+...       self.memory = \
+...         ConversationBufferMemory(memory_key='history',
+...                                   ai_prefix='tutor',
+...                                  human_prefix="user")
+...     self.convo_chain = \
+...         ConversationChain(llm=llm, memory=self.memory)
+...     self.convo_chain.prompt = \
+...         PromptTemplate(
+...             input_variables=["history", "input"],
+...             template=prompt_string)
+...
+...   def answer(self, user_input):
+...       return self.convo_chain.predict(input=user_input)
+----
+
+Now, go ahead and try this new iteration: 
+
+[source,python]
+----
+>>> onboarding_convo = MathConversation(llm, onboarding_pt)
+"hello! I'm Rori, your math tutor! Are you a student or a parent? \n                "
+>>> onboarding_convo.answer("I am a parent")
+ "Great! I'd like to get permission from you before we proceed. Is it okay for your child to use me over WhatsApp for math help?  "
+>>> onboarding_convo.answer("Yes, I agree")
+'Thanks so much! Can you please give the phone to your child so we can get started? '
+----
+
+Great! This is very similar to the conversation you wrote earlier.
+However, the LLM's creativity is a boon and a curse - your chatbot will be able to handle all kinds of unanticipated questions and comments from your users, but it will also generate responses that are imprecise or just plain wrong.  
+So `langchain` can't be the core of your chatbot by itself - you need to combine it with the techniques we discussed earlier. 
+
+But you can see how the chatbot's ability to generate dialog on the fly can be useful. 
+For a teacher bot, your LLM can generate additional content for students that may help them get through difficult spots in their learning.
+And this is a fairly straightforward thing to implement.
+You can use an LLM to directly reword the bot statements in your conversation design.
+LLMs are very reliable when you use them for the kinds of things you will need them to do when rewording your dialog content: summarization, paraphrasing and correcting grammar.
+And you can often even improve on the LLM reliability (predictability) on these tasks by reducing the size of the LLM.
+This has the additional benefit of reducing your LLM latency and expense.
+This is because your use case and the kinds of statements you have designed into your chatbot are probably very generic and commonplace -- the kinds of word patterns that would be very well-represented in the smaller LLM training sets.
+
+Let's go ahead and ramp up the difficulty of the task and see how our chatbot does. 
+
+==== Teaching math with LLMs
+
+We have seen a large language model successfully "improvise" an onboarding conversation for a math tutor chatbot. 
+But you've seen in chapter 10 that even the latest and the biggest models struggle with math reasoning.
+Can you use them to create a reliable math tutor for middle schoolers?
+You can run a quick experiment to see if you can use the generative approach to quiz the student with math questions and evaluate their answers. 
+
+To make it easier for the generative model, we will even ground it by giving it specific questions to ask the student. 
+Let's create our prompt: 
+
+[source,python]
+----
+>>> math_quiz_pt = """
+    You are a math teacher that's teaching math to a third-grade
+    student. Prompt the student to complete number sequences 
+    from the following list and compare their answer with the
+    last number in the sequence:
+      - 9,10,11,12
+      - 38,39,40,41
+      - 2,4,6,8
+      - 1,5,9,13
+      {history}
+      student:{input} 
+      tutor:"""
+)
+----
+
+Now, let's initialize the chatbot using the class we wrote in the previous section. 
+
+[[listing-llm-rori-experiment]]
+.LLMs can't count
+[source,python]
+----
+>>> math_convo = MathConversation(llm, math_quiz_pt)
+>>> math_convo.answer("Let's start!")
+" Sure thing! Let's get started. 
+I'll ask you some math questions, and you can try to 
+answer them to the best of your ability. Don't worry
+if you make mistakes - that's all part of learning!\n\n
+Here's the first question:\n\n
+What comes next in the sequence: 2, 4, 6, 8?"
+
+>>> math_convo.answer("12")
+" Great job! Your answer is correct. The next number
+in the sequence would be 10.\n\nLet's move on to the
+next question. Can you guess the next number in the
+sequence: 38, 39, 40, 41?"
+----
+
+This LLM response would definitely get the thumbs-down from the teacher.
+The student was incorrect in completing the sequence "2,4,6,8" and answering with "12".
+However, the simulated teacher gladly approved the incorrect result - even though it "knew" the correct answer!
+
+In this _in-context_ _few-shot learning_ example ChatGPT performed poorly.
+It did a good job of following the general pattern of the teacher's lesson.
+But elementary school math is evidently not your generative model's strong suit.
+We have run similar tests with OpenAI's ChatGPT and received similar results. 
+
+Fortunately, LLMs will often respond differently if you send the same prompt multiple times.
+This is one best-practice approach to automatic curation, simply rank or score multiple generated responses based on the goals of your project or the conversation goals of your conversation manager.
+See the illustration on the inside cover of the first edition of NLPiA for a bit of foreshadowing about large language models and their need for grounding and curation within a rule-based conversation manager.
+
+Try running the code again a couple of times to see if the LLM does better on the second round of testing.
+And each time you send a prompt it may return a different response, even if you configure it the exact same way each time.
+When we tested this approach with ChatGPT, we got better results a week after the first round of testing.
+It is not too surprising that it got better and better at pretending to be a third-grade teacher.
+After all, OpenAI heavily relies on reinforcement learning with human feedback (RLHF) to try to keep up with the changing needs of humans using LLMs in the real world.
+Similarly, researchers from Facebook admitted at the release of Llama 2 that RLHF is the key to improving LLM's capabilities.
+
+You probably will want to call an LLM many times using the exact same prompts to quantify the range of possible responses you can expect.
+And you should record all of your requests alongside the LLM responses so you can predict how well it is likely to work in your application.
+
+Now you see that you need to apply caution when using the generative approach. 
+It can be a very powerful tool in your toolkit.
+But should evaluate if the domain of the task is appropriate for the LLM you are using. 
+
+In most chatbots that we have, the majority of the content would be template-based or programmatic. 
+When we use LLMs, we usually combine them with semantic or knowledge-graph-based search, such as we did in Chapter 10.
+In specific occasions, Large Language Models can be trusted to lead a short conversation with the user - and in this case, they are heavily tested and the LLM's responses are carefully curated. 
+
+== Maintaining your chatbot's design
+
+Now that you've learned a few approaches to building your chatbot, it's time to address the next stage. 
+What happens when your chatbot is live and you start recording user conversations and receive user feedback?
+
+You learned many times in this book the importance of human feedback to help train your NLP models to get smarter and smarter over time.
+You can increase your chatbot's breadth of knowledge by adding new branches to the dialog tree.
+And you can increase a chatbot's ability to understand what your users are saying by finding and labeling utterances that your chatbot misunderstood.
+Figure <<figure-chatbot-convo-design>> shows how to enable your conversation designers to be "data-driven."
+Rather than guessing what your users will find helpful, you want to analyze their interactions with your system and use that to identify the most popular user _pain points_ that you can address with better conversation design.
+A data-driven organization pays attention to its users and builds what they need, rather than what they _think_ the users need.
+
+For example, in the first 6 months of Rori's interaction with the users, we identified tens of thousands of things that users said that were "out-of-script". 
+The users' unexpected responses ranged from saying "Hello" to the bot, to asking for harder math, to even insulting the bot. 
+
+As a data-driven conversation designer, you'll want to prioritize the most frequent messages from their users for labeling and conversation design.
+One way to do that is to sort your users' utterances by the maximum predicted label confidence (probability from ``predict_probas()``).
+You can scan the lowest confident utterance label predictions to see if any can be labeled with one of your existing intents.
+Labeling utterances with existing intents is the fastest way to improve the user experience.
+There's nothing worse than having a chatbot that is always falling back to its "I don't understand" response.
+
+After the initial stage of collecting and analyzing the users' utterances, the next version of Rori included pre-programmed responses to the most common user intents.
+For example, the chatbot knew to present again the menu of choosing the lesson if the user said "This is too easy".
+
+You also want to look for _false positives_ where the bot has misunderstood the user in a more insidious way.
+If a chatbot thinks it understands your user and provides it with a reply that doesn't fit what the user expects, that's an even bigger problem for your users.
+Unfortunately, those false positive intent labels are harder to find and correct.
+But you're in luck if your chatbot is asking the user questions, such as with a quiz bot or Socratic education chatbot similar to Rori.ai.
+You can look at all the answers to a particular question that the chatbot recognized as being incorrect answers to its question.
+If it looks like the chatbot made a _grading error_ by incorrectly understanding the student's answer, you can simply add the utterance to this list of possible correct answers.
+And you can label it with the appropriate intent in your labeled dataset to improve the NLU in the future.
+
+Building a chatbot is an iterative process.
+Don't try to build it all at once.
+Add one new branch in the dialog at a time.
+And pay attention to how your users use your bot to decide whether you need to add a new intent or branch in the dialog tree.
+
+[[figure-chatbot-convo-design]]
+.Conversation design workflow
+image::../images/ch12/chatbot-convo-design.drawio.png["A block at the top shows the conversation design or content management system. The next block down shows the utterance labeling system such as Label Studio. The labeled utterance dataset is passed to the machine learning models for training or reinforcement learning. And the conversation design is passed into the chatbot backend server for interaction with the user. The users interactions are then recorded in a message log and analyzed to help inform the conversation design and data labeling steps at the top of the diagram.", width=80%, link="chatbot-convo-design.drawio.png]
+
+The block at the top of Figure <<figure-chatbot-convo-design>> shows the conversation design or content management system.
+The next block down shows the utterance labeling system such as Label Studio. The labeled utterance dataset is passed to the machine learning models for training or reinforcement learning.
+And the conversation design is passed into the chatbot backend server for interaction with the user.
+The user's interactions are then recorded in a message log and analyzed to help inform the conversation design and data labeling steps at the top of the diagram.
+
+[TIP]
+====
+In any organization building chatbots, nearly everyone will have an opinion about what features your chatbot should have.
+Sometimes you can get some good ideas for features to test with your users by just imagining what will help your users.
+This is especially useful if you know of some software or data or approach that you can use to quickly try the idea.
+To avoid debates about which features are more important you can be data-driven.
+If you can sort all of your team's ideas according to what your user's appear to need, based on message statistics, you can help lead your team to think about the right problems rather than getting lost in endless debates.
+====
+
+
+== Evaluating your chatbot
+Finally, you have implemented your chatbot and it's interacting with users!
+First of all, congratulate yourself for getting here. This is a great achievement.
+The next question you need to ask yourself is "How do I know how good my chatbot is?"
+In the previous sections, we "evaluated" our chatbot by visually examining a couple of examples of its behavior.
+But as your chatbot scales to hundreds or thousands of conversations, you need more stringent quantitative measures of its performance.
+
+Before you'll be able to get those metrics, you need to be smart about keeping all of your chatbot's data in one place so that it can be easily analyzed.
+
+=== Saving your chatbot's data using a database
+
+All user interactions can be logged in a database.
+And important changes to user or bot state can also be stored and kept up to date in your database.
+This allows multiple chatbots to run simultaneously and maintain their state independently, while also coordinating their actions, if necessary.
+
+But this brings up a scaling challenge.
+Updating and saving state in RAM (within your program stack memory) is virtually instantaneous while writing to a disk-backed database can require a significant amount of time.
+In order to maintain scalability, you'll want to use a database with fast write throughput.
+You may have thousands or even millions of simultaneous users interacting with your chatbot.
+If you use a direct-to-disk database such as a self-hosted PostgreSQL or MariaDB database, you may need to implement RAM caching and write many records at once.
+
+////
+KM: Reminder, we can't use bold. I've changed the bold to italics.
+HL: thanks, I was confused by somthing I saw in the style guide that showed definitions used the `* word:: Definition sentence` format. And the word is bolded when rendered by asciidoctor, like it is in a dictionary.
+////
+=== Defining your chatbot's performance metrics
+
+You will need to think about aspects of your chatbot's performance -- ways to gauge how well your chatbot is doing.
+
+* _NLU Performance_: Measure the quality of a chatbot's Natural Language Understanding, such as intent recognition accuracy and the number of unrecognized utterances
+* _User experience_: Measure user satisfaction, engagement, education, and ability to accomplish their goals.
+* _Impact_: Measure the chatbot's impact on its users or the organization that maintains the bot.
+
+Each of these ways of understanding your chatbot performance will require different tools and techniques.
+
+=== Measuring NLU performance
+
+So, how can we quantitatively measure our chatbot's ability to understand and, possibly, generate human language? 
+That would depend on the type of your chatbot, so let's look at performance metrics for each of the four types of chatbots we discussed at the beginning of this chapter. 
+
+There's obviously not a lot of NLP quality to measure when it comes to rule-based chatbots, so let's jump to intent-based bots, which, at the time of this writing, are still dominating the chatbot space. 
+
+As intent-based chatbots are built on top of a prediction model, we can adopt some of the metrics you've met before in this book.
+Remember the accuracy and F1 score we introduced in Chapter 4? 
+As a quick reminder, for a binary classifier, _accuracy_ is the ratio of correct predictions out of all the predictions.
+And _F1 score_ is a harmonic mean of _precision_ and _recall_, that measure the ratio of positive predictions that are correct and the ratio of positive instances that are correctly identified, respectively.footnote:[Wikipedia article on precision and recall: (https://en.wikipedia.org/wiki/Precision_and_recall)]
+
+Turns out, F1 score is actually one of the most common ways to measure the performance of intent classification in chatbots. 
+If your classifier is single-label (meaning it only gives one intent prediction per utterance), essentially performing multi-class classification, you can generalize the F1 score to the multiclass case.footnote:[See an example here: (https://towardsdatascience.com/multi-class-metrics-made-simple-part-ii-the-f1-score-ebe8b2c2ca1)]
+If your classifier is multi-label (meaning it can label an utterance with multiple intent labels), you can average the individual F1 scores for each intent.
+In both cases, it is useful to look at F1 score of each intent separately, to understand your chatbot's weak points.
+
+To evaluate a retrieval-based chatbot, such as a question-answering assistant, the metrics will be different, though you still need to have a labeled dataset with questions and matching answers based on your documents.
+You can generate this dataset with open-source tools like Deepset's annotation tool.footnote:[(https://docs.haystack.deepset.ai/docs/annotation)]
+
+So, how do you evaluate the answers your chatbot generates when you have the correct answers you found?
+The simplest metric that is also the most stringent is _Exact Match_ (EM).
+As you can imagine from the name, it tracks how many of the machine's answers exactly match the expected answer the human annotator has provided. 
+Another simple metric for comparing answers is _accuracy_, which counts an answer as correct if it has any overlap with the answer provided by the labeler.
+
+You can understand how these metrics might be too simplistic and overly punishing/rewarding in cases when the machine's answer is close, but not perfectly similar to the answer a human provided. 
+That's why those who work on question-answering systems, have their own version of F1 score.
+The question-answering F1 score is based on word overlap between the expected answer and the actual answer. 
+In this case, _precision_ is defined as the ratio of the number of shared words to the total number of words in the machine's answer, while _recall_ is the ratio of the number of shared words to the total number of words in the human's answer.
+
+As you can imagine, the hardest task is to evaluate the performance of a generative chatbot. 
+
+=== Measuring the users' experience
+
+When it comes to measuring user experience (UX), things get less straightforward than mathematically calculating NLP performance. 
+Of course, you can measure superficial signals, such as the number of users that interacted with your chatbot, the number of messages exchanged, etc.
+But does that mean that the users' experience with the chatbot was positive?
+
+Luckily, conversational designers were able to borrow a lot of UX metrics from UX designers for other interfaces, such as web and mobile apps. 
+As a chatbot can be considered a type of web-based (or mobile-based) user interface, a lot of the metrics used to measure web apps apply to chatbots as well. 
+In the web world, the basic unit of measurement is an "event" - a user's action within the app, such as opening a page, clicking a button, entering information... basically, anything that can be tracked. 
+These events can be easily translated to the chatbot world - for example, you can track when the user starts engaging with the chatbot, asks a question or says "thank you".
+But among all the events you track, which are the right ones to measure and how? 
+
+==== HEART Framework 
+
+In 2010, Google researchers came up with a UX measurement framework that has since been widely adopted by designers of apps.
+It is called HEART, and includes 5 families of metrics that form the acronym: Happiness, Engagement, Adoption, Retention, and Task Success.footnote:[Google Research publication on HEART framework: (https://research.google/pubs/pub36299/)]
+
+Let's look at those metrics in more "chronological" order, as they relate to the different phases of the user's journey with your chatbot. 
+
+_Adoption_ metrics measure how many users use your chatbot for the first time. 
+"Using" might mean different things - for example, you might decide that you're not interested in users that just subscribe to the bot, but only those who exchange at least a few messages with it.
+You can also look at particular _feature adoption_ - such as, how many users use your bot's question answering functionality.
+With a math tutor chatbot, you will be interested not just in the total number of users, but also in the number of users that make it through the onboarding to the math section.
+
+_Engagement_ metrics deal with the depth and intensity of chatbot usage. 
+They can measure things like how often the users interact with your chatbot, how many questions they ask, how long they stay in the chat, and so forth. 
+For a math tutor chatbot, you might want to see which lessons the users visit, how many lessons they do per session, and how many sessions the different groups of users have. 
+
+_Task Success_ metrics relate to the task that your chatbot should help the user accomplish. 
+For example, if your chatbot is educational, you can measure what percentage of active users completed a lesson, how long it took them to complete one, and how far they got if they didn't complete it. 
+
+The task success concept is closely related to the concept of _churn funnel_. 
+A funnel is a chart that breaks down the user's journey into steps, and shows how many users drop off at each step.
+They are very useful for understanding where your users disengage and what can be done to improve their experience. 
+
+_Happiness_ metrics are pretty straightforward in what they try to measure - the user's satisfaction with the chatbot.
+But just as with human happiness, user happiness is not easily defined and measured.
+In most cases, to know how the user feels about the bot, we will proactively ask them about their experience. 
+Some common measures of happiness include the Net Promoter Score (NPS), which is calculated using a simple question: "Would you recommend this chatbot to your friend or colleague?"footnote:[Wikipedia article about Net Promoter Score: (https://en.wikipedia.org/wiki/Net_promoter_score)]
+
+Finally, _retention_ addresses the question of how many users come back to your chatbot after their first interaction.
+It's common to measure retention over time, such as daily, weekly and monthly retention. 
+While retention is not relevant for all chatbots (you wouldn't want your customer service chatbot user to return daily, would you?), it is a very important metric for chatbots that are meant to be used repeatedly, such as educational chatbots.
+If you intend your users to use your tutor bot for a prolonged time, you might want to measure how many users return to the bot after a week, a month, and so forth.
+
+While these five families highlight the different aspects of user experience, that doesn't mean you have to use them all or prioritize them similarly. 
+You can choose which ones to pay attention to based on your chatbot's goals. 
+
+=== What's next?
+
+The world of chatbots is advancing quickly, but now you have the tools and skills to keep up.
+You will be able to tell when the latest LLM is more of the same old hype, and when it might represent a new approach that could contribute intelligently to conversations.
+And you now know how to build rule-based systems that mary the flexibility of LLMs with the reliability of search and rule-based dialog flows.
+So how can you put your skills to use on something tangible?
+
+One obvious next step would be to give your chatbot and NLP pipeline a voice.
+You could build a bot on ConvoHub or your own combination of open source Python tools.
+Your NLP software could help sort your e-mail or retrieve the information for you when commercial search engines aren't enough.
+The last section of this book will show you how to give your chatbot a voice so that you can have a hands-free conversation with a chatbot that is all yours.
+
+==== Give your chatbot a voice
+
+Though we haven't talked much about voice processing in this book, you may wonder if the NLP tools you've learned can help you build a voice assistant similar to Siri or MyCroft.
+To build a voice assistant you can preprocess the inputs of your chatbot with existing voice recognition or speech to text (STT) software.
+And you can use speech generation or text to speech (TTS) software to respond to your users with a synthetic voice.
+
+Figure <<figure-voice>> shows how you can connect it all together to create a voice assistant
+
+[[figure-voice]]
+.Give your chatbot a voice
+image::../images/ch12/voice-chatbot.drawio.png[Block diagram with voice input on left passing through a speach-to-text block and then into the NLU block and dialog engine and NLG blocks. The text output the passes through a text-to-speech (TTS) block, width=80%, link="../images/ch12/voice-chatbot.drawio.png]
+
+Once your chatbot can understand spoken words and respond with a human-sounding voice it starts to feel like it's actually thinking and understanding.
+It feels human.
+So most people start to talk about this kind of system as AI.
+A more accurate name might be "virtual assistant" or "voice assistant".
+And UX designers talk about this being a _voice-first_ interface if this is the primary way to interact with your application.
+But the truly intelligent _behavior_ of a virtual assistant is not in the voice wrapper, but deep in the guts of the NLP within the chatbot or dialog engine.
+That's where the understanding and the thinking actually happen.
+
+Even though most of the intelligence of a virtual assistant is in the NLP pipeline, you shouldn't assume that a voice interface is going to be easy.
+Here are some of the best STT and TTS APIs and software packages you can incorporate into your project when you want to add a voice interface to your chatbot.
+
+When it comes to generating speech that sounds realistic and has the tone you want to convey, that can be a bit tricky.
+You may need to rely on a commercial service to generate high quality speech output.
+Here are some options to choose from.
+
+* OpenTTS -- An open source TTS engine you can self-host
+* Hugging Face SpeechT5 -- Several variations of SpeechT5 are available on Hugging Face Model Hub footnote:[Hugging Face model hub for SpeechT5 (https://huggingface.co/models?search=speecht5)]
+* Microsoft TTS -- commercial service with a web API
+* Google TTS -- commercial sercie with a web API and Python SDK footnote:[Intro to Google TTS for Python on GitHub (https://github.com/GoogleCloudPlatform/cloud-shell-tutorials/blob/master/ml/cloud-tts-intro/tutorial.md)]
+* Amazon Poly -- commercial service
+* Coqui TTS -- commercial service
+
+Unfortunately there are no easy ways to rate and select a high quality voice for your chatbot, except trial and error.
+The TTS leader board on the Papers With Code website may not reflect the qualities you or your users look for in a synthetic voice.
+You will need to experiment with each of the TTS services to find one that meets your needs.
+
+Fortunately, evaluating the accuracy of STT software is a bit more straightforward.
+Using an open source STT benchmark dataset, you can count the number of words correctly transcribed.
+Listing <<listing-tts-wer>> shows the _word error rate_ (WER) on several benchmark datasets. footnote:[]
+
+[[listing-tts-wer]]
+.TTS word error rate
+[source,text]
+----
+|             | AI   | Phone   | Meeting   | Video   | Finance   | Mean   |
+|:------------|:-----|:--------|:----------|:--------|:----------|:-------|
+| Kaldi       | 66%  | 78%     | 54%       | 69%     | 35%       | 60%    |
+| wav2vec 2.0 | 33%  | 41%     | 39%       | 26%     | 17%       | 31%    |
+| Whisper     | 6%   | 20%     | 19%       | 9%      | 5%        | 12%    |
+----
+
+Wav2Vec2 is built into PyTorch (`torchaudio`) so this is probably your best bet for a voice assistant where you will likely need to fine tune the TTS model with your own data.footnote:[STT tutorial in PyTorch docs (https://pytorch.org/audio/stable/tutorials/speech_recognition_pipeline_tutorial.html)]
+If you want state-of-the-art accuracy in an open source model, then Whisper is your best bet.
+You can download the latest Whisper models and even transcribe your own voice recordings using the Hugging Face Spaces page for Whisper. footnote:[Whisper demo on Hugging Face (https://huggingface.co/spaces/openai/whisper)]
+In a resource-constrained environment, the more efficient (but less accurate) Kaldi model may be all you need. footnote:[Kaldi source code on GitHub (https://github.com/kaldi-asr/kaldi)]
+Mozilla Deep Speech also provides an open source, self-hosted STT approach.footnote:[Docs on GitHub (https://github.com/mozilla/DeepSpeech)]
+If you don't want to host the STT model yourself, the big three Cloud platforms offer STT engines: Microsoft STT, Google ASR, Amazon Transcribe.
+
+Building a chatbot with a voice is a lot more difficult than it may seem at first.
+If you just want something for personal use then the open source packages may be all you need.
+However if you want to detect when your users are trying to wake up your bot, you will need to implement what is called wake word detection.
+And you will find that this requires low level operating system and even hardware driver access to efficiently and accurately detect the wakeup command.
+You will need a team of engineers to do this well.
+
+Fortunately there are several teams that have contributed the code for an end to end solution for voice assistants.
+The most mature and open voice assistant is MyCroft.
+The MyCroft STT, chatbot, and TTS engines can all run together locally on a Linux computer, including a Raspberry Pi.
+You can even purchase a complete system with the software pre installed.
+This is your best bet if you want something fun to do with your NLP skills.
+MyCroft can share the news and weather with you every morning, and you can extend it with the more advanced behaviors of a chatbot framework such as ConvoHub or Rasa that you learned about in this chapter.
+
+==== Improving your life with NLP
+
+Hopefully you now appreciate the power of NLP and understand how to use it for positive impact at work and in your life.
+Chatbots are just one of the many ways you can employ NLP to help you get things done, improve your health, and support your education.
+And now that you can wield this NLP superpower perhaps you are asking yourself how to learn more and apply it in the real world.
+And you'd like to know what can you expect for NLP technology in the coming years.
+
+Chatbots and NLP promise to change the way we work, play, and even create art and learn about the world.
+Just as Internet search engines have given our brains the superpower to find _information_ in an instant, chatbots promise to help us interpret that information and turn it into _knowledge_.
+The NLP inside many AI systems is automating and augmenting more and more knowledge work every day.
+The Industrial Revolution might have eliminated scarcity of physical goods, had the power of automation and production been shared with us all more widely.
+Unfortunately, poverty and homelessness are still a problem in countries that haven't learned the _21 Lessons_ yet.footnote:["21 Lessons of the 21st Century" by Yuval Harari]
+
+Similarly, AI and NLP promise to end the scarcity of knowledge.
+Fewer and fewer knowledge worker jobs cannot be augmented or automated with AI.
+Paperwork may become a thing of the past if NLP is available to all.
+The peril and promise of chatbots have captured the public's imagination and enthralled us all.
+However, the harmful influence of chatbots on the infosphere is all too apparent.
+Disinformation campaigns, conspiracy theories, and deep fakes have been given more convincing copy (text).
+It is becoming harder and harder to find authentic, accurate information and knowledge among the glut of misinformation.
+It looks like the scarcity of authentic knowledge may persist for many more decades.
+Now that you've explored all the latest technology in NLP and chatbots, including
+////
+KM: Before you get to exercises below, it would be helpful to give readers a sentence or two summarizing what they just built in this chapter and how it should work. 
+HL: Done
+KM: Also, if you want, you could add a short section with a paragraph or two summarizing the entire book and where readers can go from here if they want to learn more.
+HL: Done
+////
+
+== Test Yourself
+
+. What are the four key indicators of a cooperative conversation partner (whether chatbot or human)?
+. What are the four general approaches or algorithms for implementing a dialog system or chatbot?
+. Is it possible to reverse engineer the conversation graph of a rule-based chatbot by only interacting with it and logging a large number of conversations as scripts? Name a Python package you might use.
+. What are some approaches to dealing with the _fat tail_ of conversation intents expressed by your users?
+. Is it possible for a chatbot to use both generative language models and rule-based selection of message templates?
+. What are some of the advantages and disadvantages of a rule-based chatbot? Think about the user experience as well as the maintenance and scalability of rule-based dialog systems.
+. In a rule-based chatbot conversation graph, what information is contained within the graph nodes? What about the edges (connections between nodes)?
+
+
+== Summary
+
+* To contribute to a cooperative conversation a chatbot must maintain state, understand user intent, and be able to generate text that helps the user achieve their goals for the conversation.
+* Despite the excitement for LLMs, rule-based chatbots are still the most developed approach for building chatbots that can be relied on to cooperate with your users.
+* LLMs are not explainable nor controllable and are thus cannot be the sole chatbot technology employed within any organization attempting to develop safe and ethical AI chatbots.
+* To design effective conversation you must tap into your innate ability to have cooperative conversation.
+* Conversation design requires much more than merely strong writing skill. You must also have deep empathy and understanding for your users in order to understand what they are likely to want to chat about.
+* A chatbot can utilize GOFAI game play algorithms such as minimax graph search. The next move in an AI's conversation with users should maximize their cumulative score for their goals in the conversation, not yours or your businesses.

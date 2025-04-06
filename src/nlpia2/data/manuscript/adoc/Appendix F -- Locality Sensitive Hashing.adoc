@@ -1,0 +1,251 @@
+= Locality sensitive hashing
+:appendix: H
+:chapter: H
+:part: BM
+:imagesdir: .
+:xrefstyle: short
+:figure-caption: Figure {chapter}.
+:listing-caption: Listing {chapter}.
+:table-caption: Table {chapter}.
+:stem: latexmath
+
+In chapter 4 you learned how to create topic vectors with hundreds of dimensions of real-valued (floating point) numbers.
+In chapter 6 you learned how create word vectors that have hundreds of dimensions.
+Even though you can do useful math operations on these vectors, you cannot quickly search them like you can discrete vectors or strings.
+Databases do not have efficient indexing schemes for vectors of more than four dimensions.footnote:[Some advanced databases such as PostgreSQL can index higher-dimensional vectors, but efficiency drops quickly with dimensionality.]
+To use word vectors and document topic vectors efficiently, you need a search index that can help find the nearest neighbors for any given vector.
+
+You need this to convert the results of vector math into a word or set of words (because the resultant vector is never an exact match for the vector of a word in the English language).
+You also need it to do semantic search.
+This appendix shows an example approach based on locality sensitive hashing (LSH).
+
+== High-dimensional vectors are different
+
+As you add dimensions to vectors going from 1D to 2D and even 3D, nothing much changes about the kinds of math you can do to find nearest neighbors quickly.
+Let's talk a little bit about conventional approaches used by database indexes for 2D vectors and work your way up to high-dimensional vectors.
+That will help you see where the math breaks down (becomes impractical).
+
+=== Vector space indexes and hashes
+
+Indexes are designed to make looking up something easy.
+Real-value (`float`) indexes for things like latitude and longitude can't rely on exact matches, like the index of words at the back of a textbook.
+For 2D real-valued data, most indexes use some sort of bounding box to divide up a low-dimensional space into manageable chunks.
+The most common example of an index like this for two-dimensional geographic location information is the postal code systems used in various countries to collect mail addresses within contiguous regions (called "Zip Codes" in the US).
+
+You assign a number to each region in 2D space; even though postal code regions are not rectangular bounding boxes, they serve the same purpose.
+The military uses bounding boxes with its grid system for dividing up the globe into rectangular bounding boxes and assigning each one a number.
+In both US Zip Codes and the military grid system, the numbers for these regions have semantic meaning.
+
+The "locality sensitivity" of hashes like US Zip Codes comes from the fact that numbers or hashes that are close to each other in ordinal value are close to each other in the 2D space that they are for.
+For example, the first digit in a US Zip Code identifies a region, such as the west coast or southwest or the US state they belong to.
+The next digit (combined with the first) uniquely identifies a particular state.
+The first three digits uniquely identify a region or large city within that state.
+Locality sensitivity of US Zip Codes continues all the way down to the "+4" suffix, which identifies a particular city block or even apartment building.footnote:[The Zip Code Wikipedia article contains maps that show this locality sensitivity (https://en.wikipedia.org/wiki/ZIP_Code#Primary_state_prefixes).]
+
+The manual process and algorithm that produced the US Zip Code system is equivalent to the locality sensitive hashing algorithms created for other vector spaces.
+Locality sensitive hashing algorithms define a way to produce these locality sensitive numbers. They use the coordinates of locations in a vector space so that the numerical value of the hashes are close to each other if the locations of the regions they map to in the vector space are also close to each other or even overlap.
+Locality sensitive hashes try to create those same mathematical properties like a high probability of collision and locality sensitivity that cryptographic hashing algorithms try to avoid.
+
+=== High-dimensional thinking
+
+Natural language vector spaces are high dimensional.
+Natural language captures all the complex concepts that humans think and talk about, including natural language processing itself.
+So when you want to squeeze all that complexity into a vector, you often discard some of that complexity so it will fit in your rigid vector-space box.
+And you just keep adding dimensions to your vector to accommodate as much of the complexity of human thought and language as you can.
+
+For example, bag-of-words vectors discard the information content contained in the order of words.
+This allows you to produce discrete high-dimensional vectors that you can index and search efficiently.
+You use binary search and indexing trees to detect whether or not particular keywords are present or absent in both your query and your corpus.
+This works even if you expand your keyword vocabulary to include all the words in a natural language.
+Web search engines often even include all the words in hundreds of natural languages at once.
+That's why your web search can include Spanish and German words alongside English words all in the same query.
+
+And you learned in chapter 2 how to capture a bit of the complexity of the order of words by adding _N_-grams to your bag-of-words vector dimensions.
+And you learned in chapter 3 how to weight those millions of terms (words and _N_-grams) according to how important they are.
+This leaves you with millions of dimensions or "bins" in your vector space model of human languages.
+
+But bag-of-words, TF-IDF, and semantic analysis machines still can't understand you.
+They can only help you find the documents you're looking for.
+So in chapter 4 through chapter 6 you allowed your vector spaces to become continuous.
+You squeezed some of the complexity of natural language into the gaps in the number line between the integer counts of words.
+You no longer relied on a rigid, discrete vocabulary to define the dimensions of your vector space.
+By grouping words into concepts or topics you reduced the dimensions of your vectors from millions down to hundreds.
+You created nessvectors that captured the femaleness and blueness and placeness of words and statements.
+
+And there's more.
+In chapters 7 through 10 you figured out how to capture not only word combinations, but long, complex word sequences in your vectors.
+Your shallow nessvectors became deep thought vectors when you learned about recurrent neural networks and long short-term memory.
+
+But all this depth and complexity creates a problem.
+Continuous, dense, high-dimensional vectors like thought vectors cannot be indexed or searched efficiently.
+That's why search engines don't just answer your complex question in a millisecond.
+When you want to know the meaning of life, you have to have a conversation with a chatbot or, perish the thought, another human being.
+
+Why is that?
+Why can't you index or search a high-dimensional continuous vector?
+Start with a 1D vector "space" and see how easy it is to index and search a single scalar value on a 1D number line.
+Then you can think about how to extend that 1D index to handle multiple dimensions.
+And you can keep going up in dimensionality from there until things break down.
+
+==== A 1D index
+
+Imagine a random distribution of 1D vectors -- a bunch of random numbers.
+You can create a natural 1D bounding box that is half the width of the overall space by just cutting the number line in half.
+You could put all the positive values in one box and the negative values in another box.
+As long as you have a pretty good idea where the "middle" or centroid of your vector space is located (usually zero), each box will have about half the number of vectors in it as in the entire space.
+
+Each of those bounding boxes could be split in half again to create a total of four boxes.
+If you kept that up, a few more of those divisions would create a binary search tree or a binary hash that is sensitive to locality (where it is located).
+For a 1D vector space, the average number of points in each box is `pow(num_vectors / 2, num_boxes`.
+For 1D space, you only need about 32 levels (box sizes) to your boxes to index billions of points so that there are only a few in each box.
+
+Each of your 1D vectors can have its own "Zip Code", an index value or locality sensitive hash.
+And all the vectors that are similar to each other will be nearby in a sorted list of all those hash values.
+That way you can compute the hash values for some new query and find it quickly in your database.
+
+==== 2D, 3D, 4D indexes
+
+Let's add a dimension and see how well the 1D binary tree index will work.
+Think about how you'd divide the space into regions in a binary tree, dividing your region approximately in half with each fork in the tree.
+Which dimension would you cut in half each time you tried to reduce the number points by half?
+For a 2D vector this would just be the 2x2 squares or quadrants of 2D plane.
+For a 3D vector this might be the 3x3x3 blocks in a "Rubix Cube" of space.
+For 4D you'd need about 4x4x4x4 blocks... just to get started.
+The first fork in your binary tree index would create latexmath:[4^4^] branches.
+And some of those 256 bounding boxes in your 4D vector space might not contain any vectors at all.
+Some word combinations or sequences just never occur.
+
+Our naive binary tree approach works OK for 3D and 4D vectors and even all the way out to 8D or more.
+But it quickly gets unruly and inefficient.
+Imagine what your bounding "cubes" would like in 10 dimensions.
+Your not alone if your brain can't handle that concept.
+Human brains live in a 3D world so they aren't capable of fully grasping even 4D vector space concepts.
+
+Machines can handle 10D OK, but you need them to handle 100D or more if you want to squeeze the complexity of human thought into vectors.
+You can think of this curse of dimensionality in a few different ways:
+
+* The possible combinations of dimensions grows exponentially with each added dimension.
+* All vectors are far away from each other in high-dimensional spaces.
+* High-dimensional vector spaces are mostly empty space -- a random bounding box is almost always empty.
+
+The following code may help you get a feel for these properties of high-dimensional spaces.
+
+.Explore high-dimensional space
+[source,python]
+----
+>>> import pandas as pd
+>>> import numpy as np
+>>> from tqdm import tqdm
+
+>>> num_vecs = 100000
+>>> num_radii = 20
+>>> num_dim_list = [2, 4, 8, 18, 32, 64, 128]
+>>> radii = np.array(list(range(1, num_radii + 1)))
+>>> radii = radii / len(radii)
+>>> counts = np.zeros((len(radii), len(num_dims_list)))
+>>> rand = np.random.rand
+
+>>> for j, num_dims in enumerate(tqdm(num_dim_list)):
+...     x = rand(num_vecs, num_dims)
+...     denom = (1. / np.linalg.norm(x, axis=1))  # <1>
+...     x *= denom.reshape(-1, 1).dot(np.ones((1, x.shape[1])))
+...     for i, r in enumerate(radii):
+...         mask = (-r < x) & (x < r)
+...         counts[i, j] = (mask.sum(axis=1) == mask.shape[1]).sum()
+----
+<1> Normalize a table of random row vectors to all have unit length.
+
+You can explore this weird world of high-dimensional spaces in `nlpia/book/examples/ch_app_h.py` on github (http://gitlab.com/tangibleai/nlpia2).
+You can see much of the weirdness in the following table showing the density of points in each bounding box as you expand its size bit by bit.
+
+.Boxing up high-dimensional space
+[source,python]
+----
+>>> df = pd.DataFrame(counts, index=radii, columns=num_dim_list) / num_vecs
+>>> df = df.round(2)
+>>> df[df == 0] = ''
+>>> df
+       2     4     8     18    32   64    128
+0.05
+0.10
+0.15                                     0.37
+0.20                                0.1     1
+0.25                                  1     1
+0.30                          0.55    1     1
+0.35                    0.12  0.98    1     1
+0.40                    0.62     1    1     1
+0.45              0.03  0.92     1    1     1
+0.50               0.2  0.99     1    1     1
+0.55        0.01   0.5     1     1    1     1
+0.60        0.08  0.75     1     1    1     1
+0.65        0.24  0.89     1     1    1     1
+0.70        0.45  0.96     1     1    1     1
+0.75  0.12  0.64  0.99     1     1    1     1
+0.80  0.25  0.78     1     1     1    1     1
+0.85  0.38  0.88     1     1     1    1     1
+0.90  0.51  0.94     1     1     1    1     1
+0.95  0.67  0.98     1     1     1    1     1
+1.00     1     1     1     1     1    1     1
+----
+
+There is an indexing algorithm called a KD-Tree (https://en.wikipedia.org/wiki/K-d_tree) that attempts to divide up high-dimensional spaces as efficiently as possible to minimize empty bounding boxes.
+But even these approaches break down at dozens or hundreds of dimensions as the curse of dimensionality kicks in.
+Unlike 2D and 3D vectors, it's not possible to truly "index" or "hash" high-dimensional word and thought vectors in a way that allows you to retrieve the closest matches quickly.
+You have to just calculate the distance to a lot of guesses for the nearest neighbors until you find a few that are close.
+Or you have to check them all, if you want to be sure you didn't miss any.
+
+== High-dimensional indexing
+
+In high-dimensional space, conventional indexes that rely on bounding boxes fail.
+Eventually, even locality sensitive hashing fails.
+But let's first experiment with locality sensitive hashing to show its limitations.
+Then you will learn how to get around those limitations by giving up on the idea of a perfect index.
+You will create an approximate index after an experiment with locality sensitive hashing.
+
+=== Locality sensitive hashing
+
+In figure H.1, we constructed 400,000 completely random vectors, each with 200 dimensions (typical for topic vectors for a large corpus).
+And we indexed them with the Python LSHash package (`pip install lshash3`).
+Now imagine that you have a search engine that wants to find all the topic vectors that are close to a "query" topic vector.
+How many will be gathered up by the locality sensitive hash?
+And for what number of dimensions for the topic vectors do your search results cease to make much sense at all?
+
+.Semantic search with LSHash
+image::../images/ch04/lshash-semantic-search.png[Semantic Search with LSHash,align="center",width=500,link="../images/ch04/lshash-semantic-search.png"]
+
+You can't get many search results correct once the number of dimensions gets significantly above 10 or so.
+If you'd like to play with this yourself, or try your hand at building a better LSH algorithm, the code for running experiments like this is available in the `nlpia` package.
+And the `lshash3` package is open source, with only about 100 lines of code at the heart of it.
+
+=== Approximate nearest neighbors
+
+Approximate nearest neighbor search is the latest answer to the high-dimensional vector space problem.
+The approximate hashes are similar to locality sensitive hashes and KD-trees, but they rely on something that is more like a random forest algorithm.
+They are stochastic (random) approaches to splitting your vector space into smaller and smaller chunks of space.
+
+The state of the art for finding the closest matches for high-dimensional vectors is Facebook's FAISS package and Spotify's Annoy package.
+Because Annoy is so easy to install and use, that's what we chose to use for your chatbot.
+In addition to it being the workhorse for finding matches among vectors representing song metadata for music fans, Dark Horse Comics has also used `annoy` to suggest comic books efficiently.
+We mentioned these tools in chapter 13.
+
+== "Like" prediction
+
+Figure H.2 is what a collection of tweets looks like in hyperspace. These are the 2D shadows of 100D tweet topic vectors (points) from latent semantic analysis of those tweets. The green marks represent tweets that were liked at least once; the red marks are for tweets that received zero likes.
+
+.Scatter matrix of four topics for tweets
+image::../images/ch04/scattermatrix-tweet-lsa-4of100-topics-nofav-red-favorited-green.png[Scatter Matrix of 4 topics for Tweets,width=90%,align="center",link="../images/ch04/scattermatrix-tweet-lsa-4of100-topics-nofav-red-favorited-green.png"]
+
+An LDA model fit to these topic vectors will succeed 80% of the time.
+However, like your SMS dataset, your tweet dataset is also very imbalanced.
+So predicting the likability of new tweets using this model is not likely to be very accurate.
+You should probably only use LSA, LDA, and LDiA language models for classification problems where variance maximization (class separability) is helpful:
+
+* Semantic search
+* Sentiment analysis
+* Spam detection
+
+For more subtle discrimination between texts that rely on generalizing from similarities in semantic content you will want the most sophisticated NLP tools in your toolbox. Use LSTM deep learning models and t-SNE dimension reduction techniques to solve difficult problems such as:
+
+* Human reaction prediction (tweet likability)
+* Machine translation
+* Natural language generation

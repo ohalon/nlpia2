@@ -1,0 +1,65 @@
+import re
+from pathlib import Path
+# from setuptools import find_packages
+from setuptools import setup
+from setuptools.command.develop import develop
+from setuptools.command.install import install
+
+try:
+    with open('setup.cfg') as fin:
+        for line in fin:
+            matched = re.match(r'\s*version\s*=\s*([.0-9abrc])\b', line)
+            if matched:
+                global __version__
+                __version__ = (matched.groups()[-1] or '').strip()
+                break
+except Exception as e:
+    print('ERROR in setup.py: Unable to find version in setup.cfg')
+    print(e)
+
+REPO_DIR = Path(__file__).resolve().absolute().parent
+name = REPO_DIR.name
+package_data = {
+    name: [str(p) for p in REPO_DIR.glob(f'src/{name}/data')]
+}
+
+
+class PostDevelopCommand(develop):
+    """Post-installation for development mode."""
+
+    def run(self):
+        develop.run(self)
+
+        # PUT YOUR POST-INSTALL SCRIPT HERE or CALL A FUNCTION
+        #
+        # run shell scripts
+        # check_call("apt-get install this-package".split())
+        #
+        # or python functions
+        from spacy import cli
+        cli.download('en_core_web_md')
+
+
+class PostInstallCommand(install):
+    """Post-installation for installation mode."""
+
+    def run(self):
+        install.run(self)
+        # PUT YOUR POST-INSTALL SCRIPT HERE or CALL A FUNCTION
+        #
+        # run shell scripts
+        # check_call("apt-get install this-package".split())
+        #
+        # or python functions
+        from spacy import cli
+        cli.download('en_core_web_md')
+
+
+setup(
+    # name=name,
+    # install_requires=install_requires,
+    cmdclass={
+        'develop': PostDevelopCommand,
+        'install': PostInstallCommand,
+    }
+)

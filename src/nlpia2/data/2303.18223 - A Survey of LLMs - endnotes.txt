@@ -1,0 +1,1055 @@
+# LLM References
+
+[1] S. Pinker, The Language Instinct: How the Mind Creates
+Language. Brilliance Audio; Unabridged edition,
+2014.
+[2] M. D. Hauser, N. Chomsky, and W. T. Fitch, “The
+faculty of language: what is it, who has it, and how
+did it evolve?” science, vol. 298, no. 5598, pp. 1569–
+1579, 2002.
+[3] A. M. Turing, “Computing machinery and intelli-
+gence,” Mind, vol. LIX, no. 236, pp. 433–460, 1950.
+[4] F. Jelinek, Statistical Methods for Speech Recognition.
+MIT Press, 1998.
+[5] J. Gao and C. Lin, “Introduction to the special issue
+on statistical language modeling,” ACM Trans. Asian
+Lang. Inf. Process., vol. 3, no. 2, pp. 87–93, 2004.
+[6] R. Rosenfeld, “Two decades of statistical language
+modeling: Where do we go from here?” Proceedings
+of the IEEE, vol. 88, no. 8, pp. 1270–1278, 2000.
+[7] A. Stolcke, “Srilm-an extensible language modeling
+toolkit,” in Seventh international conference on spoken
+language processing, 2002.
+[8] X. Liu and W. B. Croft, “Statistical language modeling
+for information retrieval,” Annu. Rev. Inf. Sci. Technol.,
+vol. 39, no. 1, pp. 1–31, 2005.
+[9] C. Zhai, Statistical Language Models for Information Re-
+trieval, ser. Synthesis Lectures on Human Language
+Technologies. Morgan & Claypool Publishers, 2008.
+[10] S. M. Thede and M. P. Harper, “A second-order hid-
+den markov model for part-of-speech tagging,” in
+27th Annual Meeting of the Association for Computational
+Linguistics, University of Maryland, College Park, Mary-
+land, USA, 20-26 June 1999, R. Dale and K. W. Church,
+Eds. ACL, 1999, pp. 175–182.
+[11] L. R. Bahl, P. F. Brown, P. V. de Souza, and R. L. Mercer,
+“A tree-based statistical language model for natural
+language speech recognition,” IEEE Transactions on
+Acoustics, Speech, and Signal Processing, vol. 37, no. 7,
+pp. 1001–1008, 1989.
+[12] T. Brants, A. C. Popat, P. Xu, F. J. Och, and J. Dean,
+“Large language models in machine translation,” in
+EMNLP-CoNLL 2007, Proceedings of the 2007 Joint Con-
+ference on Empirical Methods in Natural Language Pro-
+cessing and Computational Natural Language Learning,
+June 28-30, 2007, Prague, Czech Republic, J. Eisner, Ed.
+ACL, 2007, pp. 858–867.
+[13] S. M. Katz, “Estimation of probabilities from sparse
+data for the language model component of a speech
+recognizer,” IEEE Trans. Acoust. Speech Signal Process.,
+vol. 35, no. 3, pp. 400–401, 1987.
+[14] W. A. Gale and G. Sampson, “Good-turing frequency
+estimation without tears,” J. Quant. Linguistics, vol. 2,
+no. 3, pp. 217–237, 1995.
+[15] Y. Bengio, R. Ducharme, P. Vincent, and C. Janvin, “A
+neural probabilistic language model,” J. Mach. Learn.
+Res., vol. 3, pp. 1137–1155, 2003.
+[16] T. Mikolov, M. Karafi ́at, L. Burget, J. Cernock  ́y, and
+S. Khudanpur, “Recurrent neural network based lan-
+guage model,” in INTERSPEECH 2010, 11th Annual
+Conference of the International Speech Communication
+Association, Makuhari, Chiba, Japan, September 26-30,
+2010, T. Kobayashi, K. Hirose, and S. Nakamura, Eds.
+ISCA, 2010, pp. 1045–1048.
+[17] S. Kombrink, T. Mikolov, M. Karafi ́at, and L. Burget,
+“Recurrent neural network based language modeling
+in meeting recognition,” in INTERSPEECH 2011, 12th
+Annual Conference of the International Speech Commu-
+nication Association, Florence, Italy, August 27-31, 2011.
+ISCA, 2011, pp. 2877–2880.
+[18] R. Collobert, J. Weston, L. Bottou, M. Karlen,
+K. Kavukcuoglu, and P. P. Kuksa, “Natural language
+processing (almost) from scratch,” J. Mach. Learn. Res.,
+vol. 12, pp. 2493–2537, 2011.
+34
+J. Dean, “Distributed representations of words and
+phrases and their compositionality,” in Advances in
+Neural Information Processing Systems 26: 27th Annual
+Conference on Neural Information Processing Systems
+2013. Proceedings of a meeting held December 5-8, 2013,
+Lake Tahoe, Nevada, United States, C. J. C. Burges, L. Bot-
+tou, Z. Ghahramani, and K. Q. Weinberger, Eds., 2013,
+pp. 3111–3119.
+[20] T. Mikolov, K. Chen, G. Corrado, and J. Dean, “Ef-
+ficient estimation of word representations in vector
+space,” in 1st International Conference on Learning Rep-
+resentations, ICLR 2013, Scottsdale, Arizona, USA, May
+2-4, 2013, Workshop Track Proceedings, Y. Bengio and
+Y. LeCun, Eds., 2013.
+[21] M. E. Peters, M. Neumann, M. Iyyer, M. Gardner,
+C. Clark, K. Lee, and L. Zettlemoyer, “Deep contex-
+tualized word representations,” in Proceedings of the
+2018 Conference of the North American Chapter of the As-
+sociation for Computational Linguistics: Human Language
+Technologies, NAACL-HLT 2018, New Orleans, Louisiana,
+USA, June 1-6, 2018, Volume 1 (Long Papers), M. A.
+Walker, H. Ji, and A. Stent, Eds. Association for
+Computational Linguistics, 2018, pp. 2227–2237.
+[22] A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit,
+L. Jones, A. N. Gomez, L. Kaiser, and I. Polosukhin,
+“Attention is all you need,” in Advances in Neural
+Information Processing Systems 30: Annual Conference on
+Neural Information Processing Systems 2017, December 4-
+9, 2017, Long Beach, CA, USA, 2017, pp. 5998–6008.
+[23] J. Devlin, M. Chang, K. Lee, and K. Toutanova, “BERT:
+pre-training of deep bidirectional transformers for
+language understanding,” in Proceedings of the 2019
+Conference of the North American Chapter of the Asso-
+ciation for Computational Linguistics: Human Language
+Technologies, NAACL-HLT 2019, Minneapolis, MN, USA,
+June 2-7, 2019, Volume 1 (Long and Short Papers),
+J. Burstein, C. Doran, and T. Solorio, Eds. Association
+for Computational Linguistics, 2019, pp. 4171–4186.
+[24] M. Lewis, Y. Liu, N. Goyal, M. Ghazvininejad, A. Mo-
+hamed, O. Levy, V. Stoyanov, and L. Zettlemoyer,
+“BART: denoising sequence-to-sequence pre-training
+for natural language generation, translation, and com-
+prehension,” in Proceedings of the 58th Annual Meeting
+of the Association for Computational Linguistics, ACL
+2020, Online, July 5-10, 2020, 2020, pp. 7871–7880.
+[25] W. Fedus, B. Zoph, and N. Shazeer, “Switch trans-
+formers: Scaling to trillion parameter models with
+simple and efficient sparsity,” J. Mach. Learn. Res, pp.
+1–40, 2021.
+[26] A. Radford, J. Wu, R. Child, D. Luan, D. Amodei,
+I. Sutskever et al., “Language models are unsuper-
+vised multitask learners,” OpenAI blog, p. 9, 2019.
+[27] Y. Liu, M. Ott, N. Goyal, J. Du, M. Joshi, D. Chen,
+O. Levy, M. Lewis, L. Zettlemoyer, and V. Stoyanov,
+“Roberta: A robustly optimized BERT pretraining ap-
+proach,” CoRR, vol. abs/1907.11692, 2019.
+[28] V. Sanh, A. Webson, C. Raffel, S. H. Bach, L. Sutawika,
+Z. Alyafeai, A. Chaffin, A. Stiegler, A. Raja, M. Dey,
+M. S. Bari, C. Xu, U. Thakker, S. S. Sharma,
+E. Szczechla, T. Kim, G. Chhablani, N. V. Nayak,
+D. Datta, J. Chang, M. T. Jiang, H. Wang, M. Man-
+ica, S. Shen, Z. X. Yong, H. Pandey, R. Bawden,
+T. Wang, T. Neeraj, J. Rozen, A. Sharma, A. Santilli,
+T. F ́evry, J. A. Fries, R. Teehan, T. L. Scao, S. Bider-
+man, L. Gao, T. Wolf, and A. M. Rush, “Multitask
+prompted training enables zero-shot task generaliza-
+tion,” in The Tenth International Conference on Learning
+Representations, ICLR 2022, Virtual Event, April 25-29,
+2022. OpenReview.net, 2022.
+[29] T. Wang, A. Roberts, D. Hesslow, T. L. Scao, H. W.
+Chung, I. Beltagy, J. Launay, and C. Raffel, “What
+language model architecture and pretraining objective
+works best for zero-shot generalization?” in Interna-
+tional Conference on Machine Learning, ICML 2022, 17-23
+July 2022, Baltimore, Maryland, USA, ser. Proceedings
+of Machine Learning Research, vol. 162, 2022, pp.
+22 964–22 984.
+[30] J. Kaplan, S. McCandlish, T. Henighan, T. B. Brown,
+B. Chess, R. Child, S. Gray, A. Radford, J. Wu, and
+D. Amodei, “Scaling laws for neural language mod-
+els,” CoRR, vol. abs/2001.08361, 2020.
+[31] J. Wei, Y. Tay, R. Bommasani, C. Raffel, B. Zoph,
+S. Borgeaud, D. Yogatama, M. Bosma, D. Zhou,
+D. Metzler, E. H. Chi, T. Hashimoto, O. Vinyals,
+P. Liang, J. Dean, and W. Fedus, “Emergent abilities of
+large language models,” CoRR, vol. abs/2206.07682,
+2022.
+[32] M. Shanahan, “Talking about large language models,”
+CoRR, vol. abs/2212.03551, 2022.
+[33] J. Wei, X. Wang, D. Schuurmans, M. Bosma, E. H. Chi,
+Q. Le, and D. Zhou, “Chain of thought prompting
+elicits reasoning in large language models,” CoRR, vol.
+abs/2201.11903, 2022.
+[34] J. Hoffmann, S. Borgeaud, A. Mensch, E. Buchatskaya,
+T. Cai, E. Rutherford, D. de Las Casas, L. A. Hen-
+dricks, J. Welbl, A. Clark, T. Hennigan, E. Noland,
+K. Millican, G. van den Driessche, B. Damoc, A. Guy,
+S. Osindero, K. Simonyan, E. Elsen, J. W. Rae,
+O. Vinyals, and L. Sifre, “Training compute-optimal
+large language models,” vol. abs/2203.15556, 2022.
+[35] R. Taylor, M. Kardas, G. Cucurull, T. Scialom,
+A. Hartshorn, E. Saravia, A. Poulton, V. Kerkez, and
+R. Stojnic, “Galactica: A large language model for
+science,” CoRR, vol. abs/2211.09085, 2022.
+[36] P. Liu, W. Yuan, J. Fu, Z. Jiang, H. Hayashi, and
+G. Neubig, “Pre-train, prompt, and predict: A system-
+atic survey of prompting methods in natural language
+processing,” ACM Comput. Surv., pp. 195:1–195:35,
+2023.
+[37] C. Zhou, Q. Li, C. Li, J. Yu, Y. Liu, G. Wang, K. Zhang,
+C. Ji, Q. Yan, L. He, H. Peng, J. Li, J. Wu, Z. Liu, P. Xie,
+C. Xiong, J. Pei, P. S. Yu, and L. Sun, “A comprehensive
+survey on pretrained foundation models: A history
+from BERT to chatgpt,” CoRR, vol. abs/2302.09419,
+2023.
+[38] X. Han, Z. Zhang, N. Ding, Y. Gu, X. Liu, Y. Huo,
+J. Qiu, Y. Yao, A. Zhang, L. Zhang, W. Han, M. Huang,
+Q. Jin, Y. Lan, Y. Liu, Z. Liu, Z. Lu, X. Qiu, R. Song,
+J. Tang, J. Wen, J. Yuan, W. X. Zhao, and J. Zhu, “Pre-
+trained models: Past, present and future,” AI Open,
+vol. 2, pp. 225–250, 2021.
+[39] X. Qiu, T. Sun, Y. Xu, Y. Shao, N. Dai, and X. Huang, “Pre-trained models for natural language processing:
+A survey,” CoRR, vol. abs/2003.08271, 2020.
+[40] S. Altman, “Planning for agi and beyond,” OpenAI
+Blog, February 2023.
+[41] S. Bubeck, V. Chandrasekaran, R. Eldan, J. Gehrke,
+E. Horvitz, E. Kamar, P. Lee, Y. T. Lee, Y. Li, S. Lund-
+berg, H. Nori, H. Palangi, M. T. Ribeiro, and Y. Zhang,
+“Sparks of artificial general intelligence: Early experi-
+ments with gpt-4,” vol. abs/2303.12712, 2023.
+[42] S. Huang, L. Dong, W. Wang, Y. Hao, S. Singhal, S. Ma,
+T. Lv, L. Cui, O. K. Mohammed, B. Patra, Q. Liu,
+K. Aggarwal, Z. Chi, J. Bjorck, V. Chaudhary, S. Som,
+X. Song, and F. Wei, “Language is not all you need:
+Aligning perception with language models,” CoRR,
+vol. abs/2302.14045, 2023.
+[43] Y. Cao, S. Li, Y. Liu, Z. Yan, Y. Dai, P. S. Yu, and
+L. Sun, “A comprehensive survey of ai-generated
+content (aigc): A history of generative ai from gan to
+chatgpt,” arXiv preprint arXiv:2303.04226, 2023.
+[44] D. Driess, F. Xia, M. S. Sajjadi, C. Lynch, A. Chowdh-
+ery, B. Ichter, A. Wahid, J. Tompson, Q. Vuong, T. Yu
+et al., “Palm-e: An embodied multimodal language
+model,” arXiv preprint arXiv:2303.03378, 2023.
+[45] C. Wu, S. Yin, W. Qi, X. Wang, Z. Tang, and
+N. Duan, “Visual chatgpt: Talking, drawing and edit-
+ing with visual foundation models,” arXiv preprint
+arXiv:2303.04671, 2023.
+[46] OpenAI, “Gpt-4 technical report,” OpenAI, 2023.
+[47] Y. Fu, H. Peng, and T. Khot, “How does gpt obtain its
+ability? tracing emergent abilities of language models
+to their sources,” Yao Fu’s Notion, Dec 2022.
+[48] J. Li, T. Tang, W. X. Zhao, and J. Wen, “Pretrained
+language model for text generation: A survey,” in
+Proceedings of the Thirtieth International Joint Conference
+on Artificial Intelligence, IJCAI 2021, Virtual Event /
+Montreal, Canada, 19-27 August 2021, Z. Zhou, Ed.
+ijcai.org, 2021, pp. 4492–4499.
+[49] P. Lu, L. Qiu, W. Yu, S. Welleck, and K. Chang, “A
+survey of deep learning for mathematical reasoning,”
+CoRR, vol. abs/2212.10535, 2022.
+[50] Q. Dong, L. Li, D. Dai, C. Zheng, Z. Wu, B. Chang,
+X. Sun, J. Xu, L. Li, and Z. Sui, “A survey for in-context
+learning,” CoRR, vol. abs/2301.00234, 2023.
+[51] J. Huang and K. C. Chang, “Towards reasoning
+in large language models: A survey,” CoRR, vol.
+abs/2212.10403, 2022.
+[52] S. Qiao, Y. Ou, N. Zhang, X. Chen, Y. Yao, S. Deng,
+C. Tan, F. Huang, and H. Chen, “Reasoning with
+language model prompting: A survey,” CoRR, vol.
+abs/2212.09597, 2022.
+[53] J. Zhou, P. Ke, X. Qiu, M. Huang, and J. Zhang, “Chat-
+gpt: potential, prospects, and limitations,” in Frontiers
+of Information Technology & Electronic Engineering, 2023,
+pp. 1–6.
+[54] W. X. Zhao, J. Liu, R. Ren, and J. Wen, “Dense text
+retrieval based on pretrained language models: A
+survey,” CoRR, vol. abs/2211.14876, 2022.
+[55] T. B. Brown, B. Mann, N. Ryder, M. Subbiah, J. Kaplan,
+P. Dhariwal, A. Neelakantan, P. Shyam, G. Sastry,
+A. Askell, S. Agarwal, A. Herbert-Voss, G. Krueger,
+T. Henighan, R. Child, A. Ramesh, D. M. Ziegler,
+J. Wu, C. Winter, C. Hesse, M. Chen, E. Sigler,
+M. Litwin, S. Gray, B. Chess, J. Clark, C. Berner, S. Mc-
+Candlish, A. Radford, I. Sutskever, and D. Amodei,
+“Language models are few-shot learners,” in Ad-
+vances in Neural Information Processing Systems 33: An-
+nual Conference on Neural Information Processing Sys-
+tems 2020, NeurIPS 2020, December 6-12, 2020, virtual,
+H. Larochelle, M. Ranzato, R. Hadsell, M. Balcan, and
+H. Lin, Eds., 2020.
+[56] A. Chowdhery, S. Narang, J. Devlin, M. Bosma,
+G. Mishra, A. Roberts, P. Barham, H. W. Chung,
+C. Sutton, S. Gehrmann, P. Schuh, K. Shi,
+S. Tsvyashchenko, J. Maynez, A. Rao, P. Barnes,
+Y. Tay, N. Shazeer, V. Prabhakaran, E. Reif, N. Du,
+B. Hutchinson, R. Pope, J. Bradbury, J. Austin, M. Is-
+ard, G. Gur-Ari, P. Yin, T. Duke, A. Levskaya, S. Ghe-
+mawat, S. Dev, H. Michalewski, X. Garcia, V. Misra,
+K. Robinson, L. Fedus, D. Zhou, D. Ippolito, D. Luan,
+H. Lim, B. Zoph, A. Spiridonov, R. Sepassi, D. Do-
+han, S. Agrawal, M. Omernick, A. M. Dai, T. S. Pil-
+lai, M. Pellat, A. Lewkowycz, E. Moreira, R. Child,
+O. Polozov, K. Lee, Z. Zhou, X. Wang, B. Saeta,
+M. Diaz, O. Firat, M. Catasta, J. Wei, K. Meier-
+Hellstern, D. Eck, J. Dean, S. Petrov, and N. Fiedel,
+“Palm: Scaling language modeling with pathways,”
+CoRR, vol. abs/2204.02311, 2022.
+[57] H. Touvron, T. Lavril, G. Izacard, X. Martinet,
+M. Lachaux, T. Lacroix, B. Rozi`ere, N. Goyal, E. Ham-
+bro, F. Azhar, A. Rodriguez, A. Joulin, E. Grave, and
+G. Lample, “Llama: Open and efficient foundation
+language models,” CoRR, 2023.
+[58] B. A. Huberman and T. Hogg, “Phase transitions in
+artificial intelligence systems,” Artificial Intelligence,
+vol. 33, no. 2, pp. 155–171, 1987.
+[59] J. W. Rae, S. Borgeaud, T. Cai, K. Millican, J. Hoff-
+mann, H. F. Song, J. Aslanides, S. Henderson, R. Ring,
+S. Young, E. Rutherford, T. Hennigan, J. Menick,
+A. Cassirer, R. Powell, G. van den Driessche, L. A.
+Hendricks, M. Rauh, P. Huang, A. Glaese, J. Welbl,
+S. Dathathri, S. Huang, J. Uesato, J. Mellor, I. Higgins,
+A. Creswell, N. McAleese, A. Wu, E. Elsen, S. M.
+Jayakumar, E. Buchatskaya, D. Budden, E. Suther-
+land, K. Simonyan, M. Paganini, L. Sifre, L. Martens,
+X. L. Li, A. Kuncoro, A. Nematzadeh, E. Gribovskaya,
+D. Donato, A. Lazaridou, A. Mensch, J. Lespiau,
+M. Tsimpoukelli, N. Grigorev, D. Fritz, T. Sotti-
+aux, M. Pajarskas, T. Pohlen, Z. Gong, D. Toyama,
+C. de Masson d’Autume, Y. Li, T. Terzi, V. Mikulik,
+I. Babuschkin, A. Clark, D. de Las Casas, A. Guy,
+C. Jones, J. Bradbury, M. J. Johnson, B. A. Hechtman,
+L. Weidinger, I. Gabriel, W. S. Isaac, E. Lockhart,
+S. Osindero, L. Rimell, C. Dyer, O. Vinyals, K. Ayoub,
+J. Stanway, L. Bennett, D. Hassabis, K. Kavukcuoglu,
+and G. Irving, “Scaling language models: Methods,
+analysis & insights from training gopher,” CoRR, vol.
+abs/2112.11446, 2021.
+[60] D. Dai, Y. Sun, L. Dong, Y. Hao, Z. Sui, and F. Wei,
+“Why can GPT learn in-context? language models se-
+cretly perform gradient descent as meta-optimizers,”
+CoRR, vol. abs/2212.10559, 2022.
+[61] L. Ouyang, J. Wu, X. Jiang, D. Almeida, C. L. Wain-
+36
+wright, P. Mishkin, C. Zhang, S. Agarwal, K. Slama,
+A. Ray, J. Schulman, J. Hilton, F. Kelton, L. Miller,
+M. Simens, A. Askell, P. Welinder, P. F. Christiano,
+J. Leike, and R. Lowe, “Training language models to
+follow instructions with human feedback,” CoRR, vol.
+abs/2203.02155, 2022.
+[62] J. Wei, M. Bosma, V. Y. Zhao, K. Guu, A. W. Yu,
+B. Lester, N. Du, A. M. Dai, and Q. V. Le, “Fine-
+tuned language models are zero-shot learners,” in
+The Tenth International Conference on Learning Repre-
+sentations, ICLR 2022, Virtual Event, April 25-29, 2022.
+OpenReview.net, 2022.
+[63] A. Ananthaswamy, “In ai, is bigger always better?”
+Nature, 2023.
+[64] J. Rasley, S. Rajbhandari, O. Ruwase, and Y. He,
+“Deepspeed: System optimizations enable training
+deep learning models with over 100 billion parame-
+ters,” in KDD, 2020, pp. 3505–3506.
+[65] M. Shoeybi, M. Patwary, R. Puri, P. LeGresley,
+J. Casper, and B. Catanzaro, “Megatron-lm: Training
+multi-billion parameter language models using model
+parallelism,” CoRR, vol. abs/1909.08053, 2019.
+[66] D. Narayanan, M. Shoeybi, J. Casper, P. LeGres-
+ley, M. Patwary, V. Korthikanti, D. Vainbrand,
+P. Kashinkunti, J. Bernauer, B. Catanzaro, A. Phan-
+ishayee, and M. Zaharia, “Efficient large-scale lan-
+guage model training on GPU clusters using
+megatron-lm,” in International Conference for High Per-
+formance Computing, Networking, Storage and Analysis,
+SC 2021, St. Louis, Missouri, USA, November 14-19,
+2021. ACM, 2021, p. 58.
+[67] V. Korthikanti, J. Casper, S. Lym, L. McAfee, M. An-
+dersch, M. Shoeybi, and B. Catanzaro, “Reducing ac-
+tivation recomputation in large transformer models,”
+CoRR, vol. abs/2205.05198, 2022.
+[68] T. L. Scao, A. Fan, C. Akiki, E. Pavlick, S. Ilic, D. Hess-
+low, R. Castagn ́e, A. S. Luccioni, F. Yvon, M. Gall ́e,
+J. Tow, A. M. Rush, S. Biderman, A. Webson, P. S.
+Ammanamanchi, T. Wang, B. Sagot, N. Muennighoff,
+A. V. del Moral, O. Ruwase, R. Bawden, S. Bekman,
+A. McMillan-Major, I. Beltagy, H. Nguyen, L. Saulnier,
+S. Tan, P. O. Suarez, V. Sanh, H. Laurenc ̧on, Y. Jer-
+nite, J. Launay, M. Mitchell, C. Raffel, A. Gokaslan,
+A. Simhi, A. Soroa, A. F. Aji, A. Alfassy, A. Rogers,
+A. K. Nitzav, C. Xu, C. Mou, C. Emezue, C. Klamm,
+C. Leong, D. van Strien, D. I. Adelani, and et al.,
+“BLOOM: A 176b-parameter open-access multilingual
+language model,” CoRR, vol. abs/2211.05100, 2022.
+[69] P. F. Christiano, J. Leike, T. B. Brown, M. Martic,
+S. Legg, and D. Amodei, “Deep reinforcement learn-
+ing from human preferences,” in Advances in Neural
+Information Processing Systems 30: Annual Conference on
+Neural Information Processing Systems 2017, December
+4-9, 2017, Long Beach, CA, USA, I. Guyon, U. von
+Luxburg, S. Bengio, H. M. Wallach, R. Fergus, S. V. N.
+Vishwanathan, and R. Garnett, Eds., 2017, pp. 4299–
+4307.
+[70] T. Schick, J. Dwivedi-Yu, R. Dess`ı, R. Raileanu,
+M. Lomeli, L. Zettlemoyer, N. Cancedda, and
+T. Scialom, “Toolformer: Language models can teach
+themselves to use tools,” CoRR, vol. abs/2302.04761,
+2023.
+[71] R. Nakano, J. Hilton, S. Balaji, J. Wu, L. Ouyang,
+C. Kim, C. Hesse, S. Jain, V. Kosaraju, W. Saun-
+ders, X. Jiang, K. Cobbe, T. Eloundou, G. Krueger,
+K. Button, M. Knight, B. Chess, and J. Schulman,
+“Webgpt: Browser-assisted question-answering with
+human feedback,” CoRR, vol. abs/2112.09332, 2021.
+[72] C. Raffel, N. Shazeer, A. Roberts, K. Lee, S. Narang,
+M. Matena, Y. Zhou, W. Li, and P. J. Liu, “Exploring
+the limits of transfer learning with a unified text-
+to-text transformer,” J. Mach. Learn. Res., pp. 140:1–
+140:67, 2020.
+[73] L. Xue, N. Constant, A. Roberts, M. Kale, R. Al-
+Rfou, A. Siddhant, A. Barua, and C. Raffel, “mt5: A
+massively multilingual pre-trained text-to-text trans-
+former,” in Proceedings of the 2021 Conference of the
+North American Chapter of the Association for Com-
+putational Linguistics: Human Language Technologies,
+NAACL-HLT 2021, Online, June 6-11, 2021, 2021, pp.
+483–498.
+[74] W. Zeng, X. Ren, T. Su, H. Wang, Y. Liao, Z. Wang,
+X. Jiang, Z. Yang, K. Wang, X. Zhang, C. Li,
+Z. Gong, Y. Yao, X. Huang, J. Wang, J. Yu, Q. Guo,
+Y. Yu, Y. Zhang, J. Wang, H. Tao, D. Yan, Z. Yi,
+F. Peng, F. Jiang, H. Zhang, L. Deng, Y. Zhang,
+Z. Lin, C. Zhang, S. Zhang, M. Guo, S. Gu, G. Fan,
+Y. Wang, X. Jin, Q. Liu, and Y. Tian, “Pangu-α:
+Large-scale autoregressive pretrained chinese lan-
+guage models with auto-parallel computation,” CoRR,
+vol. abs/2104.12369, 2021.
+[75] Z. Zhang, Y. Gu, X. Han, S. Chen, C. Xiao, Z. Sun,
+Y. Yao, F. Qi, J. Guan, P. Ke, Y. Cai, G. Zeng, Z. Tan,
+Z. Liu, M. Huang, W. Han, Y. Liu, X. Zhu, and
+M. Sun, “CPM-2: large-scale cost-effective pre-trained
+language models,” CoRR, vol. abs/2106.10715, 2021.
+[76] E. Nijkamp, B. Pang, H. Hayashi, L. Tu, H. Wang,
+Y. Zhou, S. Savarese, and C. Xiong, “Codegen: An
+open large language model for code with mtulti-turn
+program synthesis,” arXiv preprint arXiv:2203.13474,
+2022.
+[77] S. Black, S. Biderman, E. Hallahan, Q. Anthony,
+L. Gao, L. Golding, H. He, C. Leahy, K. McDonell,
+J. Phang, M. Pieler, U. S. Prashanth, S. Purohit,
+L. Reynolds, J. Tow, B. Wang, and S. Weinbach, “Gpt-
+neox-20b: An open-source autoregressive language
+model,” CoRR, vol. abs/2204.06745, 2022.
+[78] Y. Wang, S. Mishra, P. Alipoormolabashi, Y. Kordi,
+A. Mirzaei, A. Naik, A. Ashok, A. S. Dhanasekaran,
+A. Arunkumar, D. Stap, E. Pathak, G. Karamanolakis,
+H. G. Lai, I. Purohit, I. Mondal, J. Anderson, K. Kuz-
+nia, K. Doshi, K. K. Pal, M. Patel, M. Moradshahi,
+M. Parmar, M. Purohit, N. Varshney, P. R. Kaza,
+P. Verma, R. S. Puri, R. Karia, S. Doshi, S. K. Sampat,
+S. Mishra, S. R. A, S. Patro, T. Dixit, and X. Shen,
+“Super-naturalinstructions: Generalization via declar-
+ative instructions on 1600+ NLP tasks,” in Proceedings
+of the 2022 Conference on Empirical Methods in Natural
+Language Processing, EMNLP 2022, Abu Dhabi, United
+Arab Emirates, December 7-11, 2022, 2022, pp. 5085–
+5109.
+[79] Y. Tay, M. Dehghani, V. Q. Tran, X. Garc ́ıa, J. Wei,
+37
+X. Wang, H. W. Chung, D. Bahri, T. Schuster,
+H. Zheng, D. Zhou, N. Houlsby, and D. Metzler, “Ul2:
+Unifying language learning paradigms,” 2022.
+[80] S. Zhang, S. Roller, N. Goyal, M. Artetxe, M. Chen,
+S. Chen, C. Dewan, M. T. Diab, X. Li, X. V. Lin,
+T. Mihaylov, M. Ott, S. Shleifer, K. Shuster, D. Simig,
+P. S. Koura, A. Sridhar, T. Wang, and L. Zettlemoyer,
+“OPT: open pre-trained transformer language mod-
+els,” CoRR, vol. abs/2205.01068, 2022.
+[81] M. R. Costa-juss`a, J. Cross, O. C ̧ elebi, M. Elbayad,
+K. Heafield, K. Heffernan, E. Kalbassi, J. Lam,
+D. Licht, J. Maillard, A. Sun, S. Wang, G. Wenzek,
+A. Youngblood, B. Akula, L. Barrault, G. M. Gonzalez,
+P. Hansanti, J. Hoffman, S. Jarrett, K. R. Sadagopan,
+D. Rowe, S. Spruit, C. Tran, P. Andrews, N. F. Ayan,
+S. Bhosale, S. Edunov, A. Fan, C. Gao, V. Goswami,
+F. Guzm ́an, P. Koehn, A. Mourachko, C. Ropers,
+S. Saleem, H. Schwenk, and J. Wang, “No language
+left behind: Scaling human-centered machine transla-
+tion,” CoRR, vol. abs/2207.04672, 2022.
+[82] A. Zeng, X. Liu, Z. Du, Z. Wang, H. Lai, M. Ding,
+Z. Yang, Y. Xu, W. Zheng, X. Xia, W. L. Tam, Z. Ma,
+Y. Xue, J. Zhai, W. Chen, P. Zhang, Y. Dong, and
+J. Tang, “GLM-130B: an open bilingual pre-trained
+model,” vol. abs/2210.02414, 2022.
+[83] H. W. Chung, L. Hou, S. Longpre, B. Zoph, Y. Tay,
+W. Fedus, E. Li, X. Wang, M. Dehghani, S. Brahma,
+A. Webson, S. S. Gu, Z. Dai, M. Suzgun, X. Chen,
+A. Chowdhery, S. Narang, G. Mishra, A. Yu, V. Y.
+Zhao, Y. Huang, A. M. Dai, H. Yu, S. Petrov, E. H.
+Chi, J. Dean, J. Devlin, A. Roberts, D. Zhou, Q. V. Le,
+and J. Wei, “Scaling instruction-finetuned language
+models,” CoRR, vol. abs/2210.11416, 2022.
+[84] N. Muennighoff, T. Wang, L. Sutawika, A. Roberts,
+S. Biderman, T. L. Scao, M. S. Bari, S. Shen, Z. X. Yong,
+H. Schoelkopf, X. Tang, D. Radev, A. F. Aji, K. Al-
+mubarak, S. Albanie, Z. Alyafeai, A. Webson, E. Raff,
+and C. Raffel, “Crosslingual generalization through
+multitask finetuning,” CoRR, vol. abs/2211.01786,
+2022.
+[85] S. Iyer, X. V. Lin, R. Pasunuru, T. Mihaylov, D. Simig,
+P. Yu, K. Shuster, T. Wang, Q. Liu, P. S. Koura, X. Li,
+B. O’Horo, G. Pereyra, J. Wang, C. Dewan, A. Celikyil-
+maz, L. Zettlemoyer, and V. Stoyanov, “OPT-IML: scal-
+ing language model instruction meta learning through
+the lens of generalization,” CoRR, vol. abs/2212.12017,
+2022.
+[86] S. Biderman, H. Schoelkopf, Q. Anthony, H. Bradley,
+K. O’Brien, E. Hallahan, M. A. Khan, S. Purohit, U. S.
+Prashanth, E. Raff et al., “Pythia: A suite for analyzing
+large language models across training and scaling,”
+arXiv preprint arXiv:2304.01373, 2023.
+[87] D. Lepikhin, H. Lee, Y. Xu, D. Chen, O. Firat,
+Y. Huang, M. Krikun, N. Shazeer, and Z. Chen,
+“Gshard: Scaling giant models with conditional com-
+putation and automatic sharding,” in 9th International
+Conference on Learning Representations, ICLR 2021, Vir-
+tual Event, Austria, May 3-7, 2021, 2021.
+[88] M. Chen, J. Tworek, H. Jun, Q. Yuan, H. P.
+de Oliveira Pinto, J. Kaplan, H. Edwards, Y. Burda,
+N. Joseph, G. Brockman, A. Ray, R. Puri, G. Krueger,
+M. Petrov, H. Khlaaf, G. Sastry, P. Mishkin, B. Chan,
+S. Gray, N. Ryder, M. Pavlov, A. Power, L. Kaiser,
+M. Bavarian, C. Winter, P. Tillet, F. P. Such, D. Cum-
+mings, M. Plappert, F. Chantzis, E. Barnes, A. Herbert-
+Voss, W. H. Guss, A. Nichol, A. Paino, N. Tezak,
+J. Tang, I. Babuschkin, S. Balaji, S. Jain, W. Saun-
+ders, C. Hesse, A. N. Carr, J. Leike, J. Achiam,
+V. Misra, E. Morikawa, A. Radford, M. Knight,
+M. Brundage, M. Murati, K. Mayer, P. Welinder,
+B. McGrew, D. Amodei, S. McCandlish, I. Sutskever,
+and W. Zaremba, “Evaluating large language models
+trained on code,” CoRR, vol. abs/2107.03374, 2021.
+[89] Y. Sun, S. Wang, S. Feng, S. Ding, C. Pang, J. Shang,
+J. Liu, X. Chen, Y. Zhao, Y. Lu, W. Liu, Z. Wu,
+W. Gong, J. Liang, Z. Shang, P. Sun, W. Liu, X. Ouyang,
+D. Yu, H. Tian, H. Wu, and H. Wang, “ERNIE 3.0:
+Large-scale knowledge enhanced pre-training for lan-
+guage understanding and generation,” CoRR, vol.
+abs/2107.02137, 2021.
+[90] O. Lieber, O. Sharir, B. Lenz, and Y. Shoham, “Jurassic-
+1: Technical details and evaluation,” White Paper. AI21
+Labs, vol. 1, 2021.
+[91] B. Kim, H. Kim, S. Lee, G. Lee, D. Kwak, D. H. Jeon,
+S. Park, S. Kim, S. Kim, D. Seo, H. Lee, M. Jeong,
+S. Lee, M. Kim, S. Ko, S. Kim, T. Park, J. Kim, S. Kang,
+N. Ryu, K. M. Yoo, M. Chang, S. Suh, S. In, J. Park,
+K. Kim, H. Kim, J. Jeong, Y. G. Yeo, D. Ham, D. Park,
+M. Y. Lee, J. Kang, I. Kang, J. Ha, W. Park, and
+N. Sung, “What changes can large-scale language
+models bring? intensive study on hyperclova: Billions-
+scale korean generative pretrained transformers,” in
+Proceedings of the 2021 Conference on Empirical Methods
+in Natural Language Processing, EMNLP 2021, Virtual
+Event / Punta Cana, Dominican Republic, 7-11 November,
+2021. Association for Computational Linguistics,
+2021.
+[92] S. Wu, X. Zhao, T. Yu, R. Zhang, C. Shen, H. Liu, F. Li,
+H. Zhu, J. Luo, L. Xu et al., “Yuan 1.0: Large-scale
+pre-trained language model in zero-shot and few-shot
+learning,” arXiv preprint arXiv:2110.04725, 2021.
+[93] A. Askell, Y. Bai, A. Chen, D. Drain, D. Ganguli,
+T. Henighan, A. Jones, N. Joseph, B. Mann, N. Das-
+Sarma, N. Elhage, Z. Hatfield-Dodds, D. Hernandez,
+J. Kernion, K. Ndousse, C. Olsson, D. Amodei, T. B.
+Brown, J. Clark, S. McCandlish, C. Olah, and J. Ka-
+plan, “A general language assistant as a laboratory
+for alignment,” CoRR, vol. abs/2112.00861, 2021.
+[94] S. Wang, Y. Sun, Y. Xiang, Z. Wu, S. Ding, W. Gong,
+S. Feng, J. Shang, Y. Zhao, C. Pang, J. Liu, X. Chen,
+Y. Lu, W. Liu, X. Wang, Y. Bai, Q. Chen, L. Zhao,
+S. Li, P. Sun, D. Yu, Y. Ma, H. Tian, H. Wu, T. Wu,
+W. Zeng, G. Li, W. Gao, and H. Wang, “ERNIE 3.0
+titan: Exploring larger-scale knowledge enhanced pre-
+training for language understanding and generation,”
+CoRR, vol. abs/2112.12731, 2021.
+[95] N. Du, Y. Huang, A. M. Dai, S. Tong, D. Lepikhin,
+Y. Xu, M. Krikun, Y. Zhou, A. W. Yu, O. Firat, B. Zoph,
+L. Fedus, M. P. Bosma, Z. Zhou, T. Wang, Y. E.
+Wang, K. Webster, M. Pellat, K. Robinson, K. S. Meier-
+Hellstern, T. Duke, L. Dixon, K. Zhang, Q. V. Le,
+Y. Wu, Z. Chen, and C. Cui, “Glam: Efficient scaling
+38
+of language models with mixture-of-experts,” in In-
+ternational Conference on Machine Learning, ICML 2022,
+17-23 July 2022, Baltimore, Maryland, USA, 2022, pp.
+5547–5569.
+[96] R. Thoppilan, D. D. Freitas, J. Hall, N. Shazeer,
+A. Kulshreshtha, H. Cheng, A. Jin, T. Bos, L. Baker,
+Y. Du, Y. Li, H. Lee, H. S. Zheng, A. Ghafouri,
+M. Menegali, Y. Huang, M. Krikun, D. Lepikhin,
+J. Qin, D. Chen, Y. Xu, Z. Chen, A. Roberts, M. Bosma,
+Y. Zhou, C. Chang, I. Krivokon, W. Rusch, M. Pick-
+ett, K. S. Meier-Hellstern, M. R. Morris, T. Doshi,
+R. D. Santos, T. Duke, J. Soraker, B. Zevenbergen,
+V. Prabhakaran, M. Diaz, B. Hutchinson, K. Olson,
+A. Molina, E. Hoffman-John, J. Lee, L. Aroyo, R. Ra-
+jakumar, A. Butryna, M. Lamm, V. Kuzmina, J. Fenton,
+A. Cohen, R. Bernstein, R. Kurzweil, B. Aguera-Arcas,
+C. Cui, M. Croak, E. H. Chi, and Q. Le, “Lamda:
+Language models for dialog applications,” CoRR, vol.
+abs/2201.08239, 2022.
+[97] S. Smith, M. Patwary, B. Norick, P. LeGresley, S. Rajb-
+handari, J. Casper, Z. Liu, S. Prabhumoye, G. Zerveas,
+V. Korthikanti, E. Zheng, R. Child, R. Y. Aminabadi,
+J. Bernauer, X. Song, M. Shoeybi, Y. He, M. Hous-
+ton, S. Tiwary, and B. Catanzaro, “Using deepspeed
+and megatron to train megatron-turing NLG 530b,
+A large-scale generative language model,” CoRR, vol.
+abs/2201.11990, 2022.
+[98] Y. Li, D. H. Choi, J. Chung, N. Kushman, J. Schrit-
+twieser, R. Leblond, T. Eccles, J. Keeling, F. Gi-
+meno, A. D. Lago, T. Hubert, P. Choy, C. de Mas-
+son d’Autume, I. Babuschkin, X. Chen, P. Huang,
+J. Welbl, S. Gowal, A. Cherepanov, J. Molloy, D. J.
+Mankowitz, E. S. Robson, P. Kohli, N. de Freitas,
+K. Kavukcuoglu, and O. Vinyals, “Competition-level
+code generation with alphacode,” Science, 2022.
+[99] S. Soltan, S. Ananthakrishnan, J. FitzGerald, R. Gupta,
+W. Hamza, H. Khan, C. Peris, S. Rawls, A. Rosen-
+baum, A. Rumshisky, C. S. Prakash, M. Sridhar,
+F. Triefenbach, A. Verma, G. T  ̈ur, and P. Natara-
+jan, “Alexatm 20b: Few-shot learning using a
+large-scale multilingual seq2seq model,” CoRR, vol.
+abs/2208.01448, 2022.
+[100] A. Glaese, N. McAleese, M. Trebacz, J. Aslanides,
+V. Firoiu, T. Ewalds, M. Rauh, L. Weidinger, M. Chad-
+wick, P. Thacker, L. Campbell-Gillingham, J. Ue-
+sato, P. Huang, R. Comanescu, F. Yang, A. See,
+S. Dathathri, R. Greig, C. Chen, D. Fritz, J. S. Elias,
+R. Green, S. Mokr ́a, N. Fernando, B. Wu, R. Foley,
+S. Young, I. Gabriel, W. Isaac, J. Mellor, D. Hassabis,
+K. Kavukcuoglu, L. A. Hendricks, and G. Irving,
+“Improving alignment of dialogue agents via targeted
+human judgements,” CoRR, vol. abs/2209.14375, 2022.
+[101] H. Su, X. Zhou, H. Yu, Y. Chen, Z. Zhu, Y. Yu, and
+J. Zhou, “Welm: A well-read pre-trained language
+model for chinese,” CoRR, vol. abs/2209.10372, 2022.
+[102] Y. Tay, J. Wei, H. W. Chung, V. Q. Tran, D. R. So,
+S. Shakeri, X. Garcia, H. S. Zheng, J. Rao, A. Chowdh-
+ery, D. Zhou, D. Metzler, S. Petrov, N. Houlsby, Q. V.
+Le, and M. Dehghani, “Transcending scaling laws
+with 0.1% extra compute,” CoRR, vol. abs/2210.11399,
+2022.
+[103] X. Ren, P. Zhou, X. Meng, X. Huang, Y. Wang,
+W. Wang, P. Li, X. Zhang, A. Podolskiy, G. Arshinov,
+A. Bout, I. Piontkovskaya, J. Wei, X. Jiang, T. Su,
+Q. Liu, and J. Yao, “Pangu-Σ: Towards trillion pa-
+rameter language model with sparse heterogeneous
+computing,” CoRR, vol. abs/2303.10845, 2023.
+[104] L. Huawei Technologies Co., “Huawei mindspore
+ai development framework,” in Artificial Intelligence
+Technology. Springer, 2022, pp. 137–162.
+[105] R. Taori, I. Gulrajani, T. Zhang, Y. Dubois, X. Li,
+C. Guestrin, P. Liang, and T. B. Hashimoto, “Stan-
+ford alpaca: An instruction-following llama model,”
+https://github.com/tatsu-lab/stanford alpaca, 2023.
+[106] W.-L. Chiang, Z. Li, Z. Lin, Y. Sheng, Z. Wu, H. Zhang,
+L. Zheng, S. Zhuang, Y. Zhuang, J. E. Gonzalez,
+I. Stoica, and E. P. Xing, “Vicuna: An open-source
+chatbot impressing gpt-4 with 90%* chatgpt quality,”
+2023. [Online]. Available: https://vicuna.lmsys.org
+[107] 2023. [Online]. Available: https://github.com/
+nebuly-ai/nebullvm/tree/main/apps/accelerate/
+chatllama
+[108] Y. You, “Colossalchat: An open-source
+solution for cloning chatgpt with a complete
+rlhf pipeline,” 2023. [Online]. Available:
+https://medium.com/@yangyou berkeley/
+colossalchat-an-open-source-solution-for-cloning-
+chatgpt-with-a-complete-rlhf-pipeline-5edf08fb538b
+[109] Y. Zhu, R. Kiros, R. S. Zemel, R. Salakhutdinov, R. Ur-
+tasun, A. Torralba, and S. Fidler, “Aligning books
+and movies: Towards story-like visual explanations
+by watching movies and reading books,” in 2015 IEEE
+International Conference on Computer Vision, ICCV 2015,
+Santiago, Chile, December 7-13, 2015. IEEE Computer
+Society, 2015, pp. 19–27.
+[110] “Project gutenberg.” [Online]. Available: https://
+www.gutenberg.org/
+[111] T. H. Trinh and Q. V. Le, “A simple method for
+commonsense reasoning,” CoRR, vol. abs/1806.02847,
+2018.
+[112] R. Zellers, A. Holtzman, H. Rashkin, Y. Bisk,
+A. Farhadi, F. Roesner, and Y. Choi, “Defending
+against neural fake news,” in Advances in Neural Infor-
+mation Processing Systems 32: Annual Conference on Neu-
+ral Information Processing Systems 2019, NeurIPS 2019,
+December 8-14, 2019, Vancouver, BC, Canada, H. M.
+Wallach, H. Larochelle, A. Beygelzimer, F. d’Alch ́e-
+Buc, E. B. Fox, and R. Garnett, Eds., 2019, pp. 9051–
+9062.
+[113] A. Gokaslan, V. C. E. Pavlick, and S. Tellex,
+“Openwebtext corpus,” http://Skylion007.github.io/
+OpenWebTextCorpus, 2019.
+[114] J. Baumgartner, S. Zannettou, B. Keegan, M. Squire,
+and J. Blackburn, “The pushshift reddit dataset,” in
+Proceedings of the Fourteenth International AAAI Con-
+ference on Web and Social Media, ICWSM 2020, Held
+Virtually, Original Venue: Atlanta, Georgia, USA, June
+8-11, 2020. AAAI Press, 2020, pp. 830–839.
+[115] “Wikipedia.” [Online]. Available: https://en.
+wikipedia.org/wiki/Main Page
+[116] “Bigquery dataset.” [Online]. Available: https://
+cloud.google.com/bigquery?hl=zh-cn
+39
+[117] L. Gao, S. Biderman, S. Black, L. Golding, T. Hoppe,
+C. Foster, J. Phang, H. He, A. Thite, N. Nabeshima,
+S. Presser, and C. Leahy, “The pile: An 800gb dataset
+of diverse text for language modeling,” CoRR, vol.
+abs/2101.00027, 2021.
+[118] H. Laurenc ̧on, L. Saulnier, T. Wang, C. Akiki, A. V.
+del Moral, T. Le Scao, L. Von Werra, C. Mou, E. G.
+Ponferrada, H. Nguyen et al., “The bigscience roots
+corpus: A 1.6 tb composite multilingual dataset,” in
+Thirty-sixth Conference on Neural Information Processing
+Systems Datasets and Benchmarks Track, 2022.
+[119] A. Radford, K. Narasimhan, T. Salimans, I. Sutskever
+et al., “Improving language understanding by genera-
+tive pre-training,” 2018.
+[120] “Common crawl.” [Online]. Available: https://
+commoncrawl.org/
+[121] “A reproduction version of cc-stories on hugging
+face.” [Online]. Available: https://huggingface.co/
+datasets/spacemanidol/cc-stories
+[122] B. Wang and A. Komatsuzaki, “GPT-J-6B: A 6 Billion
+Parameter Autoregressive Language Model,” https://
+github.com/kingoflolz/mesh-transformer-jax, 2021.
+[123] T. Wolf, L. Debut, V. Sanh, J. Chaumond, C. Delangue,
+A. Moi, P. Cistac, T. Rault, R. Louf, M. Funtowicz,
+J. Davison, S. Shleifer, P. von Platen, C. Ma, Y. Jer-
+nite, J. Plu, C. Xu, T. L. Scao, S. Gugger, M. Drame,
+Q. Lhoest, and A. M. Rush, “Transformers: State-of-
+the-art natural language processing,” in Proceedings of
+the 2020 Conference on Empirical Methods in Natural Lan-
+guage Processing: System Demonstrations, EMNLP 2020
+- Demos, Online, November 16-20, 2020. Association
+for Computational Linguistics, 2020, pp. 38–45.
+[124] J. Bradbury, R. Frostig, P. Hawkins, M. J. Johnson,
+C. Leary, D. Maclaurin, G. Necula, A. Paszke,
+J. VanderPlas, S. Wanderman-Milne, and Q. Zhang,
+“JAX: composable transformations of Python+NumPy
+programs,” 2018. [Online]. Available: http://github.
+com/google/jax
+[125] Z. Bian, H. Liu, B. Wang, H. Huang, Y. Li, C. Wang,
+F. Cui, and Y. You, “Colossal-ai: A unified deep learn-
+ing system for large-scale parallel training,” CoRR,
+vol. abs/2110.14883, 2021.
+[126] J. Fang, Y. Yu, S. Li, Y. You, and J. Zhou, “Patrick-
+star: Parallel training of pre-trained models via
+a chunk-based memory management,” CoRR, vol.
+abs/2108.05818, 2021.
+[127] “Bmtrain: Effient training for big models.” [Online].
+Available: https://github.com/OpenBMB/BMTrain
+[128] J. He, J. Qiu, A. Zeng, Z. Yang, J. Zhai, and J. Tang,
+“Fastmoe: A fast mixture-of-expert training system,”
+CoRR, vol. abs/2103.13262, 2021.
+[129] A. Paszke, S. Gross, F. Massa, A. Lerer, J. Brad-
+bury, G. Chanan, T. Killeen, Z. Lin, N. Gimelshein,
+L. Antiga, A. Desmaison, A. K  ̈opf, E. Z. Yang, Z. De-
+Vito, M. Raison, A. Tejani, S. Chilamkurthy, B. Steiner,
+L. Fang, J. Bai, and S. Chintala, “Pytorch: An imper-
+ative style, high-performance deep learning library,”
+in Advances in Neural Information Processing Systems
+32: Annual Conference on Neural Information Process-
+ing Systems 2019, NeurIPS 2019, December 8-14, 2019,
+Vancouver, BC, Canada, H. M. Wallach, H. Larochelle,
+A. Beygelzimer, F. d’Alch ́e-Buc, E. B. Fox, and R. Gar-
+nett, Eds., 2019, pp. 8024–8035.
+[130] M. Abadi, P. Barham, J. Chen, Z. Chen, A. Davis,
+J. Dean, M. Devin, S. Ghemawat, G. Irving, M. Is-
+ard, M. Kudlur, J. Levenberg, R. Monga, S. Moore,
+D. G. Murray, B. Steiner, P. A. Tucker, V. Vasudevan,
+P. Warden, M. Wicke, Y. Yu, and X. Zheng, “Tensor-
+flow: A system for large-scale machine learning,” in
+12th USENIX Symposium on Operating Systems Design
+and Implementation, OSDI 2016, Savannah, GA, USA,
+November 2-4, 2016, K. Keeton and T. Roscoe, Eds.
+USENIX Association, 2016, pp. 265–283.
+[131] T. Chen, M. Li, Y. Li, M. Lin, N. Wang, M. Wang,
+T. Xiao, B. Xu, C. Zhang, and Z. Zhang, “Mxnet:
+A flexible and efficient machine learning library
+for heterogeneous distributed systems,” CoRR, vol.
+abs/1512.01274, 2015.
+[132] Y. Ma, D. Yu, T. Wu, and H. Wang, “Paddlepaddle: An
+open-source deep learning platform from industrial
+practice,” Frontiers of Data and Domputing, vol. 1, no. 1,
+p. 105, 2019.
+[133] J. Yuan, X. Li, C. Cheng, J. Liu, R. Guo, S. Cai, C. Yao,
+F. Yang, X. Yi, C. Wu, H. Zhang, and J. Zhao, “One-
+flow: Redesign the distributed deep learning frame-
+work from scratch,” CoRR, vol. abs/2110.15032, 2021.
+[134] S. Roller, E. Dinan, N. Goyal, D. Ju, M. Williamson,
+Y. Liu, J. Xu, M. Ott, E. M. Smith, Y. Boureau, and
+J. Weston, “Recipes for building an open-domain chat-
+bot,” in Proceedings of the 16th Conference of the European
+Chapter of the Association for Computational Linguistics:
+Main Volume, EACL 2021, Online, April 19 - 23, 2021,
+2021, pp. 300–325.
+[135] A. Lewkowycz, A. Andreassen, D. Dohan, E. Dyer,
+H. Michalewski, V. V. Ramasesh, A. Slone, C. Anil,
+I. Schlag, T. Gutman-Solo, Y. Wu, B. Neyshabur,
+G. Gur-Ari, and V. Misra, “Solving quantitative rea-
+soning problems with language models,” CoRR, vol.
+abs/2206.14858, 2022.
+[136] T. Saier, J. Krause, and M. F ̈arber, “unarxive 2022:
+All arxiv publications pre-processed for nlp, includ-
+ing structured full-text and citation network,” arXiv
+preprint arXiv:2303.14957, 2023.
+[137] H. A. Simon, “Experiments with a heuristic compiler,”
+J. ACM, vol. 10, no. 4, pp. 493–506, 1963.
+[138] Z. Manna and R. J. Waldinger, “Toward automatic
+program synthesis,” Commun. ACM, vol. 14, no. 3, pp.
+151–165, 1971.
+[139] Z. Feng, D. Guo, D. Tang, N. Duan, X. Feng, M. Gong,
+L. Shou, B. Qin, T. Liu, D. Jiang, and M. Zhou,
+“Codebert: A pre-trained model for programming and
+natural languages,” in Findings of EMNLP, 2020.
+[140] J. Austin, A. Odena, M. I. Nye, M. Bosma,
+H. Michalewski, D. Dohan, E. Jiang, C. J. Cai, M. Terry,
+Q. V. Le, and C. Sutton, “Program synthesis with large
+language models,” CoRR, vol. abs/2108.07732, 2021.
+[141] S. Black, L. Gao, P. Wang, C. Leahy, and S. Bi-
+derman, “GPT-Neo: Large Scale Autoregressive Lan-
+guage Modeling with Mesh-Tensorflow,” 2021.
+[142] F. F. Xu, U. Alon, G. Neubig, and V. J. Hellendoorn,
+“A systematic evaluation of large language models of
+code,” in MAPS@PLDI, 2022.
+40
+[143] D. Fried, A. Aghajanyan, J. Lin, S. Wang, E. Wallace,
+F. Shi, R. Zhong, W. Yih, L. Zettlemoyer, and M. Lewis,
+“Incoder: A generative model for code infilling and
+synthesis,” in ICLR, 2023.
+[144] A. Madaan, S. Zhou, U. Alon, Y. Yang, and G. Neubig,
+“Language models of code are few-shot commonsense
+learners,” in Proceedings of the 2022 Conference on Em-
+pirical Methods in Natural Language Processing, EMNLP
+2022, Abu Dhabi, United Arab Emirates, December 7-11,
+2022, Y. Goldberg, Z. Kozareva, and Y. Zhang, Eds.
+Association for Computational Linguistics, 2022, pp.
+1384–1403.
+[145] Y. Wu, A. Q. Jiang, W. Li, M. N. Rabe, C. Staats,
+M. Jamnik, and C. Szegedy, “Autoformalization with
+large language models,” CoRR, vol. abs/2205.12615,
+2022.
+[146] D. Hernandez, T. B. Brown, T. Conerly, N. DasSarma,
+D. Drain, S. E. Showk, N. Elhage, Z. Hatfield-Dodds,
+T. Henighan, T. Hume, S. Johnston, B. Mann, C. Olah,
+C. Olsson, D. Amodei, N. Joseph, J. Kaplan, and S. Mc-
+Candlish, “Scaling laws and interpretability of learn-
+ing from repeated data,” CoRR, vol. abs/2205.10487,
+2022.
+[147] A. Holtzman, J. Buys, L. Du, M. Forbes, and Y. Choi,
+“The curious case of neural text degeneration,” in
+8th International Conference on Learning Representations,
+ICLR 2020, Addis Ababa, Ethiopia, April 26-30, 2020.
+OpenReview.net, 2020.
+[148] K. Lee, D. Ippolito, A. Nystrom, C. Zhang, D. Eck,
+C. Callison-Burch, and N. Carlini, “Deduplicating
+training data makes language models better,” in Pro-
+ceedings of the 60th Annual Meeting of the Association for
+Computational Linguistics (Volume 1: Long Papers), ACL
+2022, Dublin, Ireland, May 22-27, 2022, 2022, pp. 8424–
+8445.
+[149] N. Carlini, D. Ippolito, M. Jagielski, K. Lee, F. Tram`er,
+and C. Zhang, “Quantifying memorization across
+neural language models,” CoRR, 2022.
+[150] N. Carlini, F. Tram`er, E. Wallace, M. Jagielski,
+A. Herbert-Voss, K. Lee, A. Roberts, T. B. Brown,
+D. Song,  ́U. Erlingsson, A. Oprea, and C. Raffel, “Ex-
+tracting training data from large language models,”
+in 30th USENIX Security Symposium, USENIX Security
+2021, August 11-13, 2021, 2021, pp. 2633–2650.
+[151] N. Kandpal, E. Wallace, and C. Raffel, “Deduplicating
+training data mitigates privacy risks in language mod-
+els,” in International Conference on Machine Learning,
+ICML 2022, 17-23 July 2022, Baltimore, Maryland, USA.
+PMLR, 2022, pp. 10 697–10 707.
+[152] T. Kudo and J. Richardson, “Sentencepiece: A simple
+and language independent subword tokenizer and
+detokenizer for neural text processing,” in Proceedings
+of the 2018 Conference on Empirical Methods in Natural
+Language Processing, EMNLP 2018: System Demonstra-
+tions, Brussels, Belgium, October 31 - November 4, 2018,
+E. Blanco and W. Lu, Eds. Association for Computa-
+tional Linguistics, 2018.
+[153] R. Sennrich, B. Haddow, and A. Birch, “Neural ma-
+chine translation of rare words with subword units,”
+in Proceedings of the 54th Annual Meeting of the Asso-
+ciation for Computational Linguistics, ACL 2016, August
+7-12, 2016, Berlin, Germany, Volume 1: Long Papers. The
+Association for Computer Linguistics, 2016.
+[154] M. Davis and M. D  ̈urst, “Unicode normalization
+forms,” 2001.
+[155] D. Paperno, G. Kruszewski, A. Lazaridou, Q. N.
+Pham, R. Bernardi, S. Pezzelle, M. Baroni, G. Boleda,
+and R. Fern ́andez, “The LAMBADA dataset: Word
+prediction requiring a broad discourse context,” in
+ACL (1). The Association for Computer Linguistics,
+2016.
+[156] P. Nakkiran, G. Kaplun, Y. Bansal, T. Yang, B. Barak,
+and I. Sutskever, “Deep double descent: Where bigger
+models and more data hurt,” in 8th International Con-
+ference on Learning Representations, ICLR 2020, Addis
+Ababa, Ethiopia, April 26-30, 2020. OpenReview.net,
+2020.
+[157] B. Zhang, B. Ghorbani, A. Bapna, Y. Cheng, X. Garcia,
+J. Shen, and O. Firat, “Examining scaling and transfer
+of language model architectures for machine transla-
+tion,” in International Conference on Machine Learning,
+ICML 2022, 17-23 July 2022, Baltimore, Maryland, USA,
+2022, pp. 26 176–26 192.
+[158] L. Dong, N. Yang, W. Wang, F. Wei, X. Liu, Y. Wang,
+J. Gao, M. Zhou, and H. Hon, “Unified language
+model pre-training for natural language understand-
+ing and generation,” in Advances in Neural Informa-
+tion Processing Systems 32: Annual Conference on Neu-
+ral Information Processing Systems 2019, NeurIPS 2019,
+December 8-14, 2019, Vancouver, BC, Canada, 2019, pp.
+13 042–13 054.
+[159] A. Clark, D. de Las Casas, A. Guy, A. Mensch,
+M. Paganini, J. Hoffmann, B. Damoc, B. A. Hecht-
+man, T. Cai, S. Borgeaud, G. van den Driessche,
+E. Rutherford, T. Hennigan, M. J. Johnson, A. Cassirer,
+C. Jones, E. Buchatskaya, D. Budden, L. Sifre, S. Osin-
+dero, O. Vinyals, M. Ranzato, J. W. Rae, E. Elsen,
+K. Kavukcuoglu, and K. Simonyan, “Unified scaling
+laws for routed language models,” in International
+Conference on Machine Learning, ICML 2022, 17-23 July
+2022, Baltimore, Maryland, USA, 2022, pp. 4057–4086.
+[160] L. J. Ba, J. R. Kiros, and G. E. Hinton, “Layer normal-
+ization,” vol. abs/1607.06450, 2016.
+[161] R. Xiong, Y. Yang, D. He, K. Zheng, S. Zheng, C. Xing,
+H. Zhang, Y. Lan, L. Wang, and T. Liu, “On layer nor-
+malization in the transformer architecture,” in ICML,
+2020.
+[162] M. Ding, Z. Yang, W. Hong, W. Zheng, C. Zhou,
+D. Yin, J. Lin, X. Zou, Z. Shao, H. Yang, and J. Tang,
+“Cogview: Mastering text-to-image generation via
+transformers,” in Advances in Neural Information Pro-
+cessing Systems 34: Annual Conference on Neural Infor-
+mation Processing Systems 2021, NeurIPS 2021, December
+6-14, 2021, virtual, 2021, pp. 19 822–19 835.
+[163] B. Zhang and R. Sennrich, “Root mean square layer
+normalization,” in Advances in Neural Information Pro-
+cessing Systems 32: Annual Conference on Neural Infor-
+mation Processing Systems 2019, NeurIPS 2019, December
+8-14, 2019, Vancouver, BC, Canada, 2019, pp. 12 360–
+12 371.
+[164] S. Narang, H. W. Chung, Y. Tay, L. Fedus, T. F ́evry,
+M. Matena, K. Malkan, N. Fiedel, N. Shazeer, Z. Lan,
+41
+Y. Zhou, W. Li, N. Ding, J. Marcus, A. Roberts,
+and C. Raffel, “Do transformer modifications transfer
+across implementations and applications?” in Proceed-
+ings of the 2021 Conference on Empirical Methods in Nat-
+ural Language Processing, EMNLP 2021, Virtual Event /
+Punta Cana, Dominican Republic, 7-11 November, 2021,
+2021, pp. 5758–5773.
+[165] H. Wang, S. Ma, L. Dong, S. Huang, D. Zhang, and
+F. Wei, “Deepnet: Scaling transformers to 1, 000 lay-
+ers,” vol. abs/2203.00555, 2022.
+[166] T. L. Scao, T. Wang, D. Hesslow, S. Bekman, M. S. Bari,
+S. Biderman, H. Elsahar, N. Muennighoff, J. Phang,
+O. Press, C. Raffel, V. Sanh, S. Shen, L. Sutawika, J. Tae,
+Z. X. Yong, J. Launay, and I. Beltagy, “What language
+model to train if you have one million GPU hours?” in
+Findings of the Association for Computational Linguistics:
+EMNLP 2022, Abu Dhabi, United Arab Emirates, Decem-
+ber 7-11, 2022, 2022, pp. 765–782.
+[167] D. Hendrycks and K. Gimpel, “Gaussian error linear
+units (gelus),” arXiv preprint arXiv:1606.08415, 2016.
+[168] Y. N. Dauphin, A. Fan, M. Auli, and D. Grangier,
+“Language modeling with gated convolutional net-
+works,” in Proceedings of the 34th International Confer-
+ence on Machine Learning, ICML 2017, Sydney, NSW,
+Australia, 6-11 August 2017, 2017, pp. 933–941.
+[169] N. Shazeer, “GLU variants improve transformer,” vol.
+abs/2002.05202, 2020.
+[170] O. Press, N. A. Smith, and M. Lewis, “Train short, test
+long: Attention with linear biases enables input length
+extrapolation,” in The Tenth International Conference on
+Learning Representations, ICLR 2022, Virtual Event, April
+25-29, 2022, 2022.
+[171] J. Su, Y. Lu, S. Pan, B. Wen, and Y. Liu, “Roformer: En-
+hanced transformer with rotary position embedding,”
+vol. abs/2104.09864, 2021.
+[172] R. Child, S. Gray, A. Radford, and I. Sutskever, “Gen-
+erating long sequences with sparse transformers,”
+CoRR, vol. abs/1904.10509, 2019.
+[173] H. Peng, N. Pappas, D. Yogatama, R. Schwartz, N. A.
+Smith, and L. Kong, “Random feature attention,” in
+9th International Conference on Learning Representations,
+ICLR 2021, Virtual Event, Austria, May 3-7, 2021.
+[174] M. Zaheer, G. Guruganesh, K. A. Dubey, J. Ainslie,
+C. Alberti, S. Onta  ̃n  ́on, P. Pham, A. Ravula, Q. Wang,
+L. Yang, and A. Ahmed, “Big bird: Transformers for
+longer sequences,” in Advances in Neural Information
+Processing Systems 33: Annual Conference on Neural
+Information Processing Systems 2020, NeurIPS 2020, De-
+cember 6-12, 2020, virtual, 2020.
+[175] T. Dao, D. Y. Fu, S. Ermon, A. Rudra, and C. Re,
+“Flashattention: Fast and memory-efficient exact at-
+tention with IO-awareness,” in NeurIPS, 2022.
+[176] D. P. Kingma and J. Ba, “Adam: A method for
+stochastic optimization,” in 3rd International Confer-
+ence on Learning Representations, ICLR 2015, San Diego,
+CA, USA, May 7-9, 2015, Conference Track Proceedings,
+Y. Bengio and Y. LeCun, Eds., 2015.
+[177] I. Loshchilov and F. Hutter, “Fixing weight decay
+regularization in adam,” CoRR, vol. abs/1711.05101,
+2017.
+[178] N. Shazeer and M. Stern, “Adafactor: Adaptive learn-
+ing rates with sublinear memory cost,” in Proceedings
+of the 35th International Conference on Machine Learning,
+ICML 2018, Stockholmsm ̈assan, Stockholm, Sweden, July
+10-15, 2018, ser. Proceedings of Machine Learning
+Research, J. G. Dy and A. Krause, Eds., vol. 80. PMLR,
+2018, pp. 4603–4611.
+[179] Y. Huang, Y. Cheng, A. Bapna, O. Firat, D. Chen,
+M. X. Chen, H. Lee, J. Ngiam, Q. V. Le, Y. Wu, and
+Z. Chen, “Gpipe: Efficient training of giant neural
+networks using pipeline parallelism,” in Advances in
+Neural Information Processing Systems 32: Annual Con-
+ference on Neural Information Processing Systems 2019,
+NeurIPS 2019, December 8-14, 2019, Vancouver, BC,
+Canada, H. M. Wallach, H. Larochelle, A. Beygelzimer,
+F. d’Alch ́e-Buc, E. B. Fox, and R. Garnett, Eds., 2019,
+pp. 103–112.
+[180] A. Harlap, D. Narayanan, A. Phanishayee, V. Seshadri,
+N. R. Devanur, G. R. Ganger, and P. B. Gibbons,
+“Pipedream: Fast and efficient pipeline parallel DNN
+training,” CoRR, vol. abs/1806.03377, 2018.
+[181] S. Rajbhandari, J. Rasley, O. Ruwase, and Y. He,
+“Zero: memory optimizations toward training trillion
+parameter models,” in Proceedings of the International
+Conference for High Performance Computing, Networking,
+Storage and Analysis, SC 2020, Virtual Event / Atlanta,
+Georgia, USA, November 9-19, 2020, C. Cuicchi, I. Qual-
+ters, and W. T. Kramer, Eds. IEEE/ACM, 2020, p. 20.
+[182] P. Micikevicius, S. Narang, J. Alben, G. F. Di-
+amos, E. Elsen, D. Garc ́ıa, B. Ginsburg, M. Houston,
+O. Kuchaiev, G. Venkatesh, and H. Wu, “Mixed preci-
+sion training,” CoRR, vol. abs/1710.03740, 2017.
+[183] Q. Xu, S. Li, C. Gong, and Y. You, “An efficient 2d
+method for training super-large deep learning mod-
+els,” CoRR, vol. abs/2104.05343, 2021.
+[184] B. Wang, Q. Xu, Z. Bian, and Y. You, “Tesseract:
+Parallelize the tensor parallelism efficiently,” in Pro-
+ceedings of the 51st International Conference on Parallel
+Processing, ICPP 2022, Bordeaux, France, 29 August 2022
+- 1 September 2022. ACM, 2022.
+[185] Z. Bian, Q. Xu, B. Wang, and Y. You, “Maximizing
+parallelism in distributed training for huge neural
+networks,” CoRR, vol. abs/2105.14450, 2021.
+[186] S. Li, F. Xue, C. Baranwal, Y. Li, and Y. You, “Sequence
+parallelism: Long sequence training from system per-
+spective,” arXiv e-prints, pp. arXiv–2105, 2021.
+[187] FairScale authors, “Fairscale: A general purpose
+modular pytorch library for high performance
+and large scale training,” https://github.com/
+facebookresearch/fairscale, 2021.
+[188] L. Zheng, Z. Li, H. Zhang, Y. Zhuang, Z. Chen,
+Y. Huang, Y. Wang, Y. Xu, D. Zhuo, E. P. Xing et al.,
+“Alpa: Automating inter-and {Intra-Operator} paral-
+lelism for distributed deep learning,” in OSDI, 2022,
+pp. 559–578.
+[189] T. Chen, B. Xu, C. Zhang, and C. Guestrin, “Training
+deep nets with sublinear memory cost,” CoRR, vol.
+abs/1604.06174, 2016.
+[190] Z. Yao, C. Li, X. Wu, S. Youn, and Y. He, “A compre-
+hensive study on post-training quantization for large
+language models,” CoRR, vol. abs/2303.08302, 2023.
+[191] T. Dettmers, M. Lewis, Y. Belkada, and L. Zettlemoyer,

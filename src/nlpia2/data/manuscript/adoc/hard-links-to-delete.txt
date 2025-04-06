@@ -1,0 +1,10 @@
+Appendix A -- Your NLP Tools.adoc
+Appendix B -- Playful Python and Regular Expressions.adoc
+Appendix C -- Vectors and Matrices (Basic Linear Algebra).adoc
+Appendix D -- Machine Learning.adoc
+Appendix E -- AWS GPU.adoc
+Appendix F -- Locality Sensitive Hashing.adoc
+Chapter 01 - 04 -- Part 01 -- Wordy Machines (Vector Models of Natural Language).adoc
+Chapter 05 - 10 -- Part 02 -- Deeper Learning (Neural Networks).adoc
+Chapter 11 - 15 -- Part 03 -- Getting Real (Real World NLP Challenges).adoc
+Chapter XX(nee 09) -- Machines that can write (sequence-to-sequence models).adoc

@@ -1,0 +1,356 @@
+>>> from torch import nn
+>>> >>> embedding = nn.Embedding(10, 3)
+... >>> # a batch of 2 samples of 4 indices each
+... >>> input = torch.LongTensor([[1,2,4,5],[4,3,2,9]])
+... >>> embedding(input)
+...
+>>> import torch
+>>> >>> embedding = nn.Embedding(10, 3)
+... >>> # a batch of 2 samples of 4 indices each
+... >>> input = torch.LongTensor([[1,2,4,5],[4,3,2,9]])
+... >>> embedding(input)
+...
+tensor([[[-1.7836, -1.2185,  0.0222],
+         [ 0.0574, -0.5189,  1.1555],
+         [-1.6981, -2.0191,  1.2527],
+         [-0.5177, -0.6415,  0.0449]],
+...
+>>> from qary.etl import wikipedia
+>>> w = wikipedia
+>>> dir(w)
+['__builtins__',
+ '__cached__',
+ '__doc__',
+ '__file__',
+ '__loader__',
+...
+>>> w??
+>>> wa = wikipedia_api
+>>> dir(wa)
+['ArticleCache',
+ 'DATA_DIR',
+ 'ES_URL',
+ 'EXCLUDE_HEADINGS',
+ 'Path',
+...
+>>> scraper = wa.WikiScraper()
+>>> crawler = wa.WikiScraper()
+>>> del scraper
+>>> crawler.get_article('positive sum game')
+{'title': 'Win-win game',
+ 'text': 'Win-win game
+
+
+See also
+...
+>>> crawler.get_article('prosocial ai')
+{}
+>>> crawler.get_article('ethical ai')
+{}
+>>> crawler.get_article('Ethical AI')
+{'title': 'Ethics of artificial intelligence',
+ 'text': 'Ethics of artificial intelligence
+
+
+Ethics fields\' approaches
+...
+>>> nlp = spacy.load('en_core_web_md')
+>>> import spacy
+>>> nlp = spacy.load('en_core_web_md')
+>>> nlp("aye cap'n my ai captain")
+aye cap'n my ai captain
+>>> toks = _
+>>> toks[0]
+aye
+>>> dir(toks[6])
+>>> dir(toks[4])
+['_',
+ '__bytes__',
+ '__class__',
+ '__delattr__',
+ '__dir__',
+...
+>>> vars(toks[6])
+>>> vars(toks[5])
+>>> vars(toks[3])
+>>> toks = nlp("aye cap'n my ai captain")
+>>> dir(toks[4])
+['_',
+ '__bytes__',
+ '__class__',
+ '__delattr__',
+ '__dir__',
+...
+>>> vars(toks[4])
+>>> vars(toks[4].text)
+>>> toks[4].text
+'captain'
+>>> toks[3].text
+'ai'
+>>> toks[2].text
+'my'
+>>> toks[1].text
+"cap'n"
+>>> toks[3].text
+'ai'
+>>> t = toks[3]
+>>> d = {}
+... for k in dir(t):
+...     d[k] = getattr(t, k)
+...
+>>> import json
+>>> json.dumps(d, indent=2)
+>>> d = {}
+... for k in dir(t):
+...     d[str(k)] = str(getattr(t, k, ''))
+...
+>>> json.dumps(d, indent=2)
+'{
+  "_": "<spacy.tokens.underscore.Underscore object at 0x7f6f7bf30fa0>",
+  "__bytes__": "<built-in method __bytes__ of spacy.tokens.token.Token object at 0x7f6f5b3154a0>",
+  "__class__": "<class \'spacy.tokens.token.Token\'>",
+  "__delattr__": "<method-wrapper \'__delattr__\' of spacy.tokens.token.Token object at 0x7f6f5b3154a0>",
+...
+>>> print(json.dumps(d, indent=2))
+>>> d = {}
+... for k in dir(t):
+...     if k.startswith('vector'):
+...         continue
+...     d[str(k)] = str(getattr(t, k, ''))
+...
+>>> print(json.dumps(d, indent=2))
+>>> d = {}
+... for k in dir(t):
+...     if k.startswith('__') or k in ('vector',):
+...         continue
+...     d[str(k)] = str(getattr(t, k, ''))
+...
+>>> print(json.dumps(d, indent=2))
+>>> d = {}
+... for k in dir(t):
+...     if k.startswith('__') or k in ('vector', 'tensor',):
+...         continue
+...     d[str(k)] = str(getattr(t, k, ''))
+...
+>>> d = {}
+... for k in dir(t):
+...     d[str(k)] = str(getattr(t, k, ''))[:70]
+...
+>>> print(json.dumps(d, indent=2))
+>>> t = toks
+>>> t = toks[3]
+>>> t
+ai
+>>> d = {}
+... for k in dir(t):
+...     d[str(k)] = str(getattr(t, k, ''))[:70]
+...
+>>> print(json.dumps(d, indent=2))
+>>> import pandas as pd
+>>> webster1913 = pd.read_csv('https://www.bragitoff.com/wp-content/uploads/2016/03/dictionary.csv)
+>>> webster1913 = pd.read_csv('https://www.bragitoff.com/wp-content/uploads/2016/03/dictionary.csv')
+>>> webster1913 = pd.read_csv('http://www.bragitoff.com/wp-content/uploads/2016/03/dictionary.csv')
+>>> webster1913 = pd.read_csv('https://www.bragitoff.com/wp-content/uploads/2016/03/dictionary.csv')
+>>> from qary.constants import DATA_DIR
+>>> DATA_DIR / 'glossaries'
+>>> Path(DATA_DIR) / 'glossaries'
+>>> from pathlib import Path
+>>> Path(DATA_DIR) / 'glossaries'
+PosixPath('/home/hobs/code/tangibleai/qary/src/qary/data/glossaries')
+>>> (Path(DATA_DIR) / 'glossaries' / 'dictionary.csv').isfile()
+>>> (Path(DATA_DIR) / 'glossaries' / 'dictionary.csv').is_file()
+True
+>>> pd.read_csv((Path(DATA_DIR) / 'glossaries' / 'dictionary.csv'))
+                 A  ... The first letter of the English and of many other alphabets. The capital A of the alphabets of Middle and Western Europe, as also the small letter (a), besides the forms in Italic, black letter, etc., are all descended from the old Latin A, which was borrowed from the Greek Alpha, of the same form; and this was made from the first letter (/) of the Phoenician alphabet, the equivalent of the Hebrew Aleph, and itself from the Egyptian origin. The Aleph was a consonant letter, with a guttural breath sound that was not an element of Greek articulation; and the Greeks took it to represent their vowel Alpha with the a sound, the Phoenician alphabet having no vowel symbols.
+0                A  ...  The name of the sixth tone in the model major ...                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+1                A  ...  An adjective, commonly called the indefinite a...                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+2                A  ...  In each; to or for each; as, "twenty leagues a...                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+3                A  ...                                    In; on; at; by.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+...
+...            ...  ...                                                ...                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+54549  Zoantharian  ...                               One of the Anthozoa.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+54550  Zoanthodeme  ...  The zooids of a compound anthozoan, collectively.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+54551    Zoanthoid  ...                Of or pertaining to the Zoanthacea.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+54552   Zoanthropy  ...  A kind of monomania in which the patient belie...                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+54553     Zoanthus  ...  A genus of Actinaria, including numerous speci...                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+...
+>>> pd.read_csv(Path(DATA_DIR) / 'glossaries' / 'dictionary.csv')
+                 A  ... The first letter of the English and of many other alphabets. The capital A of the alphabets of Middle and Western Europe, as also the small letter (a), besides the forms in Italic, black letter, etc., are all descended from the old Latin A, which was borrowed from the Greek Alpha, of the same form; and this was made from the first letter (/) of the Phoenician alphabet, the equivalent of the Hebrew Aleph, and itself from the Egyptian origin. The Aleph was a consonant letter, with a guttural breath sound that was not an element of Greek articulation; and the Greeks took it to represent their vowel Alpha with the a sound, the Phoenician alphabet having no vowel symbols.
+0                A  ...  The name of the sixth tone in the model major ...                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+1                A  ...  An adjective, commonly called the indefinite a...                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+2                A  ...  In each; to or for each; as, "twenty leagues a...                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+3                A  ...                                    In; on; at; by.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+...
+...            ...  ...                                                ...                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+54549  Zoantharian  ...                               One of the Anthozoa.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+54550  Zoanthodeme  ...  The zooids of a compound anthozoan, collectively.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+54551    Zoanthoid  ...                Of or pertaining to the Zoanthacea.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+54552   Zoanthropy  ...  A kind of monomania in which the patient belie...                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+54553     Zoanthus  ...  A genus of Actinaria, including numerous speci...                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+...
+>>> dfwebster = pd.read_csv(Path(DATA_DIR) / 'glossaries' / 'dictionary.csv')
+>>> dfwebster.shape
+(54554, 3)
+>>> dfwebster.columns
+Index(['A', 'Unnamed: 1',
+       'The first letter of the English and of many other alphabets. The capital A of the alphabets of Middle and Western Europe, as also the small letter (a), besides the forms in Italic, black letter, etc., are all descended from the old Latin A, which was borrowed from the Greek Alpha, of the same form; and this was made from the first letter (/) of the Phoenician alphabet, the equivalent of the Hebrew Aleph, and itself from the Egyptian origin. The Aleph was a consonant letter, with a guttural breath sound that was not an element of Greek articulation; and the Greeks took it to represent their vowel Alpha with the a sound, the Phoenician alphabet having no vowel symbols.'],
+      dtype='object')
+>>> dfwebster.sample()
+            A  ... The first letter of the English and of many other alphabets. The capital A of the alphabets of Middle and Western Europe, as also the small letter (a), besides the forms in Italic, black letter, etc., are all descended from the old Latin A, which was borrowed from the Greek Alpha, of the same form; and this was made from the first letter (/) of the Phoenician alphabet, the equivalent of the Hebrew Aleph, and itself from the Egyptian origin. The Aleph was a consonant letter, with a guttural breath sound that was not an element of Greek articulation; and the Greeks took it to represent their vowel Alpha with the a sound, the Phoenician alphabet having no vowel symbols.
+6062  Eanling  ...             A lamb just brought forth; a yeanling.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+
+[1 rows x 3 columns]
+>>> dfwebster.sample(5)
+                  A  ... The first letter of the English and of many other alphabets. The capital A of the alphabets of Middle and Western Europe, as also the small letter (a), besides the forms in Italic, black letter, etc., are all descended from the old Latin A, which was borrowed from the Greek Alpha, of the same form; and this was made from the first letter (/) of the Phoenician alphabet, the equivalent of the Hebrew Aleph, and itself from the Egyptian origin. The Aleph was a consonant letter, with a guttural breath sound that was not an element of Greek articulation; and the Greeks took it to represent their vowel Alpha with the a sound, the Phoenician alphabet having no vowel symbols.
+6420     Echinoderm  ...                          One of the Echinodermata.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+11368  Forebodingly  ...                            In a foreboding manner.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+23508  Homonymously  ...                          Equivocally; ambiguously.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+51660    Velocipede  ...  A light road carriage propelled by the feet of...                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+...
+>>> dfwebster = pd.read_csv(Path(DATA_DIR) / 'glossaries' / 'dictionary.csv', header=False)
+>>> dfwebster = pd.read_csv(Path(DATA_DIR) / 'glossaries' / 'dictionary.csv', header=None)
+>>> dfwebster.sample(5)
+               0                1                                2
+24168   Houghing  p. pr. & vb. n.                         of Hough
+38861   Repeller               n.  One who, or that which, repels.
+33596    Noursle            v. t.  To nurse; to rear; to bring up.
+49767  Unriddler               n.               One who unriddles.
+...
+>>> dfwebster = pd.read_csv(Path(DATA_DIR) / 'glossaries' / 'acronyms.txt', header=None)
+>>> ls /home/hobs/code/tangibleai/qary/src/qary/data/glossaries/
+>>> dfwebster = pd.read_csv(Path(DATA_DIR) / 'glossaries' / 'acronyms.csv', header=None)
+>>> with (Path(DATA_DIR) / 'glossaries' / 'acronyms.csv').open() as fin: 
+...     print(fin.readline())
+...     break
+...
+>>> with (Path(DATA_DIR) / 'glossaries' / 'acronyms.csv').open() as fin: 
+...     print(fin.readline())
+...
+>>> with (Path(DATA_DIR) / 'glossaries' / 'acronyms.csv').open() as fin: 
+...     for line in fin:
+...         print(line)
+...         break
+...
+>>> with (Path(DATA_DIR) / 'glossaries' / 'acronyms.csv').open() as fin: 
+...     for line in fin:
+...         m = re.match(r'([^ ]+)[ ]-[ ](.*)', line):
+...             print(m.groups())
+...         break
+...
+>>> with (Path(DATA_DIR) / 'glossaries' / 'acronyms.csv').open() as fin: 
+...     for line in fin:
+...         m = re.match(r'([^ ]+)[ ]-[ ](.*)', line)
+...         if m:
+...             print(m.groups())
+...         break
+...
+>>> import re
+>>> with (Path(DATA_DIR) / 'glossaries' / 'acronyms.csv').open() as fin: 
+...     for line in fin:
+...         m = re.match(r'([^ ]+)[ ]-[ ](.*)', line)
+...         if m:
+...             print(m.groups())
+...         break
+...
+>>> acronyms = []
+... with (Path(DATA_DIR) / 'glossaries' / 'acronyms.csv').open() as fin: 
+...     for line in fin:
+...         m = re.match(r'([^ ]+)[ ]-[ ](.*)', line)
+...         if not m:
+...             print(line)
+...         acronyms.append(m.groups())
+...
+>>> acronyms = []
+... with (Path(DATA_DIR) / 'glossaries' / 'acronyms.csv').open() as fin: 
+...     for line in fin:
+...         m = re.match(r'([^ ]+)[ ]-[ ](.*)', line)
+...         if not m:
+...             print(line)
+...         else:
+...             acronyms.append(m.groups())
+...
+>>> acronyms = []
+... with (Path(DATA_DIR) / 'glossaries' / 'acronyms.csv').open() as fin: 
+...     for line in fin:
+...         m = re.match(r'([^- ]+)[ ]?-[ ](.*)', line)
+...         if not m:
+...             print(line)
+...         else:
+...             acronyms.append(m.groups())
+...
+>>> acronyms = []
+... with (Path(DATA_DIR) / 'glossaries' / 'acronyms.csv').open() as fin: 
+...     for line in fin:
+...         m = re.match(r'([^- ]+)-[ ](.*)', line)
+...         if not m:
+...             print(line)
+...         else:
+...             acronyms.append(m.groups())
+...
+>>> acronyms = []
+... with (Path(DATA_DIR) / 'glossaries' / 'acronyms.csv').open() as fin: 
+...     for line in fin:
+...         m = re.match(r'(.*)[ ]?-[ ]+(.*)', line)
+...         if not m:
+...             print(line)
+...         else:
+...             acronyms.append(m.groups())
+...
+>>> acronyms = []
+... with (Path(DATA_DIR) / 'glossaries' / 'acronyms.csv').open() as fin: 
+...     for line in fin:
+...         m = re.match(r'(.*)([ ]?-[ ]+|-\(.*\))(.*)', line)
+...         if not m:
+...             print(line)
+...         else:
+...             acronyms.append(m.groups())
+...
+>>> acronyms = []
+... with (Path(DATA_DIR) / 'glossaries' / 'acronyms.csv').open() as fin: 
+...     for line in fin:
+...         m = re.match(r'(.*)([ ]*-[ ]*|-\s*\(.*\)\s*)(.*)', line)
+...         if not m:
+...             print(line)
+...         else:
+...             acronyms.append(m.groups())
+...
+>>> acronyms
+[('0D ', '- ', 'obvious deed'),
+ ('1AM ', '- ', 'Air Mechanic 1st Class'),
+ ('1D - One', '-', 'Dimensional'),
+ ('2AM ', '- ', 'Air Mechanic 2nd Class'),
+ ('2D -  Two', '-', 'dimensional'),
+...
+>>> pd.DataFrame(acronyms)
+              0    1                                      2
+0           0D    -                            obvious deed
+1          1AM    -                  Air Mechanic 1st Class
+2      1D - One    -                            Dimensional
+3          2AM    -                  Air Mechanic 2nd Class
+...
+...         ...  ...                                    ...
+5837        zC   -                             Zeptocoulomb
+5838        ZC   -                             Zettacoulomb
+5839       ZCM    -   (n) ZENworks Configuration Management
+5840      ZCMK   -                  Zone Control Master Key
+5841       ZCU   -                   Zimbabwe Cricket Union
+...
+>>> dfacro = pd.DataFrame(acronyms)
+>>> import requests
+>>> acronyms_text = requests.get('https://raw.githubusercontent.com/krishnakt031990/Crawl-Wiki-For-Acronyms/master/AcronymsFile.csv').text
+>>> acronyms_text
+'0D - obvious deed
+1AM - Air Mechanic 1st Class
+1D - One-Dimensional
+2AM - Air Mechanic 2nd Class
+2D -  Two-dimensional
+...
+>>> hist
+>>> hist -o -p >> acronyms_and_dictionaries.hist.ipy
+>>> ls -hal
+>>> ls *.ipy
+>>> cd ..
+>>> ls -hal
+>>> ls -hal *.ipy
+>>> cd examples/
+>>> hist -o -p -f acronyms_and_dictionaries.hist.ipy

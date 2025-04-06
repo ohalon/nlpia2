@@ -1,0 +1,933 @@
+>>> import pandas as pd
+>>> pd.read_csv('llm-emmergence-table.csv')
+                                                 Prompt      Task  ...             Author    Year 
+Few-shot                 Addition/subtraction (3 digit)   2.3E+22  ...       Brown et al.   (2020)
+Few-shot               Addition/subtraction (4-5 digit)   3.1E+23  ...                         NaN
+Few-shot                 MMLU Benchmark (57 topic avg.)   3.1E+23  ...   Hendrycks et al.   (2021)
+Few-shot        Toxicity classification (CivilComments)   1.3E+22  ...         Rae et al.   (2021)
+Few-shot                     Truthfulness (Truthful QA)   5.0E+23  ...                         NaN
+Few-shot                     MMLU Benchmark (26 topics)   5.0E+23  ...                         NaN
+Few-shot                   Grounded conceptual mappings   3.1E+23  ...    Patel & Pavlick   (2022)
+Few-shot                     MMLU Benchmark (30 topics)   5.0E+23  ...    Hoffmann et al.   (2022)
+Few-shot                Word in Context (WiC) benchmark   2.5E+24  ...   Chowdhery et al.   (2022)
+Few-shot          Many BIG-Bench tasks (see Appendix E)            ...             (2022)      NaN
+Augmented            Instruction following (finetuning)   1.3E+23  ...         Wei et al.   (2022)
+Augmented     Scratchpad: 8-digit addition (finetuning)   8.9E+19  ...         Nye et al.   (2021)
+Augmented   Using open-book knowledge for fact checking   1.3E+22  ...         Rae et al.   (2021)
+Augmented          Chain-of-thought: Math word problems   1.3E+23  ...         Wei et al.   (2022)
+Augmented                  Chain-of-thought: StrategyQA   2.9E+23  ...   Chowdhery et al.   (2022)
+Augmented                   Differentiable search index   3.3E+22  ...         Tay et al.   (2022)
+Augmented                     Self-consistency decoding   1.3E+23  ...        Wang et al.   (2022)
+Augmented          Leveraging explanations in prompting   5.0E+23  ...             (2022)      NaN
+Augmented                       Least-to-most prompting   3.1E+23  ...        Zhou et al.   (2022)
+Augmented          Zero-shot chain-of-thought reasoning   3.1E+23  ...      Kojima et al.   (2022)
+Augmented                       Calibration via P(True)   2.6E+23  ...    Kadavath et al.   (2022)
+Augmented       Multilingual chain-of-thought reasoning   2.9E+23  ...         Shi et al.   (2022)
+Augmented                     Ask me anything prompting   1.4E+22  ...       Arora et al.   (2022)
+
+[23 rows x 6 columns]
+>>> pd.read_csv('llm-emmergence-table.csv')
+                                                 Prompt      Task  ...             Author    Year 
+Few-shot                 Addition/subtraction (3 digit)   2.3E+22  ...       Brown et al.   (2020)
+Few-shot               Addition/subtraction (4-5 digit)   3.1E+23  ...                         NaN
+Few-shot                 MMLU Benchmark (57 topic avg.)   3.1E+23  ...   Hendrycks et al.   (2021)
+Few-shot        Toxicity classification (CivilComments)   1.3E+22  ...         Rae et al.   (2021)
+Few-shot                     Truthfulness (Truthful QA)   5.0E+23  ...                         NaN
+Few-shot                     MMLU Benchmark (26 topics)   5.0E+23  ...                         NaN
+Few-shot                   Grounded conceptual mappings   3.1E+23  ...    Patel & Pavlick   (2022)
+Few-shot                     MMLU Benchmark (30 topics)   5.0E+23  ...    Hoffmann et al.   (2022)
+Few-shot                Word in Context (WiC) benchmark   2.5E+24  ...   Chowdhery et al.   (2022)
+Few-shot          Many BIG-Bench tasks (see Appendix E)            ...                      (2022)
+Augmented            Instruction following (finetuning)   1.3E+23  ...         Wei et al.   (2022)
+Augmented     Scratchpad: 8-digit addition (finetuning)   8.9E+19  ...         Nye et al.   (2021)
+Augmented   Using open-book knowledge for fact checking   1.3E+22  ...         Rae et al.   (2021)
+Augmented          Chain-of-thought: Math word problems   1.3E+23  ...         Wei et al.   (2022)
+Augmented                  Chain-of-thought: StrategyQA   2.9E+23  ...   Chowdhery et al.   (2022)
+Augmented                   Differentiable search index   3.3E+22  ...         Tay et al.   (2022)
+Augmented                     Self-consistency decoding   1.3E+23  ...        Wang et al.   (2022)
+Augmented          Leveraging explanations in prompting   5.0E+23  ...    Lampinen et al.   (2022)
+Augmented                       Least-to-most prompting   3.1E+23  ...        Zhou et al.   (2022)
+Augmented          Zero-shot chain-of-thought reasoning   3.1E+23  ...      Kojima et al.   (2022)
+Augmented                       Calibration via P(True)   2.6E+23  ...    Kadavath et al.   (2022)
+Augmented       Multilingual chain-of-thought reasoning   2.9E+23  ...         Shi et al.   (2022)
+Augmented                     Ask me anything prompting   1.4E+22  ...       Arora et al.   (2022)
+
+[23 rows x 6 columns]
+>>> df = _
+>>> df
+                                                 Prompt      Task  Training Flops                Parameters             Author    Year 
+Few-shot                 Addition/subtraction (3 digit)   2.3E+22             13B                     GPT-3       Brown et al.   (2020)
+Few-shot               Addition/subtraction (4-5 digit)   3.1E+23            175B                                                   NaN
+Few-shot                 MMLU Benchmark (57 topic avg.)   3.1E+23            175B                     GPT-3   Hendrycks et al.   (2021)
+Few-shot        Toxicity classification (CivilComments)   1.3E+22            7.1B                    Gopher         Rae et al.   (2021)
+Few-shot                     Truthfulness (Truthful QA)   5.0E+23            280B                                                   NaN
+Few-shot                     MMLU Benchmark (26 topics)   5.0E+23            280B                                                   NaN
+Few-shot                   Grounded conceptual mappings   3.1E+23            175B                     GPT-3    Patel & Pavlick   (2022)
+Few-shot                     MMLU Benchmark (30 topics)   5.0E+23             70B                Chinchilla    Hoffmann et al.   (2022)
+Few-shot                Word in Context (WiC) benchmark   2.5E+24            540B                      PaLM   Chowdhery et al.   (2022)
+Few-shot          Many BIG-Bench tasks (see Appendix E)                            Many Many Many BIG-Bench                      (2022)
+Augmented            Instruction following (finetuning)   1.3E+23             68B                      FLAN         Wei et al.   (2022)
+Augmented     Scratchpad: 8-digit addition (finetuning)   8.9E+19             40M                     LaMDA         Nye et al.   (2021)
+Augmented   Using open-book knowledge for fact checking   1.3E+22            7.1B                    Gopher         Rae et al.   (2021)
+Augmented          Chain-of-thought: Math word problems   1.3E+23             68B                     LaMDA         Wei et al.   (2022)
+Augmented                  Chain-of-thought: StrategyQA   2.9E+23             62B                      PaLM   Chowdhery et al.   (2022)
+Augmented                   Differentiable search index   3.3E+22             11B                        T5         Tay et al.   (2022)
+Augmented                     Self-consistency decoding   1.3E+23             68B                     LaMDA        Wang et al.   (2022)
+Augmented          Leveraging explanations in prompting   5.0E+23            280B                    Gopher    Lampinen et al.   (2022)
+Augmented                       Least-to-most prompting   3.1E+23            175B                     GPT-3        Zhou et al.   (2022)
+Augmented          Zero-shot chain-of-thought reasoning   3.1E+23            175B                     GPT-3      Kojima et al.   (2022)
+Augmented                       Calibration via P(True)   2.6E+23             52B                 Anthropic    Kadavath et al.   (2022)
+Augmented       Multilingual chain-of-thought reasoning   2.9E+23             62B                      PaLM         Shi et al.   (2022)
+Augmented                     Ask me anything prompting   1.4E+22              6B                EleutherAI       Arora et al.   (2022)
+>>> df = pd.read_csv('llm-emmergence-table.csv')
+>>> df = pd.read_csv('llm-emmergence-table.csv')
+>>> df
+                                                 Prompt      Task  Training Flops   Parameters             Author    Year 
+Few-shot                 Addition/subtraction (3 digit)   2.3E+22             13B        GPT-3       Brown et al.   (2020)
+Few-shot               Addition/subtraction (4-5 digit)   3.1E+23            175B                                      NaN
+Few-shot                 MMLU Benchmark (57 topic avg.)   3.1E+23            175B        GPT-3   Hendrycks et al.   (2021)
+Few-shot        Toxicity classification (CivilComments)   1.3E+22            7.1B       Gopher         Rae et al.   (2021)
+Few-shot                     Truthfulness (Truthful QA)   5.0E+23            280B                                      NaN
+Few-shot                     MMLU Benchmark (26 topics)   5.0E+23            280B                                      NaN
+Few-shot                   Grounded conceptual mappings   3.1E+23            175B        GPT-3    Patel & Pavlick   (2022)
+Few-shot                     MMLU Benchmark (30 topics)   5.0E+23             70B   Chinchilla    Hoffmann et al.   (2022)
+Few-shot                Word in Context (WiC) benchmark   2.5E+24            540B         PaLM   Chowdhery et al.   (2022)
+Few-shot          Many BIG-Bench tasks (see Appendix E)      Many            Many         Many          BIG-Bench   (2022)
+Augmented            Instruction following (finetuning)   1.3E+23             68B         FLAN         Wei et al.   (2022)
+Augmented     Scratchpad: 8-digit addition (finetuning)   8.9E+19             40M        LaMDA         Nye et al.   (2021)
+Augmented   Using open-book knowledge for fact checking   1.3E+22            7.1B       Gopher         Rae et al.   (2021)
+Augmented          Chain-of-thought: Math word problems   1.3E+23             68B        LaMDA         Wei et al.   (2022)
+Augmented                  Chain-of-thought: StrategyQA   2.9E+23             62B         PaLM   Chowdhery et al.   (2022)
+Augmented                   Differentiable search index   3.3E+22             11B           T5         Tay et al.   (2022)
+Augmented                     Self-consistency decoding   1.3E+23             68B        LaMDA        Wang et al.   (2022)
+Augmented          Leveraging explanations in prompting   5.0E+23            280B       Gopher    Lampinen et al.   (2022)
+Augmented                       Least-to-most prompting   3.1E+23            175B        GPT-3        Zhou et al.   (2022)
+Augmented          Zero-shot chain-of-thought reasoning   3.1E+23            175B        GPT-3      Kojima et al.   (2022)
+Augmented                       Calibration via P(True)   2.6E+23             52B    Anthropic    Kadavath et al.   (2022)
+Augmented       Multilingual chain-of-thought reasoning   2.9E+23             62B         PaLM         Shi et al.   (2022)
+Augmented                     Ask me anything prompting   1.4E+22              6B   EleutherAI       Arora et al.   (2022)
+>>> df['Reference'] = df['Author'].str + df['Year'].str
+>>> df.columns
+Index(['Prompt', ' Task', ' Training Flops', ' Parameters', ' Author',
+       ' Year '],
+      dtype='object')
+>>> df = pd.read_csv('llm-emmergence-table.csv')
+>>> df.columns
+Index(['Prompt', 'Task', 'Training Flops', 'Parameters', 'Author', 'Year '], dtype='object')
+>>> df = pd.read_csv('llm-emmergence-table.csv')
+>>> df.columns
+Index(['Prompt', 'Task', 'Training Flops', 'Parameters', 'Author', 'Year'], dtype='object')
+>>> df['Reference'] = df['Author'].str + df['Year'].str
+>>> df['Reference'] = df['Author'].str() + df['Year'].str()
+>>> df['Reference'] = df['Author'] + df['Year']
+>>> df.Reference
+Few-shot          Brown et al. (2020)
+Few-shot                          NaN
+Few-shot      Hendrycks et al. (2021)
+Few-shot            Rae et al. (2021)
+Few-shot                          NaN
+Few-shot                          NaN
+Few-shot       Patel & Pavlick (2022)
+Few-shot       Hoffmann et al. (2022)
+Few-shot      Chowdhery et al. (2022)
+Few-shot             BIG-Bench (2022)
+Augmented           Wei et al. (2022)
+Augmented           Nye et al. (2021)
+Augmented           Rae et al. (2021)
+Augmented           Wei et al. (2022)
+Augmented     Chowdhery et al. (2022)
+Augmented           Tay et al. (2022)
+Augmented          Wang et al. (2022)
+Augmented      Lampinen et al. (2022)
+Augmented          Zhou et al. (2022)
+Augmented        Kojima et al. (2022)
+Augmented      Kadavath et al. (2022)
+Augmented           Shi et al. (2022)
+Augmented         Arora et al. (2022)
+Name: Reference, dtype: object
+>>> df.to_csv('llm-emmergence-table-cleaned.csv', index=False)
+>>> df.to_csv('llm-emmergence-table-cleaned.csv')
+>>> df = pd.read_csv('llm-emmergence-table-cleaned.csv')
+>>> df
+   Unnamed: 0                                        Prompt      Task  ...             Author     Year                 Reference
+0    Few-shot                Addition/subtraction (3 digit)   2.3E+22  ...       Brown et al.   (2020)       Brown et al. (2020)
+1    Few-shot              Addition/subtraction (4-5 digit)   3.1E+23  ...                         NaN                       NaN
+2    Few-shot                MMLU Benchmark (57 topic avg.)   3.1E+23  ...   Hendrycks et al.   (2021)   Hendrycks et al. (2021)
+3    Few-shot       Toxicity classification (CivilComments)   1.3E+22  ...         Rae et al.   (2021)         Rae et al. (2021)
+4    Few-shot                    Truthfulness (Truthful QA)   5.0E+23  ...                         NaN                       NaN
+5    Few-shot                    MMLU Benchmark (26 topics)   5.0E+23  ...                         NaN                       NaN
+6    Few-shot                  Grounded conceptual mappings   3.1E+23  ...    Patel & Pavlick   (2022)    Patel & Pavlick (2022)
+7    Few-shot                    MMLU Benchmark (30 topics)   5.0E+23  ...    Hoffmann et al.   (2022)    Hoffmann et al. (2022)
+8    Few-shot               Word in Context (WiC) benchmark   2.5E+24  ...   Chowdhery et al.   (2022)   Chowdhery et al. (2022)
+9    Few-shot         Many BIG-Bench tasks (see Appendix E)      Many  ...          BIG-Bench   (2022)          BIG-Bench (2022)
+10  Augmented            Instruction following (finetuning)   1.3E+23  ...         Wei et al.   (2022)         Wei et al. (2022)
+11  Augmented     Scratchpad: 8-digit addition (finetuning)   8.9E+19  ...         Nye et al.   (2021)         Nye et al. (2021)
+12  Augmented   Using open-book knowledge for fact checking   1.3E+22  ...         Rae et al.   (2021)         Rae et al. (2021)
+13  Augmented          Chain-of-thought: Math word problems   1.3E+23  ...         Wei et al.   (2022)         Wei et al. (2022)
+14  Augmented                  Chain-of-thought: StrategyQA   2.9E+23  ...   Chowdhery et al.   (2022)   Chowdhery et al. (2022)
+15  Augmented                   Differentiable search index   3.3E+22  ...         Tay et al.   (2022)         Tay et al. (2022)
+16  Augmented                     Self-consistency decoding   1.3E+23  ...        Wang et al.   (2022)        Wang et al. (2022)
+17  Augmented          Leveraging explanations in prompting   5.0E+23  ...    Lampinen et al.   (2022)    Lampinen et al. (2022)
+18  Augmented                       Least-to-most prompting   3.1E+23  ...        Zhou et al.   (2022)        Zhou et al. (2022)
+19  Augmented          Zero-shot chain-of-thought reasoning   3.1E+23  ...      Kojima et al.   (2022)      Kojima et al. (2022)
+20  Augmented                       Calibration via P(True)   2.6E+23  ...    Kadavath et al.   (2022)    Kadavath et al. (2022)
+21  Augmented       Multilingual chain-of-thought reasoning   2.9E+23  ...         Shi et al.   (2022)         Shi et al. (2022)
+22  Augmented                     Ask me anything prompting   1.4E+22  ...       Arora et al.   (2022)       Arora et al. (2022)
+
+[23 rows x 8 columns]
+>>> df = pd.read_csv('llm-emmergence-table.csv')
+>>> df['Reference'] = df['Author'] + df['Year']
+>>> df.columns
+Index(['Prompt', 'Task', 'Training Flops', 'Parameters', 'Author', 'Year',
+       'Reference'],
+      dtype='object')
+>>> df
+                                                 Prompt      Task Training Flops  ...             Author     Year                 Reference
+Few-shot                 Addition/subtraction (3 digit)   2.3E+22            13B  ...       Brown et al.   (2020)       Brown et al. (2020)
+Few-shot               Addition/subtraction (4-5 digit)   3.1E+23           175B  ...                         NaN                       NaN
+Few-shot                 MMLU Benchmark (57 topic avg.)   3.1E+23           175B  ...   Hendrycks et al.   (2021)   Hendrycks et al. (2021)
+Few-shot        Toxicity classification (CivilComments)   1.3E+22           7.1B  ...         Rae et al.   (2021)         Rae et al. (2021)
+Few-shot                     Truthfulness (Truthful QA)   5.0E+23           280B  ...                         NaN                       NaN
+Few-shot                     MMLU Benchmark (26 topics)   5.0E+23           280B  ...                         NaN                       NaN
+Few-shot                   Grounded conceptual mappings   3.1E+23           175B  ...    Patel & Pavlick   (2022)    Patel & Pavlick (2022)
+Few-shot                     MMLU Benchmark (30 topics)   5.0E+23            70B  ...    Hoffmann et al.   (2022)    Hoffmann et al. (2022)
+Few-shot                Word in Context (WiC) benchmark   2.5E+24           540B  ...   Chowdhery et al.   (2022)   Chowdhery et al. (2022)
+Few-shot          Many BIG-Bench tasks (see Appendix E)      Many           Many  ...          BIG-Bench   (2022)          BIG-Bench (2022)
+Augmented            Instruction following (finetuning)   1.3E+23            68B  ...         Wei et al.   (2022)         Wei et al. (2022)
+Augmented     Scratchpad: 8-digit addition (finetuning)   8.9E+19            40M  ...         Nye et al.   (2021)         Nye et al. (2021)
+Augmented   Using open-book knowledge for fact checking   1.3E+22           7.1B  ...         Rae et al.   (2021)         Rae et al. (2021)
+Augmented          Chain-of-thought: Math word problems   1.3E+23            68B  ...         Wei et al.   (2022)         Wei et al. (2022)
+Augmented                  Chain-of-thought: StrategyQA   2.9E+23            62B  ...   Chowdhery et al.   (2022)   Chowdhery et al. (2022)
+Augmented                   Differentiable search index   3.3E+22            11B  ...         Tay et al.   (2022)         Tay et al. (2022)
+Augmented                     Self-consistency decoding   1.3E+23            68B  ...        Wang et al.   (2022)        Wang et al. (2022)
+Augmented          Leveraging explanations in prompting   5.0E+23           280B  ...    Lampinen et al.   (2022)    Lampinen et al. (2022)
+Augmented                       Least-to-most prompting   3.1E+23           175B  ...        Zhou et al.   (2022)        Zhou et al. (2022)
+Augmented          Zero-shot chain-of-thought reasoning   3.1E+23           175B  ...      Kojima et al.   (2022)      Kojima et al. (2022)
+Augmented                       Calibration via P(True)   2.6E+23            52B  ...    Kadavath et al.   (2022)    Kadavath et al. (2022)
+Augmented       Multilingual chain-of-thought reasoning   2.9E+23            62B  ...         Shi et al.   (2022)         Shi et al. (2022)
+Augmented                     Ask me anything prompting   1.4E+22             6B  ...       Arora et al.   (2022)       Arora et al. (2022)
+
+[23 rows x 7 columns]
+>>> df['Prompt Type'] = df.index.values
+>>> df.index = range(len(df))
+>>> df.columns
+Index(['Prompt', 'Task', 'Training Flops', 'Parameters', 'Author', 'Year',
+       'Reference', 'Prompt Type'],
+      dtype='object')
+>>> df.head()
+                                     Prompt      Task Training Flops  ...     Year                 Reference Prompt Type
+0            Addition/subtraction (3 digit)   2.3E+22            13B  ...   (2020)       Brown et al. (2020)    Few-shot
+1          Addition/subtraction (4-5 digit)   3.1E+23           175B  ...      NaN                       NaN    Few-shot
+2            MMLU Benchmark (57 topic avg.)   3.1E+23           175B  ...   (2021)   Hendrycks et al. (2021)    Few-shot
+3   Toxicity classification (CivilComments)   1.3E+22           7.1B  ...   (2021)         Rae et al. (2021)    Few-shot
+4                Truthfulness (Truthful QA)   5.0E+23           280B  ...      NaN                       NaN    Few-shot
+
+[5 rows x 8 columns]
+>>> df.head().T
+                                              0  ...                            4
+Prompt           Addition/subtraction (3 digit)  ...   Truthfulness (Truthful QA)
+Task                                    2.3E+22  ...                      5.0E+23
+Training Flops                              13B  ...                         280B
+Parameters                                GPT-3  ...                             
+Author                             Brown et al.  ...                             
+Year                                     (2020)  ...                          NaN
+Reference                   Brown et al. (2020)  ...                          NaN
+Prompt Type                            Few-shot  ...                     Few-shot
+
+[8 rows x 5 columns]
+>>> df.iloc[0].T
+Prompt             Addition/subtraction (3 digit)
+Task                                      2.3E+22
+Training Flops                                13B
+Parameters                                  GPT-3
+Author                               Brown et al.
+Year                                       (2020)
+Reference                     Brown et al. (2020)
+Prompt Type                              Few-shot
+Name: 0, dtype: object
+>>> columns = list(df.columns)
+>>> df = pd.read_csv('llm-emmergence-table.csv')
+>>> df['Reference'] = df['Author'] + df['Year']
+>>> df['Year'] = df['Year'].str.strip('(').str.strip(')')
+>>> columns = list(df.columns)
+>>> df
+       Prompt                                          Task Training Flops  ...             Author    Year                 Reference
+0    Few-shot                Addition/subtraction (3 digit)        2.3E+22  ...       Brown et al.   (2020       Brown et al. (2020)
+1    Few-shot              Addition/subtraction (4-5 digit)        3.1E+23  ...                        NaN                       NaN
+2    Few-shot                MMLU Benchmark (57 topic avg.)        3.1E+23  ...   Hendrycks et al.   (2021   Hendrycks et al. (2021)
+3    Few-shot       Toxicity classification (CivilComments)        1.3E+22  ...         Rae et al.   (2021         Rae et al. (2021)
+4    Few-shot                    Truthfulness (Truthful QA)        5.0E+23  ...                        NaN                       NaN
+5    Few-shot                    MMLU Benchmark (26 topics)        5.0E+23  ...                        NaN                       NaN
+6    Few-shot                  Grounded conceptual mappings        3.1E+23  ...    Patel & Pavlick   (2022    Patel & Pavlick (2022)
+7    Few-shot                    MMLU Benchmark (30 topics)        5.0E+23  ...    Hoffmann et al.   (2022    Hoffmann et al. (2022)
+8    Few-shot               Word in Context (WiC) benchmark        2.5E+24  ...   Chowdhery et al.   (2022   Chowdhery et al. (2022)
+9    Few-shot         Many BIG-Bench tasks (see Appendix E)           Many  ...          BIG-Bench   (2022          BIG-Bench (2022)
+10  Augmented            Instruction following (finetuning)        1.3E+23  ...         Wei et al.   (2022         Wei et al. (2022)
+11  Augmented     Scratchpad: 8-digit addition (finetuning)        8.9E+19  ...         Nye et al.   (2021         Nye et al. (2021)
+12  Augmented   Using open-book knowledge for fact checking        1.3E+22  ...         Rae et al.   (2021         Rae et al. (2021)
+13  Augmented          Chain-of-thought: Math word problems        1.3E+23  ...         Wei et al.   (2022         Wei et al. (2022)
+14  Augmented                  Chain-of-thought: StrategyQA        2.9E+23  ...   Chowdhery et al.   (2022   Chowdhery et al. (2022)
+15  Augmented                   Differentiable search index        3.3E+22  ...         Tay et al.   (2022         Tay et al. (2022)
+16  Augmented                     Self-consistency decoding        1.3E+23  ...        Wang et al.   (2022        Wang et al. (2022)
+17  Augmented          Leveraging explanations in prompting        5.0E+23  ...    Lampinen et al.   (2022    Lampinen et al. (2022)
+18  Augmented                       Least-to-most prompting        3.1E+23  ...        Zhou et al.   (2022        Zhou et al. (2022)
+19  Augmented          Zero-shot chain-of-thought reasoning        3.1E+23  ...      Kojima et al.   (2022      Kojima et al. (2022)
+20  Augmented                       Calibration via P(True)        2.6E+23  ...    Kadavath et al.   (2022    Kadavath et al. (2022)
+21  Augmented       Multilingual chain-of-thought reasoning        2.9E+23  ...         Shi et al.   (2022         Shi et al. (2022)
+22  Augmented                     Ask me anything prompting        1.4E+22  ...       Arora et al.   (2022       Arora et al. (2022)
+
+[23 rows x 8 columns]
+>>> df['Year'] = df['Year'].str.strip('(')
+>>> df['Year'] = df['Year'].str.strip().str.strip('(').str.strip(')')
+>>> df
+       Prompt                                          Task Training Flops  ...             Author  Year                 Reference
+0    Few-shot                Addition/subtraction (3 digit)        2.3E+22  ...       Brown et al.  2020       Brown et al. (2020)
+1    Few-shot              Addition/subtraction (4-5 digit)        3.1E+23  ...                      NaN                       NaN
+2    Few-shot                MMLU Benchmark (57 topic avg.)        3.1E+23  ...   Hendrycks et al.  2021   Hendrycks et al. (2021)
+3    Few-shot       Toxicity classification (CivilComments)        1.3E+22  ...         Rae et al.  2021         Rae et al. (2021)
+4    Few-shot                    Truthfulness (Truthful QA)        5.0E+23  ...                      NaN                       NaN
+5    Few-shot                    MMLU Benchmark (26 topics)        5.0E+23  ...                      NaN                       NaN
+6    Few-shot                  Grounded conceptual mappings        3.1E+23  ...    Patel & Pavlick  2022    Patel & Pavlick (2022)
+7    Few-shot                    MMLU Benchmark (30 topics)        5.0E+23  ...    Hoffmann et al.  2022    Hoffmann et al. (2022)
+8    Few-shot               Word in Context (WiC) benchmark        2.5E+24  ...   Chowdhery et al.  2022   Chowdhery et al. (2022)
+9    Few-shot         Many BIG-Bench tasks (see Appendix E)           Many  ...          BIG-Bench  2022          BIG-Bench (2022)
+10  Augmented            Instruction following (finetuning)        1.3E+23  ...         Wei et al.  2022         Wei et al. (2022)
+11  Augmented     Scratchpad: 8-digit addition (finetuning)        8.9E+19  ...         Nye et al.  2021         Nye et al. (2021)
+12  Augmented   Using open-book knowledge for fact checking        1.3E+22  ...         Rae et al.  2021         Rae et al. (2021)
+13  Augmented          Chain-of-thought: Math word problems        1.3E+23  ...         Wei et al.  2022         Wei et al. (2022)
+14  Augmented                  Chain-of-thought: StrategyQA        2.9E+23  ...   Chowdhery et al.  2022   Chowdhery et al. (2022)
+15  Augmented                   Differentiable search index        3.3E+22  ...         Tay et al.  2022         Tay et al. (2022)
+16  Augmented                     Self-consistency decoding        1.3E+23  ...        Wang et al.  2022        Wang et al. (2022)
+17  Augmented          Leveraging explanations in prompting        5.0E+23  ...    Lampinen et al.  2022    Lampinen et al. (2022)
+18  Augmented                       Least-to-most prompting        3.1E+23  ...        Zhou et al.  2022        Zhou et al. (2022)
+19  Augmented          Zero-shot chain-of-thought reasoning        3.1E+23  ...      Kojima et al.  2022      Kojima et al. (2022)
+20  Augmented                       Calibration via P(True)        2.6E+23  ...    Kadavath et al.  2022    Kadavath et al. (2022)
+21  Augmented       Multilingual chain-of-thought reasoning        2.9E+23  ...         Shi et al.  2022         Shi et al. (2022)
+22  Augmented                     Ask me anything prompting        1.4E+22  ...       Arora et al.  2022       Arora et al. (2022)
+
+[23 rows x 8 columns]
+>>> palm = '''analytic entailment, codenames, common morpheme, fact checker, figure of speech detection, gender inclusive
+... sentences german, hindu knowledge, international phonetic alphabet transliterate, irony identification, logical
+... args, logical deduction, misconceptions, modified arithmetic, phrase relatedness, physical intuition, question
+... answer creation, repeat copy logic, self evaluation tutoring, social iqa, sports understanding, strange stories,
+... strategyqa, swahili english proverbs, word sorting, word unscrambling'''.split(',')
+...
+>>> palm = [p.strip() for p in palm]
+>>> palm
+['analytic entailment',
+ 'codenames',
+ 'common morpheme',
+ 'fact checker',
+ 'figure of speech detection',
+ 'gender inclusive\nsentences german',
+ 'hindu knowledge',
+ 'international phonetic alphabet transliterate',
+ 'irony identification',
+ 'logical\nargs',
+ 'logical deduction',
+ 'misconceptions',
+ 'modified arithmetic',
+ 'phrase relatedness',
+ 'physical intuition',
+ 'question\nanswer creation',
+ 'repeat copy logic',
+ 'self evaluation tutoring',
+ 'social iqa',
+ 'sports understanding',
+ 'strange stories',
+ 'strategyqa',
+ 'swahili english proverbs',
+ 'word sorting',
+ 'word unscrambling']
+>>> gpt3 = LaMDA = palm
+>>> palm = [s.strip() for s in '''anachronisms, analogical similarity, ascii word recognition, auto debugging, causal judgment, code line
+... description, conceptual combinations, crass ai, cryptonite, cs algorithms, disambiguation qa, elementary
+... math qa, emoji movie, english proverbs, english russian proverbs, geometric shapes, goal step wikihow,
+... gre reading comprehension, hinglish toxicity, hyperbaton, identify odd metaphor, international phonetic
+... alphabet nli, language identification, linguistics puzzles, logic grid puzzle, logical fallacy detection, logical
+... sequence, metaphor boolean, metaphor understanding, movie dialog same or different, odd one out, parsinlu
+... qa, parsinlu reading comprehension, physics questions, question selection, snarks, sufficient information,
+... temporal sequences, timedial, understanding fables, unit interpretation, vitaminc fact verification'''.split(',')]
+...
+>>> flat = [s.strip() for s in '''abstraction and reasoning corpus, authorship verification, checkmate in one, chinese remainder theorem, cifar10
+... classification, color, com2sense, cycled letters, discourse marker prediction, formal fallacies syllogisms negation,
+... hhh alignment, kanji ascii, kannada, key value maps, language games, mathematical induction, minute
+... mysteries qa, misconceptions russian, mnist ascii, multistep arithmetic, navigate, paragraph segmentation,
+... play dialog same or different, presuppositions as nli, program synthesis, python programming challenge, real
+... or fake text, roots optimization and games, salient translation error detection, self awareness, semantic parsing
+... in context sparc, semantic parsing spider, simple text editing, sudoku, symbol interpretation, talkdown, tense,
+... text navigation game, topical chat, tracking shuffled objects, twenty questions, web of lies, which wiki edit,
+... winowhy, word problems on sets and graphs'''.split(',')]
+...
+>>> smooth = '''abstract narrative understanding, auto categorization, bbq lite json, cause and effect, chess state tracking, con-
+... lang translation, context definition alignment, contextual parametric knowledge conflicts, coqa conversational
+... question answering, cryobiology spanish, date understanding, emojis emotion prediction, empirical judgments,
+... entailed polarity, evaluating information essentiality, forecasting subquestions, gem, general knowledge, hindi
+... question answering, human organs senses, implicatures, implicit relations, intent recognition, linguistic
+... mappings, list functions, matrixshapes, mult data wrangling, multiemo, natural instructions, nonsense words
+... grammar, object counting, operators, penguins in a table, physics, polish sequence labeling, qa wikidata,
+... reasoning about colored objects, rephrase, riddle sense, sentence ambiguity, similarities abstraction, simp
+... turing concept, simple arithmetic, simple arithmetic json, simple arithmetic json multiple choice, simple
+... arithmetic json subtasks, simple arithmetic multiple targets json, simple ethical questions, squad shifts,
+... subject verb agreement, swedish to german proverbs, undo permutation, unit conversion, unnatural in context
+... learning, bridging anaphora resolution barqa, disfl qa, novel concepts, periodic elements'''
+...
+>>> smooth = [p.split(',').strip() for p in smooth]
+>>> smooth
+'abstract narrative understanding, auto categorization, bbq lite json, cause and effect, chess state tracking, con-\nlang translation, context definition alignment, contextual parametric knowledge conflicts, coqa conversational\nquestion answering, cryobiology spanish, date understanding, emojis emotion prediction, empirical judgments,\nentailed polarity, evaluating information essentiality, forecasting subquestions, gem, general knowledge, hindi\nquestion answering, human organs senses, implicatures, implicit relations, intent recognition, linguistic\nmappings, list functions, matrixshapes, mult data wrangling, multiemo, natural instructions, nonsense words\ngrammar, object counting, operators, penguins in a table, physics, polish sequence labeling, qa wikidata,\nreasoning about colored objects, rephrase, riddle sense, sentence ambiguity, similarities abstraction, simp\nturing concept, simple arithmetic, simple arithmetic json, simple arithmetic json multiple choice, simple\narithmetic json subtasks, simple arithmetic multiple targets json, simple ethical questions, squad shifts,\nsubject verb agreement, swedish to german proverbs, undo permutation, unit conversion, unnatural in context\nlearning, bridging anaphora resolution barqa, disfl qa, novel concepts, periodic elements'
+>>> smooth = [s.strip() for s in smooth.split(',')]
+>>> df_scale = pd.DataFrame({'scaling': ['smooth']*len(smooth)})
+>>> df_scale
+   scaling
+0   smooth
+1   smooth
+2   smooth
+3   smooth
+4   smooth
+5   smooth
+6   smooth
+7   smooth
+8   smooth
+9   smooth
+10  smooth
+11  smooth
+12  smooth
+13  smooth
+14  smooth
+15  smooth
+16  smooth
+17  smooth
+18  smooth
+19  smooth
+20  smooth
+21  smooth
+22  smooth
+23  smooth
+24  smooth
+25  smooth
+26  smooth
+27  smooth
+28  smooth
+29  smooth
+30  smooth
+31  smooth
+32  smooth
+33  smooth
+34  smooth
+35  smooth
+36  smooth
+37  smooth
+38  smooth
+39  smooth
+40  smooth
+41  smooth
+42  smooth
+43  smooth
+44  smooth
+45  smooth
+46  smooth
+47  smooth
+48  smooth
+49  smooth
+50  smooth
+51  smooth
+52  smooth
+53  smooth
+54  smooth
+55  smooth
+56  smooth
+57  smooth
+>>> df_scale['Task'] = smooth
+>>> df_scale2 = pd.concat([df_scale, pd.DataFrame({'scaling': ['PaLM']*len(smooth), 'task': palm})], ignore_index=True)
+>>> df_scale
+   scaling                                       Task
+0   smooth           abstract narrative understanding
+1   smooth                        auto categorization
+2   smooth                              bbq lite json
+3   smooth                           cause and effect
+4   smooth                       chess state tracking
+5   smooth                     con-\nlang translation
+6   smooth               context definition alignment
+7   smooth  contextual parametric knowledge conflicts
+8   smooth    coqa conversational\nquestion answering
+9   smooth                        cryobiology spanish
+10  smooth                         date understanding
+11  smooth                  emojis emotion prediction
+12  smooth                        empirical judgments
+13  smooth                          entailed polarity
+14  smooth        evaluating information essentiality
+15  smooth                   forecasting subquestions
+16  smooth                                        gem
+17  smooth                          general knowledge
+18  smooth                  hindi\nquestion answering
+19  smooth                        human organs senses
+20  smooth                               implicatures
+21  smooth                         implicit relations
+22  smooth                         intent recognition
+23  smooth                       linguistic\nmappings
+24  smooth                             list functions
+25  smooth                               matrixshapes
+26  smooth                        mult data wrangling
+27  smooth                                   multiemo
+28  smooth                       natural instructions
+29  smooth                    nonsense words\ngrammar
+30  smooth                            object counting
+31  smooth                                  operators
+32  smooth                        penguins in a table
+33  smooth                                    physics
+34  smooth                   polish sequence labeling
+35  smooth                                qa wikidata
+36  smooth            reasoning about colored objects
+37  smooth                                   rephrase
+38  smooth                               riddle sense
+39  smooth                         sentence ambiguity
+40  smooth                   similarities abstraction
+41  smooth                       simp\nturing concept
+42  smooth                          simple arithmetic
+43  smooth                     simple arithmetic json
+44  smooth     simple arithmetic json multiple choice
+45  smooth           simple\narithmetic json subtasks
+46  smooth    simple arithmetic multiple targets json
+47  smooth                   simple ethical questions
+48  smooth                               squad shifts
+49  smooth                     subject verb agreement
+50  smooth                 swedish to german proverbs
+51  smooth                           undo permutation
+52  smooth                            unit conversion
+53  smooth             unnatural in context\nlearning
+54  smooth         bridging anaphora resolution barqa
+55  smooth                                   disfl qa
+56  smooth                             novel concepts
+57  smooth                          periodic elements
+>>> df_scale2 = pd.concat([df_scale, pd.DataFrame({'scaling': ['PaLM']*len(palm), 'task': palm})], ignore_index=True)
+>>> df_scale2
+   scaling                              Task                        task
+0   smooth  abstract narrative understanding                         NaN
+1   smooth               auto categorization                         NaN
+2   smooth                     bbq lite json                         NaN
+3   smooth                  cause and effect                         NaN
+4   smooth              chess state tracking                         NaN
+..     ...                               ...                         ...
+95    PaLM                               NaN          temporal sequences
+96    PaLM                               NaN                    timedial
+97    PaLM                               NaN        understanding fables
+98    PaLM                               NaN         unit interpretation
+99    PaLM                               NaN  vitaminc fact verification
+
+[100 rows x 3 columns]
+>>> df_scale2 = pd.concat([df_scale, pd.DataFrame({'scaling': ['PaLM']*len(palm), 'Task': palm})], ignore_index=True)
+>>> who
+>>> df_scale3 = pd.concat([df_scale2, pd.DataFrame({'scaling': ['flat']*len(flat), 'Task': flat})], ignore_index=True)
+>>> df_scale4 = pd.concat([df_scale3, pd.DataFrame({'scaling': ['GPT-3']*len(flat), 'Task': gpt3})], ignore_index=True)
+>>> df_scale4 = pd.concat([df_scale3, pd.DataFrame({'scaling': ['GPT-3']*len(gpt3), 'Task': gpt3})], ignore_index=True)
+>>> hist
+>>> palm
+['anachronisms',
+ 'analogical similarity',
+ 'ascii word recognition',
+ 'auto debugging',
+ 'causal judgment',
+ 'code line\ndescription',
+ 'conceptual combinations',
+ 'crass ai',
+ 'cryptonite',
+ 'cs algorithms',
+ 'disambiguation qa',
+ 'elementary\nmath qa',
+ 'emoji movie',
+ 'english proverbs',
+ 'english russian proverbs',
+ 'geometric shapes',
+ 'goal step wikihow',
+ 'gre reading comprehension',
+ 'hinglish toxicity',
+ 'hyperbaton',
+ 'identify odd metaphor',
+ 'international phonetic\nalphabet nli',
+ 'language identification',
+ 'linguistics puzzles',
+ 'logic grid puzzle',
+ 'logical fallacy detection',
+ 'logical\nsequence',
+ 'metaphor boolean',
+ 'metaphor understanding',
+ 'movie dialog same or different',
+ 'odd one out',
+ 'parsinlu\nqa',
+ 'parsinlu reading comprehension',
+ 'physics questions',
+ 'question selection',
+ 'snarks',
+ 'sufficient information',
+ 'temporal sequences',
+ 'timedial',
+ 'understanding fables',
+ 'unit interpretation',
+ 'vitaminc fact verification']
+>>> other = [s.strip() for s in other.split(',')]
+>>> other = '''boolean expressions, crash blossom, dynamic counting,
+... entailed polarity hindi, epistemic reasoning, factuality of summary, fantasy reasoning, gender sensitivity
+... chinese, gender sensitivity english, high low game, identify math theorems, intersect geometry, muslim violence
+... bias, persian idioms, protein interacting sites, scientific press release, self evaluation courtroom, social support,
+... spelling bee, taboo, training on test set, truthful qa, yes no black white, dark humor detection, dyck languages,
+... moral permissibility, ruin names'''
+...
+>>> other = [s.strip() for s in other.split(',')]
+>>> df_scale5 = pd.concat([df_scale4, pd.DataFrame({'scaling': ['sublinear']*len(other), 'Task': other})], ignore_index=True)
+>>> df_scale5
+       scaling                              Task
+0       smooth  abstract narrative understanding
+1       smooth               auto categorization
+2       smooth                     bbq lite json
+3       smooth                  cause and effect
+4       smooth              chess state tracking
+..         ...                               ...
+192  sublinear                yes no black white
+193  sublinear              dark humor detection
+194  sublinear                    dyck languages
+195  sublinear              moral permissibility
+196  sublinear                        ruin names
+
+[197 rows x 2 columns]
+>>> df_scale5['scaling'].unique()
+array(['smooth', 'PaLM', 'flat', 'GPT-3', 'sublinear'], dtype=object)
+>>> df_scale5['scaling'].replace('smooth', 'linear scaling')
+0      linear scaling
+1      linear scaling
+2      linear scaling
+3      linear scaling
+4      linear scaling
+            ...      
+192         sublinear
+193         sublinear
+194         sublinear
+195         sublinear
+196         sublinear
+Name: scaling, Length: 197, dtype: object
+>>> df_scale5['Scaling'] = df_scale5['scaling'].replace('smooth', 'linear scaling')
+>>> df_scale5['Scaling'] = df_scale5['Scaling'].replace('sublinear', 'sublinear scaling')
+>>> df_scale5.columns
+Index(['scaling', 'Task', 'Scaling'], dtype='object')
+>>> df_scale5.drop(columns=['scaling'])
+                                 Task            Scaling
+0    abstract narrative understanding     linear scaling
+1                 auto categorization     linear scaling
+2                       bbq lite json     linear scaling
+3                    cause and effect     linear scaling
+4                chess state tracking     linear scaling
+..                                ...                ...
+192                yes no black white  sublinear scaling
+193              dark humor detection  sublinear scaling
+194                    dyck languages  sublinear scaling
+195              moral permissibility  sublinear scaling
+196                        ruin names  sublinear scaling
+
+[197 rows x 2 columns]
+>>> dfscale = df_scale5.drop(columns=['scaling'])
+>>> dfscale.columns = 'Task Emergence'.split()
+>>> dfscale['Emergence'].unique()
+array(['linear scaling', 'PaLM', 'flat', 'GPT-3', 'sublinear scaling'],
+      dtype=object)
+>>> palm62 = '''nachronisms, ascii word recognition, conceptual combinations, cryptonite, disam-
+... biguation qa, emoji movie, goal step wikihow, gre reading comprehension, linguistics puzzles, logic grid puzzle,
+... metaphor boolean, metaphor understanding, odd one out, parsinlu qa.'''
+...
+>>> palm62 = [s.strip() for s in palm62.split(',')]
+>>> dfscale5 = pd.concat([dfscale, pd.DataFrame({'Emergence': ['PaLM-62B']*len(palm62), 'Task': palm62})], ignore_index=True)
+>>> dfscale5
+                                 Task       Emergence
+0    abstract narrative understanding  linear scaling
+1                 auto categorization  linear scaling
+2                       bbq lite json  linear scaling
+3                    cause and effect  linear scaling
+4                chess state tracking  linear scaling
+..                                ...             ...
+206                 logic grid puzzle        PaLM-62B
+207                  metaphor boolean        PaLM-62B
+208            metaphor understanding        PaLM-62B
+209                       odd one out        PaLM-62B
+210                      parsinlu qa.        PaLM-62B
+
+[211 rows x 2 columns]
+>>> dfscale5['Emergence'] = dfscale5['Emergence'].replace('GPT-3', 'GPT-3/LaMDA')
+>>> dfscale5.sample(20)
+                                        Task          Emergence
+11                 emojis emotion prediction     linear scaling
+183                           persian idioms  sublinear scaling
+84                         logical\nsequence               PaLM
+135                                 talkdown               flat
+104                  cifar10\nclassification               flat
+42                         simple arithmetic     linear scaling
+18                 hindi\nquestion answering     linear scaling
+44    simple arithmetic json multiple choice     linear scaling
+83                 logical fallacy detection               PaLM
+147                          common morpheme        GPT-3/LaMDA
+8    coqa conversational\nquestion answering     linear scaling
+181                       intersect geometry  sublinear scaling
+35                               qa wikidata     linear scaling
+194                           dyck languages  sublinear scaling
+205                      linguistics puzzles           PaLM-62B
+112                                  kannada               flat
+154                            logical\nargs        GPT-3/LaMDA
+97                      understanding fables               PaLM
+15                  forecasting subquestions     linear scaling
+200                               cryptonite           PaLM-62B
+>>> dfscale5['Emergence'].unique()
+array(['linear scaling', 'PaLM', 'flat', 'GPT-3/LaMDA',
+       'sublinear scaling', 'PaLM-62B'], dtype=object)
+>>> dfscale5.to_csv('llm-emmergence-table-other-big-bench-tasks.csv')
+>>> dfother = pd.read_csv('llm-emmergence-table-other-big-bench-tasks.csv')
+>>> dfother
+     Unnamed: 0                              Task       Emergence
+0             0  abstract narrative understanding  linear scaling
+1             1               auto categorization  linear scaling
+2             2                     bbq lite json  linear scaling
+3             3                  cause and effect  linear scaling
+4             4              chess state tracking  linear scaling
+..          ...                               ...             ...
+206         206                 logic grid puzzle        PaLM-62B
+207         207                  metaphor boolean        PaLM-62B
+208         208            metaphor understanding        PaLM-62B
+209         209                       odd one out        PaLM-62B
+210         210                      parsinlu qa.        PaLM-62B
+
+[211 rows x 3 columns]
+>>> dfother = pd.read_csv('llm-emmergence-table-other-big-bench-tasks.csv', index_col=0)
+>>> dfother
+                                 Task       Emergence
+0    abstract narrative understanding  linear scaling
+1                 auto categorization  linear scaling
+2                       bbq lite json  linear scaling
+3                    cause and effect  linear scaling
+4                chess state tracking  linear scaling
+..                                ...             ...
+206                 logic grid puzzle        PaLM-62B
+207                  metaphor boolean        PaLM-62B
+208            metaphor understanding        PaLM-62B
+209                       odd one out        PaLM-62B
+210                      parsinlu qa.        PaLM-62B
+
+[211 rows x 2 columns]
+>>> dfscale5['Emergence'].unique()
+array(['linear scaling', 'PaLM', 'flat', 'GPT-3/LaMDA',
+       'sublinear scaling', 'PaLM-62B'], dtype=object)
+>>> df
+       Prompt                                          Task Training Flops  ...             Author  Year                 Reference
+0    Few-shot                Addition/subtraction (3 digit)        2.3E+22  ...       Brown et al.  2020       Brown et al. (2020)
+1    Few-shot              Addition/subtraction (4-5 digit)        3.1E+23  ...                      NaN                       NaN
+2    Few-shot                MMLU Benchmark (57 topic avg.)        3.1E+23  ...   Hendrycks et al.  2021   Hendrycks et al. (2021)
+3    Few-shot       Toxicity classification (CivilComments)        1.3E+22  ...         Rae et al.  2021         Rae et al. (2021)
+4    Few-shot                    Truthfulness (Truthful QA)        5.0E+23  ...                      NaN                       NaN
+5    Few-shot                    MMLU Benchmark (26 topics)        5.0E+23  ...                      NaN                       NaN
+6    Few-shot                  Grounded conceptual mappings        3.1E+23  ...    Patel & Pavlick  2022    Patel & Pavlick (2022)
+7    Few-shot                    MMLU Benchmark (30 topics)        5.0E+23  ...    Hoffmann et al.  2022    Hoffmann et al. (2022)
+8    Few-shot               Word in Context (WiC) benchmark        2.5E+24  ...   Chowdhery et al.  2022   Chowdhery et al. (2022)
+9    Few-shot         Many BIG-Bench tasks (see Appendix E)           Many  ...          BIG-Bench  2022          BIG-Bench (2022)
+10  Augmented            Instruction following (finetuning)        1.3E+23  ...         Wei et al.  2022         Wei et al. (2022)
+11  Augmented     Scratchpad: 8-digit addition (finetuning)        8.9E+19  ...         Nye et al.  2021         Nye et al. (2021)
+12  Augmented   Using open-book knowledge for fact checking        1.3E+22  ...         Rae et al.  2021         Rae et al. (2021)
+13  Augmented          Chain-of-thought: Math word problems        1.3E+23  ...         Wei et al.  2022         Wei et al. (2022)
+14  Augmented                  Chain-of-thought: StrategyQA        2.9E+23  ...   Chowdhery et al.  2022   Chowdhery et al. (2022)
+15  Augmented                   Differentiable search index        3.3E+22  ...         Tay et al.  2022         Tay et al. (2022)
+16  Augmented                     Self-consistency decoding        1.3E+23  ...        Wang et al.  2022        Wang et al. (2022)
+17  Augmented          Leveraging explanations in prompting        5.0E+23  ...    Lampinen et al.  2022    Lampinen et al. (2022)
+18  Augmented                       Least-to-most prompting        3.1E+23  ...        Zhou et al.  2022        Zhou et al. (2022)
+19  Augmented          Zero-shot chain-of-thought reasoning        3.1E+23  ...      Kojima et al.  2022      Kojima et al. (2022)
+20  Augmented                       Calibration via P(True)        2.6E+23  ...    Kadavath et al.  2022    Kadavath et al. (2022)
+21  Augmented       Multilingual chain-of-thought reasoning        2.9E+23  ...         Shi et al.  2022         Shi et al. (2022)
+22  Augmented                     Ask me anything prompting        1.4E+22  ...       Arora et al.  2022       Arora et al. (2022)
+
+[23 rows x 8 columns]
+>>> df.drop(index=[9])
+       Prompt                                          Task Training Flops  ...             Author  Year                 Reference
+0    Few-shot                Addition/subtraction (3 digit)        2.3E+22  ...       Brown et al.  2020       Brown et al. (2020)
+1    Few-shot              Addition/subtraction (4-5 digit)        3.1E+23  ...                      NaN                       NaN
+2    Few-shot                MMLU Benchmark (57 topic avg.)        3.1E+23  ...   Hendrycks et al.  2021   Hendrycks et al. (2021)
+3    Few-shot       Toxicity classification (CivilComments)        1.3E+22  ...         Rae et al.  2021         Rae et al. (2021)
+4    Few-shot                    Truthfulness (Truthful QA)        5.0E+23  ...                      NaN                       NaN
+5    Few-shot                    MMLU Benchmark (26 topics)        5.0E+23  ...                      NaN                       NaN
+6    Few-shot                  Grounded conceptual mappings        3.1E+23  ...    Patel & Pavlick  2022    Patel & Pavlick (2022)
+7    Few-shot                    MMLU Benchmark (30 topics)        5.0E+23  ...    Hoffmann et al.  2022    Hoffmann et al. (2022)
+8    Few-shot               Word in Context (WiC) benchmark        2.5E+24  ...   Chowdhery et al.  2022   Chowdhery et al. (2022)
+10  Augmented            Instruction following (finetuning)        1.3E+23  ...         Wei et al.  2022         Wei et al. (2022)
+11  Augmented     Scratchpad: 8-digit addition (finetuning)        8.9E+19  ...         Nye et al.  2021         Nye et al. (2021)
+12  Augmented   Using open-book knowledge for fact checking        1.3E+22  ...         Rae et al.  2021         Rae et al. (2021)
+13  Augmented          Chain-of-thought: Math word problems        1.3E+23  ...         Wei et al.  2022         Wei et al. (2022)
+14  Augmented                  Chain-of-thought: StrategyQA        2.9E+23  ...   Chowdhery et al.  2022   Chowdhery et al. (2022)
+15  Augmented                   Differentiable search index        3.3E+22  ...         Tay et al.  2022         Tay et al. (2022)
+16  Augmented                     Self-consistency decoding        1.3E+23  ...        Wang et al.  2022        Wang et al. (2022)
+17  Augmented          Leveraging explanations in prompting        5.0E+23  ...    Lampinen et al.  2022    Lampinen et al. (2022)
+18  Augmented                       Least-to-most prompting        3.1E+23  ...        Zhou et al.  2022        Zhou et al. (2022)
+19  Augmented          Zero-shot chain-of-thought reasoning        3.1E+23  ...      Kojima et al.  2022      Kojima et al. (2022)
+20  Augmented                       Calibration via P(True)        2.6E+23  ...    Kadavath et al.  2022    Kadavath et al. (2022)
+21  Augmented       Multilingual chain-of-thought reasoning        2.9E+23  ...         Shi et al.  2022         Shi et al. (2022)
+22  Augmented                     Ask me anything prompting        1.4E+22  ...       Arora et al.  2022       Arora et al. (2022)
+
+[22 rows x 8 columns]
+>>> df = df.drop(index=[9])
+>>> df['Prompt-Task'] = df['Prompt'].str + ' - '
+>>> df['Prompt-Task'] = df['Prompt'].str + [' - ']*len(df)
+>>> df['Prompt-Task'] = df['Prompt'].str + pd.Series([' - ']*len(df), index=df.index)
+>>> df['Prompt-Task'] = df['Prompt'] + pd.Series([' - ']*len(df), index=df.index)
+>>> df['Prompt-Task'] = df['Prompt-Task'] + df['Task']
+>>> df
+       Prompt                                          Task  ...                 Reference                                        Prompt-Task
+0    Few-shot                Addition/subtraction (3 digit)  ...       Brown et al. (2020)         Few-shot -  Addition/subtraction (3 digit)
+1    Few-shot              Addition/subtraction (4-5 digit)  ...                       NaN       Few-shot -  Addition/subtraction (4-5 digit)
+2    Few-shot                MMLU Benchmark (57 topic avg.)  ...   Hendrycks et al. (2021)         Few-shot -  MMLU Benchmark (57 topic avg.)
+3    Few-shot       Toxicity classification (CivilComments)  ...         Rae et al. (2021)  Few-shot -  Toxicity classification (CivilComm...
+4    Few-shot                    Truthfulness (Truthful QA)  ...                       NaN             Few-shot -  Truthfulness (Truthful QA)
+5    Few-shot                    MMLU Benchmark (26 topics)  ...                       NaN             Few-shot -  MMLU Benchmark (26 topics)
+6    Few-shot                  Grounded conceptual mappings  ...    Patel & Pavlick (2022)           Few-shot -  Grounded conceptual mappings
+7    Few-shot                    MMLU Benchmark (30 topics)  ...    Hoffmann et al. (2022)             Few-shot -  MMLU Benchmark (30 topics)
+8    Few-shot               Word in Context (WiC) benchmark  ...   Chowdhery et al. (2022)        Few-shot -  Word in Context (WiC) benchmark
+10  Augmented            Instruction following (finetuning)  ...         Wei et al. (2022)    Augmented -  Instruction following (finetuning)
+11  Augmented     Scratchpad: 8-digit addition (finetuning)  ...         Nye et al. (2021)  Augmented -  Scratchpad: 8-digit addition (fin...
+12  Augmented   Using open-book knowledge for fact checking  ...         Rae et al. (2021)  Augmented -  Using open-book knowledge for fac...
+13  Augmented          Chain-of-thought: Math word problems  ...         Wei et al. (2022)  Augmented -  Chain-of-thought: Math word problems
+14  Augmented                  Chain-of-thought: StrategyQA  ...   Chowdhery et al. (2022)          Augmented -  Chain-of-thought: StrategyQA
+15  Augmented                   Differentiable search index  ...         Tay et al. (2022)           Augmented -  Differentiable search index
+16  Augmented                     Self-consistency decoding  ...        Wang et al. (2022)             Augmented -  Self-consistency decoding
+17  Augmented          Leveraging explanations in prompting  ...    Lampinen et al. (2022)  Augmented -  Leveraging explanations in prompting
+18  Augmented                       Least-to-most prompting  ...        Zhou et al. (2022)               Augmented -  Least-to-most prompting
+19  Augmented          Zero-shot chain-of-thought reasoning  ...      Kojima et al. (2022)  Augmented -  Zero-shot chain-of-thought reasoning
+20  Augmented                       Calibration via P(True)  ...    Kadavath et al. (2022)               Augmented -  Calibration via P(True)
+21  Augmented       Multilingual chain-of-thought reasoning  ...         Shi et al. (2022)  Augmented -  Multilingual chain-of-thought rea...
+22  Augmented                     Ask me anything prompting  ...       Arora et al. (2022)             Augmented -  Ask me anything prompting
+
+[22 rows x 9 columns]
+>>> df['Prompt-Task'] = df['Prompt'].str.strip() + pd.Series([': ']*len(df), index=df.index)
+>>> df['Prompt-Task'] = df['Prompt-Task'] + df['Task'].str.strip()
+>>> df[c] = df[c].str.strip()
+>>> for c in df.columns: df[c] = df[c].str.strip()
+>>> df
+       Prompt                                         Task  ...                Reference                                        Prompt-Task
+0    Few-shot               Addition/subtraction (3 digit)  ...      Brown et al. (2020)           Few-shot: Addition/subtraction (3 digit)
+1    Few-shot             Addition/subtraction (4-5 digit)  ...                      NaN         Few-shot: Addition/subtraction (4-5 digit)
+2    Few-shot               MMLU Benchmark (57 topic avg.)  ...  Hendrycks et al. (2021)           Few-shot: MMLU Benchmark (57 topic avg.)
+3    Few-shot      Toxicity classification (CivilComments)  ...        Rae et al. (2021)  Few-shot: Toxicity classification (CivilComments)
+4    Few-shot                   Truthfulness (Truthful QA)  ...                      NaN               Few-shot: Truthfulness (Truthful QA)
+5    Few-shot                   MMLU Benchmark (26 topics)  ...                      NaN               Few-shot: MMLU Benchmark (26 topics)
+6    Few-shot                 Grounded conceptual mappings  ...   Patel & Pavlick (2022)             Few-shot: Grounded conceptual mappings
+7    Few-shot                   MMLU Benchmark (30 topics)  ...   Hoffmann et al. (2022)               Few-shot: MMLU Benchmark (30 topics)
+8    Few-shot              Word in Context (WiC) benchmark  ...  Chowdhery et al. (2022)          Few-shot: Word in Context (WiC) benchmark
+10  Augmented           Instruction following (finetuning)  ...        Wei et al. (2022)      Augmented: Instruction following (finetuning)
+11  Augmented    Scratchpad: 8-digit addition (finetuning)  ...        Nye et al. (2021)  Augmented: Scratchpad: 8-digit addition (finet...
+12  Augmented  Using open-book knowledge for fact checking  ...        Rae et al. (2021)  Augmented: Using open-book knowledge for fact ...
+13  Augmented         Chain-of-thought: Math word problems  ...        Wei et al. (2022)    Augmented: Chain-of-thought: Math word problems
+14  Augmented                 Chain-of-thought: StrategyQA  ...  Chowdhery et al. (2022)            Augmented: Chain-of-thought: StrategyQA
+15  Augmented                  Differentiable search index  ...        Tay et al. (2022)             Augmented: Differentiable search index
+16  Augmented                    Self-consistency decoding  ...       Wang et al. (2022)               Augmented: Self-consistency decoding
+17  Augmented         Leveraging explanations in prompting  ...   Lampinen et al. (2022)    Augmented: Leveraging explanations in prompting
+18  Augmented                      Least-to-most prompting  ...       Zhou et al. (2022)                 Augmented: Least-to-most prompting
+19  Augmented         Zero-shot chain-of-thought reasoning  ...     Kojima et al. (2022)    Augmented: Zero-shot chain-of-thought reasoning
+20  Augmented                      Calibration via P(True)  ...   Kadavath et al. (2022)                 Augmented: Calibration via P(True)
+21  Augmented      Multilingual chain-of-thought reasoning  ...        Shi et al. (2022)  Augmented: Multilingual chain-of-thought reaso...
+22  Augmented                    Ask me anything prompting  ...      Arora et al. (2022)               Augmented: Ask me anything prompting
+
+[22 rows x 9 columns]
+>>> df.columns
+Index(['Prompt', 'Task', 'Training Flops', 'Parameters', 'Model', 'Author',
+       'Year', 'Reference', 'Prompt-Task'],
+      dtype='object')
+>>> df.to_csv('llm-emmergence-table-cleaned.csv')
+>>> dfscale5
+                                 Task       Emergence
+0    abstract narrative understanding  linear scaling
+1                 auto categorization  linear scaling
+2                       bbq lite json  linear scaling
+3                    cause and effect  linear scaling
+4                chess state tracking  linear scaling
+..                                ...             ...
+206                 logic grid puzzle        PaLM-62B
+207                  metaphor boolean        PaLM-62B
+208            metaphor understanding        PaLM-62B
+209                       odd one out        PaLM-62B
+210                      parsinlu qa.        PaLM-62B
+
+[211 rows x 2 columns]
+>>> dfscale
+                                 Task          Emergence
+0    abstract narrative understanding     linear scaling
+1                 auto categorization     linear scaling
+2                       bbq lite json     linear scaling
+3                    cause and effect     linear scaling
+4                chess state tracking     linear scaling
+..                                ...                ...
+192                yes no black white  sublinear scaling
+193              dark humor detection  sublinear scaling
+194                    dyck languages  sublinear scaling
+195              moral permissibility  sublinear scaling
+196                        ruin names  sublinear scaling
+
+[197 rows x 2 columns]
+>>> dfscale=dfscale5
+>>> dfscale['Prompt-Task'] = dfscale['Task']
+>>> pd.concat([dfscale, df[['Prompt-Task', 'Task', 'Model']]], ignore_index=True)
+                                        Task       Emergence                                        Prompt-Task       Model
+0           abstract narrative understanding  linear scaling                   abstract narrative understanding         NaN
+1                        auto categorization  linear scaling                                auto categorization         NaN
+2                              bbq lite json  linear scaling                                      bbq lite json         NaN
+3                           cause and effect  linear scaling                                   cause and effect         NaN
+4                       chess state tracking  linear scaling                               chess state tracking         NaN
+..                                       ...             ...                                                ...         ...
+228                  Least-to-most prompting             NaN                 Augmented: Least-to-most prompting       GPT-3
+229     Zero-shot chain-of-thought reasoning             NaN    Augmented: Zero-shot chain-of-thought reasoning       GPT-3
+230                  Calibration via P(True)             NaN                 Augmented: Calibration via P(True)   Anthropic
+231  Multilingual chain-of-thought reasoning             NaN  Augmented: Multilingual chain-of-thought reaso...        PaLM
+232                Ask me anything prompting             NaN               Augmented: Ask me anything prompting  EleutherAI
+
+[233 rows x 4 columns]
+>>> df.columns
+Index(['Prompt', 'Task', 'Training Flops', 'Parameters', 'Model', 'Author',
+       'Year', 'Reference', 'Prompt-Task'],
+      dtype='object')
+>>> df['Emergence'] = df['Model']
+>>> pd.concat([dfscale, df[['Prompt-Task', 'Task', 'Emergence']]], ignore_index=True)
+                                        Task       Emergence                                        Prompt-Task
+0           abstract narrative understanding  linear scaling                   abstract narrative understanding
+1                        auto categorization  linear scaling                                auto categorization
+2                              bbq lite json  linear scaling                                      bbq lite json
+3                           cause and effect  linear scaling                                   cause and effect
+4                       chess state tracking  linear scaling                               chess state tracking
+..                                       ...             ...                                                ...
+228                  Least-to-most prompting           GPT-3                 Augmented: Least-to-most prompting
+229     Zero-shot chain-of-thought reasoning           GPT-3    Augmented: Zero-shot chain-of-thought reasoning
+230                  Calibration via P(True)       Anthropic                 Augmented: Calibration via P(True)
+231  Multilingual chain-of-thought reasoning            PaLM  Augmented: Multilingual chain-of-thought reaso...
+232                Ask me anything prompting      EleutherAI               Augmented: Ask me anything prompting
+
+[233 rows x 3 columns]
+>>> pd.concat([dfscale, df[['Prompt', 'Task', 'Prompt-Task', 'Emergence']]], ignore_index=True)
+                                        Task       Emergence                                        Prompt-Task     Prompt
+0           abstract narrative understanding  linear scaling                   abstract narrative understanding        NaN
+1                        auto categorization  linear scaling                                auto categorization        NaN
+2                              bbq lite json  linear scaling                                      bbq lite json        NaN
+3                           cause and effect  linear scaling                                   cause and effect        NaN
+4                       chess state tracking  linear scaling                               chess state tracking        NaN
+..                                       ...             ...                                                ...        ...
+228                  Least-to-most prompting           GPT-3                 Augmented: Least-to-most prompting  Augmented
+229     Zero-shot chain-of-thought reasoning           GPT-3    Augmented: Zero-shot chain-of-thought reasoning  Augmented
+230                  Calibration via P(True)       Anthropic                 Augmented: Calibration via P(True)  Augmented
+231  Multilingual chain-of-thought reasoning            PaLM  Augmented: Multilingual chain-of-thought reaso...  Augmented
+232                Ask me anything prompting      EleutherAI               Augmented: Ask me anything prompting  Augmented
+
+[233 rows x 4 columns]
+>>> pd.concat([dfscale, df[['Prompt', 'Task', 'Prompt-Task', 'Emergence']]], ignore_index=True).fillna('')
+                                        Task       Emergence                                        Prompt-Task     Prompt
+0           abstract narrative understanding  linear scaling                   abstract narrative understanding           
+1                        auto categorization  linear scaling                                auto categorization           
+2                              bbq lite json  linear scaling                                      bbq lite json           
+3                           cause and effect  linear scaling                                   cause and effect           
+4                       chess state tracking  linear scaling                               chess state tracking           
+..                                       ...             ...                                                ...        ...
+228                  Least-to-most prompting           GPT-3                 Augmented: Least-to-most prompting  Augmented
+229     Zero-shot chain-of-thought reasoning           GPT-3    Augmented: Zero-shot chain-of-thought reasoning  Augmented
+230                  Calibration via P(True)       Anthropic                 Augmented: Calibration via P(True)  Augmented
+231  Multilingual chain-of-thought reasoning            PaLM  Augmented: Multilingual chain-of-thought reaso...  Augmented
+232                Ask me anything prompting      EleutherAI               Augmented: Ask me anything prompting  Augmented
+
+[233 rows x 4 columns]
+>>> dfscale = pd.concat([dfscale, df[['Prompt', 'Task', 'Prompt-Task', 'Emergence']]], ignore_index=True).fillna('')
+>>> dfscale.to_csv('llm-emmergence-table-combined-tasks.csv')
+>>> hist -o -p -f llm_emmergence_tables.hist.ipy

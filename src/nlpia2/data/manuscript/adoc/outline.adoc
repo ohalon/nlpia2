@@ -1,0 +1,410 @@
+* About this book
+** Roadmap
+** About this book
+* Acknowledgments
+** Maria Dyshel
+** Hobson Lane
+* Preface
+* Wordy machines
+* Packets of thought (NLP overview)
+** Natural language vs. programming language
+** The magic
+*** Language and thought
+*** Machines that converse
+*** The math
+** Applications
+** Language through a computer’s _eyes_
+*** The language of locks
+*** Regular expressions
+** A simple chatbot
+** Keyword-based greeting recognizer
+*** Pattern-based intent recognition
+*** Another way
+** A brief overflight of hyperspace
+** Word order and grammar
+** A chatbot natural language pipeline
+** Processing in depth
+** Natural language IQ
+** Summary
+* Tokens of thought (natural language words)
+** What is a token?
+*** Alternative tokens
+** Challenges (a preview of stemming)
+*** Tokenization
+** Your tokenizer toolbox
+*** The simplest tokenizer
+*** Rule-based tokenization
+*** SpaCy
+** Wordpiece tokenizers
+*** Clumping characters
+**** BPE Motivation
+**** Byte pair encoding
+*** Linguistics-aware tokenizers
+** Vectors of tokens
+*** One-hot Vectors
+*** BOW Vectors
+*** Dot product
+*** Measuring bag-of-words overlap
+*** A token improvement
+**** How regular expressions work
+**** Contractions
+*** Extending your vocabulary with _n_-grams
+**** We all gram for _n_-grams
+**** Stop words
+*** Normalizing your vocabulary
+**** Case folding
+**** Stemming
+**** Lemmatization
+**** Use cases
+*** A complicated picture
+**** Pictographs (象形字)
+**** Pictophonetic characters (形声字)
+**** Associative compounds (会意字)
+**** Self-explanatory characters (指事字)
+** Sentiment
+*** VADER – A rule-based sentiment analyzer
+*** Closeness of vectors
+*** Count vectorizing
+*** Naive Bayes
+** Review
+*** Summary
+* Math with words (TF-IDF vectors)
+** Bag of words
+** Vectorizing
+*** A faster way to create Bag of Words vectors
+*** Vector spaces
+** Zipf’s Law
+** Inverse Document Frequency
+*** Return of Zipf
+*** Relevance ranking
+*** Tools
+*** Alternatives
+*** Okapi BM25
+*** What’s next
+*** Summary
+* Finding meaning in word counts (semantic analysis)
+** From word counts to topic scores
+*** TF-IDF vectors and lemmatization
+*** Topic vectors
+*** Thought experiment
+*** An algorithm for scoring topics
+**** LSA ``cousins''
+*** An LDA classifier
+** Reducing dimensions
+*** Enter Principal Component Analysis
+*** Singular Value Decomposition
+** Latent Semantic Analysis
+** Latent Dirichlet allocation (LDiA)
+*** The LDiA idea
+*** LDiA topic model for SMS messages
+*** LDiA + LDA * spam classifier
+*** A fairer comparison: 32 LDiA topics
+** Distance and similarity
+** Steering with feedback
+*** Linear discriminant analysis
+** Topic vector power
+*** Semantic search
+*** Improvements
+** Summary
+* Deeper learning (neural networks)
+* Layered learning (fully-connected neural networks)
+** Neural networks, the ingredient list
+*** Perceptron
+*** A numerical perceptron
+*** Detour through bias
+**** A Pythonic neuron
+**** Class is in session
+**** Logic is a fun thing to learn
+**** Next step
+**** Neural network technology becomes useful again
+**** Backpropagation
+**** Differentiate all the things
+*** Let’s go skiing – the error surface
+*** Off the chair lift, onto the slope
+*** Let’s shake things up a bit
+*** Keras: Neural networks in Python
+*** Onward and deepward
+*** Normalization: Input with style
+*** Summary
+* Baby steps with neural networks (perceptrons and backpropagation)
+** Neural networks, the ingredient list
+*** Perceptron
+*** A numerical perceptron
+*** Detour through bias
+**** A Pythonic neuron
+**** Class is in session
+**** Logic is a fun thing to learn
+**** Next step
+**** Emergence from the first AI winter
+**** Backpropagation
+**** Differentiate all the things
+*** Let’s go skiing – the error surface
+*** Off the chair lift, onto the slope
+*** Let’s shake things up a bit
+*** Keras: Neural networks in Python
+*** Onward and deepward
+*** Normalization: Input with style
+*** Summary
+* Reasoning with word embeddings
+** Semantic queries and analogies
+*** Analogy questions
+** Word vectors
+*** Vector-oriented reasoning
+**** More reasons to use word vectors
+*** How to compute Word2Vec representations
+**** Skip-gram approach
+**** What is softmax?
+* {blank}
++
+....
+ * How does the network learn the vector representations?
+....
+* {blank}
++
+....
+ * Retrieving word vectors with linear algebra
+* Continuous bag-of-words approach
+* Skip-gram vs. CBOW: When to use which approach
+* Computational tricks of Word2vec
+....
+* {blank}
++
+....
+ * Frequent bigrams
+....
+* {blank}
++
+....
+ * Subsampling frequent tokens
+....
+* {blank}
++
+....
+ * Negative sampling
+....
+** How to use the `gensim.word2vec` module
+** How to generate your own Word vector representations
+*** Preprocessing steps
+*** Train your domain-specific `word2vec` model
+** Word2vec vs GloVe (Global Vectors)
+** fastText
+*** How to use the pretrained fastText models
+** Word2vec vs LSA
+** Visualizing word relationships
+** Making Connections
+** Unnatural words
+** Document similarity with Doc2vec
+*** How to train document vectors
+** Summary
+** ``Quiz'' Exercises
+* Getting words in order with convolutional neural networks (CNNs)
+** Learning meaning
+** Toolkit
+** Convolutional neural nets
+*** Building blocks
+*** Step size
+*** Filter composition
+*** Padding
+**** Convolutional pipeline
+*** Learning
+** Narrow windows indeed
+*** Implementation in Keras: Prepping the data
+*** Convolutional neural network architecture
+*** Pooling
+*** Dropout
+*** The cherry on the sundae
+**** Optimization
+**** Fit
+*** Let’s get to learning (training)
+*** Using the model in a pipeline
+*** Where do you go from here?
+*** Summary
+* Loopy (recurrent) neural networks (RNNs)
+** Remembering with recurrent networks
+*** Backpropagation through time
+**** tl;dr recap
+*** When do we update what?
+**** But you _do_ care what came out of the earlier steps
+*** Recap
+*** There’s always a catch
+*** Recurrent neural net with Keras
+** Putting things together
+** Let’s get to learning our past selves
+** Hyperparameters
+** Predicting
+*** Statefulness
+*** Two-way street
+*** What is this thing?
+** Summary
+** Improving retention with long short-term memory networks
+** LSTM
+*** Backpropagation through time
+**** In practice
+*** Where does the rubber hit the road?
+*** Dirty data
+*** Back to the dirty data
+*** Words are hard. Letters are easier.
+*** My turn to chat
+*** My turn to speak more clearly
+*** Learned how to say, but not yet what
+*** Other kinds of memory
+*** Going deeper
+*** Summary
+* Sequence-to-sequence models and attention
+** Encoder-decoder architecture
+*** Decoding thought
+*** Look familiar?
+*** Sequence-to-sequence conversation
+** Assembling a sequence-to-sequence pipeline
+*** Preparing your dataset for the sequence-to-sequence training
+*** Sequence-to-sequence model in PyTorch
+*** Sequence encoder
+*** Thought decoder
+*** Assembling the sequence-to-sequence network
+** Training the sequence-to-sequence network
+*** Generate output sequences
+** Building a chatbot using sequence-to-sequence networks
+*** Preparing the corpus for your training
+*** Building your character dictionary
+*** Generate one-hot encoded training sets
+*** Train your sequence-to-sequence chatbot
+*** Assemble the model for sequence generation
+*** Predicting a sequence
+*** Generating a response
+*** Converse with your chatbot
+** Enhancements
+*** Reduce training complexity with bucketing
+*** Paying attention
+** In the real world
+*** Summary
+* Getting real (real-world NLP challenges)
+* Information extraction (named entity extraction and question answering)
+** Named entities and relations
+*** A knowledge base
+*** Information extraction
+** Regular patterns
+*** Regular expressions
+*** Information extraction as ML feature extraction
+** Information worth extracting
+*** Extracting GPS locations
+*** Extracting dates
+** Extracting relationships (relations)
+*** POS tagging
+*** Entity name normalization
+*** Relation normalization and extraction
+*** Word patterns
+*** Segmentation
+**** Sentence segmentation
+*** Why won’t `split('.!?')` work?
+*** Sentence segmentation with regular expressions
+** In the real world
+*** Summary
+* Stackable Deep Learning (Attention, Transformers, BERT, GPT)
+** Attention Revisited
+*** Self-Attention
+*** Multi-Head Self-Attention
+*** Positional Encodings
+*** Gluing it all Together
+**** Encoder
+**** Decoder
+*** Transformer Language Translation Example
+**** Preparing the Data
+**** TranslationTransformer Model
+**** Training the TranslationTransformer
+**** TranslationTransformer Inference
+* {blank}
++
+....
+ * TranslationTransformer Inference Example 1
+....
+* {blank}
++
+....
+ * TranslationTransformer Inference Example 2
+....
+** BERT
+** BERT
+** BERT
+*** Fine-tuning pretrained for BERT for Text Classification
+**** BERT Example 1
+**** BERT Example 2
+** In the real world
+** Test Yourself
+** Summary
+* Getting creative (finding and generating text summaries and paraphrases)
+** Too much information
+** Summary
+* Scaling up (optimization, parallelization, and batch processing)
+** Too much of a good thing (data)
+** Optimizing NLP algorithms
+*** Indexing
+*** Advanced indexing
+*** Advanced indexing with Annoy
+*** Why use approximate indexes at all?
+*** An indexing workaround: Discretizing
+** Constant RAM algorithms
+*** Gensim
+*** Graph computing
+** Parallelizing your NLP computations
+*** Training NLP models on GPUs
+*** Renting vs. buying
+*** GPU rental options
+*** Tensor processing units
+** Reducing the memory footprint during model training
+** Gaining model insights with TensorBoard
+*** How to visualize word embeddings
+** Summary
+* Getting chatty (dialog engines)
+** Choosing your approach
+** Rule-based approach
+*** AIML
+*** Dialog Graphs
+*** Using a Database
+** Retrieval-based approach
+*** Intent Recognition
+*** Search
+** Generative
+** Real-world frameworks
+** Designing bots
+*** What makes a good conversation?
+*** The design process
+** Evaluating your chatbot
+*** Measuring chatbot accuracy
+** Language skill
+*** Modern approaches
+**** Question answering dialog systems
+**** Virtual assistants
+**** Conversational chatbots
+**** Marketing chatbots
+**** Community management
+**** Customer service
+**** Therapy
+*** A hybrid approach
+** Pattern-matching approach
+*** A pattern-matching chatbot with AIML
+**** Example AIML 2.0
+**** AIML 1.0
+**** Python AIML interpreter
+*** A network view of pattern matching
+** Grounding
+** Retrieval (search)
+*** The context challenge
+*** Example retrieval-based chatbot
+*** A search-based chatbot
+** Generative models
+*** Chat about NLPIA
+*** Pros and cons of each approach
+** Four-wheel drive
+*** The `Will` to succeed
+**** Installing Will
+**** Hello Will
+** Design process
+** Trickery
+*** Ask questions with predictable answers
+*** Be entertaining
+*** When all else fails, search
+*** Being popular
+*** Be a connector
+*** Getting emotional
+** In the real world
+** Summary

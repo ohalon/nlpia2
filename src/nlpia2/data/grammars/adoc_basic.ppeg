@@ -1,0 +1,19 @@
+# adoc.basic.ppeg (untested)
+# >>> from parsimonious.grammar import Grammar
+# >>> from nlpia2.constants import SRC_DATA_DIR
+# >>> g = Grammar(SRC_DATA_DIR / 'adoc.basic.ppeg').open().read())
+# >>> g.parse(Path('test.adoc').open().read())
+blocks          = block+ (line / text_line)*
+nonempty_line   = ~r"\w[^\n]+\n"
+text_line       = ~r"[^\n]+\n" 
+line       = ~r"[^\n]+\n"
+block      = (line / text_line)+ empty_line
+code_block = title? source (four_dashes text_line+ four_dashes)
+# # Does NOT work
+# text       = ~"[- A-Z 0-9 :\";',!@#$%^&*()_+-={}<>?,./]*"i
+empty_line  = ~r"[ \t]*\n"+
+
+# example text ".Problem setup"
+title = ~r'[.][-\w\s\(\)\[\]\|!@#{}&^%$+=<,>.?/]+\n' 
+source = ~r'\[source,python\]\s*\n'
+four_dashes = ~r'----[-]*\s*\n'

@@ -1,0 +1,1232 @@
+
+:toc: left
+:toclevels: 6
+
+++++
+  <style>
+  .first-sentence {
+    text-align: left;
+    margin-left: 0%;
+    margin-right: auto;
+    width: 66%;
+    background: Beige;
+  }
+  .last-sentence {
+    text-align: right;
+    margin-left: auto;
+    margin-right: 0%;
+    width: 66%;
+    background: AliceBlue;
+  }
+  </style>
+++++
+= Natural Language Processing in Action, Second Edition
+= Finding Kernels of Knowledge in Text with Convolutional Neural Networks (CNNs)
+[.first-sentence]
+This chapter covers
+
+[.last-sentence]
+This chapter covers
+
+[.first-sentence]
+In this chapter, you will unlock the misunderstood superpowers of convolution for Natural Language Processing.
+
+[.last-sentence]
+This will help your machine understand words by detecting patterns in sequences of words and how they are related to their neighbors.
+
+[.first-sentence]
+_Convolutional Neural Networks_ (CNNs) are all the rage for _computer vision_ (image processing).
+
+[.last-sentence]
+You can too.
+
+[.first-sentence]
+So why haven't CNNs caught on with the industry and big tech corporations?
+
+[.last-sentence]
+It's hard to charge people much money for a model anyone can train and run on their own laptop.
+
+[.first-sentence]
+Another more mundane reason CNNs are overlooked is that properly configured and tuned CNNs for NLP are hard to find.
+
+[.last-sentence]
+Your CNNs will be more efficient and performant than anything coming out of the blogosphere.
+
+[.first-sentence]
+Perhaps you're asking yourself why should you learn about CNNs when the shiny new thing in NLP, _transformers_, are all the rage.
+
+[.last-sentence]
+You won't need the unaffordable compute and training data that large transformers require.footnote:[Google AI blog post on Pathways Language Model, or PaLM, (https://ai.googleblog.com/2022/04/pathways-language-model-palm-scaling-to.html)] footnote:["How you can use GPT-J" by Vincent Meuller (https://towardsdatascience.com/how-you-can-use-gpt-j-9c4299dd8526)] footnote:["T5 - A Detailed Explanation" by Qiurui Chen (https://medium.com/analytics-vidhya/t5-a-detailed-explanation-a0ac9bc53e51)]
+
+[.first-sentence]
+Yes, in this chapter you're going to learn how to build CNN models that are a million times smaller and faster than the big transformers you read about in the news.
+
+[.last-sentence]
+And CNNs are often the best tool for the job.
+
+== Patterns in sequences of words
+[.first-sentence]
+Individual words worked well for you in the previous chapters.
+
+[.last-sentence]
+That's why keywords are usually enough to learn the most important facts about a job title or get the gist of a movie title.
+
+[.first-sentence]
+And that's why it's so hard to choose just a few words to summarize a book or job with its title.
+
+[.last-sentence]
+And the order matters.
+
+[.first-sentence]
+Before NLP, and even before computers, humans used a mathematical operation called _convolution_ to detect patterns in sequences.
+
+[.last-sentence]
+If you're a visual learner or are into computer vision it might help you grasp convolution if you check out heatmap plots of the kernels used for these convolutional filters on Wikipedia.footnote:["Digital image processing" on Wikipedia (https://en.wikipedia.org/wiki/Digital_image_processing#Filtering)] footnote:["Sobel filter" on Wikipedia (https://en.wikipedia.org/wiki/Sobel_operator)] footnote:["Gaussian filter" (https://en.wikipedia.org/wiki/Gaussian_filter)] These filters might even give you ideas for initializations of your CNN filter weights to speed learning and create more explainable deep learning language models.
+
+[.first-sentence]
+But that gets tedious after a while, and we no longer even consider handcrafted filters to be important in computer vision or NLP.
+
+[.last-sentence]
+This approach birthed the first practical CNNs for computer vision, time series forecasting and NLP.
+
+[.first-sentence]
+Figuring out how to combine convolution with neural networks to create CNNs was just the boost neural networks needed.
+
+[.last-sentence]
+And CNNs in your brain seem to be responsible for your ability to recognize language patterns that are too complex for other animals.
+
+=== Scale and Translation Invariance
+[.first-sentence]
+The main advantage of CNNs over previous NLP algorithms is that they can recognize patterns in text no matter where those patterns occur in the text (_translation invariance_) and how spread out they are (_scale invariance_).
+
+[.last-sentence]
+And fully connected neural networks over-generalize from particular patterns at particular locations in the text.
+
+[.first-sentence]
+As far back as the 1990s famous researchers like Yann LeCun, Yoshua Bengio, and Geoffrey Hinton were using convolution for computer vision and OCR (optical character recognition).footnote:[LeCun, Y and Bengio, Y "Convolutional Networks for Images, Speech, and Time-series" (https://www.iro.umontreal.ca/~lisa/pointeurs/handbook-convo.pdf)]
+
+[.last-sentence]
+This intuition empowers you to apply your NLP CNNs to a wide variety of problems that you will run into at your job - such as financial time series forecasting and weather forecasting.
+
+[.first-sentence]
+The scale invariance of convolution means you can understand others even if they stretch out the patterns in their words over a long time by speaking slowly or adding a lot of filler words.
+
+[.last-sentence]
+And some people have as many as 3 layers of convolutions happening within the part of the brain that processes voice, called "Heschl's gyrus" (HG).footnote:["An anatomical and functional topography of human auditory cortical areas" by Michelle Moerel et al (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4114190/)]
+
+[.first-sentence]
+You'll soon see how to incorporate the power of translation and scale invariant convolutional filters into your own neural networks.
+
+[.last-sentence]
+And you might be surprised to learn that CNNs can detect subtle differences between catastrophes you might read about online: catastrophic birdsite post vs a real-world disaster.
+
+== Convolution
+[.first-sentence]
+The concept of _convolution_ is not as complicated as it sounds.
+
+[.last-sentence]
+Correlation allows you to detect the similarity between a series of numbers and some other series of numbers representing the pattern you're looking to match.
+
+=== Stencils for natural language text
+[.first-sentence]
+Have you ever seen a lettering stencil?
+
+[.last-sentence]
+Your NLP stencil is an array of weights (floating point numbers) called a _filter_ or _kernel_.
+
+[.first-sentence]
+So imagine you create a lettering stencil for the nine letters (and one _space_ character) in the text "are sacred".
+
+[.last-sentence]
+And imagine it was exactly the size and shape of the text in this book that you are reading right now.
+
+.A real-life stencil
+
+[.first-sentence]
+Now, in your mind, set the stencil down on top of the book so that it covers the page and you can only see the words that "fit" into the stencil cutout.
+
+[.last-sentence]
+If you used a white stencil, the words "are sacred" would shine through and would be the only words you could see.
+
+[.first-sentence]
+If you used a stencil this way, sliding it across the text to find the maximum match between your pattern and a piece of text, you'd be doing _convolution_ with a stencil!
+
+[.last-sentence]
+Convolution is the process of sliding that kernel across your numerical representation of text to see what pops out.
+
+[.first-sentence]
+Just a decade or so ago, before CNNs, you would have had to hand-craft your kernels to match whatever patterns you could dream up.
+
+[.last-sentence]
+The backpropagation algorithm will incrementally adjust the weights bit by bit until they match the right patterns for your data.
+
+[.first-sentence]
+You need to add a few more steps to your mental model of stencils and kernels to give you a complete understanding of how CNNs work.
+
+[.last-sentence]
+A CNN needs to do 3 things with a kernel (stencil) to incorporate it into a natural language processing pipeline.
+
+[.first-sentence]
+You can think of the amount of blackness that pops through your stencil as a measure of the amount of match between your stencil and the text.
+
+[.last-sentence]
+This is just the dot product or correlation between the kernel and that particular window of text.
+
+[.first-sentence]
+Step 2 is to slide your window across the text and do the dot product of step 1 again.
+
+[.last-sentence]
+But either way, the convolution operation outputs a sequence of numerical values, one for every possible position of the kernel in your text.
+
+[.first-sentence]
+Step 3 is to decide whether the text contains a good match somewhere within it.
+
+[.last-sentence]
+This approach is called _max pooling_ because it collects or pools all of the values from the convolution into a single maximum value.
+
+[.first-sentence]
+If the patterns that you are looking for are spread out over multiple different locations within a passage of text, then you may want to try _mean pooling_ for some of your kernels.
+
+[.last-sentence]
+If the patterns that you are looking for are spread out over multiple different locations within a passage of text, then you may want to try _mean pooling_ for some of your kernels.
+
+[.first-sentence]
+You can see how convolution enables your CNN to extract patterns that depend on the order of words.
+
+[.last-sentence]
+And this allows CNN kernels to recognize subtleties in the meaning of natural language text that are lost if you only use BOW (bag-of-words) representations of text.
+
+[.first-sentence]
+Words are sacred. If you get the right ones in the right order you can nudge the world a little.
+
+[.last-sentence]
+Words are sacred. If you get the right ones in the right order you can nudge the world a little.
+
+[.first-sentence]
+In the first few chapters, you treated words as sacred by learning how best to tokenize text into words and then compute vector representations of individual words.
+
+[.last-sentence]
+Now you can combine that skill with convolution to give you the power to "nudge the world a little" with your next chatbot on Mastodon.footnote:[Mastodon is a FOSS ad-free microblogging platform similar to Twitter with an open standard API for retrieving NLP datasets (https://mastodon.social)]
+
+=== A bit more stenciling
+[.first-sentence]
+Remember the lettering stencil analogy?
+
+[.last-sentence]
+Here's how you can label the words in a portion of the quote with their parts of speech.
+
+[.first-sentence]
+Just as you learned in Chapter 6, you want to create a vector representation of each word so that the text can be converted to numbers for use in the CNN.
+
+[.last-sentence]
+Just as you learned in Chapter 6, you want to create a vector representation of each word so that the text can be converted to numbers for use in the CNN.
+
+[.first-sentence]
+Now your stencil or kernel will have to be expanded a bit to span two of the 7-D one-hot vectors.
+
+[.last-sentence]
+As you slide your imaginary stencil over each pair of words it will output a boolean `True` or `False` depending on whether the stencil matches the text or not.
+
+[.first-sentence]
+The first pair of words will create a match:
+
+[.last-sentence]
+The first pair of words will create a match:
+
+[.first-sentence]
+Moving the stencil to cover the second 2-gram, it will output False because the two gram starts with a noun and ends with a fails to beep
+
+[.last-sentence]
+Moving the stencil to cover the second 2-gram, it will output False because the two gram starts with a noun and ends with a fails to beep
+
+[.first-sentence]
+Continuing with the remaining words we end up with this 9-element map for the 10-word phrase.
+
+[.last-sentence]
+Continuing with the remaining words we end up with this 9-element map for the 10-word phrase.
+
+[.first-sentence]
+Congratulations.
+
+[.last-sentence]
+This ensures that your output sequence is always the same length, no matter how long your text is your kernel.
+
+[.first-sentence]
+_Convolution_, then, is
+
+[.last-sentence]
+_Convolution_, then, is
+
+[.first-sentence]
+Later in the chapter, you will use the terms _kernel_ and _stride_ to talk about your stencil and how you slide it across the text.
+
+[.last-sentence]
+Had you used the same kernel size of two but stepped it across the text with a stride of two, then you would get the following output:
+
+[.first-sentence]
+In this case, you got lucky with your stride because the two adjective-noun pairs were an even number of words apart.
+
+[.last-sentence]
+So it is much more common to have a stride of one and kernel sizes of two or more.
+
+=== Correlation vs. convolution
+[.first-sentence]
+In case you've forgotten, listing 7.1 should remind you what correlation looks like in Python.
+
+[.last-sentence]
+(You can also use `scipy.stats.pearsonr`).
+
+.Python implementation of correlation
+
+[.first-sentence]
+However, correlation only works when the series are the same length.
+
+[.last-sentence]
+You compute correlation over a sliding window of text to create a sequence of correlation coefficients that represent the meaning of the text.
+
+=== Convolution as a <code>mapping</code> function
+[.first-sentence]
+CNNs (in our brains and in machines) are the "mapping" in a map-reduce algorithm.
+
+[.last-sentence]
+Pay attention to the size of the outputs of each convolutional layer.
+
+[.first-sentence]
+The math of convolution allows you to detect patterns in text no matter where (or when) they occur in that text.
+
+[.last-sentence]
+Unlike word embedding representations, convolution will pay attention to the meaning of the order of the vectors and won't smush them all together into a pointless average.
+
+[.first-sentence]
+Another advantage of convolution is that it outputs a vector representation of your text that is the same size no matter how long your text is.
+
+[.last-sentence]
+Unlike the sparse TF-IDF vectors of earlier chapters, the dimensions of your convolution output vectors are all packed meaning for every single bit of text you process.
+
+=== Python convolution example
+[.first-sentence]
+You're going to start with a pure Python implementation of convolution.
+
+[.last-sentence]
+Because this is a hard-coded kernel, you won't have to worry about training or fitting your convolution to data just yet.
+
+[.first-sentence]
+You are going to hard-code this convolution to detect a pattern in a sequence of numbers just like you hard-coded a regular expression to recognize tokens in a sequence of characters in Chapter 2.
+
+[.last-sentence]
+In section 3 of this chapter, you will learn how to build on this skill to create a convolutional neural network in PyTorch that can _learn_ on its own which patterns to look for in your text.
+
+[.first-sentence]
+In computer vision and image processing you would need to use a 2-D convolutional filter so you can detect both vertical and horizontal patterns, and everything in-between.
+
+[.last-sentence]
+Here's the Python for perhaps the simplest possible useful 1-D convolution.
+
+[.first-sentence]
+Listing 7.4 shows you how to create a 1-D convolution in pure Python for a hard-coded kernel (`[.5, .5]`) with only two weights of `.5` in it.
+
+[.last-sentence]
+Listing 7.4 shows you how to create a 1-D convolution in pure Python for a hard-coded kernel (`[.5, .5]`) with only two weights of `.5` in it.
+
+[.first-sentence]
+This kernel is computing the rolling or moving average of two numbers in a sequence of numbers.
+
+[.last-sentence]
+Or the input could be the fluctuating numerical values of a dimension in your word embeddings for each token.
+
+[.first-sentence]
+This moving average filter can detect the occurrence of two things in a row because `(.5 * 1 + .5 * 1)` is `1`.
+
+[.last-sentence]
+You're looking for two adverbs in a row.
+
+[.first-sentence]
+The right word may be effective, but no word was ever as effective as a rightly timed pause.
+
+[.last-sentence]
+The right word may be effective, but no word was ever as effective as a rightly timed pause.
+
+[.first-sentence]
+Can you spot the two adverbs in a row?
+
+[.last-sentence]
+Convolution works best when you use the word embeddings from the previous chapter that keep track of all the dimensions of words in vectors.
+
+[.first-sentence]
+Not only will convolution look at all the dimensions of meaning in words but also all the _patterns_ of meaning in all those dimensions of words.
+
+[.last-sentence]
+The goal is to understand the kinds of patterns a CNN can learn to recognize in your data.
+
+[.first-sentence]
+Listing 7.2 shows how to tag the quote with parts of speech tags using SpaCy and then create a binary series to represent the one aspect of the words you are searching for, adverbiness.
+
+[.last-sentence]
+Listing 7.2 shows how to tag the quote with parts of speech tags using SpaCy and then create a binary series to represent the one aspect of the words you are searching for, adverbiness.
+
+.Tag a quote with parts of speech
+
+[.first-sentence]
+Now you have your sequence of `ADV` ones and zeros so you can process it with convolution to match the pattern you're looking for.
+
+[.last-sentence]
+Now you have your sequence of `ADV` ones and zeros so you can process it with convolution to match the pattern you're looking for.
+
+.Define your input sequence for convolution
+
+[.first-sentence]
+Wow, this cheating worked too well!
+
+[.last-sentence]
+Let's use our convolution filter to find where exactly.
+
+.Convolution in pure Python
+
+[.first-sentence]
+You can see now why you had to stop the `for` loop 1 short of the end of the input sequence.
+
+[.last-sentence]
+And you can see how you might use the Python built-in functions `map()` and `filter()` to implement the code in listing 7.4.
+
+[.first-sentence]
+You can create a moving average convolution that computes the adverbiness of a text according to our 2-consecutive-adverb definition if you use the sum function as your _pooling_ function.
+
+[.last-sentence]
+If you want it to compute an unweighted moving average you then just have to make sure your kernel values are all `1 / len(kernel)` so that they sum to 1 and are all equal.
+
+[.first-sentence]
+Listing 7.5 will create a line plot to help you visualize the convolution output and the original `is_adv` input on top of each other.
+
+[.last-sentence]
+Listing 7.5 will create a line plot to help you visualize the convolution output and the original `is_adv` input on top of each other.
+
+.Line plot of input (is_adv) and output (adverbiness)
+
+[.first-sentence]
+Did you notice how the output sequence for this convolution by a size 2 kernel produced output that was one shorter than the input sequence?
+
+[.last-sentence]
+So this particular kernel (`[.5, .5]`) is a very small (two-sample) moving average filter.
+
+.Line plot of <code>is_adv</code> and <code>adverbiness</code> convolution
+
+[.first-sentence]
+Looking at Figure 7.2 you might notice that it looks a bit like the moving average or smoothing filters for financial time series data or daily rainfall values.
+
+[.last-sentence]
+But you'd never achieve a 1.0 adverbiness score on any organic quotes unless you carefully crafted a statement yourself that contained seven adverbs in a row.
+
+[.first-sentence]
+You can generalize your Python script in Listing 7.6 to create a convolution function that will work even when the size of the kernel changes.
+
+[.last-sentence]
+This way you can reuse it in later examples.
+
+.Generalized convolution function
+
+[.first-sentence]
+The `convolve()` function you created here sums the input multiplied by the kernel weights.
+
+[.last-sentence]
+This combination makes the convolution algorithm a _map reduce_ operation that you may have heard of in your computer science or data science courses.
+
+[.first-sentence]
+Map-reduce operations such as convolution are highly parallelizable.
+
+[.last-sentence]
+This parallelizability is what makes convolution such a powerful, efficient, and successful way to process natural language data.
+
+=== PyTorch 1-D CNN on 4-D embedding vectors
+[.first-sentence]
+You can see how 1-D convolution is used to find simple patterns in a sequence of tokens.
+
+[.last-sentence]
+Later you'll learn how to use 300-D GloVE vectors that keep track of the meaning of words in addition to their grammatical role.
+
+[.first-sentence]
+Because word embeddings or vectors capture all the different components of meaning in words, they include parts of speech.
+
+[.last-sentence]
+Refer back to Listing 7.2 if you need help creating a DataFrame containing the POS tags for the "rightly timed pause" quote.
+
+.Sentence tagged with parts of speech
+
+[.first-sentence]
+To keep things efficient, PyTorch does not accept arbitrary Pandas or numpy objects.
+
+[.last-sentence]
+Instead, you must convert all input data to `torch.Tensor` containers with `torch.float` or `torch.int` data type (`dtype`) objects inside.
+
+.Convert a DataFrame to a tensor with the correct size
+
+[.first-sentence]
+Now you construct that pattern that we want to search for in the text: adverb, verb, then noun.
+
+[.last-sentence]
+Each kernel will be lined up with the others to find the pattern you're looking for in all aspects of the meaning of the words simultaneously.
+
+[.first-sentence]
+Before you had only one dimension to worry about, the adverb tag.
+
+[.last-sentence]
+The word vectors are 4-D column vectors.
+
+[.first-sentence]
+You can see that this DataFrame is just an exact copy of the sequence of vectors you want to match in your text samples.
+
+[.last-sentence]
+In a real neural network, the deep learning optimizer will use backpropagation to _learn_ the sequences of vectors that are most helpful in predicting your target variable (the label).
+
+[.first-sentence]
+How is it possible for a machine to match patterns?
+
+[.last-sentence]
+This will help you see how all this works and why it's so simple and yet so powerful.
+
+.Check the convolution pattern matching yourself
+
+[.first-sentence]
+Have you checked the math in Figure 7.4?
+
+[.last-sentence]
+Make sure you do this before you let PyTorch do the math, to embed this pattern of math in your neural network so you can do it in the future if you ever need to debug problems with your CNN.
+
+[.first-sentence]
+In PyTorch or any other deep learning framework designed to process multiple samples in parallel, you have to unsqueeze the kernel to add a dimension to hold additional samples.
+
+[.last-sentence]
+Since you only have the one quote you want to push forward through the convolution the dataset you only need a size of 1 in the first dimension.
+
+.Load hard-coded weights into a Conv1d layer
+
+[.first-sentence]
+Finally you're ready to see if your hand-crafted kernel can detect a sequence of adverb, verb, noun in this text.
+
+[.last-sentence]
+Finally you're ready to see if your hand-crafted kernel can detect a sequence of adverb, verb, noun in this text.
+
+.Running a single example through a convolutional layer
+
+.Conv1d output predicting rightly timed pause
+
+[.first-sentence]
+The y value reaches a maximum value of 3 where all 3 values of 1 in the kernel line up perfectly with the three 1's forming the same pattern within the part-of-speech tags for the sentence.
+
+[.last-sentence]
+And it makes sense that the output would have a value of three, because each of the three matched parts of speech had a weight of one in your kernel, summing to a total of three matches.
+
+[.first-sentence]
+Don't worry, you'll never have to hand-craft a kernel for a convolutional neural network ever again... unless you want to remind yourself how the math is working so you can explain it to others.
+
+[.last-sentence]
+Don't worry, you'll never have to hand-craft a kernel for a convolutional neural network ever again... unless you want to remind yourself how the math is working so you can explain it to others.
+
+=== Natural examples
+[.first-sentence]
+In the optical world of eyes and cameras, convolution is everywhere.
+
+[.last-sentence]
+The lenses of polarized glasses help fishermen filter out the scattered light and see beneath the surface of the water to find fish.
+
+[.first-sentence]
+And for a wilder example, consider a zebra standing behind a fence.
+
+[.last-sentence]
+And the convolution that happens when a zebra is running among grass or bamboo or tree trunks can create a shimmering effect that makes Zebras difficult to catch.
+
+[.first-sentence]
+In figure 7.6 you can think of the cartoon fence as a kernel of alternating numerical values.
+
+[.last-sentence]
+So if you prefer you can think of the zebra stripes as the filter and a long length of fence as the data.
+
+.Zebra behind a fence <sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup>
+
+[.first-sentence]
+Imagine the zebra in figure 7.6 walking behind the fence or the fence sliding in front of the zebra.
+
+[.last-sentence]
+So if you want to recognize alternating values of black and white or alternating numerical values you can use alternating high (1) and low values (0) in your kernel.
+
+[.first-sentence]
+If you don't see zebras walking behind fences very often, maybe this next analogy will be better.
+
+[.last-sentence]
+This cresting of the waves over the sand bars is like the multiplication operation of convolution passing in waves over your data.
+
+[.first-sentence]
+Now imagine that you've dug a hole in the sand near the edge of the water.
+
+[.last-sentence]
+If nothing else, this image of surf and sand castles will help you remember the technical term _max pooling_ when you see it later in this chapter.
+
+== Morse code
+[.first-sentence]
+Before ASCII text and computers, and even telephones, there was another way to communicate natural language: _Morse code_.footnote:["Morse code" article on Wikipedia (https://en.wikipedia.org/wiki/Morse_code)]
+
+[.last-sentence]
+Can you imagine typing text on a computer keyboard that has only one key like the Framework laptop spacebar in Figure 7.7?!
+
+.A single key laptop keyboard
+
+[.first-sentence]
+Figure 7.8 shows what an actual Morse code key looks like.
+
+[.last-sentence]
+Just like the key on a computer keyboard or the fire button on a game controller, the Morse code key just closes an electrical contact whenever the button is pressed.
+
+.An antique Morse code key
+
+[.first-sentence]
+Morse code is a language designed to be tapped out on a single key like this.
+
+[.last-sentence]
+You might even find a way to send secret messages in multiplayer games using your weapon as a telegraph.
+
+[.first-sentence]
+Communicating with a single key on a computer keyboard would be nearly impossible if it weren't for Samuel Morse's work to create a new natural language.
+
+[.last-sentence]
+That should be enough to give you a clearer understanding of convolution and how it works on natural languages.
+
+.Morse code dictionary
+
+[.first-sentence]
+Morse code is still used today in situations when the radio waves are too noisy for someone to understand your voice.
+
+[.last-sentence]
+If you know a bit of Morse code you might be able to have a two-way conversation with someone, just by banging out your words in Morse code.
+
+[.first-sentence]
+Here's the example audio data for a secret message being broadcast in Morse code.
+
+[.last-sentence]
+For now you probably just want to play the audio track so you can hear what Morse code sounds like.
+
+.Download secret message
+
+[.first-sentence]
+Of course your `.nlpia2-data` directory will be located in your `$HOME` directory rather than mine.
+
+[.last-sentence]
+Now you can load the wav file to create an array of numerical values for the audio signal that you can process later with convolution.
+
+=== Decoding Morse with convolution
+[.first-sentence]
+If you know a little Python you can build a machine that can interpret Morse code for you so you won't have to memorize all those dots and dashes in the morse code dictionary of figure 7.9.
+
+[.last-sentence]
+Just make sure you hang onto a computer or phone that can run Python.
+
+.Load the secret Morse code wav file
+
+[.first-sentence]
+The audio signal in this wav file oscillates between 255 and 0 (max and min `uint8` values) when there is a beep tone.
+
+[.last-sentence]
+Listing 7.12 centers, normalizes, and downsamples the audio data and extracts the first two seconds of this audio data.
+
+.Normalize and downsample the audio signal
+
+[.first-sentence]
+Now, you can plot your shiny new Morse code dots and dashes with `audio.plot()`.
+
+[.last-sentence]
+Now, you can plot your shiny new Morse code dots and dashes with `audio.plot()`.
+
+.Square waves morse code secret message
+
+[.first-sentence]
+Can you see where the dots are in figure 7.10?
+
+[.last-sentence]
+The dots are 60 milliseconds of silence (signal value of 0) followed by 60 milliseconds of tone (signal value of 1) and then 60 seconds of silence again (signal value of 0).
+
+[.first-sentence]
+To detect a dot with convolution you want to design a kernel that matches this pattern of low, high, low.
+
+[.last-sentence]
+You want the output of the convolution to be a value of one when a dot symbol is detected.
+
+[.first-sentence]
+Lising 7.12 shows how to build dot-detecting kernel.
+
+[.last-sentence]
+Lising 7.12 shows how to build dot-detecting kernel.
+
+.Dot detecting kernel
+
+.Morse code dot detecting kernel
+
+[.first-sentence]
+You can try out your hand-crafted kernel by convolving it with the audio signal to see if it is able to detect the dots.
+
+[.last-sentence]
+You also want your dot detecting convolution to return a low value (close to zero) for any dash symbols or silence that comes before or after the dots.
+
+.Dot detector convolved with the secret message
+
+.Hand-crafted dot detecting convolution
+
+[.first-sentence]
+Looks like the hand-crafted kernel did all right!
+
+[.last-sentence]
+The convolution output is close to one only in the middle of the dot symbols.
+
+[.first-sentence]
+Now that you understand how convolution works, feel free to use the `np.convolve()` function.
+
+[.last-sentence]
+It works faster and gives you more options for the `mode` of handling the padding.
+
+.Numpy convolve
+
+.Numpy convolution
+
+[.first-sentence]
+Numpy convolution gives you three possible modes for doing the convolution, in order of increasing output length:
+
+[.last-sentence]
+Numpy convolution gives you three possible modes for doing the convolution, in order of increasing output length:
+
+[.first-sentence]
+The numpy convolution set to 'same' mode seems to work better on our Morse code audio signal.
+
+[.last-sentence]
+So you'll want to check that your neural network library uses a similar mode when performing convolution within your neural network.
+
+[.first-sentence]
+That was a lot of hard work building a convolutional filter to detect a single symbol in a Morse code audio file.
+
+[.last-sentence]
+It's possible to use the power of back-propagation within neural networks to _learn_ the right kernels to detect all the different signals important to your problem.
+
+== Building a CNN with PyTorch
+[.first-sentence]
+Figure 7.14 shows you how text flows into a CNN network and then outputs a embedding.
+
+[.last-sentence]
+The input sentence has 4 tokens so we start with a sequence of 4 integer indices, one for each token.
+
+[.first-sentence]
+CNNs usually use word embeddings rather than one-hot encodings to represent each word.
+
+[.last-sentence]
+And you insert these vectors into your matrix of embeddings at the matching row based on your vocabulary index.
+
+[.first-sentence]
+For this four-token sentence you then look up the appropriate word embedding get a sequence of 4 embedding vectors once you have looked up each embedding in your word embedding matrix.
+
+[.last-sentence]
+If you used the smallest GloVe embeddings, your word embeddings are 50 dimensional, so you end up with a 50 x 4 matrix of numerical values for this single short sentence.
+
+[.first-sentence]
+Your convolutional layer can process each of these 50 dimensions with a 1-D convolutional kernel to squeeze this matrix of information about your sentence a bit.
+
+[.last-sentence]
+If you used a kernel of size (length) of two, and a stride of two, you would end up with a matrix of size 50 x 3 to represent the sequence of four 50-D word vectors.
+
+[.first-sentence]
+A _pooling layer_, typically max pooling, is used to reduce the size of the output even further.
+
+[.last-sentence]
+With multiple kernels they can each specialize on a separate aspect of the text that is influencing your target variable.
+
+[.first-sentence]
+You should call the output of a convolutional layer an "encoding" rather than an "embedding".
+
+[.last-sentence]
+Encodings are more complete representations of the meaning of text because they account for the order of words in the same way that your brain does.
+
+[.first-sentence]
+The encoding vector output by a CNN layer is a vector with whatever size (length) you specify.
+
+[.last-sentence]
+The length (number of dimensions) of your encoding vector doesn't depend in any way on the length of your input text.
+
+.CNN processing layers <sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup>
+
+[.first-sentence]
+You're going to need all your skills from the previous chapters to get the text in order so it can be input into your neural network.
+
+[.last-sentence]
+You will use your experience from the previous examples to decide which words to ignore, such as stopwords, punctuation, proper nouns, or really rare words.
+
+[.first-sentence]
+Filtering out and ignoring words based on an arbitrary list of stopwords that you handcraft is usually a bad idea, especially for neural nets such as CNNs.
+
+[.last-sentence]
+You know better now.
+
+[.first-sentence]
+You aren't going to handcraft you convolution kernels either.
+
+[.last-sentence]
+You no longer have to mess around with lemmatization and stemming, as long as you have enough data to create these embeddings.
+
+=== Clipping and Padding
+[.first-sentence]
+CNN models require a consistent length input text so that all the output values within the encoding are at consistent positions within that vector. This ensures that the encoding vector your CNN outputs always has the same number of dimensions no matter how long, or short your text is.
+
+[.last-sentence]
+And you need to insert filler tokens, called _padding_, to fill in the gaps in strings that are too short for your CNN.
+
+[.first-sentence]
+Remember that the convolution operation reduces the length of the input sequence by the same amount no matter how long it is.
+
+[.last-sentence]
+You want your encoding vectors to always be the same length no matter the size of your input.
+
+[.first-sentence]
+This is a fundamental properties of vectors, that they have the same number of dimensions for the entire _vector space_ that you are working in.
+
+[.last-sentence]
+Basically your CNN can find patterns in the meaning of text no matter where those patterns are in the text, as long as those patterns are somewhere within the maximum length that your CNN can handle.
+
+[.first-sentence]
+You can chose any symbol you like to represent the padding token.
+
+[.last-sentence]
+It's common to make this the first token in your `id2token` or `vocab` sequence so it has an index and id value of `0`.
+
+[.first-sentence]
+Once you've let everybody know what your padding token is, you now need to actually decide on a consistent padding approach.
+
+[.last-sentence]
+And make sure you add the total number of padding tokens required to create the correct length sequences for your CNN.
+
+[.first-sentence]
+In listing Listing 7.16 you will load "birdsite" (microblog) posts that have been labeled by Kaggle contributors with their news-worthiness.
+
+[.last-sentence]
+Later you'll use use your CNN model to predict whether CNN (Cable News Network) would be likely to "pick up" on the news before it spreads on its own in the "miasma."
+
+[.first-sentence]
+We intentionally use words that nudge you towards prosocial, authentic, mindful behavior.
+
+[.last-sentence]
+The dark patterns that permeate the Internet have nudged creative powerhouses in the tech world to create an alternate, more authentic universe with it's own vocabulary.
+
+[.first-sentence]
+"Birdsite": What "fedies" call Twitter
+
+[.last-sentence]
+"Birdsite": What "fedies" call Twitter
+
+[.first-sentence]
+"Fedies": Users of federated social media apps that protect your well-being and privacy
+
+[.last-sentence]
+"Fedies": Users of federated social media apps that protect your well-being and privacy
+
+[.first-sentence]
+"Fediverse" Alternate universe of federated social media apps (Mastodon, PeerTube)
+
+[.last-sentence]
+"Fediverse" Alternate universe of federated social media apps (Mastodon, PeerTube)
+
+[.first-sentence]
+"Nitter" is a less manipulative frontend for Twitter
+
+[.last-sentence]
+"Nitter" is a less manipulative frontend for Twitter
+
+[.first-sentence]
+"Miasma" is Neil Stephenson's name for a dystopian Internet
+
+[.last-sentence]
+"Miasma" is Neil Stephenson's name for a dystopian Internet
+
+.Load news posts
+
+[.first-sentence]
+You can see in the examples above that some microblog posts push right up against the character limit of birdsite.
+
+[.last-sentence]
+So listing 7.17 tokenizes these texts and filters out a few of the most common tokens that it finds.
+
+.Most common words for your vocabulary
+
+[.first-sentence]
+You can see that the token "t" occurs almost as many times (5199) as there are posts (7613).
+
+[.last-sentence]
+If your goal is to build a CNN that reads and understands language like a human, you would create a more sophisticated tokenizer and token filter to strip out any text that humans don't pay attention to, such as URLs and geospatial coordinates.
+
+[.first-sentence]
+Once you have your vocabulary and tokenizer dialed in, you can build a padding function to reuse whenever you need it.
+
+[.last-sentence]
+If you make your `pad()` function general enough, as in listing 7.18, you can use it on both string tokens and integer indexes.
+
+.Multipurpose padding function
+
+[.first-sentence]
+We have one last preprocessing step to do for CNNs to work well.
+
+[.last-sentence]
+You want to include your token embeddings that you learned about in chapter 6.
+
+=== Better representation with word embeddings
+[.first-sentence]
+Imagine you are running a short bit of text through your pipeline.
+
+[.last-sentence]
+Figure 7.15 shows what this would look like before you've turned your word sequence into numbers (or vectors, hint hint) for the convolution operation.
+
+.Convolution striding
+
+[.first-sentence]
+Now that you have assembled a sequence of tokens, you need to represent their meaning well for your convolution to be able to compress and encode all that meaning.
+
+[.last-sentence]
+Figure 7.11 shows you how to do that.
+
+.Word embeddings for convolution
+
+[.first-sentence]
+Figure 7.16 shows what the `nn.Embedding` layer in PyTorch is doing behind the scenes.
+
+[.last-sentence]
+This means that each dimension of your word vectors is a channel in the convolution layer.
+
+[.first-sentence]
+Unfortunately, many blog posts and tutorials may mislead you about the proper size for a convolutional layer.
+
+[.last-sentence]
+So you will need to transpose your Embedding layer outputs so that the channels (word embedding dimensions) line up with the convolutional channels.
+
+[.first-sentence]
+PyTorch has an `nn.Embedding` layer you can use within all your deep learning pipelines.
+
+[.last-sentence]
+Optionally you can define the padding token index id number.
+
+.Learn your embeddings from scratch
+
+[.first-sentence]
+The embedding layer will be the first layer in your CNN.
+
+[.last-sentence]
+These embeddings are good for only one thing, determining if a Tweet contains newsworthy disaster information or not.
+
+[.first-sentence]
+Finally you can train your CNN to see how well it will do on an extremely narrow dataset like the Kaggle disaster tweets dataset.
+
+[.last-sentence]
+Those hours of work crafting a CNN will pay off with super-fast training time and impressive accuracy.
+
+.Learn your embeddings from scratch
+
+[.first-sentence]
+After only 7 passes through your training dataset you achieved 79% accuracy on your test set.
+
+[.last-sentence]
+The CNN uses very few parameters compared to the embedding layer.
+
+[.first-sentence]
+What happens if you continue the training for a bit longer?
+
+[.last-sentence]
+What happens if you continue the training for a bit longer?
+
+.Continue training
+
+[.first-sentence]
+Oh my, that looks fishy.
+
+[.last-sentence]
+Here are the first four, after tokenization, ignoring out-of-vocabulary words, and adding padding.
+
+[.first-sentence]
+If you answered ["disaster", "not", "not", disaster"] then you got all 4 of these right.
+
+[.last-sentence]
+And sometimes even real humans get sarcastic or sensationalist about world events.
+
+[.first-sentence]
+What could be causing this overfitting?
+
+[.last-sentence]
+Here's a good function for displaying the parameters in each layer of your PyTorch neural networks.
+
+[.first-sentence]
+When you have overfitting you can use pretrained models in your pipeline to help it generalize a bit better.
+
+[.last-sentence]
+When you have overfitting you can use pretrained models in your pipeline to help it generalize a bit better.
+
+=== Transfer learning
+[.first-sentence]
+Another enhancement that can help your CNN models it to use pretrained word embeddings such as GloVe.
+
+[.last-sentence]
+You just need to size your embedding layer to make room for the size GloVe embeddings you want to initialize your CNN with.
+
+.Make room for GloVE embeddings
+
+[.first-sentence]
+That's it.
+
+[.last-sentence]
+But training your embeddings from scratch doesn't take advantage of the fact that words share meaning across many domains.
+
+[.first-sentence]
+If you want your pipeline to be "cross-fit" you can use embedding trained in other domains.
+
+[.last-sentence]
+Then you can load the embeddings for those words into your `nn.Embedding` layer.
+
+.Load embeddings and align with your vocabulary
+
+[.first-sentence]
+You have taken the top 4000 most frequent tokens from the tweets.
+
+[.last-sentence]
+Your model will learn what these words mean and compute their embeddings as you train the Embedding layer within your neural network.
+
+[.first-sentence]
+Now that you have a consistent way of identifying tokens with an integer, you can load a matrix of GloVe embeddings into your `nn.Embedding` layer.
+
+[.last-sentence]
+Now that you have a consistent way of identifying tokens with an integer, you can load a matrix of GloVe embeddings into your `nn.Embedding` layer.
+
+.Initialize your embedding layer with GloVE vectors
+
+==== Detecting meaningful patterns
+[.first-sentence]
+How you say something, the order of the words, makes a big difference.
+
+[.last-sentence]
+You combine words to create patterns that mean something significant to you, so that you can convey that meaning to someone else.
+
+[.first-sentence]
+If you want your machine to be a meaningful natural language processor, it will need to be able to detect more than just the presence or absence of particular tokens.
+
+[.last-sentence]
+You want your machine to detect meaningful patterns hidden within word sequences.footnote:[_International Association of Facilitators Handbook_, https://books.google.com/books?id=TgWsY7oSgtsC&lpg=PT35&dq=%22beneath%20the%20words%22%20empathy%20listening&pg=PT35#v=onepage&q=%22beneath%20the%20words%22%20empathy%20listening&f=false]
+
+[.first-sentence]
+Convolutions are the filters that bring out meaningful patterns from words.
+
+[.last-sentence]
+Each time you propagate the error from your labeled dataset back through the network (backpropagation), the optimizer will adjust the weights in each of your filters so that they get better and better at detecting meaning and classifying your text examples.
+
+=== Robustifying your CNN with dropout
+[.first-sentence]
+Most neural networks are susceptible to adversarial examples that trick them into outputting incorrect classifications or text.
+
+[.last-sentence]
+Humans know how to ignore noise and filter out distractors, but machines sometimes have trouble with this.
+
+[.first-sentence]
+_Robust NLP_ is the study of approaches and techniques for building machines that are smart enough to handle unusual text from diverse sources.footnote:[Robin Jia's thesis on Robust NLP (https://robinjia.github.io/assets/pdf/robinjia_thesis.pdf) and his presentation with Kai-Wei Chang, He He and Sameer Singh (https://robustnlp-tutorial.github.io)]
+
+[.last-sentence]
+And if you can figure out the "secret sauce" that makes us humans good at this, then you can encode it into your NLP pipelines.
+
+[.first-sentence]
+One popular technique for increasing the robustness of neural networks  is _random dropout_.
+
+[.last-sentence]
+This causes that pathway in your artificial brain to go quiet and forces the other neurons to learn from the particular examples that are in front of it during that dropout.
+
+[.first-sentence]
+It's counter-intuitive, but dropout helps your neural network to spread the learning around.
+
+[.last-sentence]
+But you need your neurons to diversify their patterns so that your network can be "robust" to common variations on natural language text.
+
+[.first-sentence]
+The best place in your neural network to install a dropout layer is close to the end, just before you run the fully connected linear layer that computes the predictions on a batch of data.
+
+[.last-sentence]
+Though your software isn't really thinking about anything, it's OK to anthropomorphize it a bit, if it helps you develop intuitions about why techniques like random dropout can improve your model's accuracy.
+
+== PyTorch CNN to process disaster toots
+[.first-sentence]
+Now comes the fun part.
+
+[.last-sentence]
+Your model can help you filter out Tweets abiout the culture wars so you can focus on news from real war zones.
+
+[.first-sentence]
+First you will see where your new convolution layers fit into the pipeline.
+
+[.last-sentence]
+Then you can find tweets that match that hashtag topic even when the tweeter doesn't know how to use hashtags.
+
+=== Network architecture
+[.first-sentence]
+Here are the processing steps and the corresponding shapes of the tensors for each stage of a CNN NLP pipeline.
+
+[.last-sentence]
+You need to ensure that the shape of the outputs of one layer match the shape of the inputs for the next layer will be the same for this example as for previous examples.
+
+[.first-sentence]
+And
+
+[.last-sentence]
+And
+
+[.first-sentence]
+Your PyTorch model for a CNN has a few more hyperparameters than you had in chapters 5 and 6.
+
+[.last-sentence]
+However, just as before, it's a good idea to set up your hyperparameters within the `__init__` constructor of your `CNNTextClassifier` model.
+
+.CNN hyperparameters
+
+[.first-sentence]
+Just as for your hand-crafted convolutions earlier in this chapter, the sequence length is reduced by each convolutional operation.
+
+[.last-sentence]
+The PyTorch documentation for a `Conv1d` layer provides this formula and a detailed explanation of the terms.footnote:[(https://pytorch.org/docs/stable/generated/torch.nn.Conv1d.html)]
+
+[.first-sentence]
+Your first CNN layer is an `nn.Embedding` layer that converts a sequence of word id integers into a sequence of embedding vectors.
+
+[.last-sentence]
+You can load these embedding vectors from GloVe or any other pretrained embeddings.
+
+.Initialize CNN embedding
+
+[.first-sentence]
+Next you want to build the convolution and pooling layers.
+
+[.last-sentence]
+This is what NLP experts like Christopher Manning and Yoon Kim do in the research papers of theirs that achieved state-of-the-art performance.footnote:[Conv Nets for NLP by Chistopher Manning (http://mng.bz/1Meq)]footnote:["A Sensitivity Analysis of CNNs for Sentence Classification" by Ye Zhang and Brian Wallace (https://arxiv.org/pdf/1510.03820.pdf)]
+
+.Construct convolution and pooling layers
+
+[.first-sentence]
+Unlike the previous examples, you're going to now create multiple convolution and pooling layers.
+
+[.last-sentence]
+This is effective because you've limited the dimensionality of your convolution and pooling output by performing global max pooling and keeping the number of output channels much smaller than the number of embedding dimensions.
+
+[.first-sentence]
+You can use print statements to help debug mismatching matrix shapes for each layer of your CNN.
+
+[.last-sentence]
+So the concatenated and pooled convolution outout is a 5x5 tensor which produces a 25-D linear layer for the output tensor that encodes the meaning of each text.
+
+.CNN layer shapes
+
+[.first-sentence]
+And the end result is a rapidly overfitting language model and text classifier.
+
+[.last-sentence]
+You usually want to ensure your first training runs accomplish overfitting to ensure all your layers are configured correctly and to set an upper bound on the accuracy that is achievable on a particular problem or dataset.
+
+[.first-sentence]
+By reducing the number of channels from 5 to 3 for each embedding you can reduce the total output dimensionality from 25 to 15.
+
+[.last-sentence]
+This will limit the overfitting but reduce the convergence rate unless you increase the learning coefficient:
+
+=== Pooling
+[.first-sentence]
+Pooling aggregates the data from a large tensor to compress the information into fewer values.
+
+[.last-sentence]
+But CNNs are so efficient, you aren't likely to need this kind of horsepower.
+
+[.first-sentence]
+All the statistics you're used to calculating on a matrix of data can be useful as pooling functions for CNNs:
+
+[.last-sentence]
+All the statistics you're used to calculating on a matrix of data can be useful as pooling functions for CNNs:
+
+[.first-sentence]
+The most common and most successful aggregations
+
+[.last-sentence]
+The most common and most successful aggregations
+
+=== Linear layer
+[.first-sentence]
+The concatenated encodings approach gave you a lot of information about each microblog post.
+
+[.last-sentence]
+And all you really want for this particular pipeline is the binary answer to the question "is it news worthy or not?"
+
+[.first-sentence]
+Do you remember in chapter 6 how you had to when you were trying to get a neural network to predict "yes or no" questions about the occurrence or absence of particular words?
+
+[.last-sentence]
+So you can use the same approach, a `torch.nn.Linear` layer will optimally combine all the pieces of information together from a high dimensional vector to answer whatever question you pose it.
+
+[.first-sentence]
+So you need to add a Linear layer with as many weights as you have encoding dimensions that are being output from your pooling layers.
+
+[.last-sentence]
+So you need to add a Linear layer with as many weights as you have encoding dimensions that are being output from your pooling layers.
+
+[.first-sentence]
+Listing 7.26 shows the code you can use to calculate the size of the linear layer.
+
+[.last-sentence]
+Listing 7.26 shows the code you can use to calculate the size of the linear layer.
+
+.Compute the tensor size for the output of a 1D convolution
+
+=== Getting fit
+[.first-sentence]
+Before you can train your CNN you need to tell it how to adjust the weights (parameters) with each batch of training data.
+
+[.last-sentence]
+It is usually a good bet for backpropagation within a convolutional neural network for NLP.
+
+=== Hyperparameter Tuning
+[.first-sentence]
+Explore the hyperparameter space to see if you can beat my performance.
+
+[.last-sentence]
+There's likely a lot of room to grow.
+
+[.first-sentence]
+The nlpia2 package contains a command line script that accepts arguments for many of the hyperparameters you might want to adjust.
+
+[.last-sentence]
+You can see my latest attempt in listing 7.27
+
+.Command line script for optimizing hyperparameters
+
+[.first-sentence]
+Did you notice the `win=True` flag in listing 7.27?
+
+[.last-sentence]
+If you can recreate all of these pieces, it's usually possible to recreate a particularly lucky "draw" to build on and improve later as you think of new architecture or parameter tweaks.
+
+[.first-sentence]
+In fact, this winning random number sequence initialized the weights of the model so well that the test accuracy started off better than the training set accuracy.
+
+[.last-sentence]
+After 16 passes through the dataset (epochs), the model is fit 5% better to the training set than the test set.
+
+[.first-sentence]
+If you want to achieve higher test set accuracy and reduce the overfitting, you can try adding some regularization or increasing the amount of data ignored within the Dropout layer.
+
+[.last-sentence]
+A single-layer CNN doesn't benefit much from dropout ratios above 20%.
+
+.CNN hyperparameter tuning
+
+[.first-sentence]
+Can you find a better combination of hyperparameters to improve this model's accuracy?
+
+[.last-sentence]
+Even a small 1-layer CNN does a decent job.
+
+.Learning curve for the best hyperparamters we found
+
+[.first-sentence]
+The key to hyperparameter tuning is to conscientiously record each experiment and make thoughtful decisions about the hyperparameter adjustments you make for the next experiment.
+
+[.last-sentence]
+Don't believe everything you read on the Internet, especially when it comes to CNNs for NLP.
+
+== Test yourself
+== Summary

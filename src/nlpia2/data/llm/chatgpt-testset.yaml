@@ -1,0 +1,55 @@
+-
+  date: 2023-04-19
+  references: "footnote:[Large Language Models are Zero-Shot Reasoners Jan 2023 by Takeshi Kojima et al (https://arxiv.org/pdf/2205.11916.pdf)]"
+  author: Takeshi Kojima et al
+  tags: [few shot, zero shot, benchmark, word problem, elementary school, rori] 
+  prompt: |+
+    Roger has 5 tennis balls. He buys 2 more cans of tennis balls. Each can has 3 tennis balls. How many tennis balls does he have now?
+  replies:
+    GPT-3: The answer is 11. 
+    GPT-3.5-turbo:
+    human:
+      - 11: 1.0
+      - eleven: 0.99
+      - 11 balls: 0.95
+      - Roger now has 11 tennis balls.: 1.0
+      - Roger now has eleven tennis balls.: 1.0
+      - Roger has eleven balls.: 0.9
+      - The answer is 11.: 0.95
+      - The answer is eleven.: 0.95
+-
+  date: 2023-03-19
+  references:
+    - https://blogs.berkeley.edu/2023/03/19/is-chatgpt-a-false-promise/
+  author: Edward A. Lee
+  prompt: |+
+    What does the sentence "John is too stubborn to talk to" mean?
+  answer: |+
+    The sentence "John is too stubborn to talk to" means that John is so unyielding and inflexible in his opinions, ideas, or behavior that it is difficult or impossible to have a productive conversation with him. His stubbornness makes it challenging to reason with him or persuade him to consider alternative viewpoints or options. The use of the word “too” implies that his stubbornness is excessive and beyond what is reasonable or tolerable in a conversation or interaction.
+  description: Seems to refute Chompsky's hypothesis according to Edward A. Lee, Berkeley professor, but perhaps the training set included public dialog with Chompsky or some of his linguistic training sets and examples
+-
+  date: 2023-03-31
+  author: Hobson Lane
+  prompt: |+
+    What does this mean: "Osama is too stubborn to talk to."
+  answer: |+
+The sentence "Osama is too stubborn to talk to" means that Osama is a person who is very resistant to changing their opinions, ideas or behaviors, and this makes it difficult to have a conversation or communicate effectively with him.
+
+In other words, it implies that Osama is rigid in his ways of thinking and is unwilling to consider alternative viewpoints or ideas. His stubbornness may make him difficult to reason with or to convince, which can lead to frustration or conflict during conversations. The phrase "too stubborn to talk to" suggests a level of exasperation with his unyielding attitude, making it challenging to establish effective communication with him.
+-
+  date: 2023-03-31
+  author: Hobson Lane
+  prompt: |+
+    Explain this sentence to me: Mohammed is impossible to talk to.
+  answer: |+
+    The sentence "Mohammed is impossible to talk to" means that it is very difficult or perhaps even impossible to have a conversation or communicate effectively with Mohammed.
+
+    This could imply that Mohammed is unresponsive, uncooperative, uninterested or hostile during conversations, making it challenging to establish a connection with him or convey ideas effectively. The phrase "impossible to talk to" suggests a level of frustration or disappointment with the individual's communication style or behavior.
+-
+  references:
+    - https://12ft.io/proxy?&q=https%3A%2F%2Fwww.wired.com%2Fstory%2Fchatgpt-plugins-openai
+  authors:
+    - Will Knight
+    - Khari Johnson
+  bot: ChatGPT (v3.5?)
+  date: 2023-03-28

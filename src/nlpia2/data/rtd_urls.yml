@@ -1,0 +1,20 @@
+-
+  url: https://pytorch3d.readthedocs.io/en/latest/overview.html
+  tags: [data science, ML]
+-
+  url: https://flask-mqtt.readthedocs.io/en/latest/
+  tags: [Python, backend]
+-
+  url: https://huey.readthedocs.io/en/latest/guide.html
+  tags: [backend, devops]
+-
+  url: https://django.readthedocs.io/
+  tags: [backend, python, web, webapp, framework]
+-
+  url: https://github.com/jonfaustman/django-frontend
+  tags: [django, backend, frontend]
+  robots: True
+-
+  url: "https://readthedocs.org/projects/javascript-avanzado/"
+  tags: [orphan]
+
